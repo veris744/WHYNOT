@@ -1,0 +1,98 @@
+---
+assets: 
+  - name: "MainCamera"
+    isCamera: True
+    isLight: False
+    isRendered: False
+    components:
+      - name: "TRANSFORM"
+        position: [0, 0, -1]
+        rotation: [0, 0, 0]
+        scale: [1, 1, 1]
+      - name: "CAMERA"
+  - name: "Ambient"
+    isCamera: False
+    isLight: True
+    isRendered: False
+    components:
+      - name: "LIGHT"
+        lightData:
+          color: [0.5, 0.5, 0.5]
+          ambient: 0.2
+          type: "AMBIENT"
+  - name: "Backpack"
+    isCamera: False
+    isLight: False
+    isRendered: True
+    components:
+      - name: "TRANSFORM"
+        position: [0, 0, 7]
+        rotation: [0, 45, 0]
+        scale: [1, 1, 1]
+      - name: "MODEL"
+        path: "assets/backpack/backpack.obj"
+  - name: "Cube1"
+    isCamera: False
+    isLight: False
+    isRendered: True
+    components:
+      - name: "TRANSFORM"
+        position: [1.5, 0, 3]
+        rotation: [0, 45, 0]
+        scale: [1, 1, 1]
+      - name: "MESH"
+        primitive: "CUBE"
+        textures: ["assets/box.jpg", "assets/spec.png"]
+        vertexShader: "shaders/vertex.glsl"
+        fragmentShader: "shaders/fragment.glsl"
+        specular: 1
+  - name: "Cube2"
+    isCamera: False
+    isLight: False
+    isRendered: True
+    components:
+      - name: "TRANSFORM"
+        position: [-1.5, 0, 3]
+        rotation: [45, 23, 0]
+        scale: [1, 1, 1]
+      - name: "MESH"
+        primitive: "CUBE"
+        textures: ["assets/tile.jpg"]
+        vertexShader: "shaders/vertex.glsl"
+        fragmentShader: "shaders/fragment.glsl"
+  - name: "Light2"
+    isCamera: False
+    isLight: True
+    isRendered: True
+    components:
+      - name: "LIGHT"
+        lightData:
+          position: [ 0, 0, 2 ]
+          color: [ 1, 1, 1 ]
+          specular: 1
+          diffuse: 1
+          constantAtt: 1
+          linearAtt: 0.2
+          quatAtt: 0.05
+          angle: 40
+          outerAngle: 45
+          type: "POINT"
+      - name: "TRANSFORM"
+        position: [ 0, 0, 2 ]
+        rotation: [0, 45, 0]
+        scale: [0.3, 0.3, 0.3]
+      - name: "MESH"
+        primitive: "CUBE"
+        textures: ["assets/bulb.png"]
+  - name: "Light3"
+    isCamera: False
+    isLight: True
+    isRendered: False
+    components:
+      - name: "LIGHT"
+        lightData:
+          color: [ 0, 1, 0.5 ]
+          direction: [ -8, 0, 0.5 ]
+          specular: 0.2
+          diffuse: 0.5
+          type: "DIRECTIONAL"
