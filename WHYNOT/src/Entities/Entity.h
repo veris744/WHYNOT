@@ -51,6 +51,6 @@ public:
     bool IsLight() const { return isLight; }
     string GetName() { return name; }
 
-    void Update();
+    void Update(float deltaTime);
 };
 

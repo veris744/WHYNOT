@@ -146,7 +146,7 @@ void Model::Render()
     }
 }
 
-void Model::Update()
+void Model::Update(float deltaTime)
 {
 }
 

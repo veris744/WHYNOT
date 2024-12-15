@@ -4,8 +4,6 @@
 #include "Components/LightSource.h"
 #include "Components/Mesh.h"
 #include "Components/Transform.h"
-#include "UI/Button.h"
-#include "UI/Image2D.h"
 #include "Utils/AssetReader.h"
 
 World* World::instance = nullptr;
@@ -26,8 +24,7 @@ World::World()
 
 void World::InitializeData()
 {
-    //std::shared_ptr<Button> button = std::make_shared<Button>("assets/box.jpg", vec2(20,0), vec2(200,200));
-    //widgets.push_back(button);
+    
 }
 
 void World::Initialize()
@@ -37,11 +34,11 @@ void World::Initialize()
     InitializeData();
 }
 
-void World::Update()
+void World::Update(float deltaTime)
 {
     for (const auto& entity : entities)
     {
-        entity.second->Update();
+        entity.second->Update(deltaTime);
     }
 }
 

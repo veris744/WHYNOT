@@ -40,7 +40,7 @@ vec3 Camera::GetViewPos() const
     return transform->v_position;
 }
 
-void Camera::Update()
+void Camera::Update(float deltaTime)
 {
     
 }

@@ -50,7 +50,7 @@ GLFWwindow* Helper::GetWindow()
     return window;
 }
 
-void Helper::EndUpdate()
+void Helper::EndUpdate(float deltaTime)
 {
     glfwSwapBuffers(GetWindow());
     glfwPollEvents(); 

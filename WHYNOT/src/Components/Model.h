@@ -25,6 +25,6 @@ public:
         LoadModel(path);
     }
     void Render();
-    void Update();
+    void Update(float deltaTime);
     void Clear();
 };

@@ -22,6 +22,6 @@ public:
     mat4 GetViewMatrix() const;
     vec3 GetViewPos() const;
 
-    void Update() override;
+    void Update(float deltaTime) override;
     
 };

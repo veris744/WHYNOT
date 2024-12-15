@@ -29,7 +29,7 @@ int main()
 		
 		InputManager::GetInstance()->Update(deltaTime);
 		
-		World::GetInstance()->Update();
+		World::GetInstance()->Update(deltaTime);
 		
 		Helper::Draw();
 		
@@ -39,7 +39,7 @@ int main()
 		Renderer::GetInstance()->Render();
 		Renderer::GetInstance()->Clear();
 		
-		Helper::EndUpdate();
+		Helper::EndUpdate(deltaTime);
 	}
 
 	Helper::Terminate();

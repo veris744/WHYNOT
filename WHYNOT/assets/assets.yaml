@@ -10,6 +10,7 @@ assets:
         rotation: [0, 0, 0]
         scale: [1, 1, 1]
       - name: "CAMERA"
+      - name: "MOVEMENTCOMP"
   - name: "Ambient"
     isCamera: False
     isLight: True

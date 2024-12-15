@@ -19,7 +19,7 @@ mat4 Transform::GetModelMatrix() const
     return trans;
 }
 
-void Transform::Update()
+void Transform::Update(float deltaTime)
 {
     
 }

@@ -31,7 +31,7 @@ public:
     
     static World* GetInstance();
     void Initialize();
-    void Update();
+    void Update(float deltaTime);
 
     void AddEntity(const std::shared_ptr<Entity>& _entity);
 

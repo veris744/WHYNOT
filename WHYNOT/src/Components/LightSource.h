@@ -14,7 +14,7 @@ public:
         lightData = LightData();
     }
 
-    void Update() override
+    void Update(float deltaTime) override
     {
         
     }

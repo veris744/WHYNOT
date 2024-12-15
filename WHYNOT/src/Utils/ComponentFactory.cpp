@@ -5,6 +5,7 @@
 #include "Components/LightSource.h"
 #include "Components/Mesh.h"
 #include "Components/Model.h"
+#include "Components/MovementComp.h"
 #include "Graphics/Material.h"
 #include "Managers/Renderer.h"
 
@@ -37,6 +38,11 @@ void ComponentFactory::ComponentFactorySetup()
     RegisterComponent("LIGHT", [](const std::shared_ptr<Entity>& entity, const YAML::Node& data) ->
         void {
             entity->AddComponent<LightSource>(ReadLight(data));
+    });
+    
+    RegisterComponent("MOVEMENTCOMP", [](const std::shared_ptr<Entity>& entity, const YAML::Node& data) ->
+        void {
+            entity->AddComponent<MovementComp>(ReadMoveComp(data));
         });
 
 }
@@ -211,4 +217,18 @@ std::shared_ptr<Material> ComponentFactory::ReadMaterial(const YAML::Node& asset
         textures, vertexShader, fragmentShader, materialData);
     
     return material;
+}
+
+std::shared_ptr<MovementComp> ComponentFactory::ReadMoveComp(const YAML::Node& asset)
+{
+    std::shared_ptr<MovementComp> moveComp = std::make_shared<MovementComp>();
+    if (asset["maxSpeed"])
+    {
+        moveComp->maxSpeed = asset["maxSpeed"].as<float>(); 
+    }
+    if (asset["maxAcceleration"])
+    {
+        moveComp->maxAcceleration = asset["maxAcceleration"].as<float>(); 
+    }
+    return moveComp;
 }

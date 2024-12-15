@@ -3,6 +3,8 @@
 #include <unordered_map>
 #include <Utils/Rotation.h>
 
+class MovementComp;
+class Entity;
 class EventsBuffer;
 class Transform;
 
@@ -36,17 +38,16 @@ class InputManager
     static void InitKeys();
     static unordered_map<unsigned int, KeyStatus> keysStatus;
     static std::unique_ptr<EventsBuffer> eventsBuffer; 
-
-    float deltaTime = 0.0f;
     
     vec3 movementInputPlaneValue = vec3(0, 0, 0);
     vec2 movementInputAxisValue = vec2(0, 0);
     
-    void MovementInput() const;
     void ScapeInput() const;
 
     //USEFUL ASSETS
+    std::shared_ptr<Entity> cameraEntity;
     std::shared_ptr<Transform> cameraTransform;
+    std::shared_ptr<MovementComp> cameraMoveComp;
     
 public:
     static InputManager* GetInstance();

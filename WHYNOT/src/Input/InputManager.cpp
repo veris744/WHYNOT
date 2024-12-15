@@ -1,6 +1,7 @@
 #include "InputManager.h"
 
 #include "EventsBuffer.h"
+#include "Components/MovementComp.h"
 #include "Managers/Helper.h"
 #include "Managers/World.h"
 #include "Components/Transform.h"
@@ -34,9 +35,11 @@ InputManager* InputManager::GetInstance()
 
 void InputManager::Initialize()
 {
-    if (!cameraTransform)
+    if (!cameraEntity)
     {
-        cameraTransform = World::GetInstance()->GetCamera(World::GetInstance()->currentCameraName)->GetComponent<Transform>();
+        cameraEntity = World::GetInstance()->GetCamera(World::GetInstance()->currentCameraName);
+        cameraTransform = cameraEntity->GetComponent<Transform>();
+        cameraMoveComp = cameraEntity->GetComponent<MovementComp>();
     }
 }
 
@@ -109,10 +112,7 @@ void InputManager::ScrollCallback(GLFWwindow* window, double xoffset, double yof
 
 void InputManager::Update(float _deltaTime)
 {
-    deltaTime = _deltaTime;
-    
     ProcessInput();
-    MovementInput();
 }
 
 
@@ -158,22 +158,22 @@ void InputManager::HandleKeyPress(int key, int mods)
             ScapeInput();
             break;
         case GLFW_KEY_UP:
-            movementInputPlaneValue.y = 1;
+            cameraMoveComp->SetInput(vec3(0,1,0));
             break;
         case GLFW_KEY_DOWN:
-            movementInputPlaneValue.y = -1;
+            cameraMoveComp->SetInput(vec3(0,-1,0));
             break;
         case GLFW_KEY_A:
-            movementInputPlaneValue.x = 1;
+            cameraMoveComp->SetInput(vec3(1,0,0));
             break;
         case GLFW_KEY_D:
-            movementInputPlaneValue.x = -1;
+            cameraMoveComp->SetInput(vec3(-1,0,0));
             break;
         case GLFW_KEY_S:
-            movementInputPlaneValue.z = -1;
+            cameraMoveComp->SetInput(vec3(0,0,-1));
             break;
         case GLFW_KEY_W:
-            movementInputPlaneValue.z = 1;
+            cameraMoveComp->SetInput(vec3(0,0,1));
             break;
         default: 
             break;
@@ -185,22 +185,22 @@ void InputManager::HandleKeyRelease(int key, int mods)
     switch(key)
     {
     case GLFW_KEY_UP:
-        movementInputPlaneValue.y = 0;
+        cameraMoveComp->SetInput(vec3(cameraMoveComp->GetInput().x,0,cameraMoveComp->GetInput().z));
         break;
     case GLFW_KEY_DOWN:
-        movementInputPlaneValue.y = 0;
+        cameraMoveComp->SetInput(vec3(cameraMoveComp->GetInput().x,0,cameraMoveComp->GetInput().z));
         break;
     case GLFW_KEY_A:
-        movementInputPlaneValue.x = 0;
+        cameraMoveComp->SetInput(vec3(0,cameraMoveComp->GetInput().y,cameraMoveComp->GetInput().z));
         break;
     case GLFW_KEY_D:
-        movementInputPlaneValue.x = 0;
+        cameraMoveComp->SetInput(vec3(0, cameraMoveComp->GetInput().y,cameraMoveComp->GetInput().z));
         break;
     case GLFW_KEY_S:
-        movementInputPlaneValue.z = 0;
+        cameraMoveComp->SetInput(vec3(cameraMoveComp->GetInput().x,cameraMoveComp->GetInput().y, 0));
         break;
     case GLFW_KEY_W:
-        movementInputPlaneValue.z = 0;
+        cameraMoveComp->SetInput(vec3(cameraMoveComp->GetInput().x,cameraMoveComp->GetInput().y, 0));
         break;
     default: 
         break;
@@ -251,20 +251,12 @@ void InputManager::HandleMouseMove(double x, double y)
 
 void InputManager::HandleMouseScroll(double x, double y)
 {
+    
 }
 
 void InputManager::ScapeInput() const 
 {
     glfwSetWindowShouldClose(Helper::GetWindow(), true);
-}
-
-void InputManager::MovementInput() const
-{
-    vec3 direction = cameraTransform->v_forward * movementInputPlaneValue.z
-        + cameraTransform->v_right * movementInputPlaneValue.x
-        + cameraTransform->v_up * movementInputPlaneValue.y;
-
-    cameraTransform->v_position += direction * deltaTime;
 }
 
 

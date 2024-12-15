@@ -13,7 +13,7 @@ public:
     static void InitializeGlfw();
     static void InitializeGlad();
     static GLFWwindow* GetWindow();
-    static void EndUpdate();
+    static void EndUpdate(float deltaTime);
     static void Draw();
     static void Terminate();
 };

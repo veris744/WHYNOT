@@ -30,7 +30,7 @@ public:
 
 
     mat4 GetModelMatrix() const;
-    void Update() override;
+    void Update(float deltaTime) override;
     void SetRotation(float pitch, float yaw, float roll);
     
 };

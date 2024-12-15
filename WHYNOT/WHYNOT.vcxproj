@@ -139,6 +139,7 @@
     <ClCompile Include="src\Components\Mesh.cpp" />
     <ClCompile Include="src\Components\Model.cpp" />
     <ClCompile Include="src\Components\MovementComp.cpp" />
+    <ClCompile Include="src\Components\PlayerController.cpp" />
     <ClCompile Include="src\Components\Transform.cpp" />
     <ClCompile Include="src\Entities\Entity.cpp" />
     <ClCompile Include="src\Graphics\IndexBuffer.cpp" />
@@ -463,6 +464,7 @@
     <ClInclude Include="src\Components\Mesh.h" />
     <ClInclude Include="src\Components\Model.h" />
     <ClInclude Include="src\Components\MovementComp.h" />
+    <ClInclude Include="src\Components\PlayerController.h" />
     <ClInclude Include="src\Components\Transform.h" />
     <ClInclude Include="src\Entities\Entity.h" />
     <ClInclude Include="src\Graphics\IndexBuffer.h" />
