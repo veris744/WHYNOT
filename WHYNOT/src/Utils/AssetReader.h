@@ -3,8 +3,7 @@
 #define YAML_CPP_STATIC_DEFINE
 #include <yaml-cpp/yaml.h>
 
-#include "Graphics/Material.h"
-
+class Widget;
 class Entity;
 class Mesh;
 class LightSource;
@@ -16,16 +15,12 @@ class Component;
 class AssetReader
 {
     static void SaveEntity(const YAML::Node& asset);
-    static void GetComponent(const std::shared_ptr<Entity>& entity, const YAML::Node& asset);
+    static void SaveComponent(const std::shared_ptr<Entity>& entity, const YAML::Node& asset);
+    
+    static void SaveWidget(const YAML::Node& asset, const std::shared_ptr<Widget>& parent = nullptr);
      
 public:
     static void ReadAssets(const char* filePath);
 
-    static std::shared_ptr<Transform> ReadTransform(const YAML::Node& asset);
-    static std::shared_ptr<Mesh> ReadMesh(const YAML::Node& asset);
-    static std::shared_ptr<Model> ReadModel(const YAML::Node& asset);
-    static std::shared_ptr<Camera> ReadCamera(const YAML::Node& asset);
-    static std::shared_ptr<LightSource> ReadLight(const YAML::Node& asset);
-    static std::shared_ptr<Material> ReadMaterial(const YAML::Node& asset);
     
 };

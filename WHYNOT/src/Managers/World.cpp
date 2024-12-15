@@ -26,13 +26,14 @@ World::World()
 
 void World::InitializeData()
 {
-    std::shared_ptr<Button> button = std::make_shared<Button>("assets/box.jpg", vec2(20,0), vec2(200,200));
-    widgets.push_back(button);
+    //std::shared_ptr<Button> button = std::make_shared<Button>("assets/box.jpg", vec2(20,0), vec2(200,200));
+    //widgets.push_back(button);
 }
 
 void World::Initialize()
 {
-    AssetReader::ReadAssets("assets/cubes.yaml");
+    AssetReader::ReadAssets("assets/assets.yaml");
+    AssetReader::ReadAssets("assets/widgets.yaml");
     InitializeData();
 }
 

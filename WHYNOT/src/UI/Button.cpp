@@ -11,16 +11,6 @@ Button::Button(const vec2& _pos, const vec2& _size)
     InputManager::GetInstance()->OnClickDelegate.Bind(&Button::OnClick, this);
 }
 
-Button::Button(const string& _imagePath, const vec2& _pos, const vec2& _size)
-{
-    position = _pos;
-    size = _size;
-    image = std::make_shared<Image2D>(_imagePath, position, _size);
-    AddWidget(image);
-    InputManager::GetInstance()->OnClickDelegate.Bind(&Button::OnClick, this);
-}
-
-
 bool Button::IsClicking(const vec2& _mousePos) const
 {
     if (_mousePos.x >= position.x && _mousePos.x <= position.x + size.x &&

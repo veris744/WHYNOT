@@ -61,4 +61,8 @@ public:
     vector<LightData> GetLightDataList() const;
 
     vector<std::shared_ptr<Widget>> GetWidgets() const { return widgets; }
+    void AddWidget(const std::shared_ptr<Widget>& _widget)
+    {
+        widgets.push_back(_widget);
+    }
 };

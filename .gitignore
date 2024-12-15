@@ -36,3 +36,4 @@ WHYNOT/x64/
 x64/
 .idea/
 .vs/
+*.user

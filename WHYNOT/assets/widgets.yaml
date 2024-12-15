@@ -1,0 +1,17 @@
+---
+widgets: 
+  - name: "Button1"
+    type: "BUTTON"
+    position: [20, 10]
+    size: [100, 50]
+    widgets:
+      - name: "Image2"
+        type: "IMAGE2D"
+        size: [100, 50]
+        position: [20, 10]
+        path: "assets/box.jpg"
+  - name: "Image1"
+    type: "IMAGE2D"
+    path: "assets/bulb.jpg"
+    position: [20, 400]
+    size: [75, 75]

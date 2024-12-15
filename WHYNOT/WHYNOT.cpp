@@ -15,7 +15,7 @@ int main()
 		return -1;
 	}
 	Helper::InitializeGlad();
-	
+
 	World::GetInstance()->Initialize();
 	Renderer::GetInstance()->Initialize();
 	Renderer2D::GetInstance()->Initialize();
