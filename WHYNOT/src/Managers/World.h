@@ -1,11 +1,11 @@
 #pragma once
 #include <includes.h>
 
+#include "Components/LightData.h"
 #include "Components/Transform.h"
 #include "Entities/Entity.h"
 
 class Widget;
-struct LightData;
 class LightSource;
 class Camera;
 
@@ -24,8 +24,13 @@ class World
     
     World();
     void InitializeData();
+
     
 public:
+    
+    vec2 boundariesX = vec2(-10, 10);
+    vec2 boundariesY = vec2(-10, 10);
+    vec2 boundariesZ = vec2(-10, 10);
     
     string currentCameraName = "MainCamera";
     

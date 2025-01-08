@@ -6,8 +6,10 @@
 
 static std::unordered_map<int, GLuint> uboMap;
 
-Shader::Shader(const string& vertexShaderPath, const string& fragmentShaderPath)
+Shader::Shader(const string& _vertexShaderPath, const string& _fragmentShaderPath)
 {
+    vertexShaderPath = _vertexShaderPath;
+    fragmentShaderPath = _fragmentShaderPath;
     vertexShaderSource = ReadShader(vertexShaderPath);
     fragmentShaderSource = ReadShader(fragmentShaderPath);
 }
@@ -34,7 +36,7 @@ void Shader::Compile()
     if (retCode == GL_FALSE) {
         char errorLog[512];
         glGetShaderInfoLog(vertexShader, sizeof(errorLog), nullptr, errorLog);
-        Logger::Log<Shader>(LogLevel::FatalError, "Error compiling vertex shader: " + string(errorLog));
+        Logger::Log<Shader>(LogLevel::FatalError, "Error compiling vertex shader " + vertexShaderPath + ": " + string(errorLog));
         glDeleteShader(vertexShader);
     }
 
@@ -47,7 +49,7 @@ void Shader::Compile()
     if (retCode == GL_FALSE) {
         char errorLog[1024];
         glGetShaderInfoLog(fragmentShader, sizeof(errorLog), nullptr, errorLog);
-        Logger::Log<Shader>(LogLevel::FatalError, "Error compiling vertex shader: " + string(errorLog));
+        Logger::Log<Shader>(LogLevel::FatalError, "Error compiling fragment shader " + fragmentShaderPath + ": " + string(errorLog));
         glDeleteShader(fragmentShader);
     }
 

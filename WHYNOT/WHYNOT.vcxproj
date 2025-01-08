@@ -134,11 +134,11 @@
   <ItemGroup>
     <ClCompile Include="..\include\glad\src\glad.c" />
     <ClCompile Include="src\Components\Camera.cpp" />
+    <ClCompile Include="src\Components\Collider.cpp" />
     <ClCompile Include="src\Components\Component.cpp" />
     <ClCompile Include="src\Components\LightData.cpp" />
     <ClCompile Include="src\Components\Mesh.cpp" />
     <ClCompile Include="src\Components\Model.cpp" />
-    <ClCompile Include="src\Components\MovementComp.cpp" />
     <ClCompile Include="src\Components\PlayerController.cpp" />
     <ClCompile Include="src\Components\Transform.cpp" />
     <ClCompile Include="src\Entities\Entity.cpp" />
@@ -458,12 +458,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Components\Camera.h" />
+    <ClInclude Include="src\Components\Collider.h" />
     <ClInclude Include="src\Components\Component.h" />
     <ClInclude Include="src\Components\LightData.h" />
     <ClInclude Include="src\Components\LightSource.h" />
     <ClInclude Include="src\Components\Mesh.h" />
     <ClInclude Include="src\Components\Model.h" />
-    <ClInclude Include="src\Components\MovementComp.h" />
     <ClInclude Include="src\Components\PlayerController.h" />
     <ClInclude Include="src\Components\Transform.h" />
     <ClInclude Include="src\Entities\Entity.h" />
@@ -509,10 +509,12 @@
     <Content Include="assets\assets.yaml" />
     <Content Include="assets\spec.png" />
     <Content Include="assets\tile.jpg" />
+    <Content Include="assets\ufo\PinkAlien.obj" />
     <Content Include="assets\wall.jpg" />
     <Content Include="assets\widgets.yaml" />
     <Content Include="shaders\fragment.glsl" />
     <Content Include="shaders\fragment2D.glsl" />
+    <Content Include="shaders\neonFragment.glsl" />
     <Content Include="shaders\vertex.glsl" />
     <Content Include="shaders\vertex2D.glsl" />
   </ItemGroup>

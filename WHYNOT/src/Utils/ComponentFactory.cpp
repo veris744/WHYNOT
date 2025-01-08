@@ -5,7 +5,7 @@
 #include "Components/LightSource.h"
 #include "Components/Mesh.h"
 #include "Components/Model.h"
-#include "Components/MovementComp.h"
+#include "Components/PlayerController.h"
 #include "Graphics/Material.h"
 #include "Managers/Renderer.h"
 
@@ -40,9 +40,9 @@ void ComponentFactory::ComponentFactorySetup()
             entity->AddComponent<LightSource>(ReadLight(data));
     });
     
-    RegisterComponent("MOVEMENTCOMP", [](const std::shared_ptr<Entity>& entity, const YAML::Node& data) ->
+    RegisterComponent("PLAYERCONTROLLER", [](const std::shared_ptr<Entity>& entity, const YAML::Node& data) ->
         void {
-            entity->AddComponent<MovementComp>(ReadMoveComp(data));
+            entity->AddComponent<PlayerController>(ReadMoveComp(data));
         });
 
 }
@@ -80,14 +80,30 @@ std::shared_ptr<Transform> ComponentFactory::ReadTransform(const YAML::Node& ass
 std::shared_ptr<Mesh> ComponentFactory::ReadMesh(const YAML::Node& asset)
 {
     vector<float> vertex;
+    vector<unsigned int> index = {};
     unsigned int vertexCount = 0;
     if (asset["primitive"].as<string>() == "CUBE")
     {
-        vertex = Renderer::cubeVertex;
-        vertexCount = 36;
+        vertex = Renderer::GetCubeVertex();
+        vertexCount = vertex.size();
+    }
+    else if (asset["primitive"].as<string>() == "SPHERE")
+    {
+        Renderer::SetSphereVertex(asset["radius"].as<float>(),asset["sectors"].as<int>(),asset["stack"].as<int>());
+        vertex = Renderer::GetSphereVertex();
+        index = Renderer::GetShereIndex();
+        vertexCount = vertex.size();
     }
 
-    std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>(vertex, vertexCount, ReadMaterial(asset));
+    std::shared_ptr<Mesh> mesh = nullptr;
+    if (index.empty())
+    {
+        mesh = std::make_shared<Mesh>(vertex, vertexCount, ReadMaterial(asset));
+    }
+    else
+    {
+        mesh = std::make_shared<Mesh>(vertex, vertexCount, index, index.size(), ReadMaterial(asset));
+    }
     return mesh;
 }
 
@@ -195,6 +211,21 @@ std::shared_ptr<Material> ComponentFactory::ReadMaterial(const YAML::Node& asset
     {
         materialData.shininess = asset["shininess"].as<float>(); 
     }
+    if (asset["color"])
+    {
+        materialData.color = vec3(asset["color"][0].as<float>(), asset["color"][1].as<float>(), asset["color"][2].as<float>()); 
+    }
+
+    std::string type = asset["type"].as<std::string>();
+    if (type == "TEXTURE") {
+        materialData.type = MaterialType::TEXTURE;
+    } 
+    else if (type == "COLOR") {
+        materialData.type = MaterialType::COLOR;
+    } 
+    else if (type == "NEON") {
+        materialData.type = MaterialType::NEON;
+    } 
         
     vector<string> textures;
     const YAML::Node& texturesYaml = asset["textures"];
@@ -219,9 +250,9 @@ std::shared_ptr<Material> ComponentFactory::ReadMaterial(const YAML::Node& asset
     return material;
 }
 
-std::shared_ptr<MovementComp> ComponentFactory::ReadMoveComp(const YAML::Node& asset)
+std::shared_ptr<PlayerController> ComponentFactory::ReadMoveComp(const YAML::Node& asset)
 {
-    std::shared_ptr<MovementComp> moveComp = std::make_shared<MovementComp>();
+    std::shared_ptr<PlayerController> moveComp = std::make_shared<PlayerController>();
     if (asset["maxSpeed"])
     {
         moveComp->maxSpeed = asset["maxSpeed"].as<float>(); 

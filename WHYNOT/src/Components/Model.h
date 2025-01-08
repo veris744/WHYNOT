@@ -27,4 +27,6 @@ public:
     void Render();
     void Update(float deltaTime);
     void Clear();
+
+    bool HasMeshes() { return !meshes.empty(); }
 };

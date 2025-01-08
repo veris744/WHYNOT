@@ -4,7 +4,7 @@
 
 #include "Entities/Entity.h"
 
-class MovementComp;
+class PlayerController;
 class Material;
 class LightSource;
 class Camera;
@@ -27,7 +27,7 @@ private:
     static std::shared_ptr<Camera> ReadCamera(const YAML::Node& asset);
     static std::shared_ptr<LightSource> ReadLight(const YAML::Node& asset);
     static std::shared_ptr<Material> ReadMaterial(const YAML::Node& asset);
-    static std::shared_ptr<MovementComp> ReadMoveComp(const YAML::Node& asset);
+    static std::shared_ptr<PlayerController> ReadMoveComp(const YAML::Node& asset);
     
 public:
     ComponentFactory() = default;

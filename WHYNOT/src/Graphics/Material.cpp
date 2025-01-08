@@ -114,10 +114,28 @@ void Material::SetUniforms(const mat4& _model, const mat4& _view, const mat4& _p
     shader->SetUniformMat4("uView", _view);
     shader->SetUniformMat4("uProjection", _projection);
     shader->SetUniformVec3("uViewPos", _viewPosition);
+
+    
     shader->SetUniformInt("uAmbient", materialData.ambient);
     shader->SetUniformInt("uDiffuse", materialData.diffuse);
     shader->SetUniformInt("uSpecular", materialData.specular);
-    shader->SetUniformFloat("uShininess", materialData.shininess);
+    shader->SetUniformFloat("uShininess", materialData.shininess);  
+    if (materialData.type == MaterialType::TEXTURE)
+    {
+        shader->SetUniformInt("uSampler2D", 0);      
+    }
+    else if (materialData.type == MaterialType::COLOR)
+    {
+        shader->SetUniformVec3("uColor", materialData.color);
+    }
+    else if (materialData.type == MaterialType::NEON)
+    {
+        shader->SetUniformVec3("uColor", materialData.color);
+        shader->SetUniformFloat("uGlowIntensity", 5.f);
+        shader->SetUniformFloat("uEdgeGlow", 1.f);
+    }
+
+    
     shader->SetUniformObject("u_Lights", 1,
         World::GetInstance()->GetLightCount(),
         sizeof(LightSource), World::GetInstance()->GetLightDataList().data());

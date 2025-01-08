@@ -1,7 +1,7 @@
 #include "InputManager.h"
 
 #include "EventsBuffer.h"
-#include "Components/MovementComp.h"
+#include "Components/PlayerController.h"
 #include "Managers/Helper.h"
 #include "Managers/World.h"
 #include "Components/Transform.h"
@@ -39,7 +39,7 @@ void InputManager::Initialize()
     {
         cameraEntity = World::GetInstance()->GetCamera(World::GetInstance()->currentCameraName);
         cameraTransform = cameraEntity->GetComponent<Transform>();
-        cameraMoveComp = cameraEntity->GetComponent<MovementComp>();
+        cameraMoveComp = cameraEntity->GetComponent<PlayerController>();
     }
 }
 

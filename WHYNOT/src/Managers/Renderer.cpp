@@ -6,8 +6,12 @@
 
 
 class Model;
+
+
 Renderer* Renderer::instance = nullptr;
 
+vector<float> Renderer::sphereVertex = {};
+vector<unsigned int> Renderer::sphereIndex = {};
 const vector<float> Renderer::cubeVertex = {
         // positions          // normals           // texture coords
         -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 0.0f,
@@ -99,9 +103,10 @@ void Renderer::Clear()
             continue;
         }
         std::shared_ptr<Model> model = entity.second->GetComponent<Model>();
-        if (!model)
+        if (!model || !model->HasMeshes())
         {
             Logger::Log<Renderer>(LogLevel::Warning,  "Renderable entity does not have a model");
+            return;
         }
         model->Clear();
     }

@@ -1,7 +1,6 @@
 #include "Mesh.h"
 
 #include "Camera.h"
-#include "Transform.h"
 #include "Graphics/IndexBuffer.h"
 #include "Graphics/Material.h"
 #include "Graphics/VertexArray.h"

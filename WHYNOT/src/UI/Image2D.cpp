@@ -44,7 +44,6 @@ void Image2D::Render()
     shader->Bind();
     shader->SetUniformVec2("uPosWidget", position);
     shader->SetUniformVec2("uSize", size);
-    shader->SetUniformInt("uSampler2D", 0);
     shader->SetUniformMat4("uProjection", World::GetInstance()->GetCurrentCameraComp()->GetProjectionMatrix2D());
     if (vertexArray->GetIndexBuffer())
     {

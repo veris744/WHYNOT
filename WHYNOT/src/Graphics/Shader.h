@@ -4,13 +4,16 @@
 
 class Shader
 {
+    string vertexShaderPath;
+    string fragmentShaderPath;
+    
 public:
     string vertexShaderSource;
     string fragmentShaderSource;
     
     int id;
     
-    Shader(const string& vertexShaderPath, const string& fragmentShaderPath);
+    Shader(const string& _vertexShaderPath, const string& _fragmentShaderPath);
     string ReadShader(const string& ShaderPath);
 
     void Compile();

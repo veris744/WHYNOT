@@ -14,7 +14,7 @@ class Transform;
 void Model::LoadModel(string _path)
 {
     Assimp::Importer import;
-    const aiScene *scene = import.ReadFile(_path, aiProcess_Triangulate );	
+    const aiScene *scene = import.ReadFile(_path.c_str(), aiProcess_Triangulate | aiProcess_JoinIdenticalVertices | aiProcess_SortByPType );	
 	
     if(!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) 
     {

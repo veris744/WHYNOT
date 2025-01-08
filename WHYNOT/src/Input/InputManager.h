@@ -3,7 +3,7 @@
 #include <unordered_map>
 #include <Utils/Rotation.h>
 
-class MovementComp;
+class PlayerController;
 class Entity;
 class EventsBuffer;
 class Transform;
@@ -47,7 +47,7 @@ class InputManager
     //USEFUL ASSETS
     std::shared_ptr<Entity> cameraEntity;
     std::shared_ptr<Transform> cameraTransform;
-    std::shared_ptr<MovementComp> cameraMoveComp;
+    std::shared_ptr<PlayerController> cameraMoveComp;
     
 public:
     static InputManager* GetInstance();

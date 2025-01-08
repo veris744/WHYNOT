@@ -10,7 +10,7 @@ assets:
         rotation: [0, 0, 0]
         scale: [1, 1, 1]
       - name: "CAMERA"
-      - name: "MOVEMENTCOMP"
+      - name: "PLAYERCONTROLLER"
   - name: "Ambient"
     isCamera: False
     isLight: True
@@ -21,17 +21,17 @@ assets:
           color: [0.5, 0.5, 0.5]
           ambient: 0.2
           type: "AMBIENT"
-  - name: "Backpack"
+  - name: "Alien"
     isCamera: False
     isLight: False
     isRendered: True
     components:
       - name: "TRANSFORM"
         position: [0, 0, 7]
-        rotation: [0, 45, 0]
-        scale: [1, 1, 1]
+        rotation: [0, 145, 0]
+        scale: [0.5, 0.5, 0.5]
       - name: "MODEL"
-        path: "assets/backpack/backpack.obj"
+        path: "assets/ufo/PinkAlien.obj"
   - name: "Cube1"
     isCamera: False
     isLight: False
@@ -47,20 +47,26 @@ assets:
         vertexShader: "shaders/vertex.glsl"
         fragmentShader: "shaders/fragment.glsl"
         specular: 1
-  - name: "Cube2"
+        type: "TEXTURE"
+  - name: "Sphere1"
     isCamera: False
     isLight: False
     isRendered: True
     components:
       - name: "TRANSFORM"
         position: [-1.5, 0, 3]
-        rotation: [45, 23, 0]
+        rotation: [0, 0, 0]
         scale: [1, 1, 1]
       - name: "MESH"
-        primitive: "CUBE"
-        textures: ["assets/tile.jpg"]
+        primitive: "SPHERE"
+        radius: 0.5
+        sectors: 32
+        stack: 16
+        textures: []
+        color: [0, 0, 1]
         vertexShader: "shaders/vertex.glsl"
-        fragmentShader: "shaders/fragment.glsl"
+        fragmentShader: "shaders/neonFragment.glsl"
+        type: "NEON"
   - name: "Light2"
     isCamera: False
     isLight: True
@@ -69,7 +75,7 @@ assets:
       - name: "LIGHT"
         lightData:
           position: [ 0, 0, 2 ]
-          color: [ 1, 1, 1 ]
+          color: [ 0, 0.5, 0.8 ]
           specular: 1
           diffuse: 1
           constantAtt: 1
@@ -85,6 +91,7 @@ assets:
       - name: "MESH"
         primitive: "CUBE"
         textures: ["assets/bulb.png"]
+        type: "TEXTURE"
   - name: "Light3"
     isCamera: False
     isLight: True
@@ -92,7 +99,7 @@ assets:
     components:
       - name: "LIGHT"
         lightData:
-          color: [ 0, 1, 0.5 ]
+          color: [ 1, 0, 1 ]
           direction: [ -8, 0, 0.5 ]
           specular: 0.2
           diffuse: 0.5
