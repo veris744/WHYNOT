@@ -95,7 +95,7 @@ std::shared_ptr<Mesh> Model::processMesh(aiMesh* mesh, const aiScene* scene)
 
     std::shared_ptr<Material> material = std::make_shared<Material>(textures);
 
-    std::shared_ptr<Mesh> temp = std::make_shared<Mesh>(vertices, numVertices, indices, indices.size(), material);
+    std::shared_ptr<Mesh> temp = std::make_shared<Mesh>(vertices, indices, material);
     vertices.clear();
     return temp;
 }
@@ -139,9 +139,9 @@ Model::Model(std::shared_ptr<Mesh> _mesh)
 void Model::Render()
 {
     std::shared_ptr<Transform> transform = parent->GetComponent<Transform>();
-    mat4 modelMatrix = transform->GetModelMatrix();
     for (const auto& mesh : meshes)
     {
+        mat4 modelMatrix = transform->GetModelMatrix(position, invertTexture);
         mesh->Render(modelMatrix);
     }
 }

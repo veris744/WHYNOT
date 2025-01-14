@@ -28,10 +28,15 @@ assets:
     components:
       - name: "TRANSFORM"
         position: [0, 0, 7]
-        rotation: [0, 145, 0]
-        scale: [0.5, 0.5, 0.5]
+        rotation: [90, 0, 0]
+        scale: [0.01, 0.01, 0.01]
       - name: "MODEL"
-        path: "assets/ufo/PinkAlien.obj"
+        path: "assets/ufo/ufo.obj"
+        invert: True
+        position: [0, 0, 0.5]
+      - name: "COLLIDER"
+        type: "CIRCLE"
+        radius: 2.3
   - name: "Cube1"
     isCamera: False
     isLight: False
@@ -75,14 +80,12 @@ assets:
       - name: "LIGHT"
         lightData:
           position: [ 0, 0, 2 ]
-          color: [ 0, 0.5, 0.8 ]
+          color: [ 1.0, 0.5, 0 ]
           specular: 1
           diffuse: 1
           constantAtt: 1
           linearAtt: 0.2
           quatAtt: 0.05
-          angle: 40
-          outerAngle: 45
           type: "POINT"
       - name: "TRANSFORM"
         position: [ 0, 0, 2 ]
@@ -99,7 +102,7 @@ assets:
     components:
       - name: "LIGHT"
         lightData:
-          color: [ 1, 0, 1 ]
+          color: [ 0, 0.5, 1 ]
           direction: [ -8, 0, 0.5 ]
           specular: 0.2
           diffuse: 0.5

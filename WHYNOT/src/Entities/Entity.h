@@ -20,6 +20,7 @@ public:
     ~Entity() = default;
     
     bool isRendered = false;
+    bool hasCollision = false;
     
     template <typename T>
     void AddComponent(const std::shared_ptr<T>& _component)

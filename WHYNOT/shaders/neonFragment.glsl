@@ -22,5 +22,5 @@ void main() {
     vec3 interiorColor = vec3(0, 0.7 , 0.5);
     vec3 color = mix(interiorColor, uColor, fresnel);
 
-    FragColor = vec4(color, 1.0); // Output the final color
+    FragColor = vec4(color, 1.0); 
 }

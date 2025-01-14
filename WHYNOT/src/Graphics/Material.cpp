@@ -12,10 +12,12 @@ Material::Material(const char* _texturePath, const string& _vertexShaderPath, co
 {
     string vertexShader = _vertexShaderPath.empty() ? string(DEFAULT_VERTEX_SHADER_PATH) : _vertexShaderPath;
     string fragmentShader = _fragmentShaderPath.empty() ? string(DEFAULT_FRAGMENT_SHADER_PATH) : _fragmentShaderPath;
-    
-    std::shared_ptr<Texture> texture = std::make_shared<Texture>(_texturePath);
 
-    textures.push_back(texture);
+    if (std::strcmp(_texturePath, ""))
+    {
+        std::shared_ptr<Texture> texture = std::make_shared<Texture>(_texturePath);
+        textures.push_back(texture);
+    }
     
     bool skip = false;
     for (const auto& shaderLoaded : Renderer::GetInstance()->shaders_loaded)

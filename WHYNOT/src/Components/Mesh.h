@@ -14,11 +14,11 @@ class Mesh
 
     
 public:
-    Mesh(const vector<float>& _vertex, unsigned int _vertexCount, const std::shared_ptr<Material>& _material);
-    Mesh(const vector<float>& _vertex, unsigned int _vertexCount, const vector<unsigned int>& _index,
-         unsigned int _indexCount,
+    Mesh(const vector<float>& _vertex, const std::shared_ptr<Material>& _material);
+    Mesh(const vector<float>& _vertex, const vector<unsigned int>& _index,
          const std::shared_ptr<Material>& _material);
     
     void Render(const mat4& _modelMatrix);
     void Clear();
+    std::shared_ptr<Material> GetMaterial() const { return material; }
 };

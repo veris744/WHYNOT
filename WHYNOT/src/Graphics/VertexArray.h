@@ -1,27 +1,25 @@
 #pragma once
 #include "includes.h"
+#include "IndexBuffer.h"
 #include "LayoutElement.h"
+#include "VertexBuffer.h"
 
-class IndexBuffer;
-
-class VertexBuffer;
 
 class VertexArray
 {
-    vector<std::shared_ptr<VertexBuffer>> vertexBuffers;
-    std::shared_ptr<IndexBuffer> indexBuffer;
+    vector<std::unique_ptr<VertexBuffer>> vertexBuffers;
+    std::unique_ptr<IndexBuffer> indexBuffer;
     
 public:
     VertexArray();
-    ~VertexArray() = default;
     
     unsigned int VAO;
 
     void Bind();
     void Unbind();
-    void AddVertexBuffer(std::shared_ptr<VertexBuffer>& _vertexBuffer);
-    void SetIndexBuffer(std::shared_ptr<IndexBuffer>& _indexBuffer);
-    const std::shared_ptr<IndexBuffer>& GetIndexBuffer() const { return indexBuffer; }
+    void AddVertexBuffer(const vector<float>& _vertex, unsigned int _size);
+    void SetIndexBuffer(const vector<unsigned int>& _index);
+    const std::unique_ptr<IndexBuffer>& GetIndexBuffer() const { return indexBuffer; }
     void BindVertexBuffers();
     void BindIndexBuffer();
     void DrawVertexBuffers();

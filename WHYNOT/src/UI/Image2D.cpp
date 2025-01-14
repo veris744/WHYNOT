@@ -16,11 +16,10 @@ Image2D::Image2D(const string& _path, vec2 _pos, vec2 _size)
     
     vector<float> vertex = Renderer2D::quadVertices;
     unsigned int count = 6;
-    std::shared_ptr<VertexBuffer> vertexBuffer = std::make_shared<VertexBuffer>(vertex, vertex.size() * sizeof(float), count);
 
     vertexArray = std::make_shared<VertexArray>();
     vertexArray->Bind();
-    vertexArray->AddVertexBuffer(vertexBuffer);
+    vertexArray->AddVertexBuffer(vertex, vertex.size() * sizeof(float));
 
     vertexArray->SetLayout(
         {

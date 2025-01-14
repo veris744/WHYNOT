@@ -7,13 +7,12 @@
 #include "Graphics/VertexBuffer.h"
 #include "Managers/World.h"
 
-Mesh::Mesh(const vector<float>& _vertex, unsigned int _vertexCount, const std::shared_ptr<Material>& _material)
+Mesh::Mesh(const vector<float>& _vertex, const std::shared_ptr<Material>& _material)
     : material(_material)
 {
-    std::shared_ptr<VertexBuffer> vertexBuffer = std::make_shared<VertexBuffer>(_vertex, _vertex.size() * sizeof(float), _vertexCount);
     vertexArray = std::make_shared<VertexArray>();
     vertexArray->Bind();
-    vertexArray->AddVertexBuffer(vertexBuffer);
+    vertexArray->AddVertexBuffer(_vertex, _vertex.size() * sizeof(float));
     
     vertexArray->SetLayout(
         {
@@ -24,17 +23,14 @@ Mesh::Mesh(const vector<float>& _vertex, unsigned int _vertexCount, const std::s
     );
 }
 
-Mesh::Mesh(const vector<float>& _vertex, unsigned int _vertexCount, const vector<unsigned int>& _index, unsigned int _indexCount,
-    const std::shared_ptr<Material>& _material)
+Mesh::Mesh(const vector<float>& _vertex,const vector<unsigned int>& _index, const std::shared_ptr<Material>& _material)
     : material(_material)
 {    
-    std::shared_ptr<VertexBuffer> vertexBuffer = std::make_shared<VertexBuffer>(_vertex, _vertex.size() * sizeof(float), _vertexCount);
     vertexArray = std::make_shared<VertexArray>();
     vertexArray->Bind();
-    vertexArray->AddVertexBuffer(vertexBuffer);
+    vertexArray->AddVertexBuffer(_vertex, _vertex.size() * sizeof(float));
 
-    std::shared_ptr<IndexBuffer> indexBuffer = std::make_shared<IndexBuffer>(_index, _indexCount);
-    vertexArray->SetIndexBuffer(indexBuffer);
+    vertexArray->SetIndexBuffer(_index);
     
     vertexArray->SetLayout(
         {

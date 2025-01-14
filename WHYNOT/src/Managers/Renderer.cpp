@@ -1,8 +1,10 @@
 #include "Renderer.h"
 
 #include "World.h"
+#include "Components/Collider.h"
 #include "Components/Mesh.h"
 #include "Components/Model.h"
+#include "Utils/Debugger.h"
 
 
 class Model;
@@ -75,25 +77,31 @@ Renderer* Renderer::GetInstance()
 void Renderer::Initialize()
 {
     glEnable(GL_DEPTH_TEST);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 void Renderer::Render()
 {
     for (const auto& entity : World::GetInstance()->GetEntities())
     {
-        if (!entity.second->isRendered)
+        if (entity.second->isRendered)
         {
-            continue;
+            std::shared_ptr<Model> model = entity.second->GetComponent<Model>();
+            if (!model)
+            {
+                Logger::Log<Renderer>(LogLevel::Warning,  "Renderable entity does not have a model");
+            }
+            model->Render();
         }
-        std::shared_ptr<Model> model = entity.second->GetComponent<Model>();
-        if (!model)
+
+        if (Debugger::collisionDebugEnabled && entity.second->hasCollision)
         {
-            Logger::Log<Renderer>(LogLevel::Warning,  "Renderable entity does not have a model");
+            std::shared_ptr<Collider> collider = entity.second->GetComponent<Collider>();
+            collider->Render();
         }
-        model->Render();
     }
 }
-
 void Renderer::Clear()
 {
     for (const auto& entity : World::GetInstance()->GetEntities())

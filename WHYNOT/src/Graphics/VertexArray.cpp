@@ -1,8 +1,6 @@
 #include "VertexArray.h"
 
-#include "IndexBuffer.h"
 #include "LayoutElement.h"
-#include "VertexBuffer.h"
 
 VertexArray::VertexArray()
 {
@@ -20,15 +18,16 @@ void VertexArray::Unbind()
     glBindVertexArray(0);
 }
 
-void VertexArray::AddVertexBuffer(std::shared_ptr<VertexBuffer>& _vertexBuffer)
+void VertexArray::AddVertexBuffer(const vector<float>& _vertex, unsigned int _size)
 {
-    vertexBuffers.push_back(_vertexBuffer);
-    _vertexBuffer->Bind();
+    std::unique_ptr<VertexBuffer> buff = std::make_unique<VertexBuffer>(_vertex, _size, _vertex.size());
+    vertexBuffers.push_back(std::move(buff));
+    vertexBuffers.back()->Bind();
 }
 
-void VertexArray::SetIndexBuffer(std::shared_ptr<IndexBuffer>& _indexBuffer)
+void VertexArray::SetIndexBuffer(const vector<unsigned int>& _index)
 {
-    indexBuffer = _indexBuffer;
+    indexBuffer = std::make_unique<IndexBuffer>(_index, _index.size());
     indexBuffer->Bind();
 }
 

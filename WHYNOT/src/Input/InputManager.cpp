@@ -5,7 +5,7 @@
 #include "Managers/Helper.h"
 #include "Managers/World.h"
 #include "Components/Transform.h"
-
+#include "Utils/Debugger.h"
 
 
 ////////////////////////////////////////////////////////
@@ -175,6 +175,8 @@ void InputManager::HandleKeyPress(int key, int mods)
         case GLFW_KEY_W:
             cameraMoveComp->SetInput(vec3(0,0,1));
             break;
+        case GLFW_KEY_1:
+            Debugger::collisionDebugEnabled = !Debugger::collisionDebugEnabled;
         default: 
             break;
     }

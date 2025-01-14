@@ -2,6 +2,8 @@
 
 #include "Components/Transform.h"
 #include "Components/Camera.h"
+#include "Components/CircleCollider.h"
+#include "Components/Collider.h"
 #include "Components/LightSource.h"
 #include "Components/Mesh.h"
 #include "Components/Model.h"
@@ -27,7 +29,14 @@ void ComponentFactory::ComponentFactorySetup()
     
     RegisterComponent("MESH", [](const std::shared_ptr<Entity>& entity, const YAML::Node& data) ->
         void {
-            entity->AddComponent<Model>(std::make_shared<Model>(ReadMesh(data)));
+            std::shared_ptr<Model> model = std::make_shared<Model>(ReadMesh(data));
+            if (data["position"])
+            {
+                model->position = vec3(data["position"][0].as<float>(),
+                    data["position"][1].as<float>(), data["position"][2].as<float>()); 
+            }
+            entity->AddComponent<Model>(model);
+        
         });
     
     RegisterComponent("MODEL", [](const std::shared_ptr<Entity>& entity, const YAML::Node& data) ->
@@ -43,6 +52,16 @@ void ComponentFactory::ComponentFactorySetup()
     RegisterComponent("PLAYERCONTROLLER", [](const std::shared_ptr<Entity>& entity, const YAML::Node& data) ->
         void {
             entity->AddComponent<PlayerController>(ReadMoveComp(data));
+        });
+
+    
+    RegisterComponent("COLLIDER", [](const std::shared_ptr<Entity>& entity, const YAML::Node& data) ->
+        void {
+            entity->hasCollision = true;
+            if (data["type"].as<string>() == "CIRCLE")
+            {
+                entity->AddComponent<CircleCollider>(ReadCircleCollider(data));
+            }
         });
 
 }
@@ -98,11 +117,11 @@ std::shared_ptr<Mesh> ComponentFactory::ReadMesh(const YAML::Node& asset)
     std::shared_ptr<Mesh> mesh = nullptr;
     if (index.empty())
     {
-        mesh = std::make_shared<Mesh>(vertex, vertexCount, ReadMaterial(asset));
+        mesh = std::make_shared<Mesh>(vertex, ReadMaterial(asset));
     }
     else
     {
-        mesh = std::make_shared<Mesh>(vertex, vertexCount, index, index.size(), ReadMaterial(asset));
+        mesh = std::make_shared<Mesh>(vertex, index, ReadMaterial(asset));
     }
     return mesh;
 }
@@ -110,6 +129,15 @@ std::shared_ptr<Mesh> ComponentFactory::ReadMesh(const YAML::Node& asset)
 std::shared_ptr<Model> ComponentFactory::ReadModel(const YAML::Node& asset)
 {
     std::shared_ptr<Model> model = std::make_shared<Model>(asset["path"].as<string>().c_str());
+    if (asset["position"])
+    {
+        model->position = vec3(asset["position"][0].as<float>(),
+            asset["position"][1].as<float>(), asset["position"][2].as<float>()); 
+    }
+    if (asset["invert"])
+    {
+        model->invertTexture = asset["invert"].as<bool>(); 
+    }
     return model;
 }
 
@@ -262,4 +290,10 @@ std::shared_ptr<PlayerController> ComponentFactory::ReadMoveComp(const YAML::Nod
         moveComp->maxAcceleration = asset["maxAcceleration"].as<float>(); 
     }
     return moveComp;
+}
+
+std::shared_ptr<CircleCollider> ComponentFactory::ReadCircleCollider(const YAML::Node& asset)
+{
+    std::shared_ptr<CircleCollider> circleCollider = std::make_shared<CircleCollider>(asset["radius"].as<float>());
+    return circleCollider;
 }

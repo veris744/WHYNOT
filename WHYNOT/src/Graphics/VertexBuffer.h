@@ -9,7 +9,6 @@ class VertexBuffer
     
 public:
     VertexBuffer(const vector<float>& i_vertex, unsigned int i_size, unsigned int i_count);
-    ~VertexBuffer() = default;
 
     void Bind();
     void Unbind();

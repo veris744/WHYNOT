@@ -2,15 +2,19 @@
 
 
 
-mat4 Transform::GetModelMatrix() const
+mat4 Transform::GetModelMatrix(vec3 _relativePosition, bool _invert) const
 {
     mat4 trans = mat4(1.0f);
-    // mat4 trans = mat4(
-    //     1,  0,  0,  0,
-    //     0, -1,  0,  0,
-    //     0,  0,  1,  0,
-    //     0,  0,  0,  1);
-    trans = translate(trans, v_position);
+    if (_invert)
+    {
+        trans = mat4(
+            1,  0,  0,  0,
+            0, -1,  0,  0,
+            0,  0,  1,  0,
+            0,  0,  0,  1);
+    }
+    vec3 trueDiff = _relativePosition.x * v_right + _relativePosition.y * v_forward + _relativePosition.z * v_up;
+    trans = translate(trans, v_position + trueDiff);
     trans = rotate(trans, glm::radians(v_rotation.yaw), v_up);
     trans = rotate(trans, glm::radians(v_rotation.pitch), v_right);
     trans = rotate(trans, glm::radians(v_rotation.roll), v_forward);

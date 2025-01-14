@@ -1,10 +1,10 @@
 #include "VertexBuffer.h"
 #include <includes.h>
 
-VertexBuffer::VertexBuffer(const vector<float>& i_vertex, unsigned int i_size, unsigned int i_count)
-    : vertex(i_vertex)
-    , vertexCount(i_count)
-    , size(i_size)
+VertexBuffer::VertexBuffer(const vector<float>& _vertex, unsigned int _size, unsigned int _count)
+    : vertex(_vertex)
+    , vertexCount(_count)
+    , size(_size)
 {
     glGenBuffers(1, &VBO);
 }

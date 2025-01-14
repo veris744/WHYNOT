@@ -29,7 +29,7 @@ public:
     vec3 v_right;
 
 
-    mat4 GetModelMatrix() const;
+    mat4 GetModelMatrix(vec3 _relativePosition = vec3(0,0,0), bool _invert = false) const;
     void Update(float deltaTime) override;
     void SetRotation(float pitch, float yaw, float roll);
     

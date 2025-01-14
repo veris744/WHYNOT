@@ -24,6 +24,10 @@ public:
         name = "MODEL";
         LoadModel(path);
     }
+
+    vec3 position = vec3(0,0,0);
+    bool invertTexture = false;
+    
     void Render();
     void Update(float deltaTime);
     void Clear();

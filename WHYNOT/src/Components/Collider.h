@@ -1,7 +1,37 @@
 #pragma once
+#include "Component.h"
+#include "Transform.h"
+#include "Entities/Entity.h"
 
-class Collider
+class BoxCollider;
+class CircleCollider;
+
+enum class ColliderType
 {
-public:
+    CIRCLE, BOX
+};
+
+class Collider : public Component
+{
+protected:
+    ColliderType type;
+
+    bool CheckCircleCircle(float _rad1, vec3 _pos1, float _rad2, vec3 _pos2);
+    bool CheckCircleSquare(float _rad1, vec3 _pos1, vec3 _width2, vec3 _height2, vec3 _depth, vec3 _pos2);
+    bool CheckSquareSquare(vec3 _width1, vec3 _height1, vec3 _pos1, vec3 _width2, vec3 _height2, vec3 _pos2);
     
+public:
+    Collider()
+    {
+        name = "COLLIDER";
+    }
+    virtual ~Collider() = default;
+    
+    vec3 position;
+
+    ColliderType GetType() const {  return type; }
+    
+    virtual bool Collides(const CircleCollider& other) = 0;
+    virtual bool Collides(const BoxCollider& other) = 0;
+    virtual void Render() = 0;
 };

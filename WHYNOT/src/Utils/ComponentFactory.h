@@ -4,6 +4,8 @@
 
 #include "Entities/Entity.h"
 
+class CircleCollider;
+class Collider;
 class PlayerController;
 class Material;
 class LightSource;
@@ -28,6 +30,7 @@ private:
     static std::shared_ptr<LightSource> ReadLight(const YAML::Node& asset);
     static std::shared_ptr<Material> ReadMaterial(const YAML::Node& asset);
     static std::shared_ptr<PlayerController> ReadMoveComp(const YAML::Node& asset);
+    static std::shared_ptr<CircleCollider> ReadCircleCollider(const YAML::Node& asset);
     
 public:
     ComponentFactory() = default;

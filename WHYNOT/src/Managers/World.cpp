@@ -42,6 +42,17 @@ void World::Update(float deltaTime)
     }
 }
 
+void World::CheckCollisions()
+{
+    for (const auto& entity : entities)
+    {
+        if (entity.second->hasCollision)
+        {
+            // calculate collision
+        }
+    }
+}
+
 void World::AddEntity(const std::shared_ptr<Entity>& _entity)
 {
     if (entities.count(_entity->GetName()))
