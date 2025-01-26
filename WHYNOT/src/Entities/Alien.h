@@ -4,6 +4,8 @@
 class Alien : public Entity
 {
     static unsigned int counter;
+
+    void OnOutOfBounds(vec3 _normal);
     
 public:
     Alien()

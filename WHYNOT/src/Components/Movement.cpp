@@ -21,4 +21,6 @@ void Movement::Update(float deltaTime)
         speed = normalize(speed) * maxSpeed;
     }
     transform->v_position = transform->v_position + speed * deltaTime;
+
+    cout << speed.x << " " << speed.y << " " << speed.z << std::endl;
 }

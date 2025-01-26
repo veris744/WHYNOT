@@ -14,8 +14,11 @@ public:
     
     bool Collides(const CircleCollider& other) override;
     bool Collides(const BoxCollider& other) override;
+    bool CheckInBounds() override;
     void Render() override;
     void Update(float deltaTime) override;
 
     float GetRadius() const { return radius; }
+    
+    SingleDelegate<vec3> OnOutOfBoundsDelegate;
 };

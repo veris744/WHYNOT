@@ -21,22 +21,6 @@ assets:
           color: [0.5, 0.5, 0.5]
           ambient: 0.2
           type: "AMBIENT"
-#  - name: "Alien"
-#    isCamera: False
-#    isLight: False
-#    isRendered: True
-#    components:
-#      - name: "TRANSFORM"
-#        position: [3, 0, 7]
-#        rotation: [0, 0, 0]
-#        scale:  [0.5, 0.5, 0.5]
-#      - name: "MODEL"
-#        path: "assets/ufo/PinkAlien.obj"
-##        invert: True
-#        position: [-0.5, -0.5, -0.5]
-#      - name: "COLLIDER"
-#        type: "CIRCLE"
-#        radius: 2.3
   - name: "Cube1"
     isCamera: False
     isLight: False

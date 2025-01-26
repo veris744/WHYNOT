@@ -9,6 +9,17 @@ bool Collider::CheckCircleCircle(float _rad1, vec3 _pos1, float _rad2, vec3 _pos
     return false;
 }
 
+bool Collider::CheckCirclePlane(float _rad1, vec3 _pos1, vec3 _point, vec3 _normal)
+{
+    float distanceToPlane = dot(_normal, (_pos1 - _point));
+
+    if (fabs(distanceToPlane) <= _rad1)
+    {
+        return true;
+    }
+    return false;
+}
+
 bool Collider::CheckCircleSquare(float _rad1, vec3 _pos1, vec3 _width2, vec3 _height2, vec3 _depth, vec3 _pos2)
 {
     vec3 halfExtents = vec3(_width2.x / 2.0f, _height2.y / 2.0f, _depth.z / 2.0f);

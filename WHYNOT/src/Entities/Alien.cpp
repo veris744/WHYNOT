@@ -8,6 +8,7 @@
 
 unsigned int Alien::counter = 0;
 
+
 void Alien::Initialize()
 {
     Entity::Initialize();
@@ -28,11 +29,42 @@ void Alien::Initialize()
     std::shared_ptr<CircleCollider> collider = std::make_shared<CircleCollider>(2.3);
     AddComponent(collider);
 
+    collider->OnOutOfBoundsDelegate.Bind(&Alien::OnOutOfBounds, this);
+
     std::shared_ptr<Movement> movement = std::make_shared<Movement>();
+    movement->speed = vec3(3, 2, 0);
     AddComponent(movement);
 }
 
 void Alien::Update(float _deltaTime)
 {
+    std::shared_ptr<CircleCollider> collider = GetComponent<CircleCollider>();
+    collider->CheckInBounds();
+    
     Entity::Update(_deltaTime);
+}
+
+
+void Alien::OnOutOfBounds(vec3 _normal)
+{
+    std::shared_ptr<Movement> movement = GetComponent<Movement>();
+
+    float velocityTowardPlane = dot(_normal, movement->speed);
+    if (velocityTowardPlane > 0)
+    {
+        return;
+    }
+    
+    if (_normal.x != 0.f)
+    {
+        movement->speed.x = movement->speed.x * -1;
+    }
+    if (_normal.y != 0.f)
+    {
+        movement->speed.y = movement->speed.y * -1;
+    }
+    if (_normal.z != 0.f)
+    {
+        movement->speed.z = movement->speed.z * -1;
+    }
 }

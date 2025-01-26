@@ -17,6 +17,7 @@ protected:
     ColliderType type;
 
     bool CheckCircleCircle(float _rad1, vec3 _pos1, float _rad2, vec3 _pos2);
+    bool CheckCirclePlane(float _rad1, vec3 _pos1, vec3 _point, vec3 _normal);
     bool CheckCircleSquare(float _rad1, vec3 _pos1, vec3 _width2, vec3 _height2, vec3 _depth, vec3 _pos2);
     bool CheckSquareSquare(vec3 _width1, vec3 _height1, vec3 _pos1, vec3 _width2, vec3 _height2, vec3 _pos2);
     
@@ -33,5 +34,6 @@ public:
     
     virtual bool Collides(const CircleCollider& other) = 0;
     virtual bool Collides(const BoxCollider& other) = 0;
+    virtual bool CheckInBounds() = 0;
     virtual void Render() = 0;
 };

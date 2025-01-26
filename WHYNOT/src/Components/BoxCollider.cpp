@@ -10,6 +10,11 @@ bool BoxCollider::Collides(const BoxCollider& other)
     return false;
 }
 
+bool BoxCollider::CheckInBounds()
+{
+    return false;
+}
+
 void BoxCollider::Render()
 {
 }
