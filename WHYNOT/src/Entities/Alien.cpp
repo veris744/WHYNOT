@@ -34,6 +34,8 @@ void Alien::Initialize()
     std::shared_ptr<Movement> movement = std::make_shared<Movement>();
     movement->speed = vec3(3, 2, 2.5);
     AddComponent(movement);
+    
+    collider->CollisionDelegate.Bind(&Alien::OnCollision, this);
 }
 
 void Alien::Update(float _deltaTime)
@@ -75,4 +77,9 @@ void Alien::OnOutOfBounds(vec3 _normal)
     {
         movement->speed.z = movement->speed.z * -1;
     }
+}
+
+void Alien::OnCollision(const Entity& _otherEntity, vec3 normal)
+{
+    Destroy();
 }

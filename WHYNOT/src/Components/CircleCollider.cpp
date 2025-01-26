@@ -4,14 +4,21 @@
 #include "Managers/Renderer.h"
 #include "Utils/Debugger.h"
 
-bool CircleCollider::Collides(const CircleCollider& other)
+
+bool CircleCollider::Collides(const Collider& other) const
 {
-    return CheckCircleCircle(radius, position, other.GetRadius(), other.position);
+    return other.Collides(radius, position);
 }
 
-bool CircleCollider::Collides(const BoxCollider& other)
+
+bool CircleCollider::Collides(float _rad1, vec3 _pos1) const 
 {
-    return false;
+    return CheckCircleCircle(radius, position, _rad1, _pos1);
+}
+
+bool CircleCollider::Collides(vec3 _width1, vec3 _height1, vec3 _depth1, vec3 _pos1) const
+{
+    return CheckCircleSquare(radius, position, _width1, _height1, _depth1, _pos1);
 }
 
 bool CircleCollider::CheckInBounds(const vec2& xBounds, const vec2& yBounds, const vec2& zBounds)

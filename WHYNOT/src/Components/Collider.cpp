@@ -1,6 +1,6 @@
 #include "Collider.h"
 
-bool Collider::CheckCircleCircle(float _rad1, vec3 _pos1, float _rad2, vec3 _pos2)
+bool Collider::CheckCircleCircle(float _rad1, vec3 _pos1, float _rad2, vec3 _pos2) const
 {
     if (distance(_pos1, _pos2) <= (_rad1 + _rad2))
     {
@@ -9,7 +9,7 @@ bool Collider::CheckCircleCircle(float _rad1, vec3 _pos1, float _rad2, vec3 _pos
     return false;
 }
 
-bool Collider::CheckCirclePlane(float _rad1, vec3 _pos1, vec3 _point, vec3 _normal)
+bool Collider::CheckCirclePlane(float _rad1, vec3 _pos1, vec3 _point, vec3 _normal) const
 {
     float distanceToPlane = dot(_normal, (_pos1 - _point));
 
@@ -20,7 +20,7 @@ bool Collider::CheckCirclePlane(float _rad1, vec3 _pos1, vec3 _point, vec3 _norm
     return false;
 }
 
-bool Collider::CheckCircleSquare(float _rad1, vec3 _pos1, vec3 _width2, vec3 _height2, vec3 _depth, vec3 _pos2)
+bool Collider::CheckCircleSquare(float _rad1, vec3 _pos1, vec3 _width2, vec3 _height2, vec3 _depth, vec3 _pos2) const
 {
     vec3 halfExtents = vec3(_width2.x / 2.0f, _height2.y / 2.0f, _depth.z / 2.0f);
 
@@ -39,7 +39,7 @@ bool Collider::CheckCircleSquare(float _rad1, vec3 _pos1, vec3 _width2, vec3 _he
     return distanceSquared <= (_rad1 * _rad1);
 }
 
-bool Collider::CheckSquareSquare(vec3 _width1, vec3 _height1, vec3 _pos1, vec3 _width2, vec3 _height2, vec3 _pos2)
+bool Collider::CheckSquareSquare(vec3 _width1, vec3 _height1, vec3 _depth1, vec3 _pos1, vec3 _width2, vec3 _height2, vec3 _depth2, vec3 _pos2) const
 {
     return false;
 }

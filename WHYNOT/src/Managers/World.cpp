@@ -1,6 +1,7 @@
 #include "World.h"
 
 #include "Components/Camera.h"
+#include "Components/Collider.h"
 #include "Components/LightSource.h"
 #include "Components/Mesh.h"
 #include "Components/Model.h"
@@ -42,6 +43,7 @@ void World::Update(float deltaTime)
     {
         entity.second->Update(deltaTime);
     }
+    CheckCollisions();
     for (const auto& entity : toBeDestroyed)
     {
         RemoveEntity(entity->GetName());
@@ -51,11 +53,23 @@ void World::Update(float deltaTime)
 
 void World::CheckCollisions()
 {
-    for (const auto& entity : entities)
+    for (auto it = entities.begin(); it != entities.end(); it++)
     {
-        if (entity.second->hasCollision)
+        if (it->second->hasCollision)
         {
-            // calculate collision
+            for (auto it2 = std::next(it); it2 != entities.end(); it2++)
+            {
+                if (it2->second->hasCollision)
+                {
+                    std::shared_ptr<Collider> c1 = it->second->GetComponent<Collider>();
+                    std::shared_ptr<Collider> c2 = it2->second->GetComponent<Collider>();
+                    if (c1->Collides(*c2))
+                    {
+                        c1->CollisionDelegate.Execute(*it2->second, vec3(0));
+                        c2->CollisionDelegate.Execute(*it->second, vec3(0));
+                    }
+                }
+            }
         }
     }
 }

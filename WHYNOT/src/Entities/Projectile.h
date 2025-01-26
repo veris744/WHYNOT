@@ -5,7 +5,7 @@ class Projectile : public Entity
 {
     static unsigned int counter;
 
-    void OnCollision(const std::shared_ptr<Entity>& _otherEntity, vec3 normal);
+    void OnCollision(const Entity& _otherEntity, vec3 normal);
     void OnOutOfBounds(vec3 _normal);
     
 public:

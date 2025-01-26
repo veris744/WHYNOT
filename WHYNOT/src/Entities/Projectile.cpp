@@ -45,10 +45,11 @@ void Projectile::Initialize()
     AddComponent(collider);
     
     std::shared_ptr<Movement> movement = std::make_shared<Movement>();
-    movement->speed = World::GetInstance()->GetCurrentCameraTrans()->v_forward * 2.f;
+    movement->speed = World::GetInstance()->GetCurrentCameraTrans()->v_forward * 5.f;
     AddComponent(movement);
     
     collider->OnOutOfBoundsDelegate.Bind(&Projectile::OnOutOfBounds, this);
+    collider->CollisionDelegate.Bind(&Projectile::OnCollision, this);
 }
 
 void Projectile::Update(float _deltaTime)
@@ -59,9 +60,9 @@ void Projectile::Update(float _deltaTime)
 }
 
 
-void Projectile::OnCollision(const std::shared_ptr<Entity>& _otherEntity, vec3 normal)
+void Projectile::OnCollision(const Entity& _otherEntity, vec3 normal)
 {
-    
+    Destroy();
 }
 
 void Projectile::OnOutOfBounds(vec3 _normal)
