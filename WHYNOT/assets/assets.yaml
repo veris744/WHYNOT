@@ -21,45 +21,26 @@ assets:
           color: [0.5, 0.5, 0.5]
           ambient: 0.2
           type: "AMBIENT"
-  - name: "Cube1"
-    isCamera: False
-    isLight: False
-    isRendered: True
-    components:
-      - name: "TRANSFORM"
-        position: [1.5, 0, 3]
-        rotation: [0, 45, 0]
-        scale: [1, 1, 1]
-      - name: "MESH"
-        primitive: "CUBE"
-        textures: ["assets/box.jpg", "assets/spec.png"]
-        vertexShader: "shaders/vertex.glsl"
-        fragmentShader: "shaders/fragment.glsl"
-        specular: 1
-        type: "TEXTURE"
-  - name: "Sphere1"
-    isCamera: False
-    isLight: False
-    isRendered: True
-    components:
-      - name: "TRANSFORM"
-        position: [-1.5, 0, 3]
-        rotation: [0, 0, 0]
-        scale: [1, 1, 1]
-      - name: "MESH"
-        primitive: "SPHERE"
-        radius: 0.5
-        sectors: 32
-        stack: 16
-        textures: []
-        color: [0, 0, 1]
-        vertexShader: "shaders/vertex.glsl"
-        fragmentShader: "shaders/neonFragment.glsl"
-        type: "NEON"
+#  - name: "Cube1"
+#    isCamera: False
+#    isLight: False
+#    isRendered: True
+#    components:
+#      - name: "TRANSFORM"
+#        position: [1.5, 0, 3]
+#        rotation: [0, 45, 0]
+#        scale: [1, 1, 1]
+#      - name: "MESH"
+#        primitive: "CUBE"
+#        textures: ["assets/box.jpg", "assets/spec.png"]
+#        vertexShader: "shaders/vertex.glsl"
+#        fragmentShader: "shaders/fragment.glsl"
+#        specular: 1
+#        type: "TEXTURE"
   - name: "Light2"
     isCamera: False
     isLight: True
-    isRendered: True
+    isRendered: False
     components:
       - name: "LIGHT"
         lightData:
@@ -75,10 +56,10 @@ assets:
         position: [ 0, 0, 2 ]
         rotation: [0, 45, 0]
         scale: [0.3, 0.3, 0.3]
-      - name: "MESH"
-        primitive: "CUBE"
-        textures: ["assets/bulb.png"]
-        type: "TEXTURE"
+#      - name: "MESH"
+#        primitive: "CUBE"
+#        textures: ["assets/bulb.png"]
+#        type: "TEXTURE"
   - name: "Light3"
     isCamera: False
     isLight: True

@@ -1,6 +1,7 @@
 #include "Entity.h"
 
 #include "Components/Component.h"
+#include "Managers/World.h"
 
 
 void Entity::Update(float deltaTime)
@@ -9,4 +10,9 @@ void Entity::Update(float deltaTime)
     {
         component->Update(deltaTime);
     }
+}
+
+void Entity::Destroy()
+{
+    World::GetInstance()->MarkForDestruction(name);
 }

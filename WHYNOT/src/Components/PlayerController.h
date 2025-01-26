@@ -57,4 +57,5 @@ public:
     }
 
     void Update(float deltaTime) override;
+    void Shoot();
 };

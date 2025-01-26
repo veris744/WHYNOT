@@ -10,7 +10,7 @@ bool BoxCollider::Collides(const BoxCollider& other)
     return false;
 }
 
-bool BoxCollider::CheckInBounds()
+bool BoxCollider::CheckInBounds(const vec2& xBounds, const vec2& yBounds, const vec2& zBounds)
 {
     return false;
 }

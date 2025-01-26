@@ -60,5 +60,6 @@ public:
     string GetName() { return name; }
 
     virtual void Update(float deltaTime);
+    virtual void Destroy();
 };
 

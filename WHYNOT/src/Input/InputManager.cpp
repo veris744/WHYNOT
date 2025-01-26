@@ -68,6 +68,10 @@ void InputManager::KeyCallback(GLFWwindow* window, int key, int scancode, int ac
     {
         event.type = EventType::KeyRelease;
     }
+    else
+    {
+        event.type = EventType::KeyPress;
+    }
     // if (keysStatus[key] == KeyStatus::RELEASED)
     // {
     //     keysStatus[key] = KeyStatus::PRESSED;
@@ -85,7 +89,11 @@ void InputManager::MouseButtonCallback(GLFWwindow* window, int button, int actio
     InputEvent event = {EventType::MouseButtonPress, button, action, 0, 0, mods};
     if (action == GLFW_RELEASE)
     {
-        event.type = EventType::KeyRelease;
+        event.type = EventType::MouseButtonRelease;
+    }
+    else
+    {
+        event.type = EventType::MouseButtonPress;
     }
     // if (keysStatus[button] == KeyStatus::RELEASED)
     // {
@@ -214,6 +222,7 @@ void InputManager::HandleMouseButtonPress(int key)
     double xpos, ypos;
     glfwGetCursorPos(Helper::GetWindow(), &xpos, &ypos);
     OnClickDelegate.Execute(vec2(xpos, ypos));
+    World::GetInstance()->GetCamera("MainCamera")->GetComponent<PlayerController>()->Shoot();
 }
 
 void InputManager::HandleMouseButtonRelease(int key)

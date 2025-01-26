@@ -16,7 +16,7 @@ public:
     
     bool Collides(const CircleCollider& other) override;
     bool Collides(const BoxCollider& other) override;
-    bool CheckInBounds() override;
+    bool CheckInBounds(const vec2& xBounds, const vec2& yBounds, const vec2& zBounds) override;
     void Render() override;
     void Update(float deltaTime) override;
 

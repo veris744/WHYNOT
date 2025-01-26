@@ -12,7 +12,7 @@ public:
     {
         name = "Alien" + std::to_string(++counter);
     }
-    explicit Alien(const string& _name)
+    Alien(const string& _name)
     {
         name = _name;
     }

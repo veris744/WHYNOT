@@ -2,6 +2,8 @@
 
 #include "Transform.h"
 #include "Entities/Entity.h"
+#include "Entities/Projectile.h"
+#include "Managers/World.h"
 
 void PlayerController::StopForwardMovement()
 {
@@ -54,5 +56,11 @@ void PlayerController::Update(float deltaTime)
      + transform->v_right * speed.x
     + transform->v_up * speed.y;
     transform->v_position = transform->v_position + localSpeed * deltaTime;
-    //std::cout << currentInput.x << " " << currentInput.y << " "  << currentInput.z << " "  << std::endl;
+}
+
+void PlayerController::Shoot()
+{
+    std::shared_ptr<Projectile> projectile = std::make_shared<Projectile>();
+    projectile->Initialize();
+    World::GetInstance()->AddEntity(projectile);
 }

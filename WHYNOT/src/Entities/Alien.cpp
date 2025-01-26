@@ -32,14 +32,22 @@ void Alien::Initialize()
     collider->OnOutOfBoundsDelegate.Bind(&Alien::OnOutOfBounds, this);
 
     std::shared_ptr<Movement> movement = std::make_shared<Movement>();
-    movement->speed = vec3(3, 2, 0);
+    movement->speed = vec3(3, 2, 2.5);
     AddComponent(movement);
 }
 
 void Alien::Update(float _deltaTime)
 {
     std::shared_ptr<CircleCollider> collider = GetComponent<CircleCollider>();
-    collider->CheckInBounds();
+    collider->CheckInBounds(vec2(-8, 8), vec2(-4, 12), vec2(5, 16));
+
+    
+    std::shared_ptr<Model> model = GetComponent<Model>();
+    if (model)
+    {
+       GetComponent<Transform>()->SetRotation(GetComponent<Transform>()->v_rotation.pitch,
+           GetComponent<Transform>()->v_rotation.yaw += 20*_deltaTime,GetComponent<Transform>()->v_rotation.roll);
+    }
     
     Entity::Update(_deltaTime);
 }

@@ -3,6 +3,7 @@
 #include <utility>
 
 #include "Entities/Alien.h"
+#include "Entities/Projectile.h"
 #include "Managers/World.h"
 
 
@@ -16,6 +17,12 @@ void EntityFactory::EntityFactorySetup()
         void {
             std::shared_ptr<Alien> alien = ReadAlien(data);
             World::GetInstance()->AddEntity(alien);
+        });
+    
+    RegisterEntity("PROJECTILE", [](const YAML::Node& data) ->
+        void {
+            std::shared_ptr<Projectile> proj = ReadProjectile(data);
+            World::GetInstance()->AddEntity(proj);
         });
 }
 
@@ -42,6 +49,14 @@ std::shared_ptr<Alien> EntityFactory::ReadAlien(const YAML::Node& asset)
     return alien;
 }
 
+std::shared_ptr<Projectile> EntityFactory::ReadProjectile(const YAML::Node& asset)
+{
+    std::shared_ptr<Projectile> projectile = std::make_shared<Projectile>();
+    projectile->Initialize();
+    SetTransform(projectile, asset);
+    return projectile;
+}
+
 void EntityFactory::SetTransform(const std::shared_ptr<Entity>& _entity, const YAML::Node& asset)
 {
     std::shared_ptr<Transform> transform = _entity->GetComponent<Transform>();
@@ -63,6 +78,5 @@ void EntityFactory::SetTransform(const std::shared_ptr<Entity>& _entity, const Y
     {
         transform->v_rotation.SetRotation(asset["rotation"][0].as<float>(),
             asset["rotation"][1].as<float>(), asset["rotation"][2].as<float>());
-
     }
 }

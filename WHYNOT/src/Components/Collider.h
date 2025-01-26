@@ -34,6 +34,6 @@ public:
     
     virtual bool Collides(const CircleCollider& other) = 0;
     virtual bool Collides(const BoxCollider& other) = 0;
-    virtual bool CheckInBounds() = 0;
+    virtual bool CheckInBounds(const vec2& xBounds, const vec2& yBounds, const vec2& zBounds) = 0;
     virtual void Render() = 0;
 };

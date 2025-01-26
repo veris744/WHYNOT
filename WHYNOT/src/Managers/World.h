@@ -16,6 +16,8 @@ class World
     map<string, std::shared_ptr<Entity>> cameras;
     map<string, std::shared_ptr<LightSource>> lights;
 
+    std::vector<std::shared_ptr<Entity>> toBeDestroyed;
+
     std::shared_ptr<Entity> currentCamera;
     std::shared_ptr<Camera> currentCameraComp;
     std::shared_ptr<Transform> currentCameraTransform;
@@ -63,8 +65,12 @@ public:
             lights[_entity->GetName()] = light;
         }
     }
-    //void AddEntity(const std::shared_ptr<Entity>& _entity);
 
+    void MarkForDestruction(const string& _entityName);
+private:
+    void RemoveEntity(const string& _entityName);
+
+public:
     unsigned int GetEntityCount() const { return entities.size(); }
     std::shared_ptr<Entity> GetEntity(const string& _name) const { return entities.at(_name); }
     map<string, std::shared_ptr<Entity>> GetEntities() const { return entities; }

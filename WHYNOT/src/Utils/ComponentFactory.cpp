@@ -100,18 +100,15 @@ std::shared_ptr<Mesh> ComponentFactory::ReadMesh(const YAML::Node& asset)
 {
     vector<float> vertex;
     vector<unsigned int> index = {};
-    unsigned int vertexCount = 0;
     if (asset["primitive"].as<string>() == "CUBE")
     {
         vertex = Renderer::GetCubeVertex();
-        vertexCount = vertex.size();
     }
     else if (asset["primitive"].as<string>() == "SPHERE")
     {
         Renderer::SetSphereVertex(asset["radius"].as<float>(),asset["sectors"].as<int>(),asset["stack"].as<int>());
         vertex = Renderer::GetSphereVertex();
         index = Renderer::GetShereIndex();
-        vertexCount = vertex.size();
     }
 
     std::shared_ptr<Mesh> mesh = nullptr;

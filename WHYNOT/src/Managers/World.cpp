@@ -41,13 +41,12 @@ void World::Update(float deltaTime)
     for (const auto& entity : entities)
     {
         entity.second->Update(deltaTime);
-        std::shared_ptr<Model> model = entity.second->GetComponent<Model>();
-        if (model)
-        {
-            entity.second->GetComponent<Transform>()->SetRotation(entity.second->GetComponent<Transform>()->v_rotation.pitch,
-                entity.second->GetComponent<Transform>()->v_rotation.yaw += 20*deltaTime, entity.second->GetComponent<Transform>()->v_rotation.roll);
-        }
     }
+    for (const auto& entity : toBeDestroyed)
+    {
+        RemoveEntity(entity->GetName());
+    }
+    toBeDestroyed.clear();
 }
 
 void World::CheckCollisions()
@@ -61,28 +60,24 @@ void World::CheckCollisions()
     }
 }
 
-// void World::AddEntity(const std::shared_ptr<Entity>& _entity)
-// {
-//     if (entities.count(_entity->GetName()))
-//     {
-//         Logger::Log<World>(LogLevel::Warning, _entity->GetName() + " entity already exists");
-//     }
-//     entities[_entity->GetName()] = _entity;
-//     
-//     if (_entity->IsCamera())
-//     {
-//         cameras[_entity->GetName()] = _entity;
-//         if (!currentCameraComp)
-//         {
-//            SetCurrentCamera(_entity);
-//         }
-//     }
-//     if (_entity->IsLight())
-//     {
-//         std::shared_ptr<LightSource> light = _entity->GetComponent<LightSource>();
-//         lights[_entity->GetName()] = light;
-//     }
-// }
+void World::MarkForDestruction(const string& _entityName)
+{
+    toBeDestroyed.push_back(entities.at(_entityName));
+}
+
+void World::RemoveEntity(const string& _entityName)
+{
+    std::shared_ptr<Entity> entity = entities.at(_entityName);
+    if (entity->IsCamera())
+    {
+        cameras.erase(entity->GetName());
+    }
+    if (entity->IsLight())
+    {
+        lights.erase(entity->GetName());
+    }
+    entities.erase(entity->GetName());
+}
 
 void World::SetCurrentCamera(const std::shared_ptr<Entity>& _camera)
 {

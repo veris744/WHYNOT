@@ -219,6 +219,7 @@
     <ClCompile Include="src\Components\Transform.cpp" />
     <ClCompile Include="src\Entities\Alien.cpp" />
     <ClCompile Include="src\Entities\Entity.cpp" />
+    <ClCompile Include="src\Entities\Projectile.cpp" />
     <ClCompile Include="src\Graphics\IndexBuffer.cpp" />
     <ClCompile Include="src\Graphics\LayoutElement.cpp" />
     <ClCompile Include="src\Graphics\Material.cpp" />
@@ -550,6 +551,7 @@
     <ClInclude Include="src\Components\Transform.h" />
     <ClInclude Include="src\Entities\Alien.h" />
     <ClInclude Include="src\Entities\Entity.h" />
+    <ClInclude Include="src\Entities\Projectile.h" />
     <ClInclude Include="src\Graphics\IndexBuffer.h" />
     <ClInclude Include="src\Graphics\LayoutElement.h" />
     <ClInclude Include="src\Graphics\Material.h" />

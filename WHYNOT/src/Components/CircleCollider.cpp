@@ -14,34 +14,34 @@ bool CircleCollider::Collides(const BoxCollider& other)
     return false;
 }
 
-bool CircleCollider::CheckInBounds()
+bool CircleCollider::CheckInBounds(const vec2& xBounds, const vec2& yBounds, const vec2& zBounds)
 {
-    if (CheckCirclePlane(radius, position, vec3(-8, 0, 0), vec3(1, 0, 0)))
+    if (CheckCirclePlane(radius, position, vec3(xBounds.x, 0, 0), vec3(1, 0, 0)))
     {
         OnOutOfBoundsDelegate.Execute(vec3(1, 0, 0));
         return false;
     }
-    if (CheckCirclePlane(radius, position, vec3(8, 0, 0), vec3(-1, 0, 0)))
+    if (CheckCirclePlane(radius, position, vec3(xBounds.y, 0, 0), vec3(-1, 0, 0)))
     {
         OnOutOfBoundsDelegate.Execute(vec3(-1, 0, 0));
         return false;
     }
-    if (CheckCirclePlane(radius, position, vec3(0, -8, 0), vec3(0, 1, 0)))
+    if (CheckCirclePlane(radius, position, vec3(0, yBounds.x, 0), vec3(0, 1, 0)))
     {
         OnOutOfBoundsDelegate.Execute(vec3(0, 1, 0));
         return false;
     }
-    if (CheckCirclePlane(radius, position, vec3(0, 8, 0), vec3(0, -1, 0)))
+    if (CheckCirclePlane(radius, position, vec3(0, yBounds.y, 0), vec3(0, -1, 0)))
     {
         OnOutOfBoundsDelegate.Execute(vec3(0, -1, 0));
         return false;
     }
-    if (CheckCirclePlane(radius, position, vec3(0, 0, 1), vec3(0, 0, 1)))
+    if (CheckCirclePlane(radius, position, vec3(0, 0, zBounds.x), vec3(0, 0, 1)))
     {
         OnOutOfBoundsDelegate.Execute(vec3(0, 0, 1));
         return false;
     }
-    if (CheckCirclePlane(radius, position, vec3(0, 0, 12), vec3(0, 0, -1)))
+    if (CheckCirclePlane(radius, position, vec3(0, 0, zBounds.y), vec3(0, 0, -1)))
     {
         OnOutOfBoundsDelegate.Execute(vec3(0, 0, -1));
         return false;
