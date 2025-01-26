@@ -1,6 +1,7 @@
 #include "AssetReader.h"
 
 #include "ComponentFactory.h"
+#include "EntityFactory.h"
 #include "WidgetFactory.h"
 #include "Components/Model.h"
 #include "Managers/World.h"
@@ -13,7 +14,7 @@ void AssetReader::ReadAssets(const char* filePath)
     {
         for (const YAML::Node& asset : fileYaml["assets"])
         {
-            SaveEntity(asset);
+            SaveCustomEntity(asset);
         }
     }
     if (fileYaml["widgets"])
@@ -23,9 +24,22 @@ void AssetReader::ReadAssets(const char* filePath)
             SaveWidget(asset);
         }
     }
+    if (fileYaml["entities"])
+    {
+        for (const YAML::Node& asset : fileYaml["entities"])
+        {
+            SaveEntity(asset);
+        }
+    }
 }
 
 void AssetReader::SaveEntity(const YAML::Node& asset)
+{
+    string type = asset["type"].as<std::string>();
+    EntityFactory::GetInstance()->CreateEntity(type, asset);
+}
+
+void AssetReader::SaveCustomEntity(const YAML::Node& asset)
 {
     std::shared_ptr<Entity> entity = std::make_shared<Entity>(asset["name"].as<std::string>(),
         asset["isCamera"].as<bool>(), asset["isLight"].as<bool>());
@@ -41,8 +55,8 @@ void AssetReader::SaveEntity(const YAML::Node& asset)
 
 void AssetReader::SaveComponent(const std::shared_ptr<Entity>& entity, const YAML::Node& asset)
 {
-    string name = asset["name"].as<std::string>();
-    ComponentFactory::GetInstance()->CreateComponent(name, entity, asset);
+    string type = asset["name"].as<std::string>();
+    ComponentFactory::GetInstance()->CreateComponent(type, entity, asset);
 }
 
 void AssetReader::SaveWidget(const YAML::Node& asset, const std::shared_ptr<Widget>& parent)

@@ -1,0 +1,4 @@
+---
+entities: 
+  - type: "ALIEN"
+    position: [0, 0, 7]

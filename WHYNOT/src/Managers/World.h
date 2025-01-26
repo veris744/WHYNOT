@@ -2,11 +2,11 @@
 #include <includes.h>
 
 #include "Components/LightData.h"
+#include "Components/LightSource.h"
 #include "Components/Transform.h"
 #include "Entities/Entity.h"
 
 class Widget;
-class LightSource;
 class Camera;
 
 class World
@@ -39,7 +39,31 @@ public:
     void Update(float deltaTime);
     void CheckCollisions();
 
-    void AddEntity(const std::shared_ptr<Entity>& _entity);
+    
+    template <typename T>
+    void AddEntity(const std::shared_ptr<T>& _entity)
+    {
+        if (entities.count(_entity->GetName()))
+        {
+            Logger::Log<World>(LogLevel::Warning, _entity->GetName() + " entity already exists");
+        }
+        entities[_entity->GetName()] = _entity;
+    
+        if (_entity->IsCamera())
+        {
+            cameras[_entity->GetName()] = _entity;
+            if (!currentCameraComp)
+            {
+                SetCurrentCamera(_entity);
+            }
+        }
+        if (_entity->IsLight())
+        {
+            std::shared_ptr<LightSource> light = _entity->GetComponent<LightSource>();
+            lights[_entity->GetName()] = light;
+        }
+    }
+    //void AddEntity(const std::shared_ptr<Entity>& _entity);
 
     unsigned int GetEntityCount() const { return entities.size(); }
     std::shared_ptr<Entity> GetEntity(const string& _name) const { return entities.at(_name); }

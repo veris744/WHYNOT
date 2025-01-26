@@ -140,6 +140,7 @@
     <ClCompile Include="src\Components\LightData.cpp" />
     <ClCompile Include="src\Components\Mesh.cpp" />
     <ClCompile Include="src\Components\Model.cpp" />
+    <ClCompile Include="src\Components\Movement.cpp" />
     <ClCompile Include="src\Components\PlayerController.cpp" />
     <ClCompile Include="src\Components\BoxCollider.cpp">
       <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
@@ -216,6 +217,7 @@
       <LinkCompiled>true</LinkCompiled>
     </ClCompile>
     <ClCompile Include="src\Components\Transform.cpp" />
+    <ClCompile Include="src\Entities\Alien.cpp" />
     <ClCompile Include="src\Entities\Entity.cpp" />
     <ClCompile Include="src\Graphics\IndexBuffer.cpp" />
     <ClCompile Include="src\Graphics\LayoutElement.cpp" />
@@ -455,6 +457,7 @@
     <ClCompile Include="src\Utils\AssetReader.cpp" />
     <ClCompile Include="src\Utils\ComponentFactory.cpp" />
     <ClCompile Include="src\Utils\Debugger.cpp" />
+    <ClCompile Include="src\Utils\EntityFactory.cpp" />
     <ClCompile Include="src\Utils\Logger.cpp" />
     <ClCompile Include="src\Utils\WidgetFactory.cpp">
       <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
@@ -541,9 +544,11 @@
     <ClInclude Include="src\Components\LightSource.h" />
     <ClInclude Include="src\Components\Mesh.h" />
     <ClInclude Include="src\Components\Model.h" />
+    <ClInclude Include="src\Components\Movement.h" />
     <ClInclude Include="src\Components\PlayerController.h" />
     <ClInclude Include="src\Components\BoxCollider.h" />
     <ClInclude Include="src\Components\Transform.h" />
+    <ClInclude Include="src\Entities\Alien.h" />
     <ClInclude Include="src\Entities\Entity.h" />
     <ClInclude Include="src\Graphics\IndexBuffer.h" />
     <ClInclude Include="src\Graphics\LayoutElement.h" />
@@ -566,6 +571,7 @@
     <ClInclude Include="src\Utils\AssetReader.h" />
     <ClInclude Include="src\Utils\ComponentFactory.h" />
     <ClInclude Include="src\Utils\Debugger.h" />
+    <ClInclude Include="src\Utils\EntityFactory.h" />
     <ClInclude Include="src\Utils\Logger.h" />
     <ClInclude Include="src\Utils\MultiDelegate.h" />
     <ClInclude Include="src\Utils\SingleDelegate.h" />
@@ -586,6 +592,7 @@
     <Content Include="assets\coordenadas.png" />
     <Content Include="assets\crate.jpg" />
     <Content Include="assets\assets.yaml" />
+    <Content Include="assets\entities.yaml" />
     <Content Include="assets\spec.png" />
     <Content Include="assets\tile.jpg" />
     <Content Include="assets\ufo\PinkAlien.obj" />

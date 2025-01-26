@@ -24,6 +24,7 @@ public:
         name = "MODEL";
         LoadModel(path);
     }
+    ~Model() override = default;
 
     vec3 position = vec3(0,0,0);
     bool invertTexture = false;

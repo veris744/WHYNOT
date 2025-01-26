@@ -13,6 +13,7 @@ public:
         name = "LIGHT";
         lightData = LightData();
     }
+    ~LightSource() override = default;
 
     void Update(float deltaTime) override
     {

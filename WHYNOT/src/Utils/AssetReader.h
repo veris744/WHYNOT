@@ -15,6 +15,7 @@ class Component;
 class AssetReader
 {
     static void SaveEntity(const YAML::Node& asset);
+    static void SaveCustomEntity(const YAML::Node& asset);
     static void SaveComponent(const std::shared_ptr<Entity>& entity, const YAML::Node& asset);
     
     static void SaveWidget(const YAML::Node& asset, const std::shared_ptr<Widget>& parent = nullptr);

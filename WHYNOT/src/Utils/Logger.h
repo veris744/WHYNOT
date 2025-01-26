@@ -66,7 +66,7 @@ public:
         if (level == LogLevel::FatalError)
         {
             glfwTerminate();
-            std::exit(EXIT_FAILURE);
+            throw std::runtime_error(message);
         }
     }
     

@@ -8,16 +8,23 @@ class Transform;
 
 class Entity
 {
+protected:
     vector<std::shared_ptr<Component>> components = vector<std::shared_ptr<Component>>();
     bool isCamera = false;
     bool isLight = false;
     string name;
+
+    Entity() = default;
     
 public:
+    Entity(const string& _name)
+        :name(_name)
+        {}
     Entity(const string& _name, bool _isCamera = false, bool _isLight = false)
         : isCamera(_isCamera), isLight(_isLight), name(_name)
         {}
-    ~Entity() = default;
+    virtual ~Entity() = default;
+    virtual void Initialize() {}
     
     bool isRendered = false;
     bool hasCollision = false;
@@ -52,6 +59,6 @@ public:
     bool IsLight() const { return isLight; }
     string GetName() { return name; }
 
-    void Update(float deltaTime);
+    virtual void Update(float deltaTime);
 };
 

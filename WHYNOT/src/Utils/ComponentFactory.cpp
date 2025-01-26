@@ -77,7 +77,7 @@ void ComponentFactory::CreateComponent(const std::string& type, const std::share
     if (it != creators.end()) {
         return it->second(entity, data);
     }
-    throw std::runtime_error("Unknown entity type: " + type);
+    Logger::Log(LogLevel::FatalError, "Unknown entity type: " + type);
 }
 
 
