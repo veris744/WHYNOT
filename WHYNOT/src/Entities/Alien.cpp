@@ -1,9 +1,11 @@
 #include "Alien.h"
 
 #include "Components/CircleCollider.h"
+#include "Components/Mesh.h"
 #include "Components/Model.h"
 #include "Components/Movement.h"
 #include "Components/Transform.h"
+#include "Graphics/Material.h"
 #include "Managers/World.h"
 
 unsigned int Alien::counter = 0;
@@ -22,7 +24,9 @@ void Alien::Initialize()
     transform->v_scale = vec3(0.5f, 0.5f, 0.5f);
     AddComponent(transform);
 
-    std::shared_ptr<Model> model = std::make_shared<Model>("assets/ufo/PinkAlien.obj");
+    std::shared_ptr<Material> mat = std::make_shared<Material>("", "", "shaders/fragmentColor.glsl");
+    mat->materialData.type = MaterialType::COLOR;
+    std::shared_ptr<Model> model = std::make_shared<Model>("assets/ufo/PinkAlien.obj", mat);
     model->position = vec3(-0.5f, -0.5f, -0.5f);
     AddComponent(model);
 

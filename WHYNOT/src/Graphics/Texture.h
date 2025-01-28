@@ -55,5 +55,5 @@ class Texture
         unsigned int id;
 
         const string& GetPath() const { return path; }
-    
+        int GetNbChannels() const { return nbChannels; }
 };

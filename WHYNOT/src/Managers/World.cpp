@@ -63,7 +63,7 @@ void World::CheckCollisions()
                 {
                     std::shared_ptr<Collider> c1 = it->second->GetComponent<Collider>();
                     std::shared_ptr<Collider> c2 = it2->second->GetComponent<Collider>();
-                    if (c1->Collides(*c2))
+                    if (c1->Collides(c2))
                     {
                         c1->CollisionDelegate.Execute(*it2->second, vec3(0));
                         c2->CollisionDelegate.Execute(*it->second, vec3(0));

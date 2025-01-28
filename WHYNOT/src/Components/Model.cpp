@@ -11,7 +11,7 @@
 
 class Transform;
 
-void Model::LoadModel(string _path)
+void Model::LoadModel(string _path, const std::shared_ptr<Material>& material)
 {
     Assimp::Importer import;
     const aiScene *scene = import.ReadFile(_path.c_str(), aiProcess_Triangulate | aiProcess_JoinIdenticalVertices | aiProcess_SortByPType );	
@@ -23,25 +23,25 @@ void Model::LoadModel(string _path)
     }
     directory = _path.substr(0, _path.find_last_of('/'));
 
-    processNode(scene->mRootNode, scene);
+    processNode(scene->mRootNode, scene, material);
 }
 
-void Model::processNode(aiNode* node, const aiScene* scene)
+void Model::processNode(aiNode* node, const aiScene* scene, const std::shared_ptr<Material>& material)
 {
     // process all the node's meshes (if any)
     for(unsigned int i = 0; i < node->mNumMeshes; i++)
     {
         aiMesh *mesh = scene->mMeshes[node->mMeshes[i]]; 
-        meshes.push_back(processMesh(mesh, scene));			
+        meshes.push_back(processMesh(mesh, scene, material));			
     }
     // then do the same for each of its children
     for(unsigned int i = 0; i < node->mNumChildren; i++)
     {
-        processNode(node->mChildren[i], scene);
+        processNode(node->mChildren[i], scene, material);
     }
 }
 
-std::shared_ptr<Mesh> Model::processMesh(aiMesh* mesh, const aiScene* scene)
+std::shared_ptr<Mesh> Model::processMesh(aiMesh* mesh, const aiScene* scene, const std::shared_ptr<Material>& _material)
 {
     vector<float> vertices;
     vector<unsigned int> indices;
@@ -80,7 +80,7 @@ std::shared_ptr<Mesh> Model::processMesh(aiMesh* mesh, const aiScene* scene)
     }
     
     // process material
-    if(mesh->mMaterialIndex >= 0)
+    if(!_material && mesh->mMaterialIndex >= 0)
     {
         aiMaterial *material = scene->mMaterials[mesh->mMaterialIndex];
         
@@ -92,10 +92,13 @@ std::shared_ptr<Mesh> Model::processMesh(aiMesh* mesh, const aiScene* scene)
                                             aiTextureType_SPECULAR, "texture_specular");
         textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
     }
-
-    std::shared_ptr<Material> material = std::make_shared<Material>(textures);
-
-    std::shared_ptr<Mesh> temp = std::make_shared<Mesh>(vertices, indices, material);
+    std::shared_ptr<Material> material;
+    if(!_material)
+    {
+        material = std::make_shared<Material>(textures);
+    }
+    
+    std::shared_ptr<Mesh> temp = std::make_shared<Mesh>(vertices, indices, _material ? _material : material);
     vertices.clear();
     return temp;
 }
@@ -152,5 +155,8 @@ void Model::Update(float deltaTime)
 
 void Model::Clear()
 {
-    meshes.front()->Clear();
+    for (auto mesh : meshes)
+    {
+        mesh->Clear();
+    }
 }

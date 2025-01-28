@@ -15,7 +15,6 @@ Image2D::Image2D(const string& _path, vec2 _pos, vec2 _size)
     position = _pos;
     
     vector<float> vertex = Renderer2D::quadVertices;
-    unsigned int count = 6;
 
     vertexArray = std::make_shared<VertexArray>();
     vertexArray->Bind();
@@ -29,7 +28,8 @@ Image2D::Image2D(const string& _path, vec2 _pos, vec2 _size)
     );
 
     texture = std::make_shared<Texture>(path);
-    shader = std::make_shared<Shader>("shaders/vertex2D.glsl", "shaders/fragment2D.glsl");
+    shader = std::make_shared<Shader>("shaders/vertex2D.glsl",
+        texture->GetNbChannels() == 1 ? "shaders/fragment2DBW.glsl" : "shaders/fragment2D.glsl");
     shader->Compile();
     shader->Bind();
 }
@@ -59,4 +59,5 @@ void Image2D::Clear()
     Widget::Clear();
     vertexArray->Unbind();
     shader->Unbind();
+    texture->Unbind();
 }

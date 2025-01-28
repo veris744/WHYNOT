@@ -5,9 +5,9 @@
 #include "Utils/Debugger.h"
 
 
-bool CircleCollider::Collides(const Collider& other) const
+bool CircleCollider::Collides(const std::shared_ptr<Collider>& other) const
 {
-    return other.Collides(radius, position);
+    return other->Collides(radius, position);
 }
 
 

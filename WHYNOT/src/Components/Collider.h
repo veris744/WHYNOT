@@ -36,7 +36,7 @@ public:
     
     virtual bool Collides(float _rad1, vec3 _pos1) const = 0;
     virtual bool Collides(vec3 _width1, vec3 _height1, vec3 _depth1, vec3 _pos1) const = 0;
-    virtual bool Collides(const Collider& other) const = 0;
+    virtual bool Collides(const std::shared_ptr<Collider>& other) const = 0;
     virtual bool CheckInBounds(const vec2& xBounds, const vec2& yBounds, const vec2& zBounds) = 0;
     virtual void Render() = 0;
 

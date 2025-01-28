@@ -603,6 +603,8 @@
     <Content Include="shaders\debugFragment.glsl" />
     <Content Include="shaders\fragment.glsl" />
     <Content Include="shaders\fragment2D.glsl" />
+    <Content Include="shaders\fragment2DBW.glsl" />
+    <Content Include="shaders\fragmentColor.glsl" />
     <Content Include="shaders\neonFragment.glsl" />
     <Content Include="shaders\vertex.glsl" />
     <Content Include="shaders\vertex2D.glsl" />
