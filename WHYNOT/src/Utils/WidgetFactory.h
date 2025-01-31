@@ -5,6 +5,7 @@
 #include "UI/Widget.h"
 
 
+class Text;
 class Button;
 class Image2D;
 
@@ -20,6 +21,7 @@ private:
 
     static std::shared_ptr<Image2D> ReadImage(const YAML::Node& node);
     static std::shared_ptr<Button> ReadButton(const YAML::Node& node);
+    static std::shared_ptr<Text> ReadText(const YAML::Node& node);
     
 public:
     WidgetFactory() = default;

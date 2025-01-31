@@ -1,6 +1,7 @@
 // WHYNOT.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
 
+#include "Managers/TextRenderer.h"
 #include "Managers/Helper.h"
 #include "Input/InputManager.h"
 #include "Managers/World.h"
@@ -20,6 +21,8 @@ int main()
 	Renderer::GetInstance()->Initialize();
 	Renderer2D::GetInstance()->Initialize();
 	InputManager::GetInstance()->Initialize();
+	TextRenderer::GetInstance()->InitFreeType();
+	TextRenderer::GetInstance()->LoadFont();
 	
 	double lastTime = glfwGetTime();
 	while (!glfwWindowShouldClose(Helper::GetWindow()))

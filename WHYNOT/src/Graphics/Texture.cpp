@@ -8,8 +8,23 @@
 
 Texture::Texture(const string& filePath)
 {
+    data = nullptr;
     path = filePath;
-    LoadTexture(filePath);
+    if (!path.empty())
+    {
+        LoadTexture(filePath);
+    }
+    ProcessTexture();
+}
+
+Texture::Texture(unsigned char* _data, unsigned int _bufferSize, int _width, int _height, int _channels)
+    : size(_width, _height), nbChannels(_channels)
+{
+    if (_data && _bufferSize != 0)
+    {
+        data = new unsigned char[_bufferSize];  // Allocate new memory
+        std::memcpy(data, _data, _bufferSize);
+    }
     ProcessTexture();
 }
 
@@ -101,7 +116,7 @@ void Texture::Unbind()
     glBindTexture(GL_TEXTURE_2D, 0);  
 }
 
-void Texture::Generate() const
+void Texture::Generate()
 {
     int colorMode;
     if (nbChannels == 1)
@@ -117,4 +132,6 @@ void Texture::Generate() const
     glGenerateMipmap(GL_TEXTURE_2D);
 
     stbi_image_free(data);
+    data = nullptr;
+    
 }

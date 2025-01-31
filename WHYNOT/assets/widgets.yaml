@@ -15,3 +15,8 @@ widgets:
     path: "assets/bulb.jpg"
     position: [20, 400]
     size: [75, 75]
+  - name: "Text1"
+    type: "TEXT"
+    text: "Loaded text widget"
+    position: [25, 25]
+    color: [0.5, 0.8, 0.2]

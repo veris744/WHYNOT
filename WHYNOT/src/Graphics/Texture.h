@@ -26,10 +26,14 @@ class Texture
         
     public:
         Texture(const string& filePath);
-        Texture() = delete;
+        Texture(unsigned char *_data, unsigned int _bufferSize, int _width, int _height, int _channels);
         ~Texture()
         {
-            delete[] data;
+            if (data)
+            {
+                delete[] data;
+                data = nullptr;
+            }
         }
         Texture(const Texture& _texture)
         {
@@ -47,7 +51,7 @@ class Texture
         void Bind() const;
         void Activate(unsigned int _textureNb) const;
         void Unbind();
-        void Generate() const;
+        void Generate();
         
         WrapMode wrapMode = WrapMode::REPEAT;
         FilterMode filterMode = FilterMode::LINEAR;
