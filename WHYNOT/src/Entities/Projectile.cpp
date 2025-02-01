@@ -1,7 +1,7 @@
 #include "Projectile.h"
 
 #include "Components/CircleCollider.h"
-#include "Components/Mesh.h"
+#include "Graphics/Mesh.h"
 #include "Components/Model.h"
 #include "Components/Movement.h"
 #include "Components/Transform.h"

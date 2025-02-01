@@ -3,7 +3,7 @@
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 
-#include "Mesh.h"
+#include "Graphics/Mesh.h"
 
 class Material;
 class Texture;

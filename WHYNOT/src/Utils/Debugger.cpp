@@ -1,6 +1,6 @@
 #include "Debugger.h"
 
-#include "Components/Mesh.h"
+#include "Graphics/Mesh.h"
 #include "Components/Model.h"
 #include "Graphics/Material.h"
 #include "Graphics/VertexArray.h"

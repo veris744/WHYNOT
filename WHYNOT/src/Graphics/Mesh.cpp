@@ -1,8 +1,8 @@
-#include "Mesh.h"
+#include "Graphics/Mesh.h"
 
-#include "Camera.h"
-#include "Graphics/Material.h"
-#include "Graphics/VertexArray.h"
+#include "Components/Camera.h"
+#include "Material.h"
+#include "VertexArray.h"
 #include "Managers/World.h"
 
 Mesh::Mesh(const vector<float>& _vertex, const std::shared_ptr<Material>& _material)

@@ -3,7 +3,7 @@
 #include "Renderer2D.h"
 #include "World.h"
 #include "Components/Collider.h"
-#include "Components/Mesh.h"
+#include "Graphics/Mesh.h"
 #include "Components/Model.h"
 #include "Utils/Debugger.h"
 

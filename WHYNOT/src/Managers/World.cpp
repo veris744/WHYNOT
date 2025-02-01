@@ -3,7 +3,7 @@
 #include "Components/Camera.h"
 #include "Components/Collider.h"
 #include "Components/LightSource.h"
-#include "Components/Mesh.h"
+#include "Graphics/Mesh.h"
 #include "Components/Model.h"
 #include "Components/Transform.h"
 #include "Utils/AssetReader.h"

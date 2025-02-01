@@ -1,7 +1,5 @@
 #pragma once
-#include <memory>
-
-#include "Component.h"
+#include <includes.h>
 
 class Camera;
 class Material;

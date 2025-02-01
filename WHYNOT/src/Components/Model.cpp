@@ -1,6 +1,6 @@
 #include "Model.h"
 
-#include "Mesh.h"
+#include "Graphics/Mesh.h"
 #include "Transform.h"
 #include "Entities/Entity.h"
 #include "Graphics/Material.h"

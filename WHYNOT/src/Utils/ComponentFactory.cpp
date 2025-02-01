@@ -5,7 +5,7 @@
 #include "Components/CircleCollider.h"
 #include "Components/Collider.h"
 #include "Components/LightSource.h"
-#include "Components/Mesh.h"
+#include "Graphics/Mesh.h"
 #include "Components/Model.h"
 #include "Components/PlayerController.h"
 #include "Graphics/Material.h"
