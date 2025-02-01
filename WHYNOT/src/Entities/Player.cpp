@@ -22,7 +22,7 @@ void Player::Initialize()
     AddComponent(transform);
 
     std::shared_ptr<PlayerController> controller = std::make_shared<PlayerController>();
-    // controller->SetPositionLocked(true);
+    controller->SetPositionLocked(true);
     AddComponent(controller);
 }
 

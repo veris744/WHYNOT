@@ -28,6 +28,7 @@ public:
     
     bool isRendered = false;
     bool hasCollision = false;
+    bool isActive = true;
     
     template <typename T>
     void AddComponent(const std::shared_ptr<T>& _component)

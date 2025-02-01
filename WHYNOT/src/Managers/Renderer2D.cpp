@@ -47,6 +47,7 @@ void Renderer2D::Render()
     vector<std::shared_ptr<Widget>> widgets = World::GetInstance()->GetWidgets();
     for (const auto& widget : widgets)
     {
+        if (!widget->isActive)  continue;
         widget->Render();
     }    
 }
@@ -56,6 +57,7 @@ void Renderer2D::Clear()
     vector<std::shared_ptr<Widget>> widgets = World::GetInstance()->GetWidgets();
     for (const auto& widget : widgets)
     {
+        if (!widget->isActive)  continue;
         widget->Clear();
     }
 }

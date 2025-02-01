@@ -8,11 +8,26 @@
 #include "Managers/Renderer2D.h"
 #include "Managers/World.h"
 
+
+unsigned int Image2D::counter = 0;
+
 Image2D::Image2D(const string& _path, vec2 _pos, vec2 _size)
     : Widget(_pos, _size)
 {
+    name = "Image2D" + std::to_string(++counter);
     path = _path;
-    
+    Initialize();
+}
+
+Image2D::Image2D(const string& _name, const string& _path, vec2 _pos, vec2 _size)
+    : Widget(_name, _pos, _size)
+{
+    path = _path;
+    Initialize();
+}
+
+void Image2D::Initialize()
+{
     vector<float> vertex = Renderer2D::quadVertices;
 
     vertexArray = std::make_shared<VertexArray>();

@@ -22,7 +22,6 @@ class World
     vector<std::shared_ptr<Widget>> widgets;
     
     World();
-    void InitializeData();
 
     
 public:
@@ -86,4 +85,6 @@ public:
     {
         widgets.push_back(_widget);
     }
+
+    void StartGame();
 };

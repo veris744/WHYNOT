@@ -18,6 +18,11 @@ enum class Action
     MoveForward, MoveBackwards, MoveRight, MoveLeft, MoveUp, MoveDown, Quit, Click
 };
 
+enum class InputMode
+{
+    UIOnly, GameOnly, GameAndUI 
+};
+
 static unordered_map<Action, unsigned int> actions =
 {
     {Action::MoveForward, GLFW_KEY_W},
@@ -37,7 +42,9 @@ class InputManager
 
     static void InitKeys();
     static unordered_map<unsigned int, KeyStatus> keysStatus;
-    static std::unique_ptr<EventsBuffer> eventsBuffer; 
+    static std::unique_ptr<EventsBuffer> eventsBuffer;
+
+    static InputMode inputMode;
     
     vec3 movementInputPlaneValue = vec3(0, 0, 0);
     vec2 movementInputAxisValue = vec2(0, 0);
@@ -71,6 +78,8 @@ public:
     void HandleMouseMove(double x, double y);
     void HandleMouseScroll(double x, double y);
 
+    static void SetInputMode(InputMode _mode);
+    static InputMode GetInputMode() { return inputMode; };
     
     SingleDelegate<vec2> OnClickDelegate;
 };

@@ -6,6 +6,8 @@
 #include "Graphics/Mesh.h"
 #include "Components/Model.h"
 #include "Components/Transform.h"
+#include "Input/InputManager.h"
+#include "UI/Widget.h"
 #include "Utils/AssetReader.h"
 
 std::shared_ptr<World> World::instance = nullptr;
@@ -24,23 +26,33 @@ World::World()
     
 }
 
-void World::InitializeData()
-{
-    
-}
-
 void World::Initialize()
 {
     AssetReader::ReadAssets("assets/assets.yaml");
     AssetReader::ReadAssets("assets/widgets.yaml");
     AssetReader::ReadAssets("assets/entities.yaml");
-    InitializeData();
+
+    for (const auto& widget : widgets)
+    {
+        if (widget->GetInputMode() == InputMode::UIOnly)
+        {
+            widget->isActive = true;
+        }
+        else
+        {
+            widget->isActive = false;
+        }
+    }
 }
 
 void World::Update(float deltaTime)
 {
     for (const auto& entity : entities)
     {
+        if (!entity.second->isActive)
+        {
+            continue;
+        }
         entity.second->Update(deltaTime);
     }
     CheckCollisions();
@@ -55,6 +67,10 @@ void World::CheckCollisions()
 {
     for (auto it = entities.begin(); it != entities.end(); it++)
     {
+        if (!it->second->isActive)
+        {
+            continue;
+        }
         if (it->second->hasCollision)
         {
             for (auto it2 = std::next(it); it2 != entities.end(); it2++)
@@ -142,5 +158,26 @@ vector<LightData> World::GetLightDataList() const
         list.push_back(light->lightData);
     }
     return list;
+}
+
+void World::StartGame()
+{
+    Logger::Log(LogLevel::Info, "World::StartGame()");
+    InputManager::SetInputMode(InputMode::GameOnly);
+    for (const auto& entity : entities)
+    {
+        entity.second->isActive = true;
+    }
+    for (const auto& widget : widgets)
+    {
+        if (widget->GetInputMode() == InputMode::UIOnly)
+        {
+            widget->isActive = false;            
+        }
+        else
+        {
+            widget->isActive = true;   
+        }
+    }
 }
 

@@ -4,6 +4,7 @@
 void Widget::AddWidget(std::shared_ptr<Widget> _widget)
 {
     _widget->finalPos = _widget->position + position;
+    _widget->SetInputMode(mode);
     children.push_back(_widget);
 }
 

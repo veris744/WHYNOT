@@ -601,7 +601,9 @@
     </ClCompile>
     <ClCompile Include="src\Managers\World.cpp" />
     <ClCompile Include="src\UI\Button.cpp" />
+    <ClCompile Include="src\UI\Buttons\StartButton.cpp" />
     <ClCompile Include="src\UI\Image2D.cpp" />
+    <ClCompile Include="src\UI\Panel.cpp" />
     <ClCompile Include="src\UI\Text.cpp" />
     <ClCompile Include="src\UI\Widget.cpp" />
     <ClCompile Include="src\Utils\AssetReader.cpp" />
@@ -718,7 +720,9 @@
     <ClInclude Include="src\Managers\TextRenderer.h" />
     <ClInclude Include="src\Managers\World.h" />
     <ClInclude Include="src\UI\Button.h" />
+    <ClInclude Include="src\UI\Buttons\StartButton.h" />
     <ClInclude Include="src\UI\Image2D.h" />
+    <ClInclude Include="src\UI\Panel.h" />
     <ClInclude Include="src\UI\Text.h" />
     <ClInclude Include="src\UI\Widget.h" />
     <ClInclude Include="src\Utils\AssetReader.h" />

@@ -15,6 +15,7 @@
 std::shared_ptr<InputManager> InputManager::instance = nullptr;
 unordered_map<unsigned int, KeyStatus> InputManager::keysStatus;
 std::unique_ptr<EventsBuffer> InputManager::eventsBuffer = std::make_unique<EventsBuffer>();
+InputMode InputManager::inputMode = InputMode::UIOnly;
 
 
 std::shared_ptr<InputManager> InputManager::GetInstance()
@@ -204,10 +205,16 @@ void InputManager::HandleKeyRelease(int key, int mods)
 
 void InputManager::HandleMouseButtonPress(int key)
 {
-    double xpos, ypos;
-    glfwGetCursorPos(Helper::GetWindow(), &xpos, &ypos);
-    OnClickDelegate.Execute(vec2(xpos, ypos));
-    playerController->Shoot();
+    if (inputMode == InputMode::UIOnly)
+    {
+        double xpos, ypos;
+        glfwGetCursorPos(Helper::GetWindow(), &xpos, &ypos);
+        OnClickDelegate.Execute(vec2(xpos, ypos));
+    }
+    else if (inputMode == InputMode::GameOnly)
+    {
+        playerController->Shoot();
+    }
 }
 
 void InputManager::HandleMouseButtonRelease(int key)
@@ -216,38 +223,46 @@ void InputManager::HandleMouseButtonRelease(int key)
 
 void InputManager::HandleMouseMove(double x, double y)
 {
-    vec2 pos = {x, y};
-    if (firstMouse)
+    if (inputMode == InputMode::GameOnly || inputMode == InputMode::GameAndUI)
     {
-        rotation = playerTransform->v_rotation;
+        vec2 pos = {x, y};
+        if (firstMouse)
+        {
+            rotation = playerTransform->v_rotation;
+            lastMousePos.x = pos.x;
+            lastMousePos.y = pos.y;
+            firstMouse = false;
+        }
+  
+        float xoffset = pos.x - lastMousePos.x;
+        float yoffset = lastMousePos.y - pos.y; 
         lastMousePos.x = pos.x;
         lastMousePos.y = pos.y;
-        firstMouse = false;
+
+        float sensitivity = 0.1f;
+        xoffset *= sensitivity;
+        yoffset *= -sensitivity;
+
+        rotation.yaw -= xoffset;
+        rotation.pitch -= yoffset;
+
+        if(rotation.pitch > 89.0f)
+            rotation.pitch = 89.0f;
+        if(rotation.pitch < -89.0f)
+            rotation.pitch = -89.0f;
+
+        playerTransform->SetRotation(rotation.pitch, rotation.yaw, rotation.roll);
     }
-  
-    float xoffset = pos.x - lastMousePos.x;
-    float yoffset = lastMousePos.y - pos.y; 
-    lastMousePos.x = pos.x;
-    lastMousePos.y = pos.y;
-
-    float sensitivity = 0.1f;
-    xoffset *= sensitivity;
-    yoffset *= -sensitivity;
-
-    rotation.yaw -= xoffset;
-    rotation.pitch -= yoffset;
-
-    if(rotation.pitch > 89.0f)
-        rotation.pitch = 89.0f;
-    if(rotation.pitch < -89.0f)
-        rotation.pitch = -89.0f;
-
-    playerTransform->SetRotation(rotation.pitch, rotation.yaw, rotation.roll);
 }
 
 void InputManager::HandleMouseScroll(double x, double y)
 {
     
+}
+
+void InputManager::SetInputMode(InputMode _mode)
+{
+    inputMode = _mode;
 }
 
 void InputManager::ScapeInput() const 

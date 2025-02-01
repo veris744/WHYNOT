@@ -19,6 +19,7 @@ void Alien::Initialize()
     isLight = false;
     isRendered = true;
     hasCollision = true;
+    isActive = false;
 
     std::shared_ptr<Transform> transform = std::make_shared<Transform>();
     transform->v_scale = vec3(0.5f, 0.5f, 0.5f);

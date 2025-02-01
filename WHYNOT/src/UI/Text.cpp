@@ -2,6 +2,8 @@
 
 #include "Managers/TextRenderer.h"
 
+unsigned int Text::counter = 0;
+
 void Text::Render()
 {
     Widget::Render();

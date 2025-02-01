@@ -86,6 +86,10 @@ void Renderer::Render()
 {
     for (const auto& entity : World::GetInstance()->GetEntities())
     {
+        if (!entity.second->isActive)
+        {
+            continue;
+        }
         if (entity.second->isRendered)
         {
             std::shared_ptr<Model> model = entity.second->GetComponent<Model>();
@@ -107,7 +111,7 @@ void Renderer::Clear()
 {
     for (const auto& entity : World::GetInstance()->GetEntities())
     {
-        if (!entity.second->isRendered)
+        if (!entity.second->isRendered || !entity.second->isActive)
         {
             continue;
         }

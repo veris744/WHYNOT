@@ -4,10 +4,19 @@
 #include "Graphics/Texture.h"
 #include "Input/InputManager.h"
 
+unsigned int Button::counter = 0;
+
 Button::Button(const vec2& _pos, const vec2& _size)
     : Widget(_pos, _size)
 {
-    InputManager::GetInstance()->OnClickDelegate.Bind(&Button::OnClick, this);
+    name = "Button" + std::to_string(++counter);
+    InputManager::GetInstance()->OnClickDelegate.Bind(&Button::OnClickTrigger, this);
+}
+
+Button::Button(const string& _name, const vec2& _pos, const vec2& _size)
+    : Widget(_name, _pos, _size)
+{
+    InputManager::GetInstance()->OnClickDelegate.Bind(&Button::OnClickTrigger, this);
 }
 
 bool Button::IsClicking(const vec2& _mousePos) const
@@ -20,10 +29,13 @@ bool Button::IsClicking(const vec2& _mousePos) const
     return false;
 }
 
+void Button::OnClickTrigger(vec2 _mousePos)
+{
+    if (!IsClicking(_mousePos)) return;
+    OnClick(_mousePos);
+}
+
 void Button::OnClick(vec2 _mousePos)
 {
-    if (IsClicking(_mousePos))
-    {
-        Logger::Log<Button>(LogLevel::Info, "Click");
-    }
+    Logger::Log<Button>(LogLevel::Info, "Click");
 }
