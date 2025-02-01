@@ -13,7 +13,7 @@
 
 using ComponentCreator = std::function<void (const std::shared_ptr<Entity>& entity, const YAML::Node&)>;
 
-ComponentFactory* ComponentFactory::instance = nullptr;
+std::shared_ptr<ComponentFactory> ComponentFactory::instance = nullptr;
 
 void ComponentFactory::ComponentFactorySetup()
 {

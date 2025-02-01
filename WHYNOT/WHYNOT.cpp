@@ -20,7 +20,7 @@ int main()
 	World::GetInstance()->Initialize();
 	Renderer::GetInstance()->Initialize();
 	Renderer2D::GetInstance()->Initialize();
-	InputManager::GetInstance()->Initialize();
+	// InputManager::GetInstance()->Initialize();
 	TextRenderer::GetInstance()->InitFreeType();
 	TextRenderer::GetInstance()->LoadFont();
 	

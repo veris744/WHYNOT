@@ -1,5 +1,6 @@
 #include "Renderer.h"
 
+#include "Renderer2D.h"
 #include "World.h"
 #include "Components/Collider.h"
 #include "Components/Mesh.h"
@@ -10,7 +11,7 @@
 class Model;
 
 
-Renderer* Renderer::instance = nullptr;
+std::shared_ptr<Renderer> Renderer::instance = nullptr;
 
 vector<float> Renderer::sphereVertex = {};
 vector<unsigned int> Renderer::sphereIndex = {};
@@ -64,11 +65,11 @@ Renderer::Renderer()
 
 }
 
-Renderer* Renderer::GetInstance()
+std::shared_ptr<Renderer> Renderer::GetInstance()
 {
     if (instance == nullptr)
     {
-        instance = new Renderer();
+        instance = std::make_shared<Renderer>(Renderer());
     }
     return instance;
 }

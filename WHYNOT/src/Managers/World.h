@@ -3,24 +3,21 @@
 
 #include "Components/LightData.h"
 #include "Components/LightSource.h"
-#include "Components/Transform.h"
+#include "Components/Camera.h"
 #include "Entities/Entity.h"
+#include "Entities/Player.h"
 
 class Widget;
-class Camera;
 
 class World
 {
-    static World* instance;
+    static std::shared_ptr<World> instance;
     map<string, std::shared_ptr<Entity>> entities;
-    map<string, std::shared_ptr<Entity>> cameras;
-    map<string, std::shared_ptr<LightSource>> lights;
+    vector<std::shared_ptr<Camera>> cameras;
+    vector<std::shared_ptr<LightSource>> lights;
+    std::shared_ptr<Player> playerEntity;
 
     std::vector<std::shared_ptr<Entity>> toBeDestroyed;
-
-    std::shared_ptr<Entity> currentCamera;
-    std::shared_ptr<Camera> currentCameraComp;
-    std::shared_ptr<Transform> currentCameraTransform;
 
     vector<std::shared_ptr<Widget>> widgets;
     
@@ -29,18 +26,19 @@ class World
 
     
 public:
-    
     vec2 boundariesX = vec2(-10, 10);
     vec2 boundariesY = vec2(-10, 10);
     vec2 boundariesZ = vec2(-10, 10);
     
-    string currentCameraName = "MainCamera";
+    unsigned int currentCameraIndex = 0;
     
-    static World* GetInstance();
+    static std::shared_ptr<World> GetInstance();
     void Initialize();
     void Update(float deltaTime);
     void CheckCollisions();
 
+    std::shared_ptr<Player> GetPlayer() const { return playerEntity; }
+    void SetPlayer(const std::shared_ptr<Player>& player) { playerEntity = player; }
     
     template <typename T>
     void AddEntity(const std::shared_ptr<T>& _entity)
@@ -48,21 +46,19 @@ public:
         if (entities.count(_entity->GetName()))
         {
             Logger::Log<World>(LogLevel::Warning, _entity->GetName() + " entity already exists");
+            return;
         }
         entities[_entity->GetName()] = _entity;
     
         if (_entity->IsCamera())
         {
-            cameras[_entity->GetName()] = _entity;
-            if (!currentCameraComp)
-            {
-                SetCurrentCamera(_entity);
-            }
+            std::shared_ptr<Camera> camera = _entity->GetComponent<Camera>();
+            cameras.push_back(camera);
         }
         if (_entity->IsLight())
         {
             std::shared_ptr<LightSource> light = _entity->GetComponent<LightSource>();
-            lights[_entity->GetName()] = light;
+            lights.push_back(light);
         }
     }
 
@@ -76,24 +72,13 @@ public:
     map<string, std::shared_ptr<Entity>> GetEntities() const { return entities; }
 
     unsigned int GetCameraCount() const { return cameras.size(); }
-    std::shared_ptr<Entity> GetCamera(const string& _name) const
-    {
-        if (!cameras.at(_name))
-        {
-            Logger::Log<World>(LogLevel::Error, "No camera found");
-            return nullptr;
-        }
-        return cameras.at(_name);
-    }
-    const std::shared_ptr<Camera>& GetCurrentCameraComp() const { return currentCameraComp; }
-    const std::shared_ptr<Transform>& GetCurrentCameraTrans() const
-    {
-        return GetCamera(currentCameraName)->GetComponent<Transform>();
-    }
-    void SetCurrentCamera(const std::shared_ptr<Entity>& _camera);
+    std::shared_ptr<Camera> GetCamera(unsigned int _index) const;
+    std::shared_ptr<Camera> GetCurrentCamera() const;
+    void SetCurrentCamera(unsigned int _index) { currentCameraIndex = _index; }
+    void SetCurrentCamera(const string& _entityName);
     
     unsigned int GetLightCount() const { return lights.size(); }
-    std::shared_ptr<LightSource> GetLightSource(const string& _name) const { return lights.at(_name); }
+    std::shared_ptr<LightSource> GetLightSource(unsigned int _index) const;
     vector<LightData> GetLightDataList() const;
 
     vector<std::shared_ptr<Widget>> GetWidgets() const { return widgets; }

@@ -11,6 +11,8 @@ class PlayerController : public Component
     vec3 currentInput;
     std::shared_ptr<Transform> transform;
 
+    bool isPositionLocked = false;
+
     
 public:
     PlayerController() = default;
@@ -58,4 +60,5 @@ public:
 
     void Update(float deltaTime) override;
     void Shoot();
+    void SetPositionLocked(bool _positionLocked) { isPositionLocked = _positionLocked; }
 };

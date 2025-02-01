@@ -8,13 +8,13 @@
 #include "Components/Transform.h"
 #include "Utils/AssetReader.h"
 
-World* World::instance = nullptr;
+std::shared_ptr<World> World::instance = nullptr;
 
-World* World::GetInstance()
+std::shared_ptr<World> World::GetInstance()
 {
     if (!instance)
     {
-        instance = new World();
+        instance = std::make_shared<World>(World());
     }
     return instance;
 }
@@ -84,20 +84,53 @@ void World::RemoveEntity(const string& _entityName)
     std::shared_ptr<Entity> entity = entities.at(_entityName);
     if (entity->IsCamera())
     {
-        cameras.erase(entity->GetName());
+        cameras.erase(std::find(cameras.begin(), cameras.end(), entity->GetComponent<Camera>()));
     }
     if (entity->IsLight())
     {
-        lights.erase(entity->GetName());
+        lights.erase(std::find(lights.begin(), lights.end(), entity->GetComponent<LightSource>()));
     }
     entities.erase(entity->GetName());
 }
 
-void World::SetCurrentCamera(const std::shared_ptr<Entity>& _camera)
+std::shared_ptr<Camera> World::GetCamera(unsigned int _index) const
 {
-    currentCamera = _camera;
-    currentCameraComp = _camera->GetComponent<Camera>();
-    currentCameraTransform = _camera->GetComponent<Transform>();
+    if (_index >= cameras.size())
+    {
+        Logger::Log<World>(LogLevel::Error, "No camera found");
+        return nullptr;
+    }
+    return cameras[_index];
+}
+
+std::shared_ptr<Camera> World::GetCurrentCamera() const
+{
+    return cameras.at(currentCameraIndex);
+}
+
+void World::SetCurrentCamera(const string& _entityName)
+{
+    int i = 0;
+    for (const auto& camera : cameras)
+    {
+        if (camera->parent->GetName() == _entityName)
+        {
+            currentCameraIndex = i;
+            return;
+        }
+        i++;
+    }
+    Logger::Log<World>(LogLevel::Error, "No camera found");
+}
+
+std::shared_ptr<LightSource> World::GetLightSource(unsigned int _index) const
+{
+    if (_index >= lights.size())
+    {
+        Logger::Log<World>(LogLevel::Error, "No light found");
+        return nullptr;
+    }
+    return lights[_index];
 }
 
 vector<LightData> World::GetLightDataList() const
@@ -106,7 +139,7 @@ vector<LightData> World::GetLightDataList() const
     list.reserve(lights.size());
     for (const auto& light : lights)
     {
-        list.push_back(light.second->lightData);
+        list.push_back(light->lightData);
     }
     return list;
 }

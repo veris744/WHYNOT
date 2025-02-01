@@ -46,14 +46,10 @@ void Alien::Update(float _deltaTime)
 {
     std::shared_ptr<CircleCollider> collider = GetComponent<CircleCollider>();
     collider->CheckInBounds(vec2(-8, 8), vec2(-4, 12), vec2(5, 16));
-
     
-    std::shared_ptr<Model> model = GetComponent<Model>();
-    if (model)
-    {
-       GetComponent<Transform>()->SetRotation(GetComponent<Transform>()->v_rotation.pitch,
-           GetComponent<Transform>()->v_rotation.yaw += 20*_deltaTime,GetComponent<Transform>()->v_rotation.roll);
-    }
+    GetComponent<Transform>()->SetRotation(GetComponent<Transform>()->v_rotation.pitch,
+    GetComponent<Transform>()->v_rotation.yaw += 20*_deltaTime,GetComponent<Transform>()->v_rotation.roll);
+    
     
     Entity::Update(_deltaTime);
 }

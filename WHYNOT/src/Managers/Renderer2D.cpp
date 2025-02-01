@@ -19,13 +19,13 @@ const vector<float> Renderer2D::quadVertices = {
 };
 
 
-Renderer2D* Renderer2D::instance = nullptr;
+std::shared_ptr<Renderer2D> Renderer2D::instance = nullptr;
 
-Renderer2D* Renderer2D::GetInstance()
+std::shared_ptr<Renderer2D> Renderer2D::GetInstance()
 {
     if (instance == nullptr)
     {
-        instance = new Renderer2D();
+        instance = std::make_shared<Renderer2D>(Renderer2D());
     }
     return instance;
 }

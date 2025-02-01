@@ -20,7 +20,7 @@ public:
     using ComponentCreator = std::function<void (const std::shared_ptr<Entity>& entity, const YAML::Node&)>;
 
 private:
-    static ComponentFactory* instance;
+    static std::shared_ptr<ComponentFactory> instance;
     std::unordered_map<std::string, ComponentCreator> creators;
     
     static std::shared_ptr<Transform> ReadTransform(const YAML::Node& asset);
@@ -34,13 +34,12 @@ private:
     
 public:
     ComponentFactory() = default;
-    ~ComponentFactory() = default;
 
-    static ComponentFactory* GetInstance()
+    static std::shared_ptr<ComponentFactory> GetInstance()
     {
         if (instance == nullptr)
         {
-            instance = new ComponentFactory();
+            instance = std::make_shared<ComponentFactory>(ComponentFactory());
             instance->ComponentFactorySetup();
         }
         return instance;

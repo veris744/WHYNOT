@@ -1,9 +1,12 @@
 #pragma once
 #include "Entity.h"
 
+
 class Projectile : public Entity
 {
     static unsigned int counter;
+    
+    std::shared_ptr<Transform> playerTransform;
 
     void OnCollision(const Entity& _otherEntity, vec3 normal);
     void OnOutOfBounds(vec3 _normal);

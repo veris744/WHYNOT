@@ -14,7 +14,6 @@ struct Character {
     unsigned int Advance;
 };
 
-
 class TextRenderer
 {
     static std::shared_ptr<TextRenderer> instance;

@@ -42,7 +42,7 @@ public:
     }
 
     template <typename T>
-    const std::shared_ptr<T>& GetComponent()
+    std::shared_ptr<T> GetComponent()
     {
         for (const auto& component : components)
         {

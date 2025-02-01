@@ -9,10 +9,9 @@
 #include "Managers/World.h"
 
 Image2D::Image2D(const string& _path, vec2 _pos, vec2 _size)
-    : path(_path)
+    : Widget(_pos, _size)
 {
-    size = _size;
-    position = _pos;
+    path = _path;
     
     vector<float> vertex = Renderer2D::quadVertices;
 
@@ -41,9 +40,11 @@ void Image2D::Render()
     vertexArray->Bind();
     texture->Bind();
     shader->Bind();
-    shader->SetUniformVec2("uPosWidget", position);
+    shader->SetUniformVec2("uPosWidget", finalPos);
     shader->SetUniformVec2("uSize", size);
-    shader->SetUniformMat4("uProjection", World::GetInstance()->GetCurrentCameraComp()->GetProjectionMatrix2D());
+    
+    mat4 projection = glm::ortho(0.0f, Helper::windowWidth, Helper::windowHeight, 0.0f);
+    shader->SetUniformMat4("uProjection", projection);
     if (vertexArray->GetIndexBuffer())
     {
         vertexArray->DrawElementBuffer();        

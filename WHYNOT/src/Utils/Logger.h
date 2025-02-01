@@ -22,19 +22,20 @@ public:
         switch (level)
         {
         case LogLevel::FatalError:
-            cout << "\033[1;31m" << "FATAL::";
+            std::cout << "\033[1;31m" << "FATAL::";  // Red Bold
             break;
         case LogLevel::Error:
-            cout << "\033[31m" << "ERROR::";
+            std::cout << "\033[0;31m" << "ERROR::";  // Red
             break;
         case LogLevel::Warning:
-            cout << "\033[33m" << "WARNING::";
+            std::cout << "\033[0;33m" << "WARNING::"; // Yellow
             break;
         case LogLevel::Info:
-            cout << "\033[37m" << "INFO::";
+            std::cout << "\033[0;36m" << "INFO::"; // Cyan
             break;
         }
-        cout << typeid(T).name() << "::" << message << "\033[37m" << std::endl;
+
+        cout << typeid(T).name() << "::" << message << "\033[0m" << std::endl; 
 
         if (level == LogLevel::FatalError)
         {
@@ -48,19 +49,20 @@ public:
         switch (level)
         {
         case LogLevel::FatalError:
-            cout << "\031[" << "FATAL::";
+            std::cout << "\033[1;31m" << "FATAL::";  // Red Bold
             break;
         case LogLevel::Error:
-            cout << "\031[" << "ERROR::";
+            std::cout << "\033[0;31m" << "ERROR::";  // Red
             break;
         case LogLevel::Warning:
-            cout << "\033[" << "WARNING::";
+            std::cout << "\033[0;33m" << "WARNING::"; // Yellow
             break;
         case LogLevel::Info:
-            cout << "\037[" << "INFO::";
+            std::cout << "\033[0;36m" << "INFO::"; // Cyan
             break;
         }
-        cout << message << "\033[0m" << std::endl;
+
+        std::cout << message << "\033[0m" << std::endl;
 
         
         if (level == LogLevel::FatalError)

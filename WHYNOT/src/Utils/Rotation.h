@@ -25,7 +25,7 @@ struct Rotation
     {
         vec3 fwd = normalize(_forward);
         vec3 upVec = normalize(_up);
-        yaw = glm::degrees(atan2(fwd.z, fwd.x));
+        yaw = glm::degrees(atan2(fwd.x, fwd.z));
         pitch = glm::degrees(asin(fwd.y));
         vec3 right = normalize(cross(upVec, fwd));
         roll = glm::degrees(atan2(right.y, upVec.y));

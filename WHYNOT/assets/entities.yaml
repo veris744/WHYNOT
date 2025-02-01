@@ -2,3 +2,5 @@
 entities: 
   - type: "ALIEN"
     position: [0, 0, 7]
+  - type: "PLAYER"
+    position: [0, 0, -1]

@@ -2,13 +2,18 @@
 widgets: 
   - name: "Button1"
     type: "BUTTON"
-    position: [20, 10]
+    position: [100, 50]
     size: [100, 50]
     widgets:
+      - name: "ButtonText"
+        type: "TEXT"
+        text: "Button"
+        position: [15, 20]
+        scale: 0.5
+        color: [ 0.5, 0.8, 0.2 ]
       - name: "Image2"
         type: "IMAGE2D"
         size: [100, 50]
-        position: [20, 10]
         path: "assets/box.jpg"
   - name: "Image1"
     type: "IMAGE2D"

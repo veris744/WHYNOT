@@ -16,13 +16,13 @@ enum class PrimitiveType
 class Renderer
 {
     Renderer();
-    static Renderer* instance;
+    static std::shared_ptr<Renderer> instance;
     static const vector<float> cubeVertex;
     static vector<float> sphereVertex;
     static vector<unsigned int> sphereIndex;
     
 public:
-    static Renderer * GetInstance();
+    static std::shared_ptr<Renderer> GetInstance();
     vector<std::shared_ptr<Texture>> textures_loaded; 
     vector<std::shared_ptr<Shader>> shaders_loaded;
 

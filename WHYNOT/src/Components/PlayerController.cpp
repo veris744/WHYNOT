@@ -28,6 +28,8 @@ void PlayerController::Update(float deltaTime)
     {
         transform = parent->GetComponent<Transform>();
     }
+
+    if (isPositionLocked)   return;
     
     if (length(currentInput) > 0.0f) {
         acceleration = currentInput * accelerationRate;

@@ -12,16 +12,16 @@
 /// INPUT MANAGER DEFINITIONS //////////////////////////
 ////////////////////////////////////////////////////////
 
-InputManager* InputManager::instance = nullptr;
+std::shared_ptr<InputManager> InputManager::instance = nullptr;
 unordered_map<unsigned int, KeyStatus> InputManager::keysStatus;
 std::unique_ptr<EventsBuffer> InputManager::eventsBuffer = std::make_unique<EventsBuffer>();
 
 
-InputManager* InputManager::GetInstance()
+std::shared_ptr<InputManager> InputManager::GetInstance()
 {
     if (instance == nullptr)
     {
-        instance = new InputManager();
+        instance = std::make_shared<InputManager>(InputManager());
         InitKeys();
         glfwSetInputMode(Helper::GetWindow(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
         glfwSetCursorPosCallback(Helper::GetWindow(), MouseCallback);
@@ -33,15 +33,10 @@ InputManager* InputManager::GetInstance()
 }
 
 
-void InputManager::Initialize()
-{
-    if (!cameraEntity)
-    {
-        cameraEntity = World::GetInstance()->GetCamera(World::GetInstance()->currentCameraName);
-        cameraTransform = cameraEntity->GetComponent<Transform>();
-        cameraMoveComp = cameraEntity->GetComponent<PlayerController>();
-    }
-}
+// void InputManager::Initialize()
+// {
+//     
+// }
 
 void InputManager::InitKeys()
 {
@@ -72,15 +67,6 @@ void InputManager::KeyCallback(GLFWwindow* window, int key, int scancode, int ac
     {
         event.type = EventType::KeyPress;
     }
-    // if (keysStatus[key] == KeyStatus::RELEASED)
-    // {
-    //     keysStatus[key] = KeyStatus::PRESSED;
-    // }
-    // else
-    // {
-    //     keysStatus[key] = KeyStatus::RELEASED;
-    //     event.type = EventType::KeyRelease;
-    // }
     eventsBuffer->AddEvent(event);
 }
 
@@ -95,15 +81,6 @@ void InputManager::MouseButtonCallback(GLFWwindow* window, int button, int actio
     {
         event.type = EventType::MouseButtonPress;
     }
-    // if (keysStatus[button] == KeyStatus::RELEASED)
-    // {
-    //     keysStatus[button] = KeyStatus::PRESSED;
-    // }
-    // else
-    // {
-    //     keysStatus[button] = KeyStatus::RELEASED;
-    //     event.type = EventType::MouseButtonRelease;
-    // }
     eventsBuffer->AddEvent(event);
 }
 
@@ -120,6 +97,14 @@ void InputManager::ScrollCallback(GLFWwindow* window, double xoffset, double yof
 
 void InputManager::Update(float _deltaTime)
 {
+    if (!playerController)
+    {
+        playerController = World::GetInstance()->GetPlayer()->GetComponent<PlayerController>();
+    }
+    if (!playerTransform)
+    {
+        playerTransform = World::GetInstance()->GetPlayer()->GetComponent<Transform>();
+    }
     ProcessInput();
 }
 
@@ -166,22 +151,22 @@ void InputManager::HandleKeyPress(int key, int mods)
             ScapeInput();
             break;
         case GLFW_KEY_UP:
-            cameraMoveComp->SetInput(vec3(0,1,0));
+            playerController->SetInput(vec3(0,1,0));
             break;
         case GLFW_KEY_DOWN:
-            cameraMoveComp->SetInput(vec3(0,-1,0));
+            playerController->SetInput(vec3(0,-1,0));
             break;
         case GLFW_KEY_A:
-            cameraMoveComp->SetInput(vec3(1,0,0));
+            playerController->SetInput(vec3(1,0,0));
             break;
         case GLFW_KEY_D:
-            cameraMoveComp->SetInput(vec3(-1,0,0));
+            playerController->SetInput(vec3(-1,0,0));
             break;
         case GLFW_KEY_S:
-            cameraMoveComp->SetInput(vec3(0,0,-1));
+            playerController->SetInput(vec3(0,0,-1));
             break;
         case GLFW_KEY_W:
-            cameraMoveComp->SetInput(vec3(0,0,1));
+            playerController->SetInput(vec3(0,0,1));
             break;
         case GLFW_KEY_1:
             Debugger::collisionDebugEnabled = !Debugger::collisionDebugEnabled;
@@ -195,22 +180,22 @@ void InputManager::HandleKeyRelease(int key, int mods)
     switch(key)
     {
     case GLFW_KEY_UP:
-        cameraMoveComp->SetInput(vec3(cameraMoveComp->GetInput().x,0,cameraMoveComp->GetInput().z));
+        playerController->SetInput(vec3(playerController->GetInput().x,0,playerController->GetInput().z));
         break;
     case GLFW_KEY_DOWN:
-        cameraMoveComp->SetInput(vec3(cameraMoveComp->GetInput().x,0,cameraMoveComp->GetInput().z));
+        playerController->SetInput(vec3(playerController->GetInput().x,0,playerController->GetInput().z));
         break;
     case GLFW_KEY_A:
-        cameraMoveComp->SetInput(vec3(0,cameraMoveComp->GetInput().y,cameraMoveComp->GetInput().z));
+        playerController->SetInput(vec3(0,playerController->GetInput().y,playerController->GetInput().z));
         break;
     case GLFW_KEY_D:
-        cameraMoveComp->SetInput(vec3(0, cameraMoveComp->GetInput().y,cameraMoveComp->GetInput().z));
+        playerController->SetInput(vec3(0, playerController->GetInput().y,playerController->GetInput().z));
         break;
     case GLFW_KEY_S:
-        cameraMoveComp->SetInput(vec3(cameraMoveComp->GetInput().x,cameraMoveComp->GetInput().y, 0));
+        playerController->SetInput(vec3(playerController->GetInput().x,playerController->GetInput().y, 0));
         break;
     case GLFW_KEY_W:
-        cameraMoveComp->SetInput(vec3(cameraMoveComp->GetInput().x,cameraMoveComp->GetInput().y, 0));
+        playerController->SetInput(vec3(playerController->GetInput().x,playerController->GetInput().y, 0));
         break;
     default: 
         break;
@@ -222,7 +207,7 @@ void InputManager::HandleMouseButtonPress(int key)
     double xpos, ypos;
     glfwGetCursorPos(Helper::GetWindow(), &xpos, &ypos);
     OnClickDelegate.Execute(vec2(xpos, ypos));
-    World::GetInstance()->GetCamera("MainCamera")->GetComponent<PlayerController>()->Shoot();
+    playerController->Shoot();
 }
 
 void InputManager::HandleMouseButtonRelease(int key)
@@ -234,7 +219,7 @@ void InputManager::HandleMouseMove(double x, double y)
     vec2 pos = {x, y};
     if (firstMouse)
     {
-        rotation = cameraTransform->v_rotation;
+        rotation = playerTransform->v_rotation;
         lastMousePos.x = pos.x;
         lastMousePos.y = pos.y;
         firstMouse = false;
@@ -257,7 +242,7 @@ void InputManager::HandleMouseMove(double x, double y)
     if(rotation.pitch < -89.0f)
         rotation.pitch = -89.0f;
 
-    cameraTransform->SetRotation(rotation.pitch, rotation.yaw, rotation.roll);
+    playerTransform->SetRotation(rotation.pitch, rotation.yaw, rotation.roll);
 }
 
 void InputManager::HandleMouseScroll(double x, double y)

@@ -9,7 +9,7 @@
 using WidgetCreator = std::function<std::shared_ptr<Widget>
     (const YAML::Node&, const std::shared_ptr<Widget>& parent)>;
 
-WidgetFactory* WidgetFactory::instance = nullptr;
+std::shared_ptr<WidgetFactory> WidgetFactory::instance = nullptr;
 
 
 void WidgetFactory::WidgetFactorySetup()
@@ -79,7 +79,11 @@ std::shared_ptr<Image2D> WidgetFactory::ReadImage(const YAML::Node& asset)
 {
     const string& path = asset["path"].as<std::string>();
     vec2 size = vec2(asset["size"][0].as<float>(), asset["size"][1].as<float>());
-    vec2 pos = vec2(asset["position"][0].as<float>(), asset["position"][1].as<float>());
+    vec2 pos = vec2(0);
+    if (asset["position"])
+    {
+        pos = vec2(asset["position"][0].as<float>(), asset["position"][1].as<float>());
+    }
     
     std::shared_ptr<Image2D> image = std::make_shared<Image2D>(path, pos, size);
     return image;
@@ -96,10 +100,14 @@ std::shared_ptr<Button> WidgetFactory::ReadButton(const YAML::Node& asset)
 
 std::shared_ptr<Text> WidgetFactory::ReadText(const YAML::Node& asset)
 {
-    vec2 pos = vec2(asset["position"][0].as<float>(), asset["position"][1].as<float>());
     vec3 color = vec3(asset["color"][0].as<float>(), asset["color"][1].as<float>(), asset["color"][2].as<float>());
     float scale = asset["scale"] ? asset["scale"].as<float>() : 1.0f;
     string text = asset["text"].as<std::string>();
+    vec2 pos = vec2(0);
+    if (asset["position"])
+    {
+        pos = vec2(asset["position"][0].as<float>(), asset["position"][1].as<float>());
+    }
 
     std::shared_ptr<Text> textWidget = std::make_shared<Text>(text, color, scale, pos);
     return textWidget;

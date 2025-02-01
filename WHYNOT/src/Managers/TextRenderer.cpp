@@ -86,7 +86,7 @@ void TextRenderer::RenderText(string text, float x, float y, float scale, vec3 c
 {
     defaultShader->Bind();
     defaultShader->SetUniformVec3("textColor", color);
-    mat4 projection = glm::ortho(0.0f, Helper::windowWidth, 0.0f, Helper::windowHeight);
+    mat4 projection = glm::ortho(0.0f, Helper::windowWidth, Helper::windowHeight, 0.0f);
     defaultShader->SetUniformMat4("projection", projection);
     glActiveTexture(GL_TEXTURE0);
     glBindVertexArray(VAO);
@@ -104,13 +104,13 @@ void TextRenderer::RenderText(string text, float x, float y, float scale, vec3 c
         float h = ch.Size.y * scale;
         // update VBO for each character
         float vertices[6][4] = {
-            { xpos,     ypos + h,   0.0f, 0.0f },            
-            { xpos,     ypos,       0.0f, 1.0f },
-            { xpos + w, ypos,       1.0f, 1.0f },
+            { xpos,     ypos + h,   0.0f, 1.0f },            
+            { xpos,     ypos,       0.0f, 0.0f },
+            { xpos + w, ypos,       1.0f, 0.0f },
 
-            { xpos,     ypos + h,   0.0f, 0.0f },
-            { xpos + w, ypos,       1.0f, 1.0f },
-            { xpos + w, ypos + h,   1.0f, 0.0f }           
+            { xpos,     ypos + h,   0.0f, 1.0f },
+            { xpos + w, ypos,       1.0f, 0.0f },
+            { xpos + w, ypos + h,   1.0f, 1.0f }           
         };
         // render glyph texture over quad
         glBindTexture(GL_TEXTURE_2D, ch.TextureID);

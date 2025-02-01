@@ -44,9 +44,9 @@ void Mesh::Render(const mat4& _modelMatrix)
     material->BindShader();
     
     material->SetUniforms(_modelMatrix,
-        World::GetInstance()->GetCurrentCameraComp()->GetViewMatrix(),
-        World::GetInstance()->GetCurrentCameraComp()->GetProjectionMatrix(),
-         World::GetInstance()->GetCurrentCameraComp()->GetViewPos());
+        World::GetInstance()->GetCurrentCamera()->GetViewMatrix(),
+        World::GetInstance()->GetCurrentCamera()->GetProjectionMatrix(),
+         World::GetInstance()->GetCurrentCamera()->GetViewPos());
     
     material->BindTexture();
     vertexArray->Bind();

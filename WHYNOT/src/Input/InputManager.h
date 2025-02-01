@@ -32,7 +32,7 @@ static unordered_map<Action, unsigned int> actions =
 
 class InputManager
 {
-    static InputManager* instance;
+    static std::shared_ptr<InputManager> instance;
     InputManager() = default;
 
     static void InitKeys();
@@ -45,13 +45,12 @@ class InputManager
     void ScapeInput() const;
 
     //USEFUL ASSETS
-    std::shared_ptr<Entity> cameraEntity;
-    std::shared_ptr<Transform> cameraTransform;
-    std::shared_ptr<PlayerController> cameraMoveComp;
+    std::shared_ptr<PlayerController> playerController;
+    std::shared_ptr<Transform> playerTransform;
     
 public:
-    static InputManager* GetInstance();
-    void Initialize();
+    static std::shared_ptr<InputManager> GetInstance();
+    // void Initialize();
     void Update(float _deltaTime);
     void ProcessInput();
 

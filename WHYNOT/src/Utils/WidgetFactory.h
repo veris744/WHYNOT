@@ -16,7 +16,7 @@ public:
         (const YAML::Node&, const std::shared_ptr<Widget>& parent)>;
 
 private:
-    static WidgetFactory* instance;
+    static std::shared_ptr<WidgetFactory> instance;
     std::unordered_map<std::string, WidgetCreator> creators;
 
     static std::shared_ptr<Image2D> ReadImage(const YAML::Node& node);
@@ -27,11 +27,11 @@ public:
     WidgetFactory() = default;
     ~WidgetFactory() = default;
 
-    static WidgetFactory* GetInstance()
+    static std::shared_ptr<WidgetFactory> GetInstance()
     {
         if (instance == nullptr)
         {
-            instance = new WidgetFactory();
+            instance = std::make_shared<WidgetFactory>(WidgetFactory());
             instance->WidgetFactorySetup();
         }
         return instance;

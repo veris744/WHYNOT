@@ -14,7 +14,6 @@ public:
         v_forward(vec3(0, 0, 1)),
         v_up(vec3(0, 1, 0)),
         v_right(vec3(1, 0, 0))
-        
     {
         name = "TRANSFORM";
         v_rotation.SetRotationFromDirection(v_forward, v_up);

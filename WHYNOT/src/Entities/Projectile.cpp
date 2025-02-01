@@ -21,9 +21,16 @@ void Projectile::Initialize()
     isRendered = true;
     hasCollision = true;
 
+    std::shared_ptr<Player> player = World::GetInstance()->GetPlayer();
+    if (!player)
+    {
+        Logger::Log(LogLevel::Error, "No Player Found");
+        return;
+    }
+    playerTransform = player->GetComponent<Transform>();
+
     std::shared_ptr<Transform> transform = std::make_shared<Transform>();
-    transform->v_position = World::GetInstance()->GetCurrentCameraTrans()->v_position +
-        World::GetInstance()->GetCurrentCameraTrans()->v_forward * 2.f;
+    transform->v_position = playerTransform->v_position + playerTransform->v_forward * 2.f;
     AddComponent(transform);
     
     Renderer::SetSphereVertex(0.5f, 32.f, 16.f);
@@ -45,7 +52,7 @@ void Projectile::Initialize()
     AddComponent(collider);
     
     std::shared_ptr<Movement> movement = std::make_shared<Movement>();
-    movement->speed = World::GetInstance()->GetCurrentCameraTrans()->v_forward * 5.f;
+    movement->speed = playerTransform->v_forward * 5.f;
     AddComponent(movement);
     
     collider->OnOutOfBoundsDelegate.Bind(&Projectile::OnOutOfBounds, this);

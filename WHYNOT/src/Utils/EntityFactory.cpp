@@ -2,14 +2,16 @@
 
 #include <utility>
 
+#include "Components/Transform.h"
 #include "Entities/Alien.h"
 #include "Entities/Projectile.h"
+#include "Entities/Player.h"
 #include "Managers/World.h"
 
 
 using ComponentCreator = std::function<void (const YAML::Node&)>;
 
-EntityFactory* EntityFactory::instance = nullptr;
+std::shared_ptr<EntityFactory> EntityFactory::instance = nullptr;
 
 void EntityFactory::EntityFactorySetup()
 {
@@ -23,6 +25,17 @@ void EntityFactory::EntityFactorySetup()
         void {
             std::shared_ptr<Projectile> proj = ReadProjectile(data);
             World::GetInstance()->AddEntity(proj);
+        });
+    
+    RegisterEntity("PLAYER", [](const YAML::Node& data) ->
+        void {
+            std::shared_ptr<Player> player = ReadPlayer(data);
+            if (World::GetInstance()->GetPlayer())
+            {
+                Logger::Log<EntityFactory>(LogLevel::Error, "Player already exists");
+            }
+            World::GetInstance()->AddEntity(player);
+            World::GetInstance()->SetPlayer(player);
         });
 }
 
@@ -55,6 +68,14 @@ std::shared_ptr<Projectile> EntityFactory::ReadProjectile(const YAML::Node& asse
     projectile->Initialize();
     SetTransform(projectile, asset);
     return projectile;
+}
+
+std::shared_ptr<Player> EntityFactory::ReadPlayer(const YAML::Node& asset)
+{
+    std::shared_ptr<Player> player = std::make_shared<Player>();
+    player->Initialize();
+    SetTransform(player, asset);
+    return player;
 }
 
 void EntityFactory::SetTransform(const std::shared_ptr<Entity>& _entity, const YAML::Node& asset)

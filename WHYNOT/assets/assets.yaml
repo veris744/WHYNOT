@@ -1,16 +1,5 @@
 ---
 assets: 
-  - name: "MainCamera"
-    isCamera: True
-    isLight: False
-    isRendered: False
-    components:
-      - name: "TRANSFORM"
-        position: [0, 0, -1]
-        rotation: [0, 0, 0]
-        scale: [1, 1, 1]
-      - name: "CAMERA"
-      - name: "PLAYERCONTROLLER"
   - name: "Ambient"
     isCamera: False
     isLight: True

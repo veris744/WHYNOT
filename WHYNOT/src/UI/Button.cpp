@@ -5,9 +5,8 @@
 #include "Input/InputManager.h"
 
 Button::Button(const vec2& _pos, const vec2& _size)
+    : Widget(_pos, _size)
 {
-    position = _pos;
-    size = _size;
     InputManager::GetInstance()->OnClickDelegate.Bind(&Button::OnClick, this);
 }
 

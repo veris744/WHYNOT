@@ -6,7 +6,7 @@ void Text::Render()
 {
     Widget::Render();
 
-    TextRenderer::GetInstance()->RenderText(text, position.x, position.y, scale, color);
+    TextRenderer::GetInstance()->RenderText(text, finalPos.x, finalPos.y, scale, color);
 }
 
 void Text::Clear()
