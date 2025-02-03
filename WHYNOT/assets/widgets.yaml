@@ -5,7 +5,7 @@ widgets:
     widgets:
     - type: "BUTTON"
       subtype: "Start"
-      position: [100, 50]
+      position: [900, 400]
       size: [100, 50]
       widgets:
         - type: "TEXT"
@@ -27,3 +27,8 @@ widgets:
       path: "assets/bulb.jpg"
       position: [20, 400]
       size: [75, 75]
+    - type: "TEXT"
+      name: "AliensText"
+      text: ""
+      position: [25, 25]
+      color: [0.5, 0.8, 0.2]

@@ -5,6 +5,7 @@
 #include "Components/LightSource.h"
 #include "Graphics/Mesh.h"
 #include "Input/InputManager.h"
+#include "Minigame1/AliensLogic.h"
 #include "UI/Widget.h"
 #include "Reader/AssetReader.h"
 
@@ -41,6 +42,9 @@ void World::Initialize()
             widget->isActive = false;
         }
     }
+    playerEntity->isActive = true;
+
+    AliensLogic::GetInstance()->PrepareGame();
 }
 
 void World::Update(float deltaTime)
@@ -51,7 +55,7 @@ void World::Update(float deltaTime)
         {
             continue;
         }
-        entity.second->Update(deltaTime);
+        entity.second->UpdateTrigger(deltaTime);
     }
     CheckCollisions();
     for (const auto& entity : toBeDestroyed)
@@ -79,8 +83,8 @@ void World::CheckCollisions()
                     std::shared_ptr<Collider> c2 = it2->second->GetComponent<Collider>();
                     if (c1->Collides(c2))
                     {
-                        c1->CollisionDelegate.Execute(*it2->second, vec3(0));
-                        c2->CollisionDelegate.Execute(*it->second, vec3(0));
+                        c1->CollisionDelegate.Execute(it2->second, normalize(c1->GetWorldPosition() - c2->GetWorldPosition()));
+                        c2->CollisionDelegate.Execute(it->second, normalize(c2->GetWorldPosition() - c1->GetWorldPosition()));
                     }
                 }
             }
@@ -90,7 +94,13 @@ void World::CheckCollisions()
 
 void World::MarkForDestruction(const string& _entityName)
 {
-    toBeDestroyed.push_back(entities.at(_entityName));
+    auto it = std::find_if(toBeDestroyed.begin(), toBeDestroyed.end(), [&](const std::shared_ptr<Entity>& entity) {
+        return entity->GetName() == _entityName;
+    });
+    if (it == toBeDestroyed.end())
+    {
+        toBeDestroyed.push_back(entities.at(_entityName));
+    }
 }
 
 void World::RemoveEntity(const string& _entityName)
@@ -158,14 +168,50 @@ vector<LightData> World::GetLightDataList() const
     return list;
 }
 
+std::shared_ptr<Widget> World::GetWidget(const string& _name) const
+{
+    std::shared_ptr<Widget> widget = FindWidget(_name, widgets);
+    if (!widget)
+    {
+        Logger::Log<World>(LogLevel::Error, "Widget " + _name + " not found");
+    }
+    return widget;
+}
+
+std::shared_ptr<Widget> World::FindWidget(const string& _name, const vector<std::shared_ptr<Widget>>& _widgets) const
+{
+    for (const auto& widget : _widgets)
+    {
+        if (widget->GetName() == _name)
+        {
+            return widget;
+        }
+        auto foundWidget = FindWidget(_name, widget->GetChildren());
+        if (foundWidget)
+        {
+            return foundWidget;
+        }
+    }
+    return nullptr;
+}
+
+void World::AddWidget(const std::shared_ptr<Widget>& _widget)
+{
+    auto it = std::find_if(widgets.begin(), widgets.end(), [&](const std::shared_ptr<Widget>& widget) {
+        return _widget->GetName() == widget->GetName();
+    });
+    if (it != widgets.end())
+    {
+        Logger::Log<World>(LogLevel::Error, "Widget " + _widget->GetName() + " already exists");
+        return;
+    }
+    widgets.push_back(_widget);
+}
+
 void World::StartGame()
 {
     Logger::Log(LogLevel::Info, "World::StartGame()");
     InputManager::SetInputMode(InputMode::GameOnly);
-    for (const auto& entity : entities)
-    {
-        entity.second->isActive = true;
-    }
     for (const auto& widget : widgets)
     {
         if (widget->GetInputMode() == InputMode::UIOnly)
@@ -177,5 +223,6 @@ void World::StartGame()
             widget->isActive = true;   
         }
     }
+    AliensLogic::GetInstance()->StartGame();
 }
 

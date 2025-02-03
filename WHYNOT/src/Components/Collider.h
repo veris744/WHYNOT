@@ -15,6 +15,8 @@ class Collider : public Component
 {
 protected:
     ColliderType type;
+
+    std::shared_ptr<Transform> transform = nullptr;
    
     
 public:
@@ -24,21 +26,21 @@ public:
     }
     virtual ~Collider() = default;
     
-    vec3 position;
+    vec3 position = vec3(0, 0, 0);
 
     ColliderType GetType() const {  return type; }
 
+    vec3 GetWorldPosition();
 
     bool CheckCircleCircle(float _rad1, vec3 _pos1, float _rad2, vec3 _pos2) const;
     bool CheckCirclePlane(float _rad1, vec3 _pos1, vec3 _point, vec3 _normal) const;
     bool CheckCircleSquare(float _rad1, vec3 _pos1, vec3 _width2, vec3 _height2, vec3 _depth, vec3 _pos2) const;
     bool CheckSquareSquare(vec3 _width1, vec3 _height1, vec3 _depth1, vec3 _pos1, vec3 _width2, vec3 _height2, vec3 _depth2, vec3 _pos2) const;
     
-    virtual bool Collides(float _rad1, vec3 _pos1) const = 0;
-    virtual bool Collides(vec3 _width1, vec3 _height1, vec3 _depth1, vec3 _pos1) const = 0;
-    virtual bool Collides(const std::shared_ptr<Collider>& other) const = 0;
+    virtual bool Collides(float _rad1, vec3 _pos1) = 0;
+    virtual bool Collides(const std::shared_ptr<Collider>& other) = 0;
     virtual bool CheckInBounds(const vec2& xBounds, const vec2& yBounds, const vec2& zBounds) = 0;
     virtual void Render() = 0;
 
-    SingleDelegate<const Entity&, vec3> CollisionDelegate;
+    SingleDelegate<const std::shared_ptr<Entity>&, vec3> CollisionDelegate;
 };

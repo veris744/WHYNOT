@@ -600,6 +600,7 @@
       <LinkCompiled>true</LinkCompiled>
     </ClCompile>
     <ClCompile Include="src\Managers\World.cpp" />
+    <ClCompile Include="src\Minigame1\AliensLogic.cpp" />
     <ClCompile Include="src\Reader\AssetReader.cpp">
       <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -939,6 +940,7 @@
     <ClInclude Include="src\Managers\Renderer2D.h" />
     <ClInclude Include="src\Managers\TextRenderer.h" />
     <ClInclude Include="src\Managers\World.h" />
+    <ClInclude Include="src\Minigame1\AliensLogic.h" />
     <ClInclude Include="src\Reader\AssetReader.h" />
     <ClInclude Include="src\Reader\ComponentFactory.h" />
     <ClInclude Include="src\Reader\EntityFactory.h" />

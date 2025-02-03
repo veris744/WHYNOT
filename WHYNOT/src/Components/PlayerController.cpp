@@ -64,5 +64,4 @@ void PlayerController::Shoot()
 {
     std::shared_ptr<Projectile> projectile = std::make_shared<Projectile>();
     projectile->Initialize();
-    World::GetInstance()->AddEntity(projectile);
 }

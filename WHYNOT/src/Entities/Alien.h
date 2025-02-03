@@ -1,12 +1,16 @@
 #pragma once
 #include "Entity.h"
 
+class Movement;
+
 class Alien : public Entity
 {
     static unsigned int counter;
 
     void OnOutOfBounds(vec3 _normal);
-    void OnCollision(const Entity& _otherEntity, vec3 normal);
+    void OnCollision(const std::shared_ptr<Entity>& _otherEntity, vec3 normal);
+
+    std::shared_ptr<Movement> movement;
     
 public:
     Alien(const string& _name = "")

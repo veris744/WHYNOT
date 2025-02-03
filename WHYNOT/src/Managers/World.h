@@ -64,6 +64,7 @@ public:
     void MarkForDestruction(const string& _entityName);
 private:
     void RemoveEntity(const string& _entityName);
+    std::shared_ptr<Widget> FindWidget(const string& _name, const vector<std::shared_ptr<Widget>>& _widgets) const;
 
 public:
     unsigned int GetEntityCount() const { return entities.size(); }
@@ -81,10 +82,8 @@ public:
     vector<LightData> GetLightDataList() const;
 
     vector<std::shared_ptr<Widget>> GetWidgets() const { return widgets; }
-    void AddWidget(const std::shared_ptr<Widget>& _widget)
-    {
-        widgets.push_back(_widget);
-    }
+    std::shared_ptr<Widget> GetWidget(const string& _name) const;
+    void AddWidget(const std::shared_ptr<Widget>& _widget);
 
     void StartGame();
 };

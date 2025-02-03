@@ -6,8 +6,8 @@
 class Component;
 class Transform;
 
-class Entity
-{
+class Entity : public std::enable_shared_from_this<Entity>
+{    
 protected:
     vector<std::shared_ptr<Component>> components = vector<std::shared_ptr<Component>>();
     bool isCamera = false;
@@ -24,7 +24,7 @@ public:
         : isCamera(_isCamera), isLight(_isLight), name(_name)
         {}
     virtual ~Entity() = default;
-    virtual void Initialize() {}
+    virtual void Initialize();
     
     bool isRendered = false;
     bool hasCollision = false;
@@ -60,6 +60,7 @@ public:
     bool IsLight() const { return isLight; }
     string GetName() { return name; }
 
+    void UpdateTrigger(float deltaTime);
     virtual void Update(float deltaTime);
     virtual void Destroy();
 };

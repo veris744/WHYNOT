@@ -20,13 +20,11 @@ void EntityFactory::EntityFactorySetup()
     RegisterEntity("ALIEN", [](const YAML::Node& data) ->
         void {
             std::shared_ptr<Alien> alien = ReadAlien(data);
-            World::GetInstance()->AddEntity(alien);
         });
     
     RegisterEntity("PROJECTILE", [](const YAML::Node& data) ->
         void {
             std::shared_ptr<Projectile> proj = ReadProjectile(data);
-            World::GetInstance()->AddEntity(proj);
         });
     
     RegisterEntity("PLAYER", [](const YAML::Node& data) ->
@@ -36,7 +34,6 @@ void EntityFactory::EntityFactorySetup()
             {
                 Logger::Log<EntityFactory>(LogLevel::Error, "Player already exists");
             }
-            World::GetInstance()->AddEntity(player);
             World::GetInstance()->SetPlayer(player);
         });
 }

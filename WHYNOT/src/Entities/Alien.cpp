@@ -1,20 +1,19 @@
 #include "Alien.h"
 
+#include "Projectile.h"
 #include "Components/CircleCollider.h"
 #include "Graphics/Mesh.h"
 #include "Components/Model.h"
 #include "Components/Movement.h"
 #include "Components/Transform.h"
 #include "Graphics/Material.h"
-#include "Managers/World.h"
+#include "Minigame1/AliensLogic.h"
 
 unsigned int Alien::counter = 0;
 
 
 void Alien::Initialize()
 {
-    Entity::Initialize();
-
     isCamera = false;
     isLight = false;
     isRendered = true;
@@ -31,34 +30,37 @@ void Alien::Initialize()
     model->position = vec3(-0.5f, -0.5f, -0.5f);
     AddComponent(model);
 
-    std::shared_ptr<CircleCollider> collider = std::make_shared<CircleCollider>(2.3);
+    std::shared_ptr<CircleCollider> collider = std::make_shared<CircleCollider>(2);
     AddComponent(collider);
 
     collider->OnOutOfBoundsDelegate.Bind(&Alien::OnOutOfBounds, this);
 
-    std::shared_ptr<Movement> movement = std::make_shared<Movement>();
-    movement->speed = vec3(3, 2, 2.5);
+    movement = std::make_shared<Movement>();
+    movement->maxSpeed = 5.0f;
     AddComponent(movement);
     
     collider->CollisionDelegate.Bind(&Alien::OnCollision, this);
+    
+    Entity::Initialize();
 }
 
 void Alien::Update(float _deltaTime)
 {
+    Entity::Update(_deltaTime);
+    
     std::shared_ptr<CircleCollider> collider = GetComponent<CircleCollider>();
-    collider->CheckInBounds(vec2(-8, 8), vec2(-4, 12), vec2(5, 16));
+    collider->CheckInBounds(AliensLogic::GetInstance()->GetXBounds(),
+        AliensLogic::GetInstance()->GetYBounds(),
+        AliensLogic::GetInstance()->GetZBounds());
     
     GetComponent<Transform>()->SetRotation(GetComponent<Transform>()->v_rotation.pitch,
     GetComponent<Transform>()->v_rotation.yaw += 20*_deltaTime,GetComponent<Transform>()->v_rotation.roll);
-    
-    
-    Entity::Update(_deltaTime);
 }
 
 
 void Alien::OnOutOfBounds(vec3 _normal)
 {
-    std::shared_ptr<Movement> movement = GetComponent<Movement>();
+    if (!isActive)  return;
 
     float velocityTowardPlane = dot(_normal, movement->speed);
     if (velocityTowardPlane > 0)
@@ -80,7 +82,23 @@ void Alien::OnOutOfBounds(vec3 _normal)
     }
 }
 
-void Alien::OnCollision(const Entity& _otherEntity, vec3 normal)
+void Alien::OnCollision(const std::shared_ptr<Entity>& _otherEntity, vec3 _normal)
 {
-    Destroy();
+    if (std::dynamic_pointer_cast<Projectile>(_otherEntity))
+    {
+        std::shared_ptr<Alien> self = std::static_pointer_cast<Alien>(shared_from_this());
+        AliensLogic::GetInstance()->AlienDestroyed(self);
+        Destroy();
+        return;
+    }
+    
+    float velocityTowardPlane = dot(_normal, movement->speed);
+    if (velocityTowardPlane > 0)
+    {
+        return;
+    }
+    if (std::dynamic_pointer_cast<Alien>(_otherEntity))
+    {
+        movement->speed = _normal * length(movement->speed);
+    }
 }

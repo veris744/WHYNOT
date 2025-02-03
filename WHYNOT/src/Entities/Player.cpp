@@ -8,8 +8,6 @@ unsigned int Player::counter = 0;
 
 void Player::Initialize()
 {
-    Entity::Initialize();
-
     isCamera = true;
     isLight = false;
     isRendered = false;
@@ -22,8 +20,10 @@ void Player::Initialize()
     AddComponent(transform);
 
     std::shared_ptr<PlayerController> controller = std::make_shared<PlayerController>();
-    controller->SetPositionLocked(true);
+    controller->SetPositionLocked(false);
     AddComponent(controller);
+    
+    Entity::Initialize();
 }
 
 void Player::Update(float _deltaTime)

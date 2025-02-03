@@ -1,5 +1,14 @@
 #include "Collider.h"
 
+vec3 Collider::GetWorldPosition()
+{
+    if (!transform)
+    {
+        transform = parent->GetComponent<Transform>();
+    }
+    return transform->v_position + position;
+}
+
 bool Collider::CheckCircleCircle(float _rad1, vec3 _pos1, float _rad2, vec3 _pos2) const
 {
     if (distance(_pos1, _pos2) <= (_rad1 + _rad2))

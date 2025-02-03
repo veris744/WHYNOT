@@ -5,20 +5,14 @@
 #include "Utils/Debugger.h"
 
 
-bool CircleCollider::Collides(const std::shared_ptr<Collider>& other) const
+bool CircleCollider::Collides(const std::shared_ptr<Collider>& other) 
 {
-    return other->Collides(radius, position);
+    return other->Collides(radius, GetWorldPosition());
 }
 
-
-bool CircleCollider::Collides(float _rad1, vec3 _pos1) const 
+bool CircleCollider::Collides(float _rad1, vec3 _pos1)  
 {
-    return CheckCircleCircle(radius, position, _rad1, _pos1);
-}
-
-bool CircleCollider::Collides(vec3 _width1, vec3 _height1, vec3 _depth1, vec3 _pos1) const
-{
-    return CheckCircleSquare(radius, position, _width1, _height1, _depth1, _pos1);
+    return CheckCircleCircle(radius, GetWorldPosition(), _rad1, _pos1);
 }
 
 bool CircleCollider::CheckInBounds(const vec2& xBounds, const vec2& yBounds, const vec2& zBounds)

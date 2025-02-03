@@ -14,8 +14,6 @@ unsigned int Projectile::counter = 0;
 
 void Projectile::Initialize()
 {
-    Entity::Initialize();
-    
     isCamera = false;
     isLight = false;
     isRendered = true;
@@ -57,6 +55,8 @@ void Projectile::Initialize()
     
     collider->OnOutOfBoundsDelegate.Bind(&Projectile::OnOutOfBounds, this);
     collider->CollisionDelegate.Bind(&Projectile::OnCollision, this);
+    
+    Entity::Initialize();
 }
 
 void Projectile::Update(float _deltaTime)
@@ -67,7 +67,7 @@ void Projectile::Update(float _deltaTime)
 }
 
 
-void Projectile::OnCollision(const Entity& _otherEntity, vec3 normal)
+void Projectile::OnCollision(const std::shared_ptr<Entity>& _otherEntity, vec3 normal)
 {
     Destroy();
 }
