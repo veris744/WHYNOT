@@ -61,7 +61,7 @@ void Projectile::Initialize()
 
 void Projectile::Update(float _deltaTime)
 {
-    GetComponent<Collider>()->CheckInBounds(vec2(-8, 8), vec2(-4, 12), vec2(-5, 16));
+    GetComponent<Collider>()->CheckInBounds(vec2(-8, 8), vec2(-4, 12), vec2(-15, 16));
     
     Entity::Update(_deltaTime);
 }

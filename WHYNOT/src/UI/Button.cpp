@@ -6,16 +6,10 @@
 
 unsigned int Button::counter = 0;
 
-Button::Button(const vec2& _pos, const vec2& _size)
+Button::Button(const vec2& _pos, const vec2& _size, const string& _name)
     : Widget(_pos, _size)
 {
-    name = "Button" + std::to_string(++counter);
-    InputManager::GetInstance()->OnClickDelegate.Bind(&Button::OnClickTrigger, this);
-}
-
-Button::Button(const string& _name, const vec2& _pos, const vec2& _size)
-    : Widget(_name, _pos, _size)
-{
+    name = _name.empty() ? "Button" + std::to_string(++counter) : _name;
     InputManager::GetInstance()->OnClickDelegate.Bind(&Button::OnClickTrigger, this);
 }
 

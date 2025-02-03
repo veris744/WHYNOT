@@ -1,11 +1,13 @@
 #include "WidgetFactory.h"
 
+#include "Reader.h"
 #include "Managers/World.h"
 #include "UI/Image2D.h"
 #include "UI/Text.h"
 #include "UI/Panel.h"
 #include "UI/Buttons/StartButton.h"
 
+using namespace Reader;
 
 using WidgetCreator = std::function<std::shared_ptr<Widget>
     (const YAML::Node&, const std::shared_ptr<Widget>& parent)>;
@@ -110,17 +112,13 @@ void WidgetFactory::SetInputMode(const std::shared_ptr<Widget>& widget, const YA
 std::shared_ptr<Image2D> WidgetFactory::ReadImage(const YAML::Node& asset)
 {
     const string& path = asset["path"].as<std::string>();
-    vec2 size = vec2(asset["size"][0].as<float>(), asset["size"][1].as<float>());
-    vec2 pos = vec2(0);
-    if (asset["position"])
-    {
-        pos = vec2(asset["position"][0].as<float>(), asset["position"][1].as<float>());
-    }
+    vec2 size = ReadVec2(asset, "size", vec2(50.f,50.f));
+    vec2 pos = ReadVec2(asset, "position");
     
     std::shared_ptr<Image2D> image = std::make_shared<Image2D>(path, pos, size);
     if (asset["name"])
     {
-        image = std::make_shared<Image2D>(asset["name"].as<string>(), path, pos, size);
+        image = std::make_shared<Image2D>(path, pos, size, ReadString(asset, "name"));
     }
     else
     {
@@ -132,15 +130,15 @@ std::shared_ptr<Image2D> WidgetFactory::ReadImage(const YAML::Node& asset)
 
 std::shared_ptr<Button> WidgetFactory::ReadButton(const YAML::Node& asset)
 {
-    vec2 size = vec2(asset["size"][0].as<float>(), asset["size"][1].as<float>());
-    vec2 pos = vec2(asset["position"][0].as<float>(), asset["position"][1].as<float>());
+    vec2 size = ReadVec2(asset, "size", vec2(50.f,50.f));
+    vec2 pos = ReadVec2(asset, "position");
     
-    string subtype = asset["subtype"] ? asset["subtype"].as<string>() : "";
+    string subtype = ReadString(asset, "subtype");
     if (subtype == "Start")
     {
         std::shared_ptr<StartButton> button;
         if (asset["name"])
-            button = std::make_shared<StartButton>(asset["name"].as<string>(), pos, size);
+            button = std::make_shared<StartButton>(pos, size, ReadString(asset, "name"));
         else
             button = std::make_shared<StartButton>(pos, size);
         SetInputMode(button, asset);
@@ -150,7 +148,7 @@ std::shared_ptr<Button> WidgetFactory::ReadButton(const YAML::Node& asset)
     {
         std::shared_ptr<Button> button;
         if (asset["name"])
-            button = std::make_shared<Button>(asset["name"].as<string>(), pos, size);
+            button = std::make_shared<Button>(pos, size, ReadString(asset, "name"));
         else
             button = std::make_shared<Button>(pos, size);
         SetInputMode(button, asset);
@@ -163,17 +161,14 @@ std::shared_ptr<Text> WidgetFactory::ReadText(const YAML::Node& asset)
 {
     std::shared_ptr<Text> textWidget;
     
-    vec3 color = vec3(asset["color"][0].as<float>(), asset["color"][1].as<float>(), asset["color"][2].as<float>());
-    float scale = asset["scale"] ? asset["scale"].as<float>() : 1.0f;
-    string text = asset["text"].as<std::string>();
-    vec2 pos = vec2(0);
-    if (asset["position"])
-    {
-        pos = vec2(asset["position"][0].as<float>(), asset["position"][1].as<float>());
-    }
+    vec3 color = ReadVec3(asset, "color");
+    float scale = ReadFloat(asset, "scale", 1.f);
+    string text = ReadString(asset, "text");
+    vec2 pos = ReadVec2(asset, "position");
+    
     if (asset["name"])
     {
-        textWidget = std::make_shared<Text>(asset["name"].as<string>(), text, color, scale, pos);
+        textWidget = std::make_shared<Text>(text, color, scale, pos, ReadString(asset, "name"));
     }
     else
     {
@@ -186,15 +181,12 @@ std::shared_ptr<Text> WidgetFactory::ReadText(const YAML::Node& asset)
 
 std::shared_ptr<Panel> WidgetFactory::ReadPanel(const YAML::Node& asset)
 {
-    vec2 pos = vec2(0);
-    if (asset["position"])
-    {
-        pos = vec2(asset["position"][0].as<float>(), asset["position"][1].as<float>());
-    }
+    vec2 pos = ReadVec2(asset, "position");
+    
     std::shared_ptr<Panel> widget;
     if (asset["name"])
     {
-        widget = std::make_shared<Panel>(asset["name"].as<string>(), pos);
+        widget = std::make_shared<Panel>(pos, ReadString(asset, "name"));
     }
     else
     {

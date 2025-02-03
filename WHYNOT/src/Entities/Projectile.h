@@ -12,13 +12,9 @@ class Projectile : public Entity
     void OnOutOfBounds(vec3 _normal);
     
 public:
-    Projectile()
+    Projectile(const string& _name = "")
     {
-        name = "Projectile" + std::to_string(++counter);
-    }
-    Projectile(const string& _name)
-    {
-        name = _name;
+        name = _name.empty() ? "Projectile" + std::to_string(++counter) : _name;
     }
     ~Projectile() override = default;
     

@@ -5,13 +5,9 @@ class Panel : public Widget
 {
     static unsigned int counter;
 public:
-    Panel(vec2 _pos)
+    Panel(vec2 _pos, const string& _name = "")
         : Widget(_pos, vec2(0))
     {
-        name = "Panel" + std::to_string(counter++);
+        name = _name.empty() ? "Panel" + std::to_string(++counter) : _name;
     }
-    
-    Panel(const string& _name, vec2 _pos)
-        : Widget(_name, _pos, vec2(0))
-    {}
 };

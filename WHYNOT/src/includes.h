@@ -20,6 +20,9 @@
 #include <Utils/MultiDelegate.h>
 #include "Utils/Logger.h"
 
+#define YAML_CPP_STATIC_DEFINE
+#include <yaml-cpp/yaml.h>
+
 using std::string;
 using std::vector;
 using std::deque;

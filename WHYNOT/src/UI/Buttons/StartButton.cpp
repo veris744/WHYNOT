@@ -4,15 +4,11 @@
 
 unsigned int StartButton::counter = 0;
 
-StartButton::StartButton(const vec2& _pos, const vec2& _size)
+StartButton::StartButton(const vec2& _pos, const vec2& _size, const string& _name)
     : Button(_pos, _size)
 {
-    name = "StartButton" + std::to_string(++counter);
+    name = _name.empty() ? "StartButton" + std::to_string(++counter) : _name;
 }
-
-StartButton::StartButton(const string& _name, const vec2& _pos, const vec2& _size)
-    : Button(_name, _pos, _size)
-{}
 
 void StartButton::OnClick(vec2 _mousePos)
 {

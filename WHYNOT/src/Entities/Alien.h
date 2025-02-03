@@ -9,13 +9,9 @@ class Alien : public Entity
     void OnCollision(const Entity& _otherEntity, vec3 normal);
     
 public:
-    Alien()
+    Alien(const string& _name = "")
     {
-        name = "Alien" + std::to_string(++counter);
-    }
-    Alien(const string& _name)
-    {
-        name = _name;
+        name = _name.empty() ? "Alien" + std::to_string(++counter) : _name;
     }
     ~Alien() override = default;
 

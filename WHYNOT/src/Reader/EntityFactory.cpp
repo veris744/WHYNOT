@@ -2,12 +2,14 @@
 
 #include <utility>
 
+#include "Reader.h"
 #include "Components/Transform.h"
 #include "Entities/Alien.h"
 #include "Entities/Projectile.h"
 #include "Entities/Player.h"
 #include "Managers/World.h"
 
+using namespace Reader;
 
 using ComponentCreator = std::function<void (const YAML::Node&)>;
 
@@ -58,7 +60,7 @@ std::shared_ptr<Alien> EntityFactory::ReadAlien(const YAML::Node& asset)
 {
     std::shared_ptr<Alien> alien = std::make_shared<Alien>();
     alien->Initialize();
-    SetTransform(alien, asset);
+    alien->GetComponent<Transform>()->v_position = ReadVec3(asset, "position");
     return alien;
 }
 
@@ -85,19 +87,7 @@ void EntityFactory::SetTransform(const std::shared_ptr<Entity>& _entity, const Y
     {
         Logger::Log(LogLevel::Error, "Entity does not have a transform");
     }
-    if (asset["position"])
-    {
-        transform->v_position = vec3(asset["position"][0].as<float>(),
-             asset["position"][1].as<float>(), asset["position"][2].as<float>());
-    }
-    if (asset["scale"])
-    {
-        transform->v_scale = vec3(asset["scale"][0].as<float>(),
-            asset["scale"][1].as<float>(), asset["scale"][2].as<float>());
-    }
-    if (asset["rotation"])
-    {
-        transform->v_rotation.SetRotation(asset["rotation"][0].as<float>(),
-            asset["rotation"][1].as<float>(), asset["rotation"][2].as<float>());
-    }
+    transform->v_position = ReadVec3(asset, "position");
+    transform->v_scale = ReadVec3(asset, "scale", vec3(1.f, 1.f, 1.f));
+    transform->v_rotation.SetRotation(ReadVec3(asset, "rotation"));
 }

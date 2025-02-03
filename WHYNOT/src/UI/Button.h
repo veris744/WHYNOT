@@ -7,8 +7,7 @@ class Button : public Widget
 {
     static unsigned int counter;
 public:
-    Button(const vec2& _pos, const vec2& _size);
-    Button(const string& _name, const vec2& _pos, const vec2& _size);
+    Button(const vec2& _pos, const vec2& _size, const string& _name = "");
 
     bool IsClicking(const vec2& _mousePos) const;
 

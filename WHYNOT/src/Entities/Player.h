@@ -6,13 +6,9 @@ class Player : public Entity
     static unsigned int counter;
     
 public:
-    Player()
+    Player(const string& _name = "")
     {
-        name = "Player" + std::to_string(++counter);
-    }
-    Player(const string& _name)
-    {
-        name = _name;
+        name = _name.empty() ? "Player" + std::to_string(++counter) : _name;
     }
     ~Player() override = default;
 

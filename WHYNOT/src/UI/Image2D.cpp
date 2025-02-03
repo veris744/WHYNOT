@@ -11,17 +11,10 @@
 
 unsigned int Image2D::counter = 0;
 
-Image2D::Image2D(const string& _path, vec2 _pos, vec2 _size)
+Image2D::Image2D(const string& _path, vec2 _pos, vec2 _size, const string& _name)
     : Widget(_pos, _size)
 {
-    name = "Image2D" + std::to_string(++counter);
-    path = _path;
-    Initialize();
-}
-
-Image2D::Image2D(const string& _name, const string& _path, vec2 _pos, vec2 _size)
-    : Widget(_name, _pos, _size)
-{
+    name = _name.empty() ? "Image2D" + std::to_string(++counter) : _name;
     path = _path;
     Initialize();
 }

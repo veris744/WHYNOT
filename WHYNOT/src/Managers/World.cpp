@@ -4,11 +4,9 @@
 #include "Components/Collider.h"
 #include "Components/LightSource.h"
 #include "Graphics/Mesh.h"
-#include "Components/Model.h"
-#include "Components/Transform.h"
 #include "Input/InputManager.h"
 #include "UI/Widget.h"
-#include "Utils/AssetReader.h"
+#include "Reader/AssetReader.h"
 
 std::shared_ptr<World> World::instance = nullptr;
 

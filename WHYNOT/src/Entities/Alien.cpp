@@ -22,7 +22,7 @@ void Alien::Initialize()
     isActive = false;
 
     std::shared_ptr<Transform> transform = std::make_shared<Transform>();
-    transform->v_scale = vec3(0.5f, 0.5f, 0.5f);
+    transform->v_scale = vec3(0.4f, 0.4f, 0.4f);
     AddComponent(transform);
 
     std::shared_ptr<Material> mat = std::make_shared<Material>("", "", "shaders/fragmentColor.glsl");

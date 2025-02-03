@@ -1,7 +1,5 @@
 #pragma once
-#include <functional>
-#include <memory>
-#include <yaml-cpp/yaml.h>
+#include <includes.h>
 
 class Panel;
 class Widget;

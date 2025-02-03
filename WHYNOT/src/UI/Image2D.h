@@ -16,8 +16,7 @@ class Image2D : public Widget
     void Initialize();
     
 public:
-    Image2D(const string& _path, vec2 _pos, vec2 _size);
-    Image2D(const string& _name, const string& _path, vec2 _pos, vec2 _size);
+    Image2D(const string& _path, vec2 _pos, vec2 _size, const string& _name = "");
     void Render() override;
     void Clear() override;
 };
