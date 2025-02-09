@@ -44,8 +44,6 @@ void World::Initialize()
         }
     }
     playerEntity->isActive = true;
-
-    AliensLogic::GetInstance()->PrepareGame();
 }
 
 void World::Update(float deltaTime)
@@ -228,6 +226,25 @@ void World::StartGame()
             widget->isActive = true;   
         }
     }
+    AliensLogic::GetInstance()->PrepareGame();
     AliensLogic::GetInstance()->StartGame();
+}
+
+void World::StopGame()
+{
+    Logger::Log(LogLevel::Info, "World::StopGame()");
+    InputManager::SetInputMode(InputMode::UIOnly);
+    for (const auto& widget : widgets)
+    {
+        if (widget->GetInputMode() == InputMode::UIOnly)
+        {
+            widget->isActive = true;            
+        }
+        else
+        {
+            widget->isActive = false;   
+        }
+    }
+    AliensLogic::GetInstance()->StopGame();
 }
 

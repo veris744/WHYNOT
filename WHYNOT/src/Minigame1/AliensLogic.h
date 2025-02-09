@@ -15,10 +15,10 @@ public:
     std::vector<std::shared_ptr<Alien>> aliens;
     std::queue<std::shared_ptr<Projectile>> availableProjectiles;
     std::vector<std::shared_ptr<Projectile>> usedProjectiles;
-    unsigned int totalAliens = 5;
-    unsigned int totalProjectiles = 5;
+    unsigned int totalAliens = 1;
+    unsigned int totalProjectiles = 10;
 
-    vec3 playgroundDimensions = vec3(15,15,15);
+    vec3 playgroundDimensions = vec3(10,10,10);
     vec3 playgroundCenter = vec3(0,0,6);
     
 
@@ -40,5 +40,6 @@ public:
     void StartGame();
     void ShootProjectile();
     void RemoveProjectile(const std::shared_ptr<Projectile>& _projectile);
+    void StopGame();
     
 };

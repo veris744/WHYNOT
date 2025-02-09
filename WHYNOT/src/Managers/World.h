@@ -86,4 +86,5 @@ public:
     void AddWidget(const std::shared_ptr<Widget>& _widget);
 
     void StartGame();
+    void StopGame();
 };

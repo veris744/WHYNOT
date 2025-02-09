@@ -171,6 +171,9 @@ void InputManager::HandleKeyPress(int key, int mods)
             break;
         case GLFW_KEY_1:
             Debugger::collisionDebugEnabled = !Debugger::collisionDebugEnabled;
+        case GLFW_KEY_P:
+            World::GetInstance()->StopGame();
+            break;
         default: 
             break;
     }

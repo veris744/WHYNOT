@@ -47,6 +47,10 @@ void AliensLogic::AlienDestroyed(const std::shared_ptr<Alien>& _alien)
 {
     aliens.erase(std::find(aliens.begin(), aliens.end(), _alien));
     alienText->text = std::to_string(aliens.size());
+    if (aliens.empty())
+    {
+        World::GetInstance()->StopGame();
+    }
 }
 
 void AliensLogic::PrepareGame(unsigned int _totalAliens)
@@ -99,9 +103,34 @@ void AliensLogic::ShootProjectile()
 
 void AliensLogic::RemoveProjectile(const std::shared_ptr<Projectile>& _projectile)
 {
-    usedProjectiles.erase(find(usedProjectiles.begin(), usedProjectiles.end(), _projectile));
     _projectile->DisableProjectile();
+    
+    if (usedProjectiles.empty() && availableProjectiles.empty()) return; // Game is stopping and data is being cleaned already
+    
+    usedProjectiles.erase(find(usedProjectiles.begin(), usedProjectiles.end(), _projectile));
     availableProjectiles.push(_projectile);
+}
+
+void AliensLogic::StopGame()
+{
+    for (const auto& alien : aliens)
+    {
+        alien->Destroy();
+    }
+    aliens.clear();
+    for (const auto& projectile : usedProjectiles)
+    {
+        projectile->Destroy();
+    }
+    usedProjectiles.clear();
+    while (!availableProjectiles.empty())
+    {
+        availableProjectiles.front()->Destroy();
+        availableProjectiles.pop();
+    }
+    
+    alienText->text = "";
+    alienText->isActive = false;
 }
 
 void AliensLogic::CalculateRandomPosition(const std::shared_ptr<Alien>& alien)
