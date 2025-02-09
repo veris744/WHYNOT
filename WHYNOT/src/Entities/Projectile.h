@@ -9,8 +9,8 @@ class Projectile : public Entity
     static unsigned int counter;
 
     std::shared_ptr<Movement> movementComp = nullptr;
+public:
     std::shared_ptr<Transform> transformComp = nullptr;
-    
     std::shared_ptr<Transform> playerTransform;
 
     void OnCollision(const std::shared_ptr<Entity>& _otherEntity, vec3 normal);

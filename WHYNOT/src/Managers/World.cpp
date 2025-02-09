@@ -3,6 +3,7 @@
 #include "Components/Camera.h"
 #include "Components/Collider.h"
 #include "Components/LightSource.h"
+#include "Entities/Projectile.h"
 #include "Graphics/Mesh.h"
 #include "Input/InputManager.h"
 #include "Minigame1/AliensLogic.h"

@@ -30,7 +30,7 @@ void Alien::Initialize()
     model->position = vec3(-0.5f, -0.5f, -0.5f);
     AddComponent(model);
 
-    std::shared_ptr<CircleCollider> collider = std::make_shared<CircleCollider>(2);
+    std::shared_ptr<CircleCollider> collider = std::make_shared<CircleCollider>(1);
     AddComponent(collider);
 
     collider->OnOutOfBoundsDelegate.Bind(&Alien::OnOutOfBounds, this);

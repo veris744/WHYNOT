@@ -8,6 +8,7 @@ class Alien;
 
 class AliensLogic
 {
+public:
     AliensLogic() = default;
     static std::shared_ptr<AliensLogic> instance;
     

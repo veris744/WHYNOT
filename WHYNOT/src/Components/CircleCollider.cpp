@@ -17,45 +17,53 @@ bool CircleCollider::Collides(float _rad1, vec3 _pos1)
 
 bool CircleCollider::CheckInBounds(const vec2& xBounds, const vec2& yBounds, const vec2& zBounds)
 {
-    if (CheckCirclePlane(radius, position, vec3(xBounds.x, 0, 0), vec3(1, 0, 0)))
-    {
-        OnOutOfBoundsDelegate.Execute(vec3(1, 0, 0));
-        return false;
+    bool isInside = true;
+    vec3 outNormal = vec3(0.0f, 0.0f, 0.0f);
+    vec3 worldPos = GetWorldPosition();
+
+    // Check X bounds
+    if (worldPos.x - radius < xBounds.x) {
+        outNormal = vec3(1.0f, 0.0f, 0.0f);
+        isInside = false;
+    } 
+    else if (worldPos.x + radius > xBounds.y) {
+        outNormal = vec3(-1.0f, 0.0f, 0.0f);
+        isInside = false;
     }
-    if (CheckCirclePlane(radius, position, vec3(xBounds.y, 0, 0), vec3(-1, 0, 0)))
-    {
-        OnOutOfBoundsDelegate.Execute(vec3(-1, 0, 0));
-        return false;
+
+    // Check Y bounds
+    if (worldPos.y - radius < yBounds.x) {
+        outNormal = vec3(0.0f, 1.0f, 0.0f);
+        isInside = false;
+    } 
+    else if (worldPos.y + radius > yBounds.y) {
+        outNormal = vec3(0.0f, -1.0f, 0.0f);
+        isInside = false;
     }
-    if (CheckCirclePlane(radius, position, vec3(0, yBounds.x, 0), vec3(0, 1, 0)))
-    {
-        OnOutOfBoundsDelegate.Execute(vec3(0, 1, 0));
-        return false;
+
+    // Check Z bounds
+    if (worldPos.z - radius < zBounds.x) {
+        outNormal = vec3(0.0f, 0.0f, 1.0f);
+        isInside = false;
+    } 
+    else if (worldPos.z + radius > zBounds.y) {
+        outNormal = vec3(0.0f, 0.0f, -1.0f);
+        isInside = false;
     }
-    if (CheckCirclePlane(radius, position, vec3(0, yBounds.y, 0), vec3(0, -1, 0)))
+    if (!isInside)
     {
-        OnOutOfBoundsDelegate.Execute(vec3(0, -1, 0));
-        return false;
+        OnOutOfBoundsDelegate.Execute(outNormal);
     }
-    if (CheckCirclePlane(radius, position, vec3(0, 0, zBounds.x), vec3(0, 0, 1)))
-    {
-        OnOutOfBoundsDelegate.Execute(vec3(0, 0, 1));
-        return false;
-    }
-    if (CheckCirclePlane(radius, position, vec3(0, 0, zBounds.y), vec3(0, 0, -1)))
-    {
-        OnOutOfBoundsDelegate.Execute(vec3(0, 0, -1));
-        return false;
-    }
-    return true;
+
+    return isInside;
 }
 
 void CircleCollider::Render()
 {
-    Debugger::DrawSphereDebug(radius, parent->GetComponent<Transform>()->v_position);    
+    Debugger::DrawSphereDebug(radius, GetWorldPosition());    
 }
 
 void CircleCollider::Update(float deltaTime)
 {
-    position = parent->GetComponent<Transform>()->v_position;
+    
 }

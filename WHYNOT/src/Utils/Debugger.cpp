@@ -12,7 +12,7 @@ void Debugger::SetSphereMesh()
 {
     vector<float> vertices;
     vector<unsigned int> indices;
-    Helper::generateSphere(vertices, indices, 0.5, 16, 8);
+    Helper::generateSphere(vertices, indices, 1, 16, 8);
 
     std::shared_ptr<VertexArray> vertexArray = std::make_shared<VertexArray>();
     vertexArray->AddVertexBuffer(vertices, vertices.size() * sizeof(float));

@@ -11,7 +11,7 @@ vec3 Collider::GetWorldPosition()
 
 bool Collider::CheckCircleCircle(float _rad1, vec3 _pos1, float _rad2, vec3 _pos2) const
 {
-    if (distance(_pos1, _pos2) <= (_rad1 + _rad2))
+    if (distance(_pos1, _pos2) <= _rad1 + _rad2)
     {
         return true;
     }
@@ -21,11 +21,11 @@ bool Collider::CheckCircleCircle(float _rad1, vec3 _pos1, float _rad2, vec3 _pos
 bool Collider::CheckCirclePlane(float _rad1, vec3 _pos1, vec3 _point, vec3 _normal) const
 {
     float distanceToPlane = dot(_normal, (_pos1 - _point));
-
     if (fabs(distanceToPlane) <= _rad1)
     {
         return true;
     }
+    Logger::Log(LogLevel::Error, std::to_string(distanceToPlane));
     return false;
 }
 

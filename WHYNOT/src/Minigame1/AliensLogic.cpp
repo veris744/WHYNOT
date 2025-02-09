@@ -95,10 +95,6 @@ void AliensLogic::ShootProjectile()
 
     usedProjectiles.back()->GetShot();
     AudioManager::GetInstance()->PlaySound("assets/sounds/shoot.wav");
-    if (!usedProjectiles.back()->isActive)
-    {
-        usedProjectiles.pop_back();
-    }
 }
 
 void AliensLogic::RemoveProjectile(const std::shared_ptr<Projectile>& _projectile)
