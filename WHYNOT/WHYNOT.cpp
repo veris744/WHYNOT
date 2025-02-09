@@ -4,6 +4,7 @@
 #include "Managers/TextRenderer.h"
 #include "Managers/Helper.h"
 #include "Input/InputManager.h"
+#include "Managers/AudioManager.h"
 #include "Managers/World.h"
 #include "Managers/Renderer.h"
 #include "Managers/Renderer2D.h"
@@ -17,10 +18,10 @@ int main()
 	}
 	Helper::InitializeGlad();
 
+	AudioManager::GetInstance()->Initialize();
 	World::GetInstance()->Initialize();
 	Renderer::GetInstance()->Initialize();
 	Renderer2D::GetInstance()->Initialize();
-	// InputManager::GetInstance()->Initialize();
 	TextRenderer::GetInstance()->InitFreeType();
 	TextRenderer::GetInstance()->LoadFont();
 	

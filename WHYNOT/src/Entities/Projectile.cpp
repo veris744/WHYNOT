@@ -8,6 +8,7 @@
 #include "Graphics/Material.h"
 #include "Managers/Renderer.h"
 #include "Managers/World.h"
+#include "Minigame1/AliensLogic.h"
 
 unsigned int Projectile::counter = 0;
 
@@ -27,9 +28,8 @@ void Projectile::Initialize()
     }
     playerTransform = player->GetComponent<Transform>();
 
-    std::shared_ptr<Transform> transform = std::make_shared<Transform>();
-    transform->v_position = playerTransform->v_position + playerTransform->v_forward * 2.f;
-    AddComponent(transform);
+    transformComp = std::make_shared<Transform>();
+    AddComponent(transformComp);
     
     Renderer::SetSphereVertex(0.5f, 32.f, 16.f);
     vector<float> vertex = Renderer::GetSphereVertex();
@@ -49,9 +49,8 @@ void Projectile::Initialize()
     std::shared_ptr<CircleCollider> collider = std::make_shared<CircleCollider>(0.5);
     AddComponent(collider);
     
-    std::shared_ptr<Movement> movement = std::make_shared<Movement>();
-    movement->speed = playerTransform->v_forward * 5.f;
-    AddComponent(movement);
+    movementComp = std::make_shared<Movement>();
+    AddComponent(movementComp);
     
     collider->OnOutOfBoundsDelegate.Bind(&Projectile::OnOutOfBounds, this);
     collider->CollisionDelegate.Bind(&Projectile::OnCollision, this);
@@ -66,13 +65,26 @@ void Projectile::Update(float _deltaTime)
     Entity::Update(_deltaTime);
 }
 
+void Projectile::GetShot()
+{
+    isActive = true;
+    movementComp->speed = playerTransform->v_forward * 5.f;
+    transformComp->v_position = playerTransform->v_position + playerTransform->v_forward * 2.f;
+}
+
+void Projectile::DisableProjectile()
+{
+    isActive = false;
+    movementComp->QuickStop();
+}
+
 
 void Projectile::OnCollision(const std::shared_ptr<Entity>& _otherEntity, vec3 normal)
 {
-    Destroy();
+    AliensLogic::GetInstance()->RemoveProjectile(std::static_pointer_cast<Projectile>(shared_from_this()));
 }
 
 void Projectile::OnOutOfBounds(vec3 _normal)
 {
-    Destroy();
+    AliensLogic::GetInstance()->RemoveProjectile(std::static_pointer_cast<Projectile>(shared_from_this()));
 }

@@ -2,8 +2,8 @@
 
 #include "Transform.h"
 #include "Entities/Entity.h"
-#include "Entities/Projectile.h"
-#include "Managers/World.h"
+#include "Minigame1/AliensLogic.h"
+#include "Utils/Timer.h"
 
 void PlayerController::StopForwardMovement()
 {
@@ -62,6 +62,8 @@ void PlayerController::Update(float deltaTime)
 
 void PlayerController::Shoot()
 {
-    std::shared_ptr<Projectile> projectile = std::make_shared<Projectile>();
-    projectile->Initialize();
+    if (!bCanShood) return;
+    AliensLogic::GetInstance()->ShootProjectile();
+    bCanShood = false;
+    Timer::StartTimer(0.3f, this, &PlayerController::SetCanShoot, true);
 }

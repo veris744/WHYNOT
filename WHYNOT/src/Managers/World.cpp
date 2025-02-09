@@ -77,7 +77,7 @@ void World::CheckCollisions()
         {
             for (auto it2 = std::next(it); it2 != entities.end(); it2++)
             {
-                if (it2->second->hasCollision)
+                if (it2->second->hasCollision && it2->second->isActive)
                 {
                     std::shared_ptr<Collider> c1 = it->second->GetComponent<Collider>();
                     std::shared_ptr<Collider> c2 = it2->second->GetComponent<Collider>();
@@ -86,6 +86,10 @@ void World::CheckCollisions()
                         c1->CollisionDelegate.Execute(it2->second, normalize(c1->GetWorldPosition() - c2->GetWorldPosition()));
                         c2->CollisionDelegate.Execute(it->second, normalize(c2->GetWorldPosition() - c1->GetWorldPosition()));
                     }
+                }
+                if (!it->second->isActive)
+                {
+                    break;
                 }
             }
         }

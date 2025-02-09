@@ -12,6 +12,7 @@ class PlayerController : public Component
     std::shared_ptr<Transform> transform;
 
     bool isPositionLocked = false;
+    bool bCanShood = true;
 
     
 public:
@@ -57,6 +58,7 @@ public:
     {
         return currentInput;
     }
+    void SetCanShoot(bool _canShoot) { bCanShood = _canShoot; }
 
     void Update(float deltaTime) override;
     void Shoot();

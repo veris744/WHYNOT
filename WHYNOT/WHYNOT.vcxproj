@@ -71,8 +71,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <LibraryPath>$(SolutionDir)\lib\glfw;$(LibraryPath);$(SolutionDir)\lib\yaml-cpp;$(SolutionDir)\lib\assimp;$(SolutionDir)\lib\freetype</LibraryPath>
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)\include;$(SolutionDir)\include\glad\include;$(ProjectDir)\src;$(SolutionDir)\include\yaml\include;$(SolutionDir)\include\freetype\include</IncludePath>
+    <LibraryPath>$(SolutionDir)\lib\glfw;$(LibraryPath);$(SolutionDir)\lib\yaml-cpp;$(SolutionDir)\lib\assimp;$(SolutionDir)\lib\freetype;$(SolutionDir)\lib\AL</LibraryPath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)\include;$(SolutionDir)\include\glad\include;$(ProjectDir)\src;$(SolutionDir)\include\yaml\include;$(SolutionDir)\include\freetype\include\;$(SolutionDir)\include\freetype\include\AL</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -112,7 +112,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>$(CoreLibraryDependencies);%(AdditionalDependencies);glfw3.lib;yaml-cppd.lib;assimp-vc143-mtd.lib;freetyped.lib</AdditionalDependencies>
+      <AdditionalDependencies>$(CoreLibraryDependencies);%(AdditionalDependencies);glfw3.lib;yaml-cppd.lib;assimp-vc143-mtd.lib;freetyped.lib;OpenAL32.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -376,6 +376,7 @@
       <SDLCheck>true</SDLCheck>
       <LinkCompiled>true</LinkCompiled>
     </ClCompile>
+    <ClCompile Include="src\Managers\AudioManager.cpp" />
     <ClCompile Include="src\Managers\Helper.cpp">
       <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -935,6 +936,7 @@
     <ClInclude Include="src\includes.h" />
     <ClInclude Include="src\Input\EventsBuffer.h" />
     <ClInclude Include="src\Input\InputManager.h" />
+    <ClInclude Include="src\Managers\AudioManager.h" />
     <ClInclude Include="src\Managers\Helper.h" />
     <ClInclude Include="src\Managers\Renderer.h" />
     <ClInclude Include="src\Managers\Renderer2D.h" />
@@ -956,8 +958,10 @@
     <ClInclude Include="src\Utils\Logger.h" />
     <ClInclude Include="src\Utils\MultiDelegate.h" />
     <ClInclude Include="src\Utils\SingleDelegate.h" />
+    <ClInclude Include="src\Utils\Timer.h" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="assets\assets.yaml" />
     <Content Include="assets\backpack\ao.jpg" />
     <Content Include="assets\backpack\backpack.mtl" />
     <Content Include="assets\backpack\backpack.obj" />
@@ -968,15 +972,21 @@
     <Content Include="assets\backpack\specular.jpg" />
     <Content Include="assets\box.jpg" />
     <Content Include="assets\bulb.jpg" />
+    <Content Include="assets\bulb.png" />
+    <Content Include="assets\button.jpg" />
     <Content Include="assets\camera.jpg" />
     <Content Include="assets\coordenadas.png" />
     <Content Include="assets\crate.jpg" />
-    <Content Include="assets\assets.yaml" />
     <Content Include="assets\entities.yaml" />
     <Content Include="assets\fonts\default.ttf" />
+    <Content Include="assets\sounds\noshot.wav" />
+    <Content Include="assets\sounds\shoot.wav" />
     <Content Include="assets\spec.png" />
     <Content Include="assets\tile.jpg" />
+    <Content Include="assets\ufo\13884_Diffuse.jpg" />
+    <Content Include="assets\ufo\13884_UFO_Saucer_v1_l2.mtl" />
     <Content Include="assets\ufo\PinkAlien.obj" />
+    <Content Include="assets\ufo\ufo.obj" />
     <Content Include="assets\wall.jpg" />
     <Content Include="assets\widgets.yaml" />
     <Content Include="shaders\debugFragment.glsl" />

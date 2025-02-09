@@ -12,7 +12,8 @@ class AliensLogic
     static std::shared_ptr<AliensLogic> instance;
     
     std::vector<std::shared_ptr<Alien>> aliens;
-    std::vector<std::shared_ptr<Projectile>> projectiles;
+    std::queue<std::shared_ptr<Projectile>> availableProjectiles;
+    std::vector<std::shared_ptr<Projectile>> usedProjectiles;
     unsigned int totalAliens = 5;
     unsigned int totalProjectiles = 5;
 
@@ -36,5 +37,7 @@ public:
 
     void PrepareGame(unsigned int _totalAliens = 5);
     void StartGame();
+    void ShootProjectile();
+    void RemoveProjectile(const std::shared_ptr<Projectile>& _projectile);
     
 };

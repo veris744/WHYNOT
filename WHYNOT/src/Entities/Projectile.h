@@ -2,9 +2,14 @@
 #include "Entity.h"
 
 
+class Movement;
+
 class Projectile : public Entity
 {
     static unsigned int counter;
+
+    std::shared_ptr<Movement> movementComp = nullptr;
+    std::shared_ptr<Transform> transformComp = nullptr;
     
     std::shared_ptr<Transform> playerTransform;
 
@@ -20,4 +25,6 @@ public:
     
     void Initialize() override;
     void Update(float _deltaTime) override;
+    void GetShot();
+    void DisableProjectile();
 };

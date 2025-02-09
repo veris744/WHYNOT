@@ -7,6 +7,7 @@
 #include "Components/Transform.h"
 #include "Entities/Alien.h"
 #include "Entities/Projectile.h"
+#include "Managers/AudioManager.h"
 #include "Managers/World.h"
 
 float getRandomFloat(float min, float max) {
@@ -64,7 +65,7 @@ void AliensLogic::PrepareGame(unsigned int _totalAliens)
         std::shared_ptr<Projectile> temp = std::make_shared<Projectile>();
         temp->Initialize();
         temp->isActive = false;
-        projectiles.push_back(temp);
+        availableProjectiles.push(temp);
     }
     alienText = std::dynamic_pointer_cast<Text>(World::GetInstance()->GetWidget("AliensText"));
     alienText->isActive = true;
@@ -82,6 +83,30 @@ void AliensLogic::StartGame()
     }
 }
 
+void AliensLogic::ShootProjectile()
+{
+    if (availableProjectiles.empty())
+    {
+        AudioManager::GetInstance()->PlaySound("assets/sounds/noshot.wav");
+        return;
+    }
+    usedProjectiles.push_back(availableProjectiles.front());
+    availableProjectiles.pop();
+
+    usedProjectiles.back()->GetShot();
+    AudioManager::GetInstance()->PlaySound("assets/sounds/shoot.wav");
+    if (!usedProjectiles.back()->isActive)
+    {
+        usedProjectiles.pop_back();
+    }
+}
+
+void AliensLogic::RemoveProjectile(const std::shared_ptr<Projectile>& _projectile)
+{
+    usedProjectiles.erase(find(usedProjectiles.begin(), usedProjectiles.end(), _projectile));
+    _projectile->DisableProjectile();
+    availableProjectiles.push(_projectile);
+}
 
 void AliensLogic::CalculateRandomPosition(const std::shared_ptr<Alien>& alien)
 {
@@ -103,7 +128,6 @@ void AliensLogic::CalculateRandomPosition(const std::shared_ptr<Alien>& alien)
         }
     }
 }
-
 
 void AliensLogic::CalculateRandomDirection(const std::shared_ptr<Alien>& alien)
 {
