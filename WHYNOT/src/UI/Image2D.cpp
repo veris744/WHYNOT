@@ -48,7 +48,7 @@ void Image2D::Render()
     vertexArray->Bind();
     texture->Bind();
     shader->Bind();
-    shader->SetUniformVec2("uPosWidget", finalPos);
+    shader->SetUniformVec2("uPosWidget", GetPixelPosition());
     shader->SetUniformVec2("uSize", size);
     
     mat4 projection = glm::ortho(0.0f, Helper::windowWidth, Helper::windowHeight, 0.0f);

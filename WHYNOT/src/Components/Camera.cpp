@@ -21,7 +21,8 @@ mat4 Camera::GetViewMatrix() const
     std::shared_ptr<Transform> transform = parent->GetComponent<Transform>();
     if (!transform)
     {
-        Logger::Log<Camera>(LogLevel::FatalError, "No Camera Transform");
+        Logger::Log<Camera>(LogLevel::Error, "No Camera Transform");
+        return mat4();
     }
     
     mat4 view = lookAt(transform->v_position, transform->v_position + transform->v_forward, transform->v_up);
@@ -34,7 +35,8 @@ vec3 Camera::GetViewPos() const
     std::shared_ptr<Transform> transform = parent->GetComponent<Transform>();
     if (!transform)
     {
-        Logger::Log<Camera>(LogLevel::FatalError, "No Camera Transform");
+        Logger::Log<Camera>(LogLevel::Error, "No Camera Transform");
+        return vec3(0, 0, 0);
     }
     
     return transform->v_position;

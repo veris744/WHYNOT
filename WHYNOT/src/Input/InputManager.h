@@ -82,4 +82,6 @@ public:
     static InputMode GetInputMode() { return inputMode; };
     
     SingleDelegate<vec2> OnClickDelegate;
+
+    void Clear();
 };

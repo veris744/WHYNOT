@@ -961,7 +961,7 @@
     <ClInclude Include="src\Utils\Timer.h" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="assets\assets.yaml" />
+    <Content Include="assets\2dImages\space.png" />
     <Content Include="assets\backpack\ao.jpg" />
     <Content Include="assets\backpack\backpack.mtl" />
     <Content Include="assets\backpack\backpack.obj" />
@@ -977,8 +977,9 @@
     <Content Include="assets\camera.jpg" />
     <Content Include="assets\coordenadas.png" />
     <Content Include="assets\crate.jpg" />
-    <Content Include="assets\entities.yaml" />
     <Content Include="assets\fonts\default.ttf" />
+    <Content Include="assets\scenes\Aliens.yaml" />
+    <Content Include="assets\scenes\MainMenu.yaml" />
     <Content Include="assets\sounds\noshot.wav" />
     <Content Include="assets\sounds\shoot.wav" />
     <Content Include="assets\spec.png" />
@@ -988,12 +989,12 @@
     <Content Include="assets\ufo\PinkAlien.obj" />
     <Content Include="assets\ufo\ufo.obj" />
     <Content Include="assets\wall.jpg" />
-    <Content Include="assets\widgets.yaml" />
     <Content Include="shaders\debugFragment.glsl" />
     <Content Include="shaders\fragment.glsl" />
     <Content Include="shaders\fragment2D.glsl" />
     <Content Include="shaders\fragment2DBW.glsl" />
     <Content Include="shaders\fragmentColor.glsl" />
+    <Content Include="shaders\fragmentSky.glsl" />
     <Content Include="shaders\neonFragment.glsl" />
     <Content Include="shaders\textFragmentShader.glsl" />
     <Content Include="shaders\textVertexShader.glsl" />

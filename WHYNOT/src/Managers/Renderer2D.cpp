@@ -44,6 +44,10 @@ void Renderer2D::Initialize()
 
 void Renderer2D::Render()
 {
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glDepthMask(GL_TRUE);
+    
     vector<std::shared_ptr<Widget>> widgets = World::GetInstance()->GetWidgets();
     for (const auto& widget : widgets)
     {

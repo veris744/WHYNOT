@@ -15,8 +15,9 @@ Button::Button(const vec2& _pos, const vec2& _size, const string& _name)
 
 bool Button::IsClicking(const vec2& _mousePos) const
 {
-    if (_mousePos.x >= position.x && _mousePos.x <= position.x + size.x &&
-        _mousePos.y >= position.y && _mousePos.y <= position.y + size.y)
+    vec2 pixelPos = GetPixelPosition();
+    if (_mousePos.x >= pixelPos.x && _mousePos.x <= pixelPos.x + size.x &&
+        _mousePos.y >= pixelPos.y && _mousePos.y <= pixelPos.y + size.y)
     {
         return true;
     }

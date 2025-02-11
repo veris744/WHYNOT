@@ -8,5 +8,5 @@ uniform sampler2D uSampler2D;
 void main()
 {
     float value = texture(uSampler2D, aUV).r;
-    FragColor = vec4(0, 0, 0, value == 1 ? 0 : 1);
+    FragColor = vec4(1, 1, 1, value == 1 ? 0 : 1);
 } 

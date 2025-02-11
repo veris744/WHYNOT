@@ -9,10 +9,11 @@
 
 class Widget;
 
+
 class World
 {
     static std::shared_ptr<World> instance;
-    map<string, std::shared_ptr<Entity>> entities;
+    unordered_map<string, std::shared_ptr<Entity>> entities;
     vector<std::shared_ptr<Camera>> cameras;
     vector<std::shared_ptr<LightSource>> lights;
     std::shared_ptr<Player> playerEntity;
@@ -20,9 +21,11 @@ class World
     std::vector<std::shared_ptr<Entity>> toBeDestroyed;
 
     vector<std::shared_ptr<Widget>> widgets;
+
+    bool isSceneLoaded = false;
+    string currentScene = "";
     
     World();
-
     
 public:
     vec2 boundariesX = vec2(-10, 10);
@@ -33,8 +36,10 @@ public:
     
     static std::shared_ptr<World> GetInstance();
     void Initialize();
+    void Prepare();
     void Update(float deltaTime);
     void CheckCollisions();
+    void Clean();
 
     std::shared_ptr<Player> GetPlayer() const { return playerEntity; }
     void SetPlayer(const std::shared_ptr<Player>& player) { playerEntity = player; }
@@ -69,7 +74,7 @@ private:
 public:
     unsigned int GetEntityCount() const { return entities.size(); }
     std::shared_ptr<Entity> GetEntity(const string& _name) const { return entities.at(_name); }
-    map<string, std::shared_ptr<Entity>> GetEntities() const { return entities; }
+    unordered_map<string, std::shared_ptr<Entity>> GetEntities() const { return entities; }
 
     unsigned int GetCameraCount() const { return cameras.size(); }
     std::shared_ptr<Camera> GetCamera(unsigned int _index) const;
@@ -85,6 +90,9 @@ public:
     std::shared_ptr<Widget> GetWidget(const string& _name) const;
     void AddWidget(const std::shared_ptr<Widget>& _widget);
 
-    void StartGame();
-    void StopGame();
+    void LoadScene(const string& _sceneName);
+    void DoLoad();
+    void UnloadScene();
+
+    bool IsSceneLoaded() const { return isSceneLoaded; }
 };

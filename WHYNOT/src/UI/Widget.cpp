@@ -23,3 +23,10 @@ void Widget::Clear()
         widget->Clear();
     }
 }
+
+vec2 Widget::GetPixelPosition() const
+{
+    float x = Helper::windowWidth * finalPos.x * 0.01 - size.x * 0.5;
+    float y = Helper::windowHeight * finalPos.y * 0.01 - size.y * 0.5;
+    return vec2(x, y);
+}

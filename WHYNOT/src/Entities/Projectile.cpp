@@ -31,7 +31,7 @@ void Projectile::Initialize()
     transformComp = std::make_shared<Transform>();
     AddComponent(transformComp);
     
-    Renderer::SetSphereVertex(0.5f, 32.f, 16.f);
+    Renderer::SetSphereVertex(0.2f, 32.f, 16.f);
     vector<float> vertex = Renderer::GetSphereVertex();
     vector<unsigned int> index = Renderer::GetShereIndex();
 
@@ -46,10 +46,11 @@ void Projectile::Initialize()
     std::shared_ptr<Model> model = std::make_shared<Model>(sphereMesh);
     AddComponent(model);
     
-    std::shared_ptr<CircleCollider> collider = std::make_shared<CircleCollider>(0.5);
+    std::shared_ptr<CircleCollider> collider = std::make_shared<CircleCollider>(0.2);
     AddComponent(collider);
     
     movementComp = std::make_shared<Movement>();
+    movementComp->maxSpeed = 40;
     AddComponent(movementComp);
     
     collider->OnOutOfBoundsDelegate.Bind(&Projectile::OnOutOfBounds, this);

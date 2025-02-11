@@ -63,5 +63,9 @@ public:
     void UpdateTrigger(float deltaTime);
     virtual void Update(float deltaTime);
     virtual void Destroy();
+    void ClearComponents()
+    {
+        components.clear();
+    }
 };
 

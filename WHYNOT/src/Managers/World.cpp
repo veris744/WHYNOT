@@ -3,7 +3,6 @@
 #include "Components/Camera.h"
 #include "Components/Collider.h"
 #include "Components/LightSource.h"
-#include "Entities/Projectile.h"
 #include "Graphics/Mesh.h"
 #include "Input/InputManager.h"
 #include "Minigame1/AliensLogic.h"
@@ -28,26 +27,21 @@ World::World()
 
 void World::Initialize()
 {
-    AssetReader::ReadAssets("assets/assets.yaml");
-    AssetReader::ReadAssets("assets/widgets.yaml");
-    AssetReader::ReadAssets("assets/entities.yaml");
+    LoadScene("MainMenu");
+}
 
-    for (const auto& widget : widgets)
+void World::Prepare()
+{
+    if (!isSceneLoaded && entities.empty())
     {
-        if (widget->GetInputMode() == InputMode::UIOnly)
-        {
-            widget->isActive = true;
-        }
-        else
-        {
-            widget->isActive = false;
-        }
+        DoLoad();
     }
-    playerEntity->isActive = true;
 }
 
 void World::Update(float deltaTime)
 {
+    if (!isSceneLoaded) return;
+    
     for (const auto& entity : entities)
     {
         if (!entity.second->isActive)
@@ -57,18 +51,13 @@ void World::Update(float deltaTime)
         entity.second->UpdateTrigger(deltaTime);
     }
     CheckCollisions();
-    for (const auto& entity : toBeDestroyed)
-    {
-        RemoveEntity(entity->GetName());
-    }
-    toBeDestroyed.clear();
 }
 
 void World::CheckCollisions()
 {
     for (auto it = entities.begin(); it != entities.end(); it++)
     {
-        if (!it->second->isActive)
+        if (!it->second || !it->second->isActive)
         {
             continue;
         }
@@ -76,7 +65,7 @@ void World::CheckCollisions()
         {
             for (auto it2 = std::next(it); it2 != entities.end(); it2++)
             {
-                if (it2->second->hasCollision && it2->second->isActive)
+                if (it2->second && it2->second->hasCollision && it2->second->isActive)
                 {
                     std::shared_ptr<Collider> c1 = it->second->GetComponent<Collider>();
                     std::shared_ptr<Collider> c2 = it2->second->GetComponent<Collider>();
@@ -86,13 +75,22 @@ void World::CheckCollisions()
                         c2->CollisionDelegate.Execute(it->second, normalize(c2->GetWorldPosition() - c1->GetWorldPosition()));
                     }
                 }
-                if (!it->second->isActive)
+                if (!it->second || !it->second->isActive)
                 {
                     break;
                 }
             }
         }
     }
+}
+
+void World::Clean()
+{
+    for (const auto& entity : toBeDestroyed)
+    {
+        RemoveEntity(entity->GetName());
+    }
+    toBeDestroyed.clear();
 }
 
 void World::MarkForDestruction(const string& _entityName)
@@ -118,6 +116,7 @@ void World::RemoveEntity(const string& _entityName)
         lights.erase(std::find(lights.begin(), lights.end(), entity->GetComponent<LightSource>()));
     }
     entities.erase(entity->GetName());
+    entity->ClearComponents();
 }
 
 std::shared_ptr<Camera> World::GetCamera(unsigned int _index) const
@@ -211,40 +210,48 @@ void World::AddWidget(const std::shared_ptr<Widget>& _widget)
     widgets.push_back(_widget);
 }
 
-void World::StartGame()
+
+void World::LoadScene(const string& _sceneName)
 {
-    Logger::Log(LogLevel::Info, "World::StartGame()");
-    InputManager::SetInputMode(InputMode::GameOnly);
-    for (const auto& widget : widgets)
-    {
-        if (widget->GetInputMode() == InputMode::UIOnly)
-        {
-            widget->isActive = false;            
-        }
-        else
-        {
-            widget->isActive = true;   
-        }
-    }
-    AliensLogic::GetInstance()->PrepareGame();
-    AliensLogic::GetInstance()->StartGame();
+    UnloadScene();
+    currentScene = _sceneName;    
 }
 
-void World::StopGame()
-{
-    Logger::Log(LogLevel::Info, "World::StopGame()");
-    InputManager::SetInputMode(InputMode::UIOnly);
-    for (const auto& widget : widgets)
+void World::DoLoad()
+{    
+    string file = "assets/scenes/" + currentScene + ".yaml";
+    AssetReader::ReadAssets(file.c_str());
+
+    if (currentScene == "Aliens")
     {
-        if (widget->GetInputMode() == InputMode::UIOnly)
-        {
-            widget->isActive = true;            
-        }
-        else
-        {
-            widget->isActive = false;   
-        }
+        AliensLogic::GetInstance()->PrepareGame();
+        AliensLogic::GetInstance()->StartGame();  
+        InputManager::SetInputMode(InputMode::GameOnly);      
     }
-    AliensLogic::GetInstance()->StopGame();
+    if (currentScene == "MainMenu")
+    {
+        InputManager::SetInputMode(InputMode::UIOnly);
+    }
+
+    if (!playerEntity)
+    {
+        Logger::Log(LogLevel::FatalError,"Failed to load playerEntity");
+    }
+    playerEntity->isActive = true;
+    
+    isSceneLoaded = true;
+}
+
+void World::UnloadScene()
+{
+    isSceneLoaded = false;
+    for (const auto& entity : entities)
+    {
+        entity.second->Destroy();
+    }
+    widgets.clear();
+    playerEntity = nullptr;
+    currentCameraIndex = 0;
+    InputManager::GetInstance()->Clear();
 }
 

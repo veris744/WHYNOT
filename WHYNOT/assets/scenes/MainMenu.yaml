@@ -1,0 +1,33 @@
+---
+widgets:
+  - type: "PANEL"
+    inputMode: "UI"
+    widgets:
+      - type: "BUTTON"
+        subtype: "Start"
+        position: [50, 50]
+        size: [100, 50]
+        widgets:
+          - type: "TEXT"
+            text: "START"
+            position: [-2, -1]
+            scale: 0.5
+            color: [ 0.5, 0.8, 0.2 ]
+          - type: "IMAGE2D"
+            size: [100, 50]
+            path: "assets/box.jpg"
+entities:
+  - type: "PLAYER"
+    position: [0, 0, -5]
+assets:
+  - name: "Ambient"
+    isCamera: False
+    isLight: True
+    isRendered: False
+    components:
+      - name: "LIGHT"
+        lightData:
+          color: [0.5, 0.5, 0.5]
+          ambient: 0.2
+          type: "AMBIENT"
+    

@@ -5,6 +5,7 @@
 #include "Managers/Helper.h"
 #include "Managers/World.h"
 #include "Components/Transform.h"
+#include "Minigame1/AliensLogic.h"
 #include "Utils/Debugger.h"
 
 
@@ -53,12 +54,16 @@ void InputManager::InitKeys()
 
 void InputManager::MouseCallback(GLFWwindow* window, double xpos, double ypos)
 {
+    if (!World::GetInstance()->IsSceneLoaded())  return;
+    
     InputEvent event = {EventType::MouseMove, -1, -1, xpos, ypos};
     eventsBuffer->AddEvent(event);
 }
 
 void InputManager::KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
+    if (!World::GetInstance()->IsSceneLoaded())  return;
+    
     InputEvent event = {EventType::KeyPress, key, action, 0, 0, mods};
     if (action == GLFW_RELEASE)
     {
@@ -73,6 +78,10 @@ void InputManager::KeyCallback(GLFWwindow* window, int key, int scancode, int ac
 
 void InputManager::MouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
 {
+    if (!World::GetInstance()->IsSceneLoaded())
+    {
+        return;
+    }
     InputEvent event = {EventType::MouseButtonPress, button, action, 0, 0, mods};
     if (action == GLFW_RELEASE)
     {
@@ -87,6 +96,8 @@ void InputManager::MouseButtonCallback(GLFWwindow* window, int button, int actio
 
 void InputManager::ScrollCallback(GLFWwindow* window, double xoffset, double yoffset)
 {
+    if (!World::GetInstance()->IsSceneLoaded())  return;
+    
     InputEvent event = {EventType::MouseScroll, -1, -1, xoffset, yoffset};
     eventsBuffer->AddEvent(event);
 }
@@ -97,7 +108,7 @@ void InputManager::ScrollCallback(GLFWwindow* window, double xoffset, double yof
 ////////////////////////////////////////////////////////
 
 void InputManager::Update(float _deltaTime)
-{
+{    
     if (!playerController)
     {
         playerController = World::GetInstance()->GetPlayer()->GetComponent<PlayerController>();
@@ -171,8 +182,8 @@ void InputManager::HandleKeyPress(int key, int mods)
             break;
         case GLFW_KEY_1:
             Debugger::collisionDebugEnabled = !Debugger::collisionDebugEnabled;
-        case GLFW_KEY_P:
-            World::GetInstance()->StopGame();
+    case GLFW_KEY_P:
+            AliensLogic::GetInstance()->StopGame();
             break;
         default: 
             break;
@@ -216,6 +227,7 @@ void InputManager::HandleMouseButtonPress(int key)
     }
     else if (inputMode == InputMode::GameOnly)
     {
+        if (!playerController) return;
         playerController->Shoot();
     }
 }
@@ -226,6 +238,7 @@ void InputManager::HandleMouseButtonRelease(int key)
 
 void InputManager::HandleMouseMove(double x, double y)
 {
+    if (!playerTransform)   return;
     if (inputMode == InputMode::GameOnly || inputMode == InputMode::GameAndUI)
     {
         vec2 pos = {x, y};
@@ -266,6 +279,12 @@ void InputManager::HandleMouseScroll(double x, double y)
 void InputManager::SetInputMode(InputMode _mode)
 {
     inputMode = _mode;
+}
+
+void InputManager::Clear()
+{
+    playerController = nullptr;
+    playerTransform = nullptr;
 }
 
 void InputManager::ScapeInput() const 

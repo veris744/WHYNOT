@@ -30,19 +30,21 @@ int main()
 	{
 		float deltaTime = static_cast<float>(glfwGetTime() - lastTime);
 		lastTime = glfwGetTime();
+
+		Helper::Draw();
+		World::GetInstance()->Prepare();
 		
 		InputManager::GetInstance()->Update(deltaTime);
-		
 		World::GetInstance()->Update(deltaTime);
 		
-		Helper::Draw();
-		
-		Renderer2D::GetInstance()->Render();
-		Renderer2D::GetInstance()->Clear();
 		
 		Renderer::GetInstance()->Render();
 		Renderer::GetInstance()->Clear();
 		
+		Renderer2D::GetInstance()->Render();
+		Renderer2D::GetInstance()->Clear();
+
+		World::GetInstance()->Clean();
 		Helper::EndUpdate(deltaTime);
 	}
 

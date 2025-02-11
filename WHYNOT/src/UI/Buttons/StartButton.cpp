@@ -13,5 +13,5 @@ StartButton::StartButton(const vec2& _pos, const vec2& _size, const string& _nam
 void StartButton::OnClick(vec2 _mousePos)
 {
     Button::OnClick(_mousePos);
-    World::GetInstance()->StartGame();
+    World::GetInstance()->LoadScene("Aliens");
 }

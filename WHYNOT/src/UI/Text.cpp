@@ -7,8 +7,8 @@ unsigned int Text::counter = 0;
 void Text::Render()
 {
     Widget::Render();
-
-    TextRenderer::GetInstance()->RenderText(text, finalPos.x, finalPos.y, scale, color);
+    vec2 pixelPos = GetPixelPosition();
+    TextRenderer::GetInstance()->RenderText(text, pixelPos.x, pixelPos.y, scale, color);
 }
 
 void Text::Clear()

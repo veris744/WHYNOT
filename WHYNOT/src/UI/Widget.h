@@ -17,7 +17,7 @@ protected:
     
 public:
     Widget() = default;
-    Widget(vec2 _pos, vec2 _size, const string& _name = "") : position(_pos), size(_size), finalPos(_pos)
+    Widget(vec2 _pos, vec2 _size, const string& _name = "") : name(_name), position(_pos), size(_size), finalPos(_pos)
     { }
 
     virtual ~Widget() = default;
@@ -34,5 +34,7 @@ public:
     
     virtual void Render();
     virtual void Clear();
+
+    vec2 GetPixelPosition() const;
     
 };

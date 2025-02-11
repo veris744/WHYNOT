@@ -21,7 +21,7 @@ void Alien::Initialize()
     isActive = false;
 
     std::shared_ptr<Transform> transform = std::make_shared<Transform>();
-    transform->v_scale = vec3(0.4f, 0.4f, 0.4f);
+    transform->v_scale = vec3(0.3f, 0.3f, 0.3f);
     AddComponent(transform);
 
     std::shared_ptr<Material> mat = std::make_shared<Material>("", "", "shaders/fragmentColor.glsl");
@@ -88,7 +88,6 @@ void Alien::OnCollision(const std::shared_ptr<Entity>& _otherEntity, vec3 _norma
     {
         std::shared_ptr<Alien> self = std::static_pointer_cast<Alien>(shared_from_this());
         AliensLogic::GetInstance()->AlienDestroyed(self);
-        Destroy();
         return;
     }
     

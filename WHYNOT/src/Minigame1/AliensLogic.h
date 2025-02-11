@@ -19,7 +19,7 @@ public:
     unsigned int totalProjectiles = 10;
 
     vec3 playgroundDimensions = vec3(10,10,10);
-    vec3 playgroundCenter = vec3(0,0,6);
+    vec3 playgroundCenter = vec3(0,0,10);
     
 
     void CalculateRandomPosition(const std::shared_ptr<Alien>& alien);

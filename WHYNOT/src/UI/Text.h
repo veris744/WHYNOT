@@ -14,6 +14,7 @@ public:
         color = _color;
         scale = _scale;
         position = _position;
+        size = vec2(scale);
     }
     
     string text;

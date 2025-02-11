@@ -46,10 +46,11 @@ vec2 AliensLogic::GetZBounds() const
 void AliensLogic::AlienDestroyed(const std::shared_ptr<Alien>& _alien)
 {
     aliens.erase(std::find(aliens.begin(), aliens.end(), _alien));
-    alienText->text = std::to_string(aliens.size());
+    alienText->text = "Aliens : " + std::to_string(aliens.size());
+    _alien->Destroy();
     if (aliens.empty())
     {
-        World::GetInstance()->StopGame();
+        StopGame();
     }
 }
 
@@ -113,24 +114,15 @@ void AliensLogic::RemoveProjectile(const std::shared_ptr<Projectile>& _projectil
 
 void AliensLogic::StopGame()
 {
-    for (const auto& alien : aliens)
-    {
-        alien->Destroy();
-    }
     aliens.clear();
-    for (const auto& projectile : usedProjectiles)
-    {
-        projectile->Destroy();
-    }
     usedProjectiles.clear();
     while (!availableProjectiles.empty())
     {
-        availableProjectiles.front()->Destroy();
         availableProjectiles.pop();
     }
-    
-    alienText->text = "";
-    alienText->isActive = false;
+    alienText = nullptr;
+
+    World::GetInstance()->LoadScene("MainMenu");
 }
 
 void AliensLogic::CalculateRandomPosition(const std::shared_ptr<Alien>& alien)
