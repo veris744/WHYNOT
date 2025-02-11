@@ -27,16 +27,16 @@ void Alien::Initialize()
     std::shared_ptr<Material> mat = std::make_shared<Material>("", "", "shaders/fragmentColor.glsl");
     mat->materialData.type = MaterialType::COLOR;
     std::shared_ptr<Model> model = std::make_shared<Model>("assets/ufo/PinkAlien.obj", mat);
-    model->position = vec3(-0.5f, -0.5f, -0.5f);
+    model->position = vec3(-0.3f, -0.3f, -0.35f);
     AddComponent(model);
 
-    std::shared_ptr<CircleCollider> collider = std::make_shared<CircleCollider>(1);
+    std::shared_ptr<CircleCollider> collider = std::make_shared<CircleCollider>(0.65);
     AddComponent(collider);
 
     collider->OnOutOfBoundsDelegate.Bind(&Alien::OnOutOfBounds, this);
 
     movement = std::make_shared<Movement>();
-    movement->maxSpeed = 5.0f;
+    movement->maxSpeed = 4.0f;
     AddComponent(movement);
     
     collider->CollisionDelegate.Bind(&Alien::OnCollision, this);

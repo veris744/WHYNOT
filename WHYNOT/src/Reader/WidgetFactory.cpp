@@ -114,6 +114,7 @@ std::shared_ptr<Image2D> WidgetFactory::ReadImage(const YAML::Node& asset)
     const string& path = asset["path"].as<std::string>();
     vec2 size = ReadVec2(asset, "size", vec2(50.f,50.f));
     vec2 pos = ReadVec2(asset, "position");
+    vec3 color = ReadVec3(asset, "color");
     
     std::shared_ptr<Image2D> image = std::make_shared<Image2D>(path, pos, size);
     if (asset["name"])
@@ -125,6 +126,7 @@ std::shared_ptr<Image2D> WidgetFactory::ReadImage(const YAML::Node& asset)
         image = std::make_shared<Image2D>(path, pos, size);
     }
     SetInputMode(image, asset);
+    image->color = color;
     return image;
 }
 

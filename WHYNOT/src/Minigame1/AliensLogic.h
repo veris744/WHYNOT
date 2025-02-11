@@ -18,8 +18,8 @@ public:
     unsigned int totalAliens = 1;
     unsigned int totalProjectiles = 10;
 
-    vec3 playgroundDimensions = vec3(10,10,10);
-    vec3 playgroundCenter = vec3(0,0,10);
+    vec3 playgroundDimensions = vec3(10,10,5);
+    vec3 playgroundCenter = vec3(0,0,8);
     
 
     void CalculateRandomPosition(const std::shared_ptr<Alien>& alien);

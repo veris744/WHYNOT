@@ -34,9 +34,16 @@ void Image2D::Initialize()
         }
     );
 
+
     texture = std::make_shared<Texture>(path);
-    shader = std::make_shared<Shader>("shaders/vertex2D.glsl",
-        texture->GetNbChannels() == 1 ? "shaders/fragment2DBW.glsl" : "shaders/fragment2D.glsl");
+    
+    string shaderName = "shaders/fragment2D.glsl";
+    if (texture->GetNbChannels() == 1)
+        shaderName = "shaders/fragment2DBW.glsl" ;
+    if (texture->GetNbChannels() == 2)
+        shaderName = "shaders/fragment2D2Ch.glsl" ;
+    shader = std::make_shared<Shader>("shaders/vertex2D.glsl", shaderName);
+    
     shader->Compile();
     shader->Bind();
 }
@@ -50,6 +57,7 @@ void Image2D::Render()
     shader->Bind();
     shader->SetUniformVec2("uPosWidget", GetPixelPosition());
     shader->SetUniformVec2("uSize", size);
+    shader->SetUniformVec3("uColor", color);
     
     mat4 projection = glm::ortho(0.0f, Helper::windowWidth, Helper::windowHeight, 0.0f);
     shader->SetUniformMat4("uProjection", projection);

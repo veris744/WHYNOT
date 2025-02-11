@@ -961,6 +961,7 @@
     <ClInclude Include="src\Utils\Timer.h" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="assets\2dImages\aim.png" />
     <Content Include="assets\2dImages\space.png" />
     <Content Include="assets\backpack\ao.jpg" />
     <Content Include="assets\backpack\backpack.mtl" />
@@ -992,6 +993,7 @@
     <Content Include="shaders\debugFragment.glsl" />
     <Content Include="shaders\fragment.glsl" />
     <Content Include="shaders\fragment2D.glsl" />
+    <Content Include="shaders\fragment2D2Ch.glsl" />
     <Content Include="shaders\fragment2DBW.glsl" />
     <Content Include="shaders\fragmentColor.glsl" />
     <Content Include="shaders\fragmentSky.glsl" />

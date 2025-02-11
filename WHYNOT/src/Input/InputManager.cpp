@@ -182,7 +182,8 @@ void InputManager::HandleKeyPress(int key, int mods)
             break;
         case GLFW_KEY_1:
             Debugger::collisionDebugEnabled = !Debugger::collisionDebugEnabled;
-    case GLFW_KEY_P:
+        break;
+        case GLFW_KEY_P:
             AliensLogic::GetInstance()->StopGame();
             break;
         default: 

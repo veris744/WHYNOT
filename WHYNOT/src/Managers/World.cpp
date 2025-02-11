@@ -226,11 +226,13 @@ void World::DoLoad()
     {
         AliensLogic::GetInstance()->PrepareGame();
         AliensLogic::GetInstance()->StartGame();  
-        InputManager::SetInputMode(InputMode::GameOnly);      
+        InputManager::SetInputMode(InputMode::GameOnly);
+        Helper::SetCursorVisible(false);
     }
     if (currentScene == "MainMenu")
     {
         InputManager::SetInputMode(InputMode::UIOnly);
+        Helper::SetCursorVisible(true);
     }
 
     if (!playerEntity)

@@ -9,5 +9,5 @@ uniform vec3 uColor;
 void main()
 {
     float value = texture(uSampler2D, aUV).g;
-    FragColor = vec4(uColor, value == 1 ? 0 : 1);
+    FragColor = vec4(uColor, value);
 } 

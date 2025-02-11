@@ -67,4 +67,9 @@ void Helper::Terminate()
     glfwTerminate();
 }
 
+void Helper::SetCursorVisible(bool _isVisible)
+{
+    glfwSetInputMode(window, GLFW_CURSOR, _isVisible ? GLFW_CURSOR_NORMAL : GLFW_CURSOR_DISABLED);
+}
+
 

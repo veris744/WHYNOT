@@ -16,6 +16,7 @@ public:
     static void EndUpdate(float deltaTime);
     static void Draw();
     static void Terminate();
+    static void SetCursorVisible(bool _isVisible);
 
     // Generate sphere vertices
     static void generateSphere(std::vector<float>& vertices, std::vector<unsigned int>& indices, float radius, int sectors, int stacks) {
