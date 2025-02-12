@@ -1,6 +1,7 @@
 #pragma once
 #include <includes.h>
 
+#include "Helper.h"
 #include "Components/LightData.h"
 #include "Components/LightSource.h"
 #include "Components/Camera.h"
@@ -22,7 +23,7 @@ class World
 
     vector<std::shared_ptr<Widget>> widgets;
 
-    bool isSceneLoaded = false;
+    static bool isSceneLoaded;
     string currentScene = "";
     
     World();
@@ -94,5 +95,11 @@ public:
     void DoLoad();
     void UnloadScene();
 
-    bool IsSceneLoaded() const { return isSceneLoaded; }
+    static bool IsSceneLoaded() { return isSceneLoaded; }
+    static void SetIsLoadingScene(bool value)
+    {
+        Helper::SetIsLoadingScene(value);
+        isSceneLoaded = value;
+    }
+    void EndApplication();
 };

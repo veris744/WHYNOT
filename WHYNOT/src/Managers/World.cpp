@@ -1,5 +1,6 @@
 #include "World.h"
 
+#include "Renderer.h"
 #include "Components/Camera.h"
 #include "Components/Collider.h"
 #include "Components/LightSource.h"
@@ -10,6 +11,7 @@
 #include "Reader/AssetReader.h"
 
 std::shared_ptr<World> World::instance = nullptr;
+bool World::isSceneLoaded = false;
 
 std::shared_ptr<World> World::GetInstance()
 {
@@ -241,12 +243,12 @@ void World::DoLoad()
     }
     playerEntity->isActive = true;
     
-    isSceneLoaded = true;
+    SetIsLoadingScene(true);
 }
 
 void World::UnloadScene()
 {
-    isSceneLoaded = false;
+    SetIsLoadingScene(false);
     for (const auto& entity : entities)
     {
         entity.second->Destroy();
@@ -255,5 +257,12 @@ void World::UnloadScene()
     playerEntity = nullptr;
     currentCameraIndex = 0;
     InputManager::GetInstance()->Clear();
+}
+
+void World::EndApplication()
+{
+    SetIsLoadingScene(false);
+    Renderer::GetInstance()->CleanUp();
+    glfwSetWindowShouldClose(Helper::GetWindow(), true);
 }
 

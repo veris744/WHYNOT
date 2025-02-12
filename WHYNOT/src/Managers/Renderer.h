@@ -1,6 +1,7 @@
 #pragma once
 #include <includes.h>
 
+#include "Helper.h"
 #include "Graphics/Texture.h"
 
 class Material;
@@ -29,6 +30,7 @@ public:
     void Initialize();
     void Render();
     void Clear();
+    void CleanUp();
 
     static const vector<float> GetCubeVertex() { return cubeVertex; }
     static const vector<float> GetSphereVertex() { return sphereVertex; }

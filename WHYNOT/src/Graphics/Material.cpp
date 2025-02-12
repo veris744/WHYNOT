@@ -112,11 +112,11 @@ Material::Material(const vector<std::shared_ptr<Texture>>& _textures, const stri
 
 void Material::SetUniforms(const mat4& _model, const mat4& _view, const mat4& _projection, const vec3& _viewPosition)
 {
+    
     shader->SetUniformMat4("uModel", _model);
     shader->SetUniformMat4("uView", _view);
     shader->SetUniformMat4("uProjection", _projection);
     shader->SetUniformVec3("uViewPos", _viewPosition);
-
     
     shader->SetUniformInt("uAmbient", materialData.ambient);
     shader->SetUniformInt("uDiffuse", materialData.diffuse);
@@ -136,13 +136,21 @@ void Material::SetUniforms(const mat4& _model, const mat4& _view, const mat4& _p
         shader->SetUniformFloat("uGlowIntensity", 5.f);
         shader->SetUniformFloat("uEdgeGlow", 1.f);
     }
-
     
     shader->SetUniformObject("u_Lights", 1,
         World::GetInstance()->GetLightCount(),
         sizeof(LightSource), World::GetInstance()->GetLightDataList().data());
 
     shader->SetUniformInt("uNumLights", World::GetInstance()->GetLightCount());
+
+    
+#ifdef _DEBUG
+    GLenum error = glGetError();
+    if (error != GL_NO_ERROR) {
+        std::cerr << "OpenGL Error: " << error << std::endl;
+        return;
+    }
+#endif
 }
 
 

@@ -1,21 +1,22 @@
 #include "VertexBuffer.h"
 #include <includes.h>
 
-VertexBuffer::VertexBuffer(const vector<float>& _vertex, unsigned int _size, unsigned int _count)
-    : vertex(_vertex)
-    , vertexCount(_count)
-    , size(_size)
+VertexBuffer::VertexBuffer(const float* _vertex, unsigned int _count)
+    : vertexCount(_count)
 {
+    size = _count * sizeof(float);
     glGenBuffers(1, &VBO);
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBufferData(GL_ARRAY_BUFFER, size, _vertex, GL_STATIC_DRAW);
 }
 
 void VertexBuffer::Bind()
 {
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, size, vertex.data(), GL_STATIC_DRAW);
 }
 
 void VertexBuffer::Unbind()
 {
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
+

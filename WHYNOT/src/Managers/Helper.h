@@ -18,6 +18,20 @@ public:
     static void Terminate();
     static void SetCursorVisible(bool _isVisible);
 
+    static void SetIsLoadingScene(bool value)
+    {
+        if (!value)
+        {
+            glfwSetInputMode(window, GLFW_STICKY_KEYS, GLFW_FALSE);
+            glfwSetInputMode(window, GLFW_STICKY_MOUSE_BUTTONS, GLFW_FALSE);
+        }
+        else
+        {
+            glfwSetInputMode(window, GLFW_STICKY_KEYS, GLFW_TRUE); 
+            glfwSetInputMode(window, GLFW_STICKY_MOUSE_BUTTONS, GLFW_TRUE); 
+        }
+    }
+
     // Generate sphere vertices
     static void generateSphere(std::vector<float>& vertices, std::vector<unsigned int>& indices, float radius, int sectors, int stacks) {
         const float PI = 3.14159265359f;

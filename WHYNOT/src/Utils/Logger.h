@@ -3,8 +3,6 @@
 #include <ostream>
 #include <string>
 
-#include "Managers/Helper.h"
-
 using std::cout;
 
 enum class LogLevel
@@ -39,7 +37,6 @@ public:
 
         if (level == LogLevel::FatalError)
         {
-            glfwTerminate();
             std::exit(EXIT_FAILURE);
         }
     }
@@ -67,7 +64,6 @@ public:
         
         if (level == LogLevel::FatalError)
         {
-            glfwTerminate();
             throw std::runtime_error(message);
         }
     }

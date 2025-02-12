@@ -12,13 +12,21 @@ class VertexArray
     
 public:
     VertexArray();
+    ~VertexArray()
+    {
+        indexBuffer = nullptr;
+        vertexBuffers.clear();
+    
+        Unbind();
+        glDeleteBuffers(1, &VAO);
+    }
     
     unsigned int VAO;
 
     void Bind();
     void Unbind();
-    void AddVertexBuffer(const vector<float>& _vertex, unsigned int _size);
-    void SetIndexBuffer(const vector<unsigned int>& _index);
+    void AddVertexBuffer(const float* _vertex, unsigned int _count);
+    void SetIndexBuffer(const unsigned int* _index, unsigned int _count);
     const std::unique_ptr<IndexBuffer>& GetIndexBuffer() const { return indexBuffer; }
     void BindVertexBuffers();
     void BindIndexBuffer();

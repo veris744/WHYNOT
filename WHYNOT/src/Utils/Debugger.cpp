@@ -4,6 +4,7 @@
 #include "Components/Model.h"
 #include "Graphics/Material.h"
 #include "Graphics/VertexArray.h"
+#include "Managers/Helper.h"
 
 bool Debugger::collisionDebugEnabled = false;
 std::shared_ptr<Mesh> Debugger::mesh = nullptr;
@@ -15,8 +16,8 @@ void Debugger::SetSphereMesh()
     Helper::generateSphere(vertices, indices, 1, 16, 8);
 
     std::shared_ptr<VertexArray> vertexArray = std::make_shared<VertexArray>();
-    vertexArray->AddVertexBuffer(vertices, vertices.size() * sizeof(float));
-    vertexArray->SetIndexBuffer(indices);
+    vertexArray->AddVertexBuffer(vertices.data(), vertices.size());
+    vertexArray->SetIndexBuffer(indices.data(), indices.size());
     vertexArray->Bind();
     std::shared_ptr<Material> material = std::make_shared<Material>("",
         "shaders/vertex.glsl", "shaders/debugFragment.glsl");

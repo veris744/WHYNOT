@@ -5,6 +5,7 @@
 #include "Managers/Helper.h"
 #include "Managers/World.h"
 #include "Components/Transform.h"
+#include "Managers/Renderer.h"
 #include "Minigame1/AliensLogic.h"
 #include "Utils/Debugger.h"
 
@@ -54,7 +55,7 @@ void InputManager::InitKeys()
 
 void InputManager::MouseCallback(GLFWwindow* window, double xpos, double ypos)
 {
-    if (!World::GetInstance()->IsSceneLoaded())  return;
+    if (!World::IsSceneLoaded())  return;
     
     InputEvent event = {EventType::MouseMove, -1, -1, xpos, ypos};
     eventsBuffer->AddEvent(event);
@@ -62,7 +63,7 @@ void InputManager::MouseCallback(GLFWwindow* window, double xpos, double ypos)
 
 void InputManager::KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-    if (!World::GetInstance()->IsSceneLoaded())  return;
+    if (!World::IsSceneLoaded())  return;
     
     InputEvent event = {EventType::KeyPress, key, action, 0, 0, mods};
     if (action == GLFW_RELEASE)
@@ -78,7 +79,7 @@ void InputManager::KeyCallback(GLFWwindow* window, int key, int scancode, int ac
 
 void InputManager::MouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
 {
-    if (!World::GetInstance()->IsSceneLoaded())
+    if (!World::IsSceneLoaded())
     {
         return;
     }
@@ -96,7 +97,7 @@ void InputManager::MouseButtonCallback(GLFWwindow* window, int button, int actio
 
 void InputManager::ScrollCallback(GLFWwindow* window, double xoffset, double yoffset)
 {
-    if (!World::GetInstance()->IsSceneLoaded())  return;
+    if (!World::IsSceneLoaded())  return;
     
     InputEvent event = {EventType::MouseScroll, -1, -1, xoffset, yoffset};
     eventsBuffer->AddEvent(event);
@@ -290,7 +291,7 @@ void InputManager::Clear()
 
 void InputManager::ScapeInput() const 
 {
-    glfwSetWindowShouldClose(Helper::GetWindow(), true);
+    World::GetInstance()->EndApplication();
 }
 
 

@@ -20,7 +20,10 @@ public:
     Widget(vec2 _pos, vec2 _size, const string& _name = "") : name(_name), position(_pos), size(_size), finalPos(_pos)
     { }
 
-    virtual ~Widget() = default;
+    virtual ~Widget()
+    {
+        children.clear();
+    }
 
     bool isActive = true;
 

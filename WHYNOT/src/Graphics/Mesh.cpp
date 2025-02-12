@@ -10,7 +10,7 @@ Mesh::Mesh(const vector<float>& _vertex, const std::shared_ptr<Material>& _mater
 {
     vertexArray = std::make_shared<VertexArray>();
     vertexArray->Bind();
-    vertexArray->AddVertexBuffer(_vertex, _vertex.size() * sizeof(float));
+    vertexArray->AddVertexBuffer(_vertex.data(), _vertex.size());
     
     vertexArray->SetLayout(
         {
@@ -26,9 +26,9 @@ Mesh::Mesh(const vector<float>& _vertex,const vector<unsigned int>& _index, cons
 {    
     vertexArray = std::make_shared<VertexArray>();
     vertexArray->Bind();
-    vertexArray->AddVertexBuffer(_vertex, _vertex.size() * sizeof(float));
+    vertexArray->AddVertexBuffer(_vertex.data(), _vertex.size());
 
-    vertexArray->SetIndexBuffer(_index);
+    vertexArray->SetIndexBuffer(_index.data(), _index.size());
     
     vertexArray->SetLayout(
         {

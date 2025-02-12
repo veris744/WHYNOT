@@ -25,7 +25,7 @@ void Image2D::Initialize()
 
     vertexArray = std::make_shared<VertexArray>();
     vertexArray->Bind();
-    vertexArray->AddVertexBuffer(vertex, vertex.size() * sizeof(float));
+    vertexArray->AddVertexBuffer(vertex.data(), vertex.size());
 
     vertexArray->SetLayout(
         {

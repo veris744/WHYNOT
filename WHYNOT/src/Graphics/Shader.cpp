@@ -1,10 +1,6 @@
 #include "Shader.h"
 
-#include <unordered_map>
-
 #include "Managers/Renderer.h"
-
-static std::unordered_map<int, GLuint> uboMap;
 
 Shader::Shader(const string& _vertexShaderPath, const string& _fragmentShaderPath)
 {
@@ -22,7 +18,6 @@ string Shader::ReadShader(const string& vertexShaderPath)
     string temp = sstream.str();
     return temp;
 }
-
 
 void Shader::Compile()
 {
@@ -70,7 +65,6 @@ void Shader::Compile()
     }
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader);
-
 }
 
 void Shader::Bind() const
@@ -81,6 +75,16 @@ void Shader::Bind() const
 void Shader::Unbind() const
 {
     glUseProgram(0);
+}
+
+void Shader::CleanUp()
+{
+    glDeleteProgram(id);
+        
+    for (auto& pair : uboMap) {
+        glDeleteBuffers(1, &pair.second);
+    }
+    uboMap.clear();
 }
 
 void Shader::SetUniformBool(const char* name, bool value) const
@@ -118,7 +122,7 @@ void Shader::SetUniformMat4(const char* name, const mat4& value) const
     glUniformMatrix4fv(glGetUniformLocation(id, name), 1, GL_FALSE, glm::value_ptr(value));
 }
 
-void Shader::SetUniformObject(const char* name, int bindingPoint, int maxObjects, int sizeObject, void* objects, bool _static) const
+void Shader::SetUniformObject(const char* name, int bindingPoint, int maxObjects, int sizeObject, void* objects, bool _static)
 {
     GLuint uboObjects;
 
@@ -127,7 +131,6 @@ void Shader::SetUniformObject(const char* name, int bindingPoint, int maxObjects
         // Create and store a new UBO
         glGenBuffers(1, &uboObjects);
         uboMap[bindingPoint] = uboObjects;
-
         glBindBuffer(GL_UNIFORM_BUFFER, uboObjects);
         glBufferData(GL_UNIFORM_BUFFER, maxObjects * sizeObject, nullptr, _static ? GL_STATIC_DRAW : GL_DYNAMIC_DRAW);
     } else {
@@ -154,13 +157,5 @@ void Shader::SetUniformObject(const char* name, int bindingPoint, int maxObjects
         std::cerr << "Error: UBO size exceeds hardware limits!" << std::endl;
         return;
     }
-
-#ifdef _DEBUG
-    GLenum error = glGetError();
-    if (error != GL_NO_ERROR) {
-        std::cerr << "OpenGL Error: " << error << std::endl;
-        return;
-    }
-#endif
 }
 

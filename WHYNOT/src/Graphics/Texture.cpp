@@ -103,6 +103,7 @@ void Texture::SetParameters() const
 
 void Texture::Bind() const
 {
+    if (id == 0)    return;
     glBindTexture(GL_TEXTURE_2D, id);
 }
 
@@ -134,4 +135,18 @@ void Texture::Generate()
     stbi_image_free(data);
     data = nullptr;
     
+}
+
+void Texture::CleanUp()
+{
+    if (id != 0)
+    {
+        glDeleteTextures(1, &id);
+        id = 0;
+    }
+            
+    GLenum error;
+    if ((error = glGetError()) != GL_NO_ERROR) {
+        Logger::Log<Texture>(LogLevel::Error, "OpenGL Cleanup Error: " + error);
+    }
 }

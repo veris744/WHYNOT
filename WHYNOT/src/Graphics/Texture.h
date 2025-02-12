@@ -60,4 +60,6 @@ class Texture
 
         const string& GetPath() const { return path; }
         int GetNbChannels() const { return nbChannels; }
+
+        void CleanUp();
 };

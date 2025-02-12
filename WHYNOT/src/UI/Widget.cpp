@@ -1,5 +1,7 @@
 #include "Widget.h"
 
+#include "Managers/Helper.h"
+
 
 void Widget::AddWidget(std::shared_ptr<Widget> _widget)
 {

@@ -36,14 +36,16 @@ int main()
 		
 		InputManager::GetInstance()->Update(deltaTime);
 		World::GetInstance()->Update(deltaTime);
-		
-		
-		Renderer::GetInstance()->Render();
-		Renderer::GetInstance()->Clear();
-		
-		Renderer2D::GetInstance()->Render();
-		Renderer2D::GetInstance()->Clear();
 
+		if (World::IsSceneLoaded())
+		{
+			Renderer::GetInstance()->Render();
+			Renderer::GetInstance()->Clear();
+		
+			Renderer2D::GetInstance()->Render();
+			Renderer2D::GetInstance()->Clear();
+		}
+		
 		World::GetInstance()->Clean();
 		Helper::EndUpdate(deltaTime);
 	}

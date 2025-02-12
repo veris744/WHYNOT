@@ -5,6 +5,7 @@
 #include "Components/Collider.h"
 #include "Graphics/Mesh.h"
 #include "Components/Model.h"
+#include "Graphics/Shader.h"
 #include "Utils/Debugger.h"
 
 
@@ -84,6 +85,7 @@ void Renderer::Initialize()
 
 void Renderer::Render()
 {
+    
     for (const auto& entity : World::GetInstance()->GetEntities())
     {
         if (!entity.second->isActive)
@@ -123,4 +125,18 @@ void Renderer::Clear()
         }
         model->Clear();
     }
+}
+
+void Renderer::CleanUp()
+{
+    for (const auto& texture : textures_loaded)
+    {
+        texture->CleanUp();
+    }
+    for (const auto& shader : shaders_loaded)
+    {
+        shader->CleanUp();
+    }
+    textures_loaded.clear();
+    shaders_loaded.clear();
 }
