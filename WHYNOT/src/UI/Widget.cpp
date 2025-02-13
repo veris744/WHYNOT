@@ -5,8 +5,7 @@
 
 void Widget::AddWidget(std::shared_ptr<Widget> _widget)
 {
-    _widget->finalPos = _widget->position + position;
-    _widget->SetInputMode(mode);
+    _widget->parent = shared_from_this();
     children.push_back(_widget);
 }
 
@@ -28,7 +27,19 @@ void Widget::Clear()
 
 vec2 Widget::GetPixelPosition() const
 {
-    float x = Helper::windowWidth * finalPos.x * 0.01 - size.x * 0.5;
-    float y = Helper::windowHeight * finalPos.y * 0.01 - size.y * 0.5;
+    if (!parent)
+    {
+        float x = Helper::windowWidth * position.x * 0.01f ;
+        float y = Helper::windowHeight * position.y * 0.01f;
+        return vec2(x, y);
+    }
+
+    vec2 parentPos = parent->GetPixelPosition();
+    float parentWidth = parent->size.x;
+    float parentHeight = parent->size.y;
+
+    float x = parentPos.x + parentWidth * position.x * 0.01f;
+    float y = parentPos.y + parentHeight * position.y * 0.01f;
+
     return vec2(x, y);
 }

@@ -91,23 +91,6 @@ void WidgetFactory::SaveWidget(const std::shared_ptr<Widget>& widget, const std:
     }
 }
 
-void WidgetFactory::SetInputMode(const std::shared_ptr<Widget>& widget, const YAML::Node& asset)
-{
-    // THIS WILL BE OVERWRITTEN BY THE PARENT'S INPUT MODE
-    if (asset["inputMode"])
-    {
-        string mode = asset["inputMode"].as<std::string>();
-        if (mode == "UI")
-        {
-            widget->SetInputMode(InputMode::UIOnly);
-        }
-        else if (mode == "Game")
-        {
-            widget->SetInputMode(InputMode::GameOnly);
-        }
-    }
-}
-
 
 std::shared_ptr<Image2D> WidgetFactory::ReadImage(const YAML::Node& asset)
 {
@@ -125,7 +108,6 @@ std::shared_ptr<Image2D> WidgetFactory::ReadImage(const YAML::Node& asset)
     {
         image = std::make_shared<Image2D>(path, pos, size);
     }
-    SetInputMode(image, asset);
     image->color = color;
     return image;
 }
@@ -143,7 +125,6 @@ std::shared_ptr<Button> WidgetFactory::ReadButton(const YAML::Node& asset)
             button = std::make_shared<StartButton>(pos, size, ReadString(asset, "name"));
         else
             button = std::make_shared<StartButton>(pos, size);
-        SetInputMode(button, asset);
         return button;
     }
     else
@@ -153,7 +134,6 @@ std::shared_ptr<Button> WidgetFactory::ReadButton(const YAML::Node& asset)
             button = std::make_shared<Button>(pos, size, ReadString(asset, "name"));
         else
             button = std::make_shared<Button>(pos, size);
-        SetInputMode(button, asset);
         return button;
     }
     
@@ -176,7 +156,6 @@ std::shared_ptr<Text> WidgetFactory::ReadText(const YAML::Node& asset)
     {
         textWidget = std::make_shared<Text>(text, color, scale, pos);
     }
-    SetInputMode(textWidget, asset);
     
     return textWidget;
 }
@@ -194,7 +173,6 @@ std::shared_ptr<Panel> WidgetFactory::ReadPanel(const YAML::Node& asset)
     {
         widget = std::make_shared<Panel>(pos);
     }
-    SetInputMode(widget, asset);
     return widget;
 }
 

@@ -1,21 +1,19 @@
 ---
 widgets:
-  - type: "PANEL"
-    inputMode: "UI"
+  - type: "BUTTON"
+    subtype: "Start"
+    position: [50, 50]
+    size: [100, 50]
     widgets:
-      - type: "BUTTON"
-        subtype: "Start"
-        position: [50, 50]
+      - type: "IMAGE2D"
         size: [100, 50]
+        path: "assets/box.jpg"
         widgets:
           - type: "TEXT"
             text: "START"
-            position: [-2, -1]
+            position: [ -25, -15 ]
             scale: 0.5
             color: [ 0.5, 0.8, 0.2 ]
-          - type: "IMAGE2D"
-            size: [100, 50]
-            path: "assets/box.jpg"
 entities:
   - type: "PLAYER"
     position: [0, 0, -5]

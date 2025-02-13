@@ -1,5 +1,5 @@
 #pragma once
-#include "UI/Button.h"
+#include "Button.h"
 
 class StartButton : public Button
 {

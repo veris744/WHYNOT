@@ -1,7 +1,5 @@
 #include "Button.h"
 
-#include "Image2D.h"
-#include "Graphics/Texture.h"
 #include "Input/InputManager.h"
 
 unsigned int Button::counter = 0;
@@ -16,8 +14,8 @@ Button::Button(const vec2& _pos, const vec2& _size, const string& _name)
 bool Button::IsClicking(const vec2& _mousePos) const
 {
     vec2 pixelPos = GetPixelPosition();
-    if (_mousePos.x >= pixelPos.x && _mousePos.x <= pixelPos.x + size.x &&
-        _mousePos.y >= pixelPos.y && _mousePos.y <= pixelPos.y + size.y)
+    if (_mousePos.x >= pixelPos.x - size.x * 0.5 && _mousePos.x <= pixelPos.x + size.x * 0.5 &&
+        _mousePos.y >= pixelPos.y - size.y * 0.5 && _mousePos.y <= pixelPos.y + size.y * 0.5)
     {
         return true;
     }

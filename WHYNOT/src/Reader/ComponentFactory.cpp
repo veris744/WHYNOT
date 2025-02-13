@@ -102,11 +102,10 @@ std::shared_ptr<Mesh> ComponentFactory::ReadMesh(const YAML::Node& asset)
     }
     else if (ReadString(asset, "primitive") == "SPHERE")
     {
-        Renderer::SetSphereVertex(ReadFloat(asset, "radius"),
+        Helper::generateSphere(vertex, index,
+            ReadFloat(asset, "radius"),
             ReadInt(asset, "sectors", 32),
             ReadInt(asset, "stack", 16));
-        vertex = Renderer::GetSphereVertex();
-        index = Renderer::GetShereIndex();
     }
 
     std::shared_ptr<Mesh> mesh = nullptr;

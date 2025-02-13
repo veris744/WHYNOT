@@ -58,19 +58,16 @@ assets:
         type: "TEXTURE"
         
 widgets:
-  - type: "PANEL"
-    inputMode: "Game"
-    widgets:
-      - type: "IMAGE2D"
-        path: "assets/2dImages/aim.png"
-        position: [50, 50]
-        size: [75, 75]
-        color: [1, 0, 0]
-      - type: "TEXT"
-        name: "AliensText"
-        text: ""
-        position: [5, 5]
-        color: [0.5, 0.8, 0.2]
+  - type: "IMAGE2D"
+    path: "assets/2dImages/aim.png"
+    position: [50, 50]
+    size: [75, 75]
+    color: [1, 0, 0]
+  - type: "TEXT"
+    name: "AliensText"
+    text: ""
+    position: [5, 5]
+    color: [0.5, 0.8, 0.2]
 entities:
   - type: "PLAYER"
     position: [0, 0, 0]

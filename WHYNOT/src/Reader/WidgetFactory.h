@@ -23,7 +23,6 @@ private:
     static std::shared_ptr<Panel> ReadPanel(const YAML::Node& asset);
 
     static void SaveWidget(const std::shared_ptr<Widget>& widget, const std::shared_ptr<Widget>& parent);
-    static void SetInputMode(const std::shared_ptr<Widget>& widget, const YAML::Node& asset);
     
     
 public:
