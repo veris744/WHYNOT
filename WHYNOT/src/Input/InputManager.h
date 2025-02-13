@@ -54,6 +54,8 @@ class InputManager
     //USEFUL ASSETS
     std::shared_ptr<PlayerController> playerController;
     std::shared_ptr<Transform> playerTransform;
+
+    static bool isInputEnabled;
     
 public:
     static std::shared_ptr<InputManager> GetInstance();
@@ -80,6 +82,7 @@ public:
 
     static void SetInputMode(InputMode _mode);
     static InputMode GetInputMode() { return inputMode; };
+    static void EnableInput(bool value);
     
     SingleDelegate<vec2> OnClickDelegate;
 

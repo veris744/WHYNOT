@@ -32,13 +32,15 @@ int main()
 		lastTime = glfwGetTime();
 
 		Helper::Draw();
-		World::GetInstance()->Prepare();
+		World::GetInstance()->PrepareLoad();
 		
 		InputManager::GetInstance()->Update(deltaTime);
-		World::GetInstance()->Update(deltaTime);
-
+		
 		if (World::IsSceneLoaded())
 		{
+			//InputManager::EnableInput(true);
+			World::GetInstance()->Update(deltaTime);
+			
 			Renderer::GetInstance()->Render();
 			Renderer::GetInstance()->Clear();
 		

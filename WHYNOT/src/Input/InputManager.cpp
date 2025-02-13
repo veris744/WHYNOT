@@ -18,7 +18,7 @@ std::shared_ptr<InputManager> InputManager::instance = nullptr;
 unordered_map<unsigned int, KeyStatus> InputManager::keysStatus;
 std::unique_ptr<EventsBuffer> InputManager::eventsBuffer = std::make_unique<EventsBuffer>();
 InputMode InputManager::inputMode = InputMode::UIOnly;
-
+bool InputManager::isInputEnabled = false;
 
 std::shared_ptr<InputManager> InputManager::GetInstance()
 {
@@ -55,7 +55,7 @@ void InputManager::InitKeys()
 
 void InputManager::MouseCallback(GLFWwindow* window, double xpos, double ypos)
 {
-    if (!World::IsSceneLoaded())  return;
+    if (!isInputEnabled)  return;
     
     InputEvent event = {EventType::MouseMove, -1, -1, xpos, ypos};
     eventsBuffer->AddEvent(event);
@@ -63,7 +63,7 @@ void InputManager::MouseCallback(GLFWwindow* window, double xpos, double ypos)
 
 void InputManager::KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-    if (!World::IsSceneLoaded())  return;
+    if (!isInputEnabled)  return;
     
     InputEvent event = {EventType::KeyPress, key, action, 0, 0, mods};
     if (action == GLFW_RELEASE)
@@ -79,10 +79,11 @@ void InputManager::KeyCallback(GLFWwindow* window, int key, int scancode, int ac
 
 void InputManager::MouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
 {
-    if (!World::IsSceneLoaded())
+    if (!isInputEnabled)
     {
         return;
     }
+    
     InputEvent event = {EventType::MouseButtonPress, button, action, 0, 0, mods};
     if (action == GLFW_RELEASE)
     {
@@ -97,7 +98,7 @@ void InputManager::MouseButtonCallback(GLFWwindow* window, int button, int actio
 
 void InputManager::ScrollCallback(GLFWwindow* window, double xoffset, double yoffset)
 {
-    if (!World::IsSceneLoaded())  return;
+    if (!isInputEnabled)  return;
     
     InputEvent event = {EventType::MouseScroll, -1, -1, xoffset, yoffset};
     eventsBuffer->AddEvent(event);
@@ -281,6 +282,34 @@ void InputManager::HandleMouseScroll(double x, double y)
 void InputManager::SetInputMode(InputMode _mode)
 {
     inputMode = _mode;
+}
+
+void InputManager::EnableInput(bool value)
+{
+    if (value == isInputEnabled)    return;
+    
+    if (!value)
+    {
+        isInputEnabled = false;
+        glfwSetInputMode(Helper::GetWindow(), GLFW_STICKY_KEYS, GLFW_FALSE);
+        glfwSetInputMode(Helper::GetWindow(), GLFW_STICKY_MOUSE_BUTTONS, GLFW_FALSE);
+        Logger::Log(LogLevel::Info, "Input disabled");
+    }
+    else
+    {
+        isInputEnabled = true;
+        glfwSetInputMode(Helper::GetWindow(), GLFW_STICKY_KEYS, GLFW_TRUE); 
+        glfwSetInputMode(Helper::GetWindow(), GLFW_STICKY_MOUSE_BUTTONS, GLFW_TRUE);
+        if (inputMode == InputMode::GameOnly)
+        {
+            glfwSetInputMode(Helper::GetWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+        }
+        else
+        {
+            glfwSetInputMode(Helper::GetWindow(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+        }
+        Logger::Log(LogLevel::Info, "Input enabled");
+    }
 }
 
 void InputManager::Clear()

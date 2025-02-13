@@ -24,7 +24,7 @@ class World
     vector<std::shared_ptr<Widget>> widgets;
 
     static bool isSceneLoaded;
-    string currentScene = "";
+    static string currentScene;
     
     World();
     
@@ -37,7 +37,7 @@ public:
     
     static std::shared_ptr<World> GetInstance();
     void Initialize();
-    void Prepare();
+    void PrepareLoad();
     void Update(float deltaTime);
     void CheckCollisions();
     void Clean();
@@ -96,10 +96,7 @@ public:
     void UnloadScene();
 
     static bool IsSceneLoaded() { return isSceneLoaded; }
-    static void SetIsLoadingScene(bool value)
-    {
-        Helper::SetIsLoadingScene(value);
-        isSceneLoaded = value;
-    }
     void EndApplication();
+
+    static void ShowLoading();
 };

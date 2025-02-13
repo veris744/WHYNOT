@@ -1,5 +1,7 @@
 #include "Helper.h"
 
+#include "Input/InputManager.h"
+
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
@@ -71,5 +73,6 @@ void Helper::SetCursorVisible(bool _isVisible)
 {
     glfwSetInputMode(window, GLFW_CURSOR, _isVisible ? GLFW_CURSOR_NORMAL : GLFW_CURSOR_DISABLED);
 }
+
 
 

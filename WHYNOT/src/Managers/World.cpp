@@ -1,17 +1,20 @@
 #include "World.h"
 
+#include <thread>
+
 #include "Renderer.h"
 #include "Components/Camera.h"
 #include "Components/Collider.h"
 #include "Components/LightSource.h"
-#include "Graphics/Mesh.h"
 #include "Input/InputManager.h"
 #include "Minigame1/AliensLogic.h"
 #include "UI/Widget.h"
 #include "Reader/AssetReader.h"
+#include "Utils/Timer.h"
 
 std::shared_ptr<World> World::instance = nullptr;
 bool World::isSceneLoaded = false;
+string World::currentScene = "";
 
 std::shared_ptr<World> World::GetInstance()
 {
@@ -32,11 +35,12 @@ void World::Initialize()
     LoadScene("MainMenu");
 }
 
-void World::Prepare()
+void World::PrepareLoad()
 {
     if (!isSceneLoaded && entities.empty())
     {
         DoLoad();
+        Logger::Log(LogLevel::Info, "SceneLoaded");
     }
 }
 
@@ -243,12 +247,14 @@ void World::DoLoad()
     }
     playerEntity->isActive = true;
     
-    SetIsLoadingScene(true);
+    isSceneLoaded = true;
+    Timer::StartTimer(0.2, &InputManager::EnableInput, true);
 }
 
 void World::UnloadScene()
 {
-    SetIsLoadingScene(false);
+    isSceneLoaded = false;
+    InputManager::EnableInput(false);
     for (const auto& entity : entities)
     {
         entity.second->Destroy();
@@ -261,7 +267,8 @@ void World::UnloadScene()
 
 void World::EndApplication()
 {
-    SetIsLoadingScene(false);
+    isSceneLoaded = false;
+    InputManager::EnableInput(false);
     Renderer::GetInstance()->CleanUp();
     glfwSetWindowShouldClose(Helper::GetWindow(), true);
 }
