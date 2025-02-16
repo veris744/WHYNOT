@@ -11,7 +11,7 @@ class Alien;
 class EntityFactory
 {
 public:
-    using EntityCreator = std::function<void (const YAML::Node&)>;
+    using EntityCreator = std::function<std::shared_ptr<Entity> (const YAML::Node&)>;
 
 private:
     static std::shared_ptr<EntityFactory> instance;
@@ -39,5 +39,5 @@ public:
     
     void EntityFactorySetup();
     void RegisterEntity(const std::string& type, EntityCreator creator);
-    void CreateEntity(const std::string& type, const YAML::Node& data) const;
+    std::shared_ptr<Entity> CreateEntity(const std::string& type, const YAML::Node& data) const;
 };

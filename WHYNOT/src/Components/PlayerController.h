@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Component.h"
+#include "Reflection/Reflection.h"
 
 class Transform;
 
@@ -64,3 +65,9 @@ public:
     void Shoot();
     void SetPositionLocked(bool _positionLocked) { isPositionLocked = _positionLocked; }
 };
+REGISTER_CLASS(PlayerController, {
+    REGISTER_MEMBER(PlayerController, maxSpeed),
+    REGISTER_MEMBER(PlayerController, maxAcceleration),
+    REGISTER_MEMBER(PlayerController, accelerationRate),
+    REGISTER_MEMBER(PlayerController, decelerationRate)
+})

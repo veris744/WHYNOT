@@ -1,13 +1,13 @@
 #pragma once
 #include "Collider.h"
+#include "Reflection/Reflection.h"
 
 class CircleCollider : public Collider
 {
-    float radius;
-
-    
 public:
-    CircleCollider(float _radius)
+    float radius;
+    
+    CircleCollider(float _radius = 0)
         : radius(_radius)
     {
         type = ColliderType::CIRCLE;
@@ -18,9 +18,10 @@ public:
     bool CheckInBounds(const vec2& xBounds, const vec2& yBounds, const vec2& zBounds) override;
     void Render() override;
     void Update(float deltaTime) override;
-
-    float GetRadius() const { return radius; }
     
     SingleDelegate<vec3> OnOutOfBoundsDelegate;
     
 };
+REGISTER_CLASS(CircleCollider, {
+    REGISTER_MEMBER(CircleCollider, radius)
+});

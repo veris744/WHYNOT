@@ -2,8 +2,11 @@
 #include <includes.h>
 
 #include "Component.h"
+#include "Reflection/Reflection.h"
 
 class Transform;
+
+
 
 class Movement : public Component
 {
@@ -27,3 +30,10 @@ public:
         acceleration = vec3(0, 0, 0);
     }
 };
+
+REGISTER_CLASS(Movement, {
+    REGISTER_MEMBER(Movement, maxSpeed),
+    REGISTER_MEMBER(Movement, maxAcceleration),
+    REGISTER_MEMBER(Movement, speed),
+    REGISTER_MEMBER(Movement, acceleration)
+});

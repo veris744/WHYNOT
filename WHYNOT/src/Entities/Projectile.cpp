@@ -20,41 +20,49 @@ void Projectile::Initialize()
     isRendered = true;
     hasCollision = true;
 
-    std::shared_ptr<Player> player = World::GetInstance()->GetPlayer();
-    if (!player)
+    if (!GetComponent<Transform>())
     {
-        Logger::Log(LogLevel::Error, "No Player Found");
-        return;
+        transformComp = std::make_shared<Transform>();
+        AddComponent(transformComp);
     }
-    playerTransform = player->GetComponent<Transform>();
 
-    transformComp = std::make_shared<Transform>();
-    AddComponent(transformComp);
-    
-    Renderer::SetSphereVertex(0.2f, 32.f, 16.f);
-    vector<float> vertex = Renderer::GetSphereVertex();
-    vector<unsigned int> index = Renderer::GetShereIndex();
+    if (!GetComponent<Model>())
+    {
+        Renderer::SetSphereVertex(0.2f, 32.f, 16.f);
+        vector<float> vertex = Renderer::GetSphereVertex();
+        vector<unsigned int> index = Renderer::GetShereIndex();
 
-    std::shared_ptr<Material> mat = std::make_shared<Material>(vector<string>(), "shaders/vertex.glsl",
-        "shaders/neonFragment.glsl");
-    mat->materialData.color = vec3(0.0f, 0.0f, 1.0f);
-    mat->materialData.type = MaterialType::NEON;
-    mat->materialData.shininess = 32;
+        std::shared_ptr<Material> mat = std::make_shared<Material>(vector<string>(), "shaders/vertex.glsl",
+            "shaders/neonFragment.glsl");
+        mat->materialData.color = vec3(0.0f, 0.0f, 1.0f);
+        mat->materialData.type = MaterialType::NEON;
+        mat->materialData.shininess = 32;
     
-    std::shared_ptr<Mesh> sphereMesh = std::make_shared<Mesh>(vertex, index, mat);
+        std::shared_ptr<Mesh> sphereMesh = std::make_shared<Mesh>(vertex, index, mat);
     
-    std::shared_ptr<Model> model = std::make_shared<Model>(sphereMesh);
-    AddComponent(model);
-    
-    std::shared_ptr<CircleCollider> collider = std::make_shared<CircleCollider>(0.2);
-    AddComponent(collider);
-    
-    movementComp = std::make_shared<Movement>();
-    movementComp->maxSpeed = 40;
-    AddComponent(movementComp);
-    
-    collider->OnOutOfBoundsDelegate.Bind(&Projectile::OnOutOfBounds, this);
-    collider->CollisionDelegate.Bind(&Projectile::OnCollision, this);
+        std::shared_ptr<Model> model = std::make_shared<Model>();
+        model->AddMesh(sphereMesh);
+        AddComponent(model);
+    }
+
+    if (!GetComponent<CircleCollider>())
+    {
+        std::shared_ptr<CircleCollider> collider = std::make_shared<CircleCollider>(0.2);
+        AddComponent(collider);
+    }
+    GetComponent<CircleCollider>()->OnOutOfBoundsDelegate.Bind(&Projectile::OnOutOfBounds, this);
+    GetComponent<CircleCollider>()->CollisionDelegate.Bind(&Projectile::OnCollision, this);
+
+    if (!GetComponent<Movement>())
+    {
+        movementComp = std::make_shared<Movement>();
+        movementComp->maxSpeed = 40;
+        AddComponent(movementComp);
+    }
+    else
+    {
+        movementComp = GetComponent<Movement>();
+    }
     
     Entity::Initialize();
 }
@@ -67,9 +75,17 @@ void Projectile::Update(float _deltaTime)
 
 void Projectile::GetShot()
 {
+    std::shared_ptr<Player> player = World::GetInstance()->GetPlayer();
+    if (!player)
+    {
+        Logger::Log(LogLevel::Error, "No Player Found");
+        return;
+    }
+    std::shared_ptr<Transform> playerTransform = player->GetComponent<Transform>();
+    
     isActive = true;
-    movementComp->speed = playerTransform->v_forward * 5.f;
-    transformComp->v_position = playerTransform->v_position + playerTransform->v_forward * 2.f;
+    movementComp->speed = playerTransform->forward * 5.f;
+    transformComp->position = playerTransform->position + playerTransform->forward * 2.f;
 }
 
 void Projectile::DisableProjectile()

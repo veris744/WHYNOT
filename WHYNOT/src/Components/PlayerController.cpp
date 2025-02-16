@@ -7,19 +7,19 @@
 
 void PlayerController::StopForwardMovement()
 {
-    speed = speed - dot(speed, transform->v_forward) * transform->v_forward;
-    acceleration = acceleration - dot(acceleration, transform->v_forward) * transform->v_forward;
+    speed = speed - dot(speed, transform->forward) * transform->forward;
+    acceleration = acceleration - dot(acceleration, transform->forward) * transform->forward;
 }
 void PlayerController::StopRightMovement()
 {
-    speed = speed - dot(speed, transform->v_right) * transform->v_right;
-    acceleration = acceleration - dot(acceleration, transform->v_right) * transform->v_right;
+    speed = speed - dot(speed, transform->right) * transform->right;
+    acceleration = acceleration - dot(acceleration, transform->right) * transform->right;
 }
 
 void PlayerController::StopUpMovement()
 {
-    speed = speed - dot(speed, transform->v_up) * transform->v_up;
-    acceleration = acceleration - dot(acceleration, transform->v_up) * transform->v_up;
+    speed = speed - dot(speed, transform->up) * transform->up;
+    acceleration = acceleration - dot(acceleration, transform->up) * transform->up;
 }
 
 void PlayerController::Update(float deltaTime)
@@ -54,10 +54,10 @@ void PlayerController::Update(float deltaTime)
         }
     }
 
-    vec3 localSpeed = transform->v_forward * speed.z
-     + transform->v_right * speed.x
-    + transform->v_up * speed.y;
-    transform->v_position = transform->v_position + localSpeed * deltaTime;
+    vec3 localSpeed = transform->forward * speed.z
+     + transform->right * speed.x
+    + transform->up * speed.y;
+    transform->position = transform->position + localSpeed * deltaTime;
 }
 
 void PlayerController::Shoot()

@@ -22,14 +22,8 @@ private:
     static std::shared_ptr<ComponentFactory> instance;
     std::unordered_map<std::string, ComponentCreator> creators;
     
-    static std::shared_ptr<Transform> ReadTransform(const YAML::Node& asset);
     static std::shared_ptr<Mesh> ReadMesh(const YAML::Node& asset);
-    static std::shared_ptr<Model> ReadModel(const YAML::Node& asset);
-    static std::shared_ptr<Camera> ReadCamera(const YAML::Node& asset);
-    static std::shared_ptr<LightSource> ReadLight(const YAML::Node& asset);
     static std::shared_ptr<Material> ReadMaterial(const YAML::Node& asset);
-    static std::shared_ptr<PlayerController> ReadMoveComp(const YAML::Node& asset);
-    static std::shared_ptr<CircleCollider> ReadCircleCollider(const YAML::Node& asset);
     
 public:
     ComponentFactory() = default;

@@ -72,7 +72,7 @@ void AliensLogic::PrepareGame(unsigned int _totalAliens)
         temp->isActive = false;
         availableProjectiles.push(temp);
     }
-    alienText = std::dynamic_pointer_cast<Text>(World::GetInstance()->GetWidget("AliensText"));
+    alienText = std::static_pointer_cast<Text>(World::GetInstance()->GetWidget("AliensText"));
     alienText->isActive = true;
     alienText->text = "Aliens : " + std::to_string(totalAliens);
     
@@ -131,7 +131,7 @@ void AliensLogic::CalculateRandomPosition(const std::shared_ptr<Alien>& alien)
     vec2 yBounds = GetYBounds();
     vec2 zBounds = GetZBounds();
     
-    alien->GetComponent<Transform>()->v_position = vec3(getRandomFloat(xBounds.x, xBounds.y),
+    alien->GetComponent<Transform>()->position = vec3(getRandomFloat(xBounds.x, xBounds.y),
         getRandomFloat(yBounds.x, yBounds.y),
         getRandomFloat(zBounds.x, zBounds.y));
 

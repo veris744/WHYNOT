@@ -1,5 +1,6 @@
 #pragma once
 #include "Entity.h"
+#include "Reflection/Reflection.h"
 
 class Movement;
 
@@ -22,3 +23,4 @@ public:
     void Initialize() override;
     void Update(float _deltaTime) override;
 };
+REGISTER_CLASS(Alien)

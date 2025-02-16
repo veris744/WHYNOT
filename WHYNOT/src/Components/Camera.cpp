@@ -25,7 +25,7 @@ mat4 Camera::GetViewMatrix() const
         return mat4();
     }
     
-    mat4 view = lookAt(transform->v_position, transform->v_position + transform->v_forward, transform->v_up);
+    mat4 view = lookAt(transform->position, transform->position + transform->forward, transform->up);
     return view;
     
 }
@@ -39,7 +39,7 @@ vec3 Camera::GetViewPos() const
         return vec3(0, 0, 0);
     }
     
-    return transform->v_position;
+    return transform->position;
 }
 
 void Camera::Update(float deltaTime)

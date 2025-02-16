@@ -5,6 +5,7 @@
 #include "Graphics/Texture.h"
 #include "Graphics/VertexArray.h"
 #include "Graphics/VertexBuffer.h"
+#include "Managers/Helper.h"
 #include "Managers/Renderer2D.h"
 #include "Managers/World.h"
 

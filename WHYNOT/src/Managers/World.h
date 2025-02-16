@@ -1,8 +1,6 @@
 #pragma once
 #include <includes.h>
 
-#include "Helper.h"
-#include "Components/LightData.h"
 #include "Components/LightSource.h"
 #include "Components/Camera.h"
 #include "Entities/Entity.h"

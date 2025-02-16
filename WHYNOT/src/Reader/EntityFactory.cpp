@@ -11,30 +11,36 @@
 
 using namespace Reader;
 
-using ComponentCreator = std::function<void (const YAML::Node&)>;
+using ComponentCreator = std::function<std::shared_ptr<Entity> (const YAML::Node&)>;
+using namespace Reflection;
 
 std::shared_ptr<EntityFactory> EntityFactory::instance = nullptr;
 
 void EntityFactory::EntityFactorySetup()
 {
     RegisterEntity("ALIEN", [](const YAML::Node& data) ->
-        void {
-            std::shared_ptr<Alien> alien = ReadAlien(data);
+        std::shared_ptr<Entity> {
+            std::shared_ptr<Alien> alien = make_shared<Alien>();
+            deserialize(data, alien);
+            return alien;
         });
     
     RegisterEntity("PROJECTILE", [](const YAML::Node& data) ->
-        void {
-            std::shared_ptr<Projectile> proj = ReadProjectile(data);
+        std::shared_ptr<Entity> {
+            std::shared_ptr<Projectile> proj = std::make_shared<Projectile>();
+            deserialize(data, proj);
+            return proj;
         });
     
     RegisterEntity("PLAYER", [](const YAML::Node& data) ->
-        void {
-            std::shared_ptr<Player> player = ReadPlayer(data);
+        std::shared_ptr<Entity> {
+            std::shared_ptr<Player> player = make_shared<Player>();
             if (World::GetInstance()->GetPlayer())
             {
                 Logger::Log<EntityFactory>(LogLevel::Error, "Player already exists");
             }
-            World::GetInstance()->SetPlayer(player);
+            deserialize(data, player);
+            return player;
         });
 }
 
@@ -43,13 +49,14 @@ void EntityFactory::RegisterEntity(const std::string& type, EntityCreator creato
     creators[type] = std::move(creator);
 }
 
-void EntityFactory::CreateEntity(const std::string& type, const YAML::Node& data) const
+std::shared_ptr<Entity> EntityFactory::CreateEntity(const std::string& type, const YAML::Node& data) const
 {
     auto it = creators.find(type);
     if (it != creators.end()) {
         return it->second(data);
     }
     Logger::Log(LogLevel::FatalError, "Unknown entity type: " + type);
+    return nullptr;
 }
 
 
@@ -57,7 +64,7 @@ std::shared_ptr<Alien> EntityFactory::ReadAlien(const YAML::Node& asset)
 {
     std::shared_ptr<Alien> alien = std::make_shared<Alien>();
     alien->Initialize();
-    alien->GetComponent<Transform>()->v_position = ReadVec3(asset, "position");
+    alien->GetComponent<Transform>()->position = ReadVec3(asset, "position");
     return alien;
 }
 
@@ -84,7 +91,7 @@ void EntityFactory::SetTransform(const std::shared_ptr<Entity>& _entity, const Y
     {
         Logger::Log(LogLevel::Error, "Entity does not have a transform");
     }
-    transform->v_position = ReadVec3(asset, "position");
-    transform->v_scale = ReadVec3(asset, "scale", vec3(1.f, 1.f, 1.f));
-    transform->v_rotation.SetRotation(ReadVec3(asset, "rotation"));
+    transform->position = ReadVec3(asset, "position");
+    transform->scale = ReadVec3(asset, "scale", vec3(1.f, 1.f, 1.f));
+    transform->rotation.SetRotation(ReadVec3(asset, "rotation"));
 }

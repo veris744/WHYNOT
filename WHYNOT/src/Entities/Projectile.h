@@ -1,5 +1,6 @@
 #pragma once
 #include "Entity.h"
+#include "Reflection/Reflection.h"
 
 
 class Movement;
@@ -9,14 +10,12 @@ class Projectile : public Entity
     static unsigned int counter;
 
     std::shared_ptr<Movement> movementComp = nullptr;
-public:
     std::shared_ptr<Transform> transformComp = nullptr;
-    std::shared_ptr<Transform> playerTransform;
+public:
 
     void OnCollision(const std::shared_ptr<Entity>& _otherEntity, vec3 normal);
     void OnOutOfBounds(vec3 _normal);
     
-public:
     Projectile(const string& _name = "")
     {
         name = _name.empty() ? "Projectile" + std::to_string(++counter) : _name;
@@ -28,3 +27,4 @@ public:
     void GetShot();
     void DisableProjectile();
 };
+REGISTER_CLASS(Projectile);

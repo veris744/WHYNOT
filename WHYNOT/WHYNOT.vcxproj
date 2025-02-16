@@ -80,6 +80,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -94,6 +95,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -109,6 +111,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalOptions>/FS</AdditionalOptions>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -124,6 +127,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -138,7 +142,6 @@
     <ClCompile Include="src\Components\CircleCollider.cpp" />
     <ClCompile Include="src\Components\Collider.cpp" />
     <ClCompile Include="src\Components\Component.cpp" />
-    <ClCompile Include="src\Components\LightData.cpp" />
     <ClCompile Include="src\Components\Model.cpp" />
     <ClCompile Include="src\Components\Movement.cpp" />
     <ClCompile Include="src\Components\PlayerController.cpp" />
@@ -825,6 +828,7 @@
       <SDLCheck>true</SDLCheck>
       <LinkCompiled>true</LinkCompiled>
     </ClCompile>
+    <ClCompile Include="src\Reader\EnumRegistry.cpp" />
     <ClCompile Include="src\Reader\Reader.cpp" />
     <ClCompile Include="src\Reader\WidgetFactory.cpp">
       <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
@@ -988,7 +992,6 @@
     <ClInclude Include="src\Components\CircleCollider.h" />
     <ClInclude Include="src\Components\Collider.h" />
     <ClInclude Include="src\Components\Component.h" />
-    <ClInclude Include="src\Components\LightData.h" />
     <ClInclude Include="src\Components\LightSource.h" />
     <ClInclude Include="src\Components\Model.h" />
     <ClInclude Include="src\Components\Movement.h" />
@@ -1021,8 +1024,10 @@
     <ClInclude Include="src\Reader\AssetReader.h" />
     <ClInclude Include="src\Reader\ComponentFactory.h" />
     <ClInclude Include="src\Reader\EntityFactory.h" />
+    <ClInclude Include="src\Reader\EnumRegistry.h" />
     <ClInclude Include="src\Reader\Reader.h" />
     <ClInclude Include="src\Reader\WidgetFactory.h" />
+    <ClInclude Include="src\Reflection\Reflection.h" />
     <ClInclude Include="src\UI\Buttons\Button.h" />
     <ClInclude Include="src\UI\Buttons\StartButton.h" />
     <ClInclude Include="src\UI\Image2D.h" />

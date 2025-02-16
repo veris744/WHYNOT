@@ -16,7 +16,9 @@ widgets:
             color: [ 0.5, 0.8, 0.2 ]
 entities:
   - type: "PLAYER"
-    position: [0, 0, -5]
+    components:
+      - name: "TRANSFORM"
+        position: [0, 0, -5]
 assets:
   - name: "Ambient"
     isCamera: False
@@ -25,7 +27,7 @@ assets:
     components:
       - name: "LIGHT"
         lightData:
-          color: [0.5, 0.5, 0.5]
+          color: [0.5, 0.5, 0.5, 1]
           ambient: 0.2
           type: "AMBIENT"
   - name: "bp"
@@ -35,7 +37,8 @@ assets:
     components:
       - name: "TRANSFORM"
         position: [1, 0, 0]
-        rotation: [0, 120, 0]
+        rotation:
+          yaw: 120
         scale: [0.5,0.5,0.5]
       - name: "MODEL"
         path: "assets/backpack/backpack.obj"
