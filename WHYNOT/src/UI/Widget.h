@@ -1,20 +1,17 @@
 #pragma once
 #include <includes.h>
-
-#include "Input/InputManager.h"
+#include "Reflection/Reflection.h"
 
 class Widget : public std::enable_shared_from_this<Widget>
 {
 protected:
-    string name;
-    vec2 position;
-    vec2 size;
 
     std::shared_ptr<Widget> parent = nullptr;
     vector<std::shared_ptr<Widget>> children;
     
 public:
-    Widget() = default;
+    Widget(): position(vec2(0,0)), size(vec2(0,0)){}
+
     Widget(vec2 _pos, vec2 _size, const string& _name = "") : name(_name), position(_pos), size(_size)
     { }
 
@@ -22,6 +19,10 @@ public:
     {
         children.clear();
     }
+    
+    string name;
+    vec2 position;
+    vec2 size;
 
     bool isActive = true;
 
@@ -29,6 +30,7 @@ public:
     const vector<std::shared_ptr<Widget>>& GetChildren() const { return children; }
     
     const string& GetName() const { return name; }
+    virtual void SetAutoName() = 0;
     
     virtual void Render();
     virtual void Clear();

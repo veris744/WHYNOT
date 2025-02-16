@@ -8,9 +8,16 @@ class Button : public Widget
     static unsigned int counter;
 public:
     Button(const vec2& _pos, const vec2& _size, const string& _name = "");
+    Button();
+    void SetAutoName() override;
 
     bool IsClicking(const vec2& _mousePos) const;
 
     void OnClickTrigger(vec2 _mousePos);
     virtual void OnClick(vec2 _mousePos);
 };
+REGISTER_CLASS(Button, {
+    REGISTER_MEMBER(Button, name),
+    REGISTER_MEMBER(Button, position),
+    REGISTER_MEMBER(Button, size),
+});

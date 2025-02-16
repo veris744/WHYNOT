@@ -34,8 +34,6 @@ void Image2D::Initialize()
             LayoutElement("uUV", ShaderDataType::VEC2),
         }
     );
-
-
     texture = std::make_shared<Texture>(path);
     
     string shaderName = "shaders/fragment2D.glsl";
@@ -52,6 +50,9 @@ void Image2D::Initialize()
 void Image2D::Render()
 {
     Widget::Render();
+
+    if (!vertexArray)
+        Initialize();
 
     vertexArray->Bind();
     texture->Bind();
@@ -78,4 +79,10 @@ void Image2D::Clear()
     vertexArray->Unbind();
     shader->Unbind();
     texture->Unbind();
+}
+
+void Image2D::SetAutoName()
+{
+    if (name.empty())
+        name = "Image2D" + std::to_string(++counter);
 }

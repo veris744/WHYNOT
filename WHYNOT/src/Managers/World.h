@@ -8,7 +8,6 @@
 
 class Widget;
 
-
 class World
 {
     static std::shared_ptr<World> instance;

@@ -11,6 +11,17 @@ Button::Button(const vec2& _pos, const vec2& _size, const string& _name)
     InputManager::GetInstance()->OnClickDelegate.Bind(&Button::OnClickTrigger, this);
 }
 
+Button::Button()
+{
+    InputManager::GetInstance()->OnClickDelegate.Bind(&Button::OnClickTrigger, this);
+}
+
+void Button::SetAutoName()
+{
+    if (name.empty())
+        name = "Button" + std::to_string(++counter);
+}
+
 bool Button::IsClicking(const vec2& _mousePos) const
 {
     vec2 pixelPos = GetPixelPosition();

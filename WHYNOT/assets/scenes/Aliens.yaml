@@ -52,7 +52,7 @@ assets:
         scale: [50, 50, 50]
       - name: "MESH"
         primitive: "CUBE"
-        textures: ["assets/2DiMAGES/space.png"]
+        textures: ["assets/2dImages/space.png"]
         vertexShader: "shaders/vertex.glsl"
         fragmentShader: "shaders/fragmentSky.glsl"
         type: "TEXTURE"
@@ -68,7 +68,8 @@ widgets:
     text: ""
     position: [5, 5]
     color: [0.5, 0.8, 0.2]
+    scale: 1
+    
 entities:
   - type: "PLAYER"
-    position: [0, 0, 0]
     

@@ -17,3 +17,9 @@ void Text::Clear()
     
     TextRenderer::GetInstance()->Clear();
 }
+
+void Text::SetAutoName()
+{
+    if (name.empty())
+        name = "Text" + std::to_string(++counter);
+}

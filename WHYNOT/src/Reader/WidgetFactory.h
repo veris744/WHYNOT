@@ -17,10 +17,7 @@ private:
     static std::shared_ptr<WidgetFactory> instance;
     std::unordered_map<std::string, WidgetCreator> creators;
 
-    static std::shared_ptr<Image2D> ReadImage(const YAML::Node& asset);
     static std::shared_ptr<Button> ReadButton(const YAML::Node& asset);
-    static std::shared_ptr<Text> ReadText(const YAML::Node& asset);
-    static std::shared_ptr<Panel> ReadPanel(const YAML::Node& asset);
 
     static void SaveWidget(const std::shared_ptr<Widget>& widget, const std::shared_ptr<Widget>& parent);
     

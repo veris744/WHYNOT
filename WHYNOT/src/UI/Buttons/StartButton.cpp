@@ -10,6 +10,12 @@ StartButton::StartButton(const vec2& _pos, const vec2& _size, const string& _nam
     name = _name.empty() ? "StartButton" + std::to_string(++counter) : _name;
 }
 
+void StartButton::SetAutoName()
+{
+    if (name.empty())
+        name = "StartButton" + std::to_string(++counter);
+}
+
 void StartButton::OnClick(vec2 _mousePos)
 {
     Button::OnClick(_mousePos);

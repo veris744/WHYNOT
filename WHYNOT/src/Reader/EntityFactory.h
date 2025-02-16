@@ -17,12 +17,6 @@ private:
     static std::shared_ptr<EntityFactory> instance;
     std::unordered_map<std::string, EntityCreator> creators;
     
-    static std::shared_ptr<Alien> ReadAlien(const YAML::Node& asset);
-    static std::shared_ptr<Projectile> ReadProjectile(const YAML::Node& asset);
-    static std::shared_ptr<Player> ReadPlayer(const YAML::Node& asset);
-
-    static void SetTransform(const std::shared_ptr<Entity>& _entity, const YAML::Node& asset);
-    
 public:
     EntityFactory() = default;
     ~EntityFactory() = default;

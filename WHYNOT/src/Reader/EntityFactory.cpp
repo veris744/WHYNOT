@@ -3,7 +3,6 @@
 #include <utility>
 
 #include "Reader.h"
-#include "Components/Transform.h"
 #include "Entities/Alien.h"
 #include "Entities/Projectile.h"
 #include "Entities/Player.h"
@@ -57,41 +56,4 @@ std::shared_ptr<Entity> EntityFactory::CreateEntity(const std::string& type, con
     }
     Logger::Log(LogLevel::FatalError, "Unknown entity type: " + type);
     return nullptr;
-}
-
-
-std::shared_ptr<Alien> EntityFactory::ReadAlien(const YAML::Node& asset)
-{
-    std::shared_ptr<Alien> alien = std::make_shared<Alien>();
-    alien->Initialize();
-    alien->GetComponent<Transform>()->position = ReadVec3(asset, "position");
-    return alien;
-}
-
-std::shared_ptr<Projectile> EntityFactory::ReadProjectile(const YAML::Node& asset)
-{
-    std::shared_ptr<Projectile> projectile = std::make_shared<Projectile>();
-    projectile->Initialize();
-    SetTransform(projectile, asset);
-    return projectile;
-}
-
-std::shared_ptr<Player> EntityFactory::ReadPlayer(const YAML::Node& asset)
-{
-    std::shared_ptr<Player> player = std::make_shared<Player>();
-    player->Initialize();
-    SetTransform(player, asset);
-    return player;
-}
-
-void EntityFactory::SetTransform(const std::shared_ptr<Entity>& _entity, const YAML::Node& asset)
-{
-    std::shared_ptr<Transform> transform = _entity->GetComponent<Transform>();
-    if (transform == nullptr)
-    {
-        Logger::Log(LogLevel::Error, "Entity does not have a transform");
-    }
-    transform->position = ReadVec3(asset, "position");
-    transform->scale = ReadVec3(asset, "scale", vec3(1.f, 1.f, 1.f));
-    transform->rotation.SetRotation(ReadVec3(asset, "rotation"));
 }
