@@ -2,6 +2,7 @@
 #include <includes.h>
 
 #include "Component.h"
+#include "Reflection/Reflection.h"
 #include "Utils/Rotation.h"
 
 class Transform : public Component
@@ -9,27 +10,31 @@ class Transform : public Component
     
 public:
     Transform(vec3 _pos = vec3(0))
-        : v_position(_pos),
-        v_scale(vec3(1, 1, 1)),
-        v_forward(vec3(0, 0, 1)),
-        v_up(vec3(0, 1, 0)),
-        v_right(vec3(1, 0, 0))
+        : position(_pos),
+        scale(vec3(1, 1, 1)),
+        forward(vec3(0, 0, 1)),
+        up(vec3(0, 1, 0)),
+        right(vec3(1, 0, 0))
     {
         name = "TRANSFORM";
-        v_rotation.SetRotationFromDirection(v_forward, v_up);
+        rotation.SetRotationFromDirection(forward, up);
     }
 
-    vec3 v_position;
-    vec3 v_scale;
-    Rotation v_rotation;
+    vec3 position;
+    vec3 scale;
+    Rotation rotation;
 
-    vec3 v_forward;
-    vec3 v_up;
-    vec3 v_right;
+    vec3 forward;
+    vec3 up;
+    vec3 right;
 
 
     mat4 GetModelMatrix(vec3 _relativePosition = vec3(0,0,0), bool _invert = false) const;
     void Update(float deltaTime) override;
     void SetRotation(float pitch, float yaw, float roll);
-    
 };
+REGISTER_CLASS(Transform, 
+    REGISTER_MEMBER(Transform, position),
+    REGISTER_MEMBER(Transform, scale),
+    REGISTER_MEMBER(Transform, rotation)
+);

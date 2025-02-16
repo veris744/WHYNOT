@@ -1,5 +1,6 @@
 #include "TextRenderer.h"
 
+#include "Helper.h"
 #include "World.h"
 #include "Graphics/Shader.h"
 #include "Graphics/Texture.h"

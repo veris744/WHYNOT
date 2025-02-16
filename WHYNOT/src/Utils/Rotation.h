@@ -1,6 +1,8 @@
 #pragma once
 #include <includes.h>
 
+#include "Reflection/Reflection.h"
+
 struct Rotation
 {
     float pitch = 0.0f;
@@ -32,3 +34,8 @@ struct Rotation
     }    
     
 };
+REGISTER_CLASS(Rotation, {
+    REGISTER_MEMBER(Rotation, pitch),
+    REGISTER_MEMBER(Rotation, yaw),
+    REGISTER_MEMBER(Rotation, roll)
+});

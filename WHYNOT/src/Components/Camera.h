@@ -2,8 +2,7 @@
 #include <includes.h>
 
 #include "Component.h"
-
-class Entity;
+#include "Reflection/Reflection.h"
 
 class Camera : public Component
 {
@@ -25,3 +24,4 @@ public:
     void Update(float deltaTime) override;
     
 };
+REGISTER_CLASS(Camera)

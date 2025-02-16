@@ -1,5 +1,6 @@
 #pragma once
 #include "Entity.h"
+#include "Reflection/Reflection.h"
 
 class Player : public Entity
 {
@@ -15,3 +16,4 @@ public:
     void Initialize() override;
     void Update(float _deltaTime) override;
 };
+REGISTER_CLASS(Player);

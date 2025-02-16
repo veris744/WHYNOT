@@ -3,6 +3,7 @@
 #include "Components/Camera.h"
 #include "Components/PlayerController.h"
 #include "Components/Transform.h"
+#include "Managers/World.h"
 
 unsigned int Player::counter = 0;
 
@@ -13,16 +14,26 @@ void Player::Initialize()
     isRendered = false;
     hasCollision = false;
 
-    std::shared_ptr<Camera> camera = std::make_shared<Camera>();
-    AddComponent(camera);
+    if (!GetComponent<Camera>())
+    {
+        std::shared_ptr<Camera> camera = std::make_shared<Camera>();
+        AddComponent(camera);
+    }
 
-    std::shared_ptr<Transform> transform = std::make_shared<Transform>(vec3(0));
-    AddComponent(transform);
+    if (!GetComponent<Transform>())
+    {
+        std::shared_ptr<Transform> transform = std::make_shared<Transform>(vec3(0));
+        AddComponent(transform);
+    }
 
-    std::shared_ptr<PlayerController> controller = std::make_shared<PlayerController>();
-    controller->SetPositionLocked(false);
-    AddComponent(controller);
+    if (!GetComponent<PlayerController>())
+    {
+        std::shared_ptr<PlayerController> controller = std::make_shared<PlayerController>();
+        controller->SetPositionLocked(false);
+        AddComponent(controller);
+    }
     
+    World::GetInstance()->SetPlayer(std::static_pointer_cast<Player>(shared_from_this()));
     Entity::Initialize();
 }
 

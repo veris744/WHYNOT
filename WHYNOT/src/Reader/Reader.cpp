@@ -9,7 +9,16 @@ namespace Reader
              node[name][1].as<float>(),
              node[name][2].as<float>()) : defaultValue;
     }
-    
+
+    vec4 ReadVec4(const YAML::Node& node, const string& name, const vec4& defaultValue)
+    {
+        return node[name] ?
+            vec4(node[name][0].as<float>(),
+             node[name][1].as<float>(),
+             node[name][2].as<float>(),
+             node[name][3] ? node[name][3].as<float>() : 1) : defaultValue;
+    }
+
     vec2 ReadVec2(const YAML::Node& node, const string& name, const vec2& defaultValue)
     {
         return node[name] ?

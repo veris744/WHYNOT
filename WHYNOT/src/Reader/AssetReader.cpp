@@ -36,7 +36,16 @@ void AssetReader::ReadAssets(const char* filePath)
 void AssetReader::SaveEntity(const YAML::Node& asset)
 {
     string type = asset["type"].as<std::string>();
-    EntityFactory::GetInstance()->CreateEntity(type, asset);
+    std::transform(type.begin(), type.end(), type.begin(), toupper);
+    std::shared_ptr<Entity> entity = EntityFactory::GetInstance()->CreateEntity(type, asset);
+    if (asset["components"])
+    {
+        for (const YAML::Node& component : asset["components"])
+        {
+            SaveComponent(entity, component);
+        }
+    }
+    entity->Initialize();
 }
 
 void AssetReader::SaveCustomEntity(const YAML::Node& asset)

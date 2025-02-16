@@ -133,9 +133,13 @@ vector<std::shared_ptr<Texture>> Model::loadMaterialTextures(aiMaterial* _mat, a
     return textures;
 }
 
-Model::Model(std::shared_ptr<Mesh> _mesh)
+Model::Model()
 {
     name = "MODEL";
+}
+
+void Model::AddMesh(const std::shared_ptr<Mesh>& _mesh)
+{
     meshes.push_back(_mesh);
 }
 

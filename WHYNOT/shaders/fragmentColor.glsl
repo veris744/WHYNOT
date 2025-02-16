@@ -51,15 +51,15 @@ void main()
         float f_OuterCuttoff = cos(uLights[i].outerAngle * (3.14 / 180));
 
         float f_Attenuation = 1;
-        vec3 v_LightDir     = vec3(0.0);
+        vec3 LightDir     = vec3(0.0);
 
         if (uLights[i].type == 0)
         {
-            v_LightDir = normalize(-uLights[i].direction);
+            LightDir = normalize(-uLights[i].direction);
         }
         else
         {
-            v_LightDir      = normalize(uLights[i].position - aFragPosition);
+            LightDir      = normalize(uLights[i].position - aFragPosition);
             float distance  = length(uLights[i].position - aFragPosition);
             if (uLights[i].constantAtt + uLights[i].linearAtt + uLights[i].quadAtt != 0)
             {
@@ -76,7 +76,7 @@ void main()
 
         if (uLights[i].type == 2)
         {
-            f_DotProduct = dot(v_LightDir, normalize(-uLights[i].direction));
+            f_DotProduct = dot(LightDir, normalize(-uLights[i].direction));
             f_Epsilon   = f_CutOff - f_OuterCuttoff;
             f_Intensity = clamp((f_DotProduct - f_OuterCuttoff) / f_Epsilon, 0.0, 1.0);
         }
@@ -85,12 +85,12 @@ void main()
         {
             // Diffuse
             vec3  norm      = normalize(aNormal);
-            float diff      = max(dot(norm, v_LightDir), 0.0);
+            float diff      = max(dot(norm, LightDir), 0.0);
             diffuse         = diff * uLights[i].color * uLights[i].diffuse * uColor * f_Attenuation * f_Intensity;
             
             // Specular
             vec3 viewDir    = normalize(uViewPos - aFragPosition);
-            vec3 reflectDir = reflect(-v_LightDir, aNormal);
+            vec3 reflectDir = reflect(-LightDir, aNormal);
             float spec      = pow(max(dot(viewDir, reflectDir), 0.0), uShininess);
             specular        = uLights[i].color * uLights[i].specular * spec * uColor * f_Attenuation * f_Intensity;
 

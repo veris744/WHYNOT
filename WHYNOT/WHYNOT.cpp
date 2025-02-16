@@ -17,7 +17,11 @@ int main()
 		return -1;
 	}
 	Helper::InitializeGlad();
-
+	bool b = std::is_same_v<vec3, vec3>;
+	if (b)
+	{
+		std::cout << b << std::endl;
+	}
 	AudioManager::GetInstance()->Initialize();
 	World::GetInstance()->Initialize();
 	Renderer::GetInstance()->Initialize();

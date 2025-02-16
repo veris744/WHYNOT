@@ -20,26 +20,42 @@ void Alien::Initialize()
     hasCollision = true;
     isActive = false;
 
-    std::shared_ptr<Transform> transform = std::make_shared<Transform>();
-    transform->v_scale = vec3(0.3f, 0.3f, 0.3f);
-    AddComponent(transform);
+    if (!GetComponent<Transform>())
+    {
+        std::shared_ptr<Transform> transform = std::make_shared<Transform>();
+        transform->scale = vec3(0.3f, 0.3f, 0.3f);
+        AddComponent(transform);
+    }
 
-    std::shared_ptr<Material> mat = std::make_shared<Material>("", "", "shaders/fragmentColor.glsl");
-    mat->materialData.type = MaterialType::COLOR;
-    std::shared_ptr<Model> model = std::make_shared<Model>("assets/ufo/PinkAlien.obj", mat);
-    model->position = vec3(-0.3f, -0.3f, -0.35f);
-    AddComponent(model);
+    if (!GetComponent<Model>())
+    {
+        std::shared_ptr<Material> mat = std::make_shared<Material>("", "", "shaders/fragmentColor.glsl");
+        mat->materialData.type = MaterialType::COLOR;
+        std::shared_ptr<Model> model = std::make_shared<Model>("assets/ufo/PinkAlien.obj", mat);
+        model->position = vec3(-0.3f, -0.3f, -0.35f);
+        AddComponent(model);
+    }
 
-    std::shared_ptr<CircleCollider> collider = std::make_shared<CircleCollider>(0.65);
-    AddComponent(collider);
-
-    collider->OnOutOfBoundsDelegate.Bind(&Alien::OnOutOfBounds, this);
-
-    movement = std::make_shared<Movement>();
-    movement->maxSpeed = 4.0f;
-    AddComponent(movement);
     
-    collider->CollisionDelegate.Bind(&Alien::OnCollision, this);
+    if (!GetComponent<CircleCollider>())
+    {
+        std::shared_ptr<CircleCollider> collider = std::make_shared<CircleCollider>(0.65);
+        AddComponent(collider);
+    }
+    
+    GetComponent<CircleCollider>()->OnOutOfBoundsDelegate.Bind(&Alien::OnOutOfBounds, this);
+    GetComponent<CircleCollider>()->CollisionDelegate.Bind(&Alien::OnCollision, this);
+
+    if (!GetComponent<Movement>())
+    {
+        movement = std::make_shared<Movement>();
+        movement->maxSpeed = 4.0f;
+        AddComponent(movement);
+    }
+    else
+    {
+        movement = GetComponent<Movement>();
+    }
     
     Entity::Initialize();
 }
@@ -53,8 +69,8 @@ void Alien::Update(float _deltaTime)
         AliensLogic::GetInstance()->GetYBounds(),
         AliensLogic::GetInstance()->GetZBounds());
     
-    GetComponent<Transform>()->SetRotation(GetComponent<Transform>()->v_rotation.pitch,
-    GetComponent<Transform>()->v_rotation.yaw += 20*_deltaTime,GetComponent<Transform>()->v_rotation.roll);
+    GetComponent<Transform>()->SetRotation(GetComponent<Transform>()->rotation.pitch,
+    GetComponent<Transform>()->rotation.yaw += 20*_deltaTime,GetComponent<Transform>()->rotation.roll);
 }
 
 

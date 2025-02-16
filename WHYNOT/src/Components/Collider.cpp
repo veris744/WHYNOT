@@ -6,7 +6,7 @@ vec3 Collider::GetWorldPosition()
     {
         transform = parent->GetComponent<Transform>();
     }
-    return transform->v_position + position;
+    return transform->position + position;
 }
 
 bool Collider::CheckCircleCircle(float _rad1, vec3 _pos1, float _rad2, vec3 _pos2) const

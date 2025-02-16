@@ -247,7 +247,7 @@ void InputManager::HandleMouseMove(double x, double y)
         vec2 pos = {x, y};
         if (firstMouse)
         {
-            rotation = playerTransform->v_rotation;
+            rotation = playerTransform->rotation;
             lastMousePos.x = pos.x;
             lastMousePos.y = pos.y;
             firstMouse = false;
