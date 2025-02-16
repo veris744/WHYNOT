@@ -23,7 +23,6 @@ private:
     std::unordered_map<std::string, ComponentCreator> creators;
     
     static std::shared_ptr<Mesh> ReadMesh(const YAML::Node& asset);
-    static std::shared_ptr<Material> ReadMaterial(const YAML::Node& asset);
     
 public:
     ComponentFactory() = default;

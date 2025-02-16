@@ -1004,7 +1004,6 @@
     <ClInclude Include="src\Graphics\IndexBuffer.h" />
     <ClInclude Include="src\Graphics\LayoutElement.h" />
     <ClInclude Include="src\Graphics\Material.h" />
-    <ClInclude Include="src\Graphics\MaterialData.h" />
     <ClInclude Include="src\Graphics\Mesh.h" />
     <ClInclude Include="src\Graphics\Shader.h" />
     <ClInclude Include="src\Graphics\Texture.h" />

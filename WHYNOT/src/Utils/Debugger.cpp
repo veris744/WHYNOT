@@ -15,7 +15,7 @@ void Debugger::SetSphereMesh()
     vector<unsigned int> indices;
     Helper::generateSphere(vertices, indices, 1, 16, 8);
     std::shared_ptr<Material> material = std::make_shared<Material>("",
-        "shaders/vertex.glsl", "shaders/debugFragment.glsl");
+        DEFAULT_VERTEX_SHADER_PATH, "shaders/debugFragment.glsl");
     mesh = std::make_shared<Mesh>(vertices, indices, material);
 }
 

@@ -2,6 +2,7 @@
 #include <includes.h>
 
 #include "VertexArray.h"
+#include "Reflection/Reflection.h"
 
 class Camera;
 class Material;
@@ -17,6 +18,8 @@ public:
     Mesh(const vector<float>& _vertex, const std::shared_ptr<Material>& _material);
     Mesh(const vector<float>& _vertex, const vector<unsigned int>& _index,
          const std::shared_ptr<Material>& _material);
+    Mesh();
+
     ~Mesh()
     {
         vertexArray = nullptr;

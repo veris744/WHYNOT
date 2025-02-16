@@ -30,15 +30,15 @@ assets:
           color: [0.5, 0.5, 0.5, 1]
           ambient: 0.2
           type: "AMBIENT"
-  - name: "bp"
-    isCamera: False
-    isLight: False
-    isRendered: True
-    components:
-      - name: "TRANSFORM"
-        position: [1, 0, 0]
-        rotation:
-          yaw: 120
-        scale: [0.5,0.5,0.5]
-      - name: "MODEL"
-        path: "assets/backpack/backpack.obj"
+#  - name: "bp"
+#    isCamera: False
+#    isLight: False
+#    isRendered: True
+#    components:
+#      - name: "TRANSFORM"
+#        position: [1, 0, 0]
+#        rotation:
+#          yaw: 120
+#        scale: [0.5,0.5,0.5]
+#      - name: "MODEL"
+#        path: "assets/backpack/backpack.obj"

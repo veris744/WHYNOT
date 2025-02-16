@@ -52,10 +52,13 @@ assets:
         scale: [50, 50, 50]
       - name: "MESH"
         primitive: "CUBE"
-        textures: ["assets/2dImages/space.png"]
-        vertexShader: "shaders/vertex.glsl"
-        fragmentShader: "shaders/fragmentSky.glsl"
-        type: "TEXTURE"
+        material:
+          textures: ["assets/2dImages/space.png"]
+          vertexShaderPath: "shaders/vertex.glsl"
+          fragmentShaderPath: "shaders/fragmentSky.glsl"
+          materialData:
+            type: "TEXTURE"
+            shininess: 10
         
 widgets:
   - type: "IMAGE2D"

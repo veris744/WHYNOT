@@ -112,49 +112,24 @@ std::shared_ptr<Mesh> ComponentFactory::ReadMesh(const YAML::Node& asset)
     }
 
     std::shared_ptr<Mesh> mesh = nullptr;
+    std::shared_ptr<Material> material = std::make_shared<Material>();
+    deserialize(asset["material"], material);
+    material->InitializeShader();
+
+    const YAML::Node& texturesYaml = asset["material"]["textures"];
+    for (const YAML::Node& texturePath : texturesYaml)
+    {
+        string path = texturePath.as<string>();
+        std::shared_ptr<Texture> texture = std::make_shared<Texture>(path);
+        material->AddTexture(texture);
+    }
     if (index.empty())
     {
-        mesh = std::make_shared<Mesh>(vertex, ReadMaterial(asset));
+        mesh = std::make_shared<Mesh>(vertex, material);
     }
     else
     {
-        mesh = std::make_shared<Mesh>(vertex, index, ReadMaterial(asset));
+        mesh = std::make_shared<Mesh>(vertex, index, material);
     }
     return mesh;
-}
-
-std::shared_ptr<Material> ComponentFactory::ReadMaterial(const YAML::Node& asset)
-{
-    MaterialData materialData;
-    materialData.ambient = ReadInt(asset, "ambient"); 
-    materialData.diffuse = ReadInt(asset, "diffuse"); 
-    materialData.specular = ReadInt(asset, "specular"); 
-    materialData.shininess = ReadFloat(asset, "diffuse"); 
-    materialData.color = ReadVec3(asset, "color");
-    
-    std::string type = ReadString(asset, "type");
-    if (type == "TEXTURE") {
-        materialData.type = MaterialType::TEXTURE;
-    } 
-    else if (type == "COLOR") {
-        materialData.type = MaterialType::COLOR;
-    } 
-    else if (type == "NEON") {
-        materialData.type = MaterialType::NEON;
-    } 
-        
-    vector<string> textures;
-    const YAML::Node& texturesYaml = asset["textures"];
-    for (const YAML::Node& texture : texturesYaml)
-    {
-        string temp = texture.as<string>();
-        textures.push_back(temp);
-    }
-    string vertexShader= ReadString(asset, "vertexShader");
-    string fragmentShader= ReadString(asset, "fragmentShader");
-    
-    std::shared_ptr<Material> material = std::make_shared<Material>(
-        textures, vertexShader, fragmentShader, materialData);
-    
-    return material;
 }

@@ -4,11 +4,11 @@
 
 class Shader
 {
-    string vertexShaderPath;
-    string fragmentShaderPath;
     unordered_map<int, GLuint> uboMap;
     
 public:
+    string vertexShaderPath;
+    string fragmentShaderPath;
     string vertexShaderSource;
     string fragmentShaderSource;
     

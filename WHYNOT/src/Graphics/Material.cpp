@@ -8,106 +8,65 @@
 
 
 Material::Material(const char* _texturePath, const string& _vertexShaderPath, const string& _fragmentShaderPath, MaterialData _materialData)
-        : materialData(_materialData)
+        : materialData(_materialData), vertexShaderPath(_vertexShaderPath), fragmentShaderPath(_fragmentShaderPath)
 {
-    string vertexShader = _vertexShaderPath.empty() ? string(DEFAULT_VERTEX_SHADER_PATH) : _vertexShaderPath;
-    string fragmentShader = _fragmentShaderPath.empty() ? string(DEFAULT_FRAGMENT_SHADER_PATH) : _fragmentShaderPath;
-
+    InitializeShader();
     if (std::strcmp(_texturePath, ""))
     {
         std::shared_ptr<Texture> texture = std::make_shared<Texture>(_texturePath);
         textures.push_back(texture);
     }
-    
-    bool skip = false;
-    for (const auto& shaderLoaded : Renderer::GetInstance()->shaders_loaded)
-    {
-        if (shaderLoaded->vertexShaderSource.compare(vertexShader) == 0
-            && shaderLoaded->fragmentShaderSource.compare(fragmentShader) == 0)
-        {
-            shader = shaderLoaded;
-            skip = true;
-            break;
-        }
-    }
-
-    if (!skip)
-    {
-        shader = std::make_shared<Shader>(vertexShader, fragmentShader);
-        shader->Compile();
-    
-        Renderer::GetInstance()->shaders_loaded.push_back(shader);
-    }
-    
-    Renderer::GetInstance()->shaders_loaded.push_back(shader);
 }
 
 Material::Material(const vector<string>& _texturePaths, const string& _vertexShaderPath,
     const string& _fragmentShaderPath, MaterialData _materialData)
-        : materialData(_materialData)
+        : materialData(_materialData), vertexShaderPath(_vertexShaderPath), fragmentShaderPath(_fragmentShaderPath)
 {
-    string vertexShader = _vertexShaderPath.empty() ? string(DEFAULT_VERTEX_SHADER_PATH) : _vertexShaderPath;
-    string fragmentShader = _fragmentShaderPath.empty() ? string(DEFAULT_FRAGMENT_SHADER_PATH) : _fragmentShaderPath;
-    
-    
-    unsigned int i = 0;
+    InitializeShader();
+
     for (string texturePath : _texturePaths)
     {
         std::shared_ptr<Texture> texture = std::make_shared<Texture>(texturePath);
-
         textures.push_back(texture);
-        i++;
     }    
-    bool skip = false;
-    for (const auto& shaderLoaded : Renderer::GetInstance()->shaders_loaded)
-    {
-        if (shaderLoaded->vertexShaderSource.compare(vertexShader) == 0
-            && shaderLoaded->fragmentShaderSource.compare(fragmentShader) == 0)
-        {
-            shader = shaderLoaded;
-            skip = true;
-            break;
-        }
-    }
-
-    if (!skip)
-    {
-        shader = std::make_shared<Shader>(vertexShader, fragmentShader);
-        shader->Compile();
     
-        Renderer::GetInstance()->shaders_loaded.push_back(shader);
-    }
-    
-    Renderer::GetInstance()->shaders_loaded.push_back(shader);
 }
 
 Material::Material(const vector<std::shared_ptr<Texture>>& _textures, const string& _vertexShaderPath,
     const string& _fragmentShaderPath, MaterialData _materialData)
         : textures(_textures)
         , materialData(_materialData)
+        , vertexShaderPath(_vertexShaderPath)
+        , fragmentShaderPath(_fragmentShaderPath)
 {
-    string vertexShader = _vertexShaderPath.empty() ? string(DEFAULT_VERTEX_SHADER_PATH) : _vertexShaderPath;
-    string fragmentShader = _fragmentShaderPath.empty() ? string(DEFAULT_FRAGMENT_SHADER_PATH) : _fragmentShaderPath;
+    InitializeShader();
+}
 
+void Material::InitializeShader()
+{
     bool skip = false;
     for (const auto& shaderLoaded : Renderer::GetInstance()->shaders_loaded)
     {
-        if (shaderLoaded->vertexShaderSource.compare(vertexShader) == 0
-            && shaderLoaded->fragmentShaderSource.compare(fragmentShader) == 0)
+        if (shaderLoaded->vertexShaderPath == vertexShaderPath
+            && shaderLoaded->fragmentShaderPath == fragmentShaderPath)
         {
             shader = shaderLoaded;
             skip = true;
             break;
         }
     }
-
     if (!skip)
     {
-        shader = std::make_shared<Shader>(vertexShader, fragmentShader);
+        shader = std::make_shared<Shader>(vertexShaderPath, fragmentShaderPath);
         shader->Compile();
     
         Renderer::GetInstance()->shaders_loaded.push_back(shader);
     }
+}
+
+void Material::AddTexture(const std::shared_ptr<Texture>& _texture)
+{
+    textures.push_back(_texture);
 }
 
 void Material::SetUniforms(const mat4& _model, const mat4& _view, const mat4& _projection, const vec3& _viewPosition)
