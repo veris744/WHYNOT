@@ -979,7 +979,7 @@
       <AdditionalOptions>/FS</AdditionalOptions>
       <LinkCompiled>true</LinkCompiled>
     </ClCompile>
-    <ClCompile Include="src\UI\Buttons\StartButton.cpp" />
+    <ClCompile Include="src\UI\Buttons\LoadSceneButton.cpp" />
     <ClCompile Include="src\UI\Image2D.cpp" />
     <ClCompile Include="src\UI\Text.cpp" />
     <ClCompile Include="src\UI\Widget.cpp" />
@@ -1027,7 +1027,7 @@
     <ClInclude Include="src\Reader\WidgetFactory.h" />
     <ClInclude Include="src\Reflection\Reflection.h" />
     <ClInclude Include="src\UI\Buttons\Button.h" />
-    <ClInclude Include="src\UI\Buttons\StartButton.h" />
+    <ClInclude Include="src\UI\Buttons\LoadSceneButton.h" />
     <ClInclude Include="src\UI\Image2D.h" />
     <ClInclude Include="src\UI\Text.h" />
     <ClInclude Include="src\UI\Widget.h" />

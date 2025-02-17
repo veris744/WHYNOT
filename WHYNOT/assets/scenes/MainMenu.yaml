@@ -4,6 +4,7 @@ widgets:
     subtype: "Start"
     position: [50, 50]
     size: [200, 50]
+    sceneName: "Aliens"
     widgets:
       - type: "IMAGE2D"
         size: [200, 50]

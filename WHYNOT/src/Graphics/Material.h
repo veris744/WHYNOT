@@ -67,7 +67,7 @@ public:
     
 };
 REGISTER_CLASS(Material, {
-    //REGISTER_MEMBER(Material, materialData),
+    REGISTER_MEMBER(Material, materialData),
     REGISTER_MEMBER(Material, vertexShaderPath),
     REGISTER_MEMBER(Material, fragmentShaderPath),
     REGISTER_MEMBER(Material, texturePaths)

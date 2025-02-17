@@ -4,7 +4,7 @@
 #include "Managers/World.h"
 #include "UI/Image2D.h"
 #include "UI/Text.h"
-#include "UI/Buttons/StartButton.h"
+#include "UI/Buttons/LoadSceneButton.h"
 
 using namespace Reader;
 using namespace Reflection;
@@ -19,7 +19,6 @@ void WidgetFactory::WidgetFactorySetup()
     RegisterWidget("BUTTON", [](const YAML::Node& asset, const std::shared_ptr<Widget>& parent) ->
         std::shared_ptr<Widget>  {
             std::shared_ptr<Button> widget = ReadButton(asset);
-            deserialize(asset, widget);
             SaveWidget(widget, parent);
             return widget;
         });
@@ -90,7 +89,11 @@ std::shared_ptr<Button> WidgetFactory::ReadButton(const YAML::Node& asset)
     string subtype = ReadString(asset, "subtype");
     if (subtype == "Start")
     {
-        return std::make_shared<StartButton>();
+        std::shared_ptr<LoadSceneButton> button = std::make_shared<LoadSceneButton>();
+        deserialize(asset, button);
+        return button;
     }
-    return std::make_shared<Button>();
+    std::shared_ptr<Button> button = std::make_shared<Button>();
+    deserialize(asset, button);
+    return button;
 }
