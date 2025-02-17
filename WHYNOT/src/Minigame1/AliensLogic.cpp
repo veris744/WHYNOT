@@ -45,8 +45,8 @@ vec2 AliensLogic::GetZBounds() const
 
 void AliensLogic::AlienDestroyed(const std::shared_ptr<Alien>& _alien)
 {
-    aliens.erase(std::find(aliens.begin(), aliens.end(), _alien));
-    alienText->text = "Aliens : " + std::to_string(aliens.size());
+    aliens.erase(ranges::find(aliens, _alien));
+    OnTextChangedDelegate.Execute("Aliens : " + std::to_string(aliens.size()));
     _alien->Destroy();
     if (aliens.empty())
     {
@@ -74,7 +74,8 @@ void AliensLogic::PrepareGame(unsigned int _totalAliens)
     }
     alienText = std::static_pointer_cast<Text>(World::GetInstance()->GetWidget("AliensText"));
     alienText->isActive = true;
-    alienText->text = "Aliens : " + std::to_string(totalAliens);
+    OnTextChangedDelegate.Bind(&Text::SetText, alienText.get());
+    OnTextChangedDelegate.Execute("Aliens : " + std::to_string(totalAliens));
     
 }
 

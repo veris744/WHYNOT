@@ -37,5 +37,7 @@ public:
     
     void RenderText(string text, float x, float y, float scale, vec3 color);
     void Clear();
+
+    const std::map<GLchar, Character>& GetCharacters() const { return Characters; };
     
 };

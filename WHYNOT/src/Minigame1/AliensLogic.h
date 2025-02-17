@@ -8,7 +8,6 @@ class Alien;
 
 class AliensLogic
 {
-public:
     AliensLogic() = default;
     static std::shared_ptr<AliensLogic> instance;
     
@@ -21,11 +20,12 @@ public:
     vec3 playgroundDimensions = vec3(10,10,5);
     vec3 playgroundCenter = vec3(0,0,8);
     
-
     void CalculateRandomPosition(const std::shared_ptr<Alien>& alien);
     void CalculateRandomDirection(const std::shared_ptr<Alien>& alien);
 
     std::shared_ptr<Text> alienText = nullptr;
+    
+    SingleDelegate<const string&> OnTextChangedDelegate;
     
 public:
     static std::shared_ptr<AliensLogic> GetInstance();

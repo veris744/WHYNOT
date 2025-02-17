@@ -36,6 +36,7 @@ void WidgetFactory::WidgetFactorySetup()
         std::shared_ptr<Widget> {
             std::shared_ptr<Text> widget = std::shared_ptr<Text>();
             deserialize(asset, widget);
+            widget->size = widget->CalculateSize();
             SaveWidget(widget, parent);
             return widget;
         });
