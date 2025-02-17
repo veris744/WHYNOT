@@ -3,7 +3,7 @@ widgets:
   - type: "BUTTON"
     subtype: "Start"
     position: [50, 50]
-    size: [100, 50]
+    size: [200, 50]
     widgets:
       - type: "IMAGE2D"
         size: [200, 50]
@@ -20,22 +20,14 @@ entities:
     components:
       - name: "TRANSFORM"
         position: [0, 0, -5]
-assets:
   - name: "Ambient"
-    isCamera: False
-    isLight: True
-    isRendered: False
     components:
       - name: "LIGHT"
         lightData:
           color: [0.5, 0.5, 0.5, 1]
           ambient: 0.2
           type: "AMBIENT"
-  - name: "bp"
-    isCamera: False
-    isLight: False
-    isRendered: True
-    components:
+  - components:
       - name: "TRANSFORM"
         position: [1, 0, 0]
         rotation:

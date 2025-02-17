@@ -45,21 +45,25 @@ public:
     template <typename T>
     void AddEntity(const std::shared_ptr<T>& _entity)
     {
-        if (entities.count(_entity->GetName()))
+        if (_entity->GetName().empty())
+        {
+            _entity->SetAutoName();
+        }
+        if (entities.count(_entity->GetName()) != 0)
         {
             Logger::Log<World>(LogLevel::Warning, _entity->GetName() + " entity already exists");
-            return;
+            _entity->SetAutoName();
         }
         entities[_entity->GetName()] = _entity;
     
         if (_entity->IsCamera())
         {
-            std::shared_ptr<Camera> camera = _entity->GetComponent<Camera>();
+            std::shared_ptr<Camera> camera = _entity->template GetComponent<Camera>();
             cameras.push_back(camera);
         }
         if (_entity->IsLight())
         {
-            std::shared_ptr<LightSource> light = _entity->GetComponent<LightSource>();
+            std::shared_ptr<LightSource> light = _entity->template GetComponent<LightSource>();
             lights.push_back(light);
         }
     }

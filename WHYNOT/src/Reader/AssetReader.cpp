@@ -10,13 +10,6 @@
 void AssetReader::ReadAssets(const char* filePath)
 {    
     YAML::Node fileYaml = YAML::LoadFile(filePath);
-    if (fileYaml["assets"])
-    {
-        for (const YAML::Node& asset : fileYaml["assets"])
-        {
-            SaveCustomEntity(asset);
-        }
-    }
     if (fileYaml["widgets"])
     {
         for (const YAML::Node& asset : fileYaml["widgets"])
@@ -35,9 +28,19 @@ void AssetReader::ReadAssets(const char* filePath)
 
 void AssetReader::SaveEntity(const YAML::Node& asset)
 {
-    string type = asset["type"].as<std::string>();
-    std::transform(type.begin(), type.end(), type.begin(), toupper);
-    std::shared_ptr<Entity> entity = EntityFactory::GetInstance()->CreateEntity(type, asset);
+    std::shared_ptr<Entity> entity;
+    if (asset["type"])
+    {
+        string type = asset["type"].as<std::string>();
+        std::transform(type.begin(), type.end(), type.begin(), toupper);
+        entity = EntityFactory::GetInstance()->CreateEntity(type, asset);
+        
+    }
+    else
+    {
+        entity = std::make_shared<Entity>();
+        Reflection::deserialize(asset, entity);
+    }
     if (asset["components"])
     {
         for (const YAML::Node& component : asset["components"])
@@ -46,20 +49,6 @@ void AssetReader::SaveEntity(const YAML::Node& asset)
         }
     }
     entity->Initialize();
-}
-
-void AssetReader::SaveCustomEntity(const YAML::Node& asset)
-{
-    std::shared_ptr<Entity> entity = std::make_shared<Entity>(asset["name"].as<std::string>(),
-        asset["isCamera"].as<bool>(), asset["isLight"].as<bool>());
-    entity->isRendered = asset["isRendered"].as<bool>();
-
-    for (const YAML::Node& component : asset["components"])
-    {
-        SaveComponent(entity, component);
-    }
-
-    World::GetInstance()->AddEntity(entity);
 }
 
 void AssetReader::SaveComponent(const std::shared_ptr<Entity>& entity, const YAML::Node& asset)

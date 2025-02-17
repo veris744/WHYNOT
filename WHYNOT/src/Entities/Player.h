@@ -16,4 +16,6 @@ public:
     void Initialize() override;
     void Update(float _deltaTime) override;
 };
-REGISTER_CLASS(Player);
+REGISTER_CLASS(Player, {
+    REGISTER_MEMBER(Player, name)
+});

@@ -3,12 +3,18 @@
 #include "Components/Component.h"
 #include "Managers/World.h"
 
+unsigned int Entity::counter = 0;
 
 void Entity::Initialize()
 {
     World::GetInstance()->AddEntity(shared_from_this());
 }
 
+
+void Entity::SetAutoName()
+{
+    name = "Entity" + std::to_string(++counter);
+}
 
 void Entity::UpdateTrigger(float deltaTime)
 {

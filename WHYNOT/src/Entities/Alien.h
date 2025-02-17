@@ -23,4 +23,6 @@ public:
     void Initialize() override;
     void Update(float _deltaTime) override;
 };
-REGISTER_CLASS(Alien)
+REGISTER_CLASS(Alien, {
+    REGISTER_MEMBER(Alien, name)
+});

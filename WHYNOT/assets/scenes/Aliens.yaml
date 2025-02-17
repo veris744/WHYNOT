@@ -1,9 +1,6 @@
 ---
-assets:
+entities:
   - name: "Light2"
-    isCamera: False
-    isLight: True
-    isRendered: False
     components:
       - name: "LIGHT"
         lightData:
@@ -20,9 +17,6 @@ assets:
         rotation: [ 0, 45, 0 ]
         scale: [ 0.3, 0.3, 0.3 ]
   - name: "Light3"
-    isCamera: False
-    isLight: True
-    isRendered: False
     components:
       - name: "LIGHT"
         lightData:
@@ -32,9 +26,6 @@ assets:
           diffuse: 0.5
           type: "DIRECTIONAL"
   - name: "Ambient"
-    isCamera: False
-    isLight: True
-    isRendered: False
     components:
       - name: "LIGHT"
         lightData:
@@ -42,9 +33,6 @@ assets:
           ambient: 0.2
           type: "AMBIENT"
   - name: "Skybox"
-    isCamera: False
-    isLight: False
-    isRendered: True
     components:
       - name: "TRANSFORM"
         position: [0, 0, 0]
@@ -59,6 +47,7 @@ assets:
             fragmentShaderPath: "shaders/fragmentSky.glsl"
             materialData:
               type: "TEXTURE"
+  - type: "PLAYER"
         
 widgets:
   - type: "IMAGE2D"
@@ -76,6 +65,4 @@ widgets:
     align: "LEFT"
     alignVertical: "TOP"
     
-entities:
-  - type: "PLAYER"
     

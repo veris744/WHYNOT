@@ -67,7 +67,6 @@ void ComponentFactory::ComponentFactorySetup()
     
     RegisterComponent("COLLIDER", [](const std::shared_ptr<Entity>& entity, const YAML::Node& data) ->
         void {
-            entity->hasCollision = true;
             if (ReadString(data, "type") == "CIRCLE")
             {
                 std::shared_ptr<CircleCollider> collider = std::make_shared<CircleCollider>();

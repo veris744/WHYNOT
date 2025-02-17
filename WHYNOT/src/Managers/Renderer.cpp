@@ -92,7 +92,7 @@ void Renderer::Render()
         {
             continue;
         }
-        if (entity.second->isRendered)
+        if (entity.second->IsRendered())
         {
             std::shared_ptr<Model> model = entity.second->GetComponent<Model>();
             if (!model)
@@ -102,7 +102,7 @@ void Renderer::Render()
             model->Render();
         }
 
-        if (Debugger::collisionDebugEnabled && entity.second->hasCollision)
+        if (Debugger::collisionDebugEnabled && entity.second->HasCollision())
         {
             std::shared_ptr<Collider> collider = entity.second->GetComponent<Collider>();
             collider->Render();
@@ -113,7 +113,7 @@ void Renderer::Clear()
 {
     for (const auto& entity : World::GetInstance()->GetEntities())
     {
-        if (!entity.second->isRendered || !entity.second->isActive)
+        if (!entity.second->IsRendered() || !entity.second->isActive)
         {
             continue;
         }

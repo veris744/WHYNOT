@@ -27,4 +27,6 @@ public:
     void GetShot();
     void DisableProjectile();
 };
-REGISTER_CLASS(Projectile);
+REGISTER_CLASS(Projectile, {
+    REGISTER_MEMBER(Projectile, name)
+});
