@@ -53,6 +53,7 @@ public:
     MaterialData materialData;
     string vertexShaderPath = DEFAULT_VERTEX_SHADER_PATH;
     string fragmentShaderPath = DEFAULT_FRAGMENT_SHADER_PATH;
+    vector<string> texturePaths;
 
     void InitializeShader();
     void AddTexture(const std::shared_ptr<Texture>& _texture);
@@ -66,7 +67,8 @@ public:
     
 };
 REGISTER_CLASS(Material, {
-    REGISTER_MEMBER(Material, materialData),
+    //REGISTER_MEMBER(Material, materialData),
     REGISTER_MEMBER(Material, vertexShaderPath),
-    REGISTER_MEMBER(Material, fragmentShaderPath)
-})
+    REGISTER_MEMBER(Material, fragmentShaderPath),
+    REGISTER_MEMBER(Material, texturePaths)
+});

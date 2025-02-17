@@ -104,7 +104,8 @@ namespace Reflection
     MemberInfo{#member, #type, [](void* obj, const YAML::Node& node) { \
         auto& instance = *static_cast<type*>(obj); \
         using MemberT = std::decay_t<decltype(instance.member)>; \
-        if constexpr (std::is_class_v<MemberT> && !Reader::IsGLMType<MemberT>() && !std::is_same_v<MemberT, std::string>) { \
+        if constexpr (std::is_class_v<MemberT> && !Reader::IsGLMType<MemberT>() \
+            && !std::is_same_v<MemberT, std::string> && !std::is_same_v<MemberT, std::vector<std::string>>) { \
             if (node[#member]) { \
                 Reflection::deserialize(node[#member], instance.member); \
             } \

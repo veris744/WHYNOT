@@ -50,4 +50,15 @@ namespace Reader
     {
         return node[name] ? node[name].as<bool>() : defaultValue;
     }
+
+    vector<string> ReadStringVector(const YAML::Node& node, const std::string& name)
+    {
+        std::vector<std::string> result;
+        if (node[name] && node[name].IsSequence()) {
+            for (const auto& item : node[name]) {
+                result.push_back(item.as<std::string>());
+            }
+        }
+        return result;
+    }
 }

@@ -3,6 +3,7 @@
 
 #include "Helper.h"
 #include "Graphics/Texture.h"
+#include "Reflection/Reflection.h"
 
 class Material;
 class Camera;
@@ -11,8 +12,13 @@ class VertexArray;
 
 enum class PrimitiveType
 {
-    CUBE, SPHERE
+    NONE, BOX, SPHERE
 };
+REGISTER_ENUM(PrimitiveType,
+    {"NONE", PrimitiveType::NONE},
+    {"BOX", PrimitiveType::BOX},
+    {"SPHERE", PrimitiveType::SPHERE}
+);
 
 class Renderer
 {

@@ -30,7 +30,8 @@ namespace Reader
     unsigned int ReadUInt(const YAML::Node& node, const string& name, unsigned int defaultValue = 0);
     float ReadFloat(const YAML::Node& node, const string& name, float defaultValue = 0.0f);
     bool ReadBool(const YAML::Node& node, const string& name, bool defaultValue = false);
-
+    vector<string> ReadStringVector(const YAML::Node& node, const std::string& name);
+    
     template<typename T>
     T ReadValue(const YAML::Node& node, const string& name)
     {
@@ -46,6 +47,9 @@ namespace Reader
         } 
         else if constexpr (is_same_v<T, decltype(vec2{})>) {
             return ReadVec2(node, name);
+        } 
+        else if constexpr (is_same_v<T, vector<string>>) {
+            return ReadStringVector(node, name);
         } 
         else if constexpr (is_same_v<T, string>) {
             return ReadString(node, name);

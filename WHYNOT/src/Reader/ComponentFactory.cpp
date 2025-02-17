@@ -35,20 +35,18 @@ void ComponentFactory::ComponentFactorySetup()
             entity->AddComponent<Camera>(camera);
         });
     
-    RegisterComponent("MESH", [](const std::shared_ptr<Entity>& entity, const YAML::Node& data) ->
-        void {
-            std::shared_ptr<Model> model = std::make_shared<Model>();
-            model->AddMesh(ReadMesh(data));
-            model->position = ReadVec3(data, "position");
-            entity->AddComponent<Model>(model);
-        
-        });
-    
     RegisterComponent("MODEL", [](const std::shared_ptr<Entity>& entity, const YAML::Node& data) ->
         void {
             std::shared_ptr<Model> model = std::make_shared<Model>();
             deserialize(data, model);
-            model->LoadModel(model->path);
+            if (!model->path.empty())
+            {
+                model->LoadModel(model->path);
+            }
+            else if (data["mesh"])
+            {
+                model->AddMesh(ReadMesh(data["mesh"]));
+            }
             entity->AddComponent<Model>(model);
         });
     
@@ -97,32 +95,39 @@ void ComponentFactory::CreateComponent(const std::string& type, const std::share
 
 std::shared_ptr<Mesh> ComponentFactory::ReadMesh(const YAML::Node& asset)
 {
+    // INITIALIZE MESH VERTEX
     vector<float> vertex;
     vector<unsigned int> index = {};
-    if (ReadString(asset, "primitive") == "CUBE")
+    
+    switch (EnumRegistry::instance().fromString<PrimitiveType>(ReadString(asset, "primitive")))
     {
-        vertex = Renderer::GetCubeVertex();
-    }
-    else if (ReadString(asset, "primitive") == "SPHERE")
-    {
+    case PrimitiveType::NONE:
+        Logger::Log(LogLevel::FatalError, "Primitive type is NONE");
+        return nullptr;
+    case PrimitiveType::SPHERE:
         Helper::generateSphere(vertex, index,
             ReadFloat(asset, "radius"),
             ReadInt(asset, "sectors", 32),
             ReadInt(asset, "stack", 16));
+        break;
+    case PrimitiveType::BOX:
+        vertex = Renderer::GetCubeVertex();
+        break;
     }
 
-    std::shared_ptr<Mesh> mesh = nullptr;
+    // INITIALIZE MATERIAL
     std::shared_ptr<Material> material = std::make_shared<Material>();
     deserialize(asset["material"], material);
     material->InitializeShader();
 
-    const YAML::Node& texturesYaml = asset["material"]["textures"];
-    for (const YAML::Node& texturePath : texturesYaml)
+    for (const string& texturePath : material->texturePaths)
     {
-        string path = texturePath.as<string>();
-        std::shared_ptr<Texture> texture = std::make_shared<Texture>(path);
+        std::shared_ptr<Texture> texture = std::make_shared<Texture>(texturePath);
         material->AddTexture(texture);
     }
+
+    // INITIALIZE MESH
+    std::shared_ptr<Mesh> mesh = nullptr;
     if (index.empty())
     {
         mesh = std::make_shared<Mesh>(vertex, material);

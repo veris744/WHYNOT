@@ -50,15 +50,15 @@ assets:
         position: [0, 0, 0]
         rotation: [0, 0, 0]
         scale: [50, 50, 50]
-      - name: "MESH"
-        primitive: "CUBE"
-        material:
-          textures: ["assets/2dImages/space.png"]
-          vertexShaderPath: "shaders/vertex.glsl"
-          fragmentShaderPath: "shaders/fragmentSky.glsl"
-          materialData:
-            type: "TEXTURE"
-            shininess: 10
+      - name: "MODEL" 
+        mesh: 
+          primitive: "BOX"
+          material:
+            texturePaths: ["assets/2dImages/space.png"]
+            vertexShaderPath: "shaders/vertex.glsl"
+            fragmentShaderPath: "shaders/fragmentSky.glsl"
+            materialData:
+              type: "TEXTURE"
         
 widgets:
   - type: "IMAGE2D"
