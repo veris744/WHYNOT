@@ -39,6 +39,7 @@ entities:
         rotation: [0, 0, 0]
         scale: [50, 50, 50]
       - name: "MODEL" 
+        enableCulling: false
         mesh: 
           primitive: "BOX"
           material:
@@ -55,6 +56,7 @@ widgets:
     position: [50, 50]
     size: [75, 75]
     color: [1, 0, 0]
+    hasTransparency: true
   - type: "TEXT"
     name: "AliensText"
     text: ""

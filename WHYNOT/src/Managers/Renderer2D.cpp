@@ -1,9 +1,6 @@
 #include "Renderer2D.h"
 
 #include "World.h"
-#include "Graphics/IndexBuffer.h"
-#include "Graphics/VertexArray.h"
-#include "Graphics/VertexBuffer.h"
 #include "UI/Widget.h"
 
 
@@ -20,6 +17,19 @@ const vector<float> Renderer2D::quadVertices = {
 
 
 std::shared_ptr<Renderer2D> Renderer2D::instance = nullptr;
+
+void Renderer2D::PrepareOpaqueRendering()
+{
+    glDisable(GL_BLEND);
+    glDepthMask(GL_TRUE);
+}
+
+void Renderer2D::PrepareTransparentRendering()
+{
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glDepthMask(GL_FALSE);
+}
 
 std::shared_ptr<Renderer2D> Renderer2D::GetInstance()
 {
@@ -46,15 +56,42 @@ void Renderer2D::Render()
 {
     glEnable(GL_DEPTH_TEST);
     glDisable(GL_CULL_FACE);
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glDepthFunc(GL_LEQUAL);
+
+    PrepareOpaqueRendering();
     
     vector<std::shared_ptr<Widget>> widgets = World::GetInstance()->GetWidgets();
     for (const auto& widget : widgets)
     {
         if (!widget->isActive)  continue;
+        RenderOpaqueWidget(widget);
+    }
+
+    PrepareTransparentRendering();
+    
+    for (const auto& widget : transparentWidgets)
+    {
         widget->Render();
-    }    
+    }
+    transparentWidgets.clear();
+}
+
+void Renderer2D::RenderOpaqueWidget(const std::shared_ptr<Widget>& _widget)
+{
+    if (!_widget->isActive) return;
+
+    if (_widget->hasTransparency)
+    {
+        transparentWidgets.push_back(_widget);
+    }
+    else
+    {
+        _widget->Render();
+    }
+    for (const auto& child : _widget->GetChildren())
+    {
+        RenderOpaqueWidget(child);
+    }
 }
 
 void Renderer2D::Clear()
@@ -65,4 +102,7 @@ void Renderer2D::Clear()
         if (!widget->isActive)  continue;
         widget->Clear();
     }
+    
+    glDisable(GL_BLEND);
+    glDepthMask(GL_TRUE);
 }

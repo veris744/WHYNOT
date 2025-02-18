@@ -30,6 +30,7 @@ class Text : public Widget
 public:
     Text(): color(vec3(0, 0, 0)), scale(0), align(TextAlign::LEFT), alignVertical(TextAlignVertical::CENTER), padding()
     {
+        hasTransparency = true;
     }
 
     Text(const string& _text, vec3 _color, float _scale, vec2 _position, const string& _name = "")
@@ -43,6 +44,7 @@ public:
         alignVertical = TextAlignVertical::CENTER;
         size = CalculateSize();
         padding = vec2(0);
+        hasTransparency = true;
     }
 
     string text;
@@ -67,6 +69,5 @@ REGISTER_CLASS(Text, {
     REGISTER_MEMBER(Text, position),
     REGISTER_MEMBER(Text, align),
     REGISTER_MEMBER(Text, alignVertical),
-    REGISTER_MEMBER(Text, padding),
-    REGISTER_MEMBER(Text, layer)
+    REGISTER_MEMBER(Text, padding)
 });

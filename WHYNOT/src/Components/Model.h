@@ -24,6 +24,7 @@ public:
     string path;
     vec3 position = vec3(0,0,0);
     bool invertTexture = false;
+    bool enableCulling = true;
     
     Model();
     Model (const char* _path)
@@ -53,5 +54,6 @@ public:
 REGISTER_CLASS(Model, {
     REGISTER_MEMBER(Model, path),
     REGISTER_MEMBER(Model, position),
-    REGISTER_MEMBER(Model, invertTexture)
+    REGISTER_MEMBER(Model, invertTexture),
+    REGISTER_MEMBER(Model, enableCulling)
 });

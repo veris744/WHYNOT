@@ -23,7 +23,10 @@ public:
     string name;
     vec2 position;
     vec2 size;
+
+    // NOTE: Currently, layers only work with opaque widgets
     unsigned int layer = 0;
+    bool hasTransparency = false;
 
     bool isActive = true;
 

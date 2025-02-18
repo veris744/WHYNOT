@@ -78,6 +78,9 @@ std::shared_ptr<Renderer> Renderer::GetInstance()
 
 void Renderer::Initialize()
 {
+    // glEnable(GL_DEPTH_TEST);
+    // glEnable(GL_BLEND);
+    // glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 void Renderer::Render()
@@ -86,6 +89,7 @@ void Renderer::Render()
     glDepthFunc(GL_LESS);
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
+    glDisable(GL_BLEND);
     
     for (const auto& entity : World::GetInstance()->GetEntities())
     {
@@ -100,7 +104,9 @@ void Renderer::Render()
             {
                 Logger::Log<Renderer>(LogLevel::Warning,  "Renderable entity does not have a model");
             }
+            if (!model->enableCulling)  glDisable(GL_CULL_FACE);
             model->Render();
+            if (!model->enableCulling)  glEnable(GL_CULL_FACE);
         }
 
         if (Debugger::collisionDebugEnabled && entity.second->HasCollision())

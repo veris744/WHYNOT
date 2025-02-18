@@ -30,5 +30,6 @@ REGISTER_CLASS(Image2D, {
     REGISTER_MEMBER(Image2D, color),
     REGISTER_MEMBER(Image2D, position),
     REGISTER_MEMBER(Image2D, size),
-    REGISTER_MEMBER(Image2D, layer)
+    REGISTER_MEMBER(Image2D, layer),
+    REGISTER_MEMBER(Image2D, hasTransparency)
 })
