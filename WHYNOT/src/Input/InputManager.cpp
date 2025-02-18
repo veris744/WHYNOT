@@ -163,7 +163,10 @@ void InputManager::HandleKeyPress(int key, int mods)
     {
         case GLFW_KEY_ESCAPE:
             ScapeInput();
-            break;
+        break;
+        case GLFW_KEY_Q:
+            ScapeInput();
+        break;
         case GLFW_KEY_UP:
             playerController->SetInput(vec3(0,1,0));
             break;

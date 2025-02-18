@@ -14,7 +14,7 @@ class AliensLogic
     std::vector<std::shared_ptr<Alien>> aliens;
     std::queue<std::shared_ptr<Projectile>> availableProjectiles;
     std::vector<std::shared_ptr<Projectile>> usedProjectiles;
-    unsigned int totalAliens = 1;
+    unsigned int totalAliens = 12;
     unsigned int totalProjectiles = 10;
 
     vec3 playgroundDimensions = vec3(10,10,5);
@@ -36,7 +36,7 @@ public:
 
     void AlienDestroyed(const std::shared_ptr<Alien>& alien);
 
-    void PrepareGame(unsigned int _totalAliens = 5);
+    void PrepareGame(unsigned int _totalAliens = 0);
     void StartGame();
     void ShootProjectile();
     void RemoveProjectile(const std::shared_ptr<Projectile>& _projectile);

@@ -23,7 +23,8 @@ Mesh::Mesh(const vector<float>& _vertex, const std::shared_ptr<Material>& _mater
 
 Mesh::Mesh(const vector<float>& _vertex,const vector<unsigned int>& _index, const std::shared_ptr<Material>& _material)
     : material(_material)
-{    
+{
+    
     vertexArray = std::make_shared<VertexArray>();
     vertexArray->Bind();
     vertexArray->AddVertexBuffer(_vertex.data(), _vertex.size());

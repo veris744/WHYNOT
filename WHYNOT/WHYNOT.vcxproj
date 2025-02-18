@@ -984,6 +984,7 @@
     <ClCompile Include="src\UI\Text.cpp" />
     <ClCompile Include="src\UI\Widget.cpp" />
     <ClCompile Include="src\Utils\Debugger.cpp" />
+    <ClCompile Include="src\Utils\OctreeNode.cpp" />
     <ClCompile Include="WHYNOT.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -1034,6 +1035,7 @@
     <ClInclude Include="src\Utils\Debugger.h" />
     <ClInclude Include="src\Utils\Logger.h" />
     <ClInclude Include="src\Utils\MultiDelegate.h" />
+    <ClInclude Include="src\Utils\OctreeNode.h" />
     <ClInclude Include="src\Utils\SingleDelegate.h" />
     <ClInclude Include="src\Utils\Timer.h" />
   </ItemGroup>

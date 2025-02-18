@@ -15,7 +15,10 @@ public:
     int id;
     
     Shader(const string& _vertexShaderPath, const string& _fragmentShaderPath);
-    ~Shader() = default;
+    ~Shader()
+    {
+        glDeleteProgram(id);
+    }
     string ReadShader(const string& ShaderPath);
 
     void Compile();

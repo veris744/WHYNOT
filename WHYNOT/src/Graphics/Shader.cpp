@@ -78,9 +78,7 @@ void Shader::Unbind() const
 }
 
 void Shader::CleanUp()
-{
-    glDeleteProgram(id);
-        
+{        
     for (auto& pair : uboMap) {
         glDeleteBuffers(1, &pair.second);
     }
@@ -125,7 +123,7 @@ void Shader::SetUniformMat4(const char* name, const mat4& value) const
 void Shader::SetUniformObject(const char* name, int bindingPoint, int maxObjects, int sizeObject, void* objects, bool _static)
 {
     GLuint uboObjects;
-
+    
     // Check if UBO for this binding point already exists
     if (uboMap.find(bindingPoint) == uboMap.end()) {
         // Create and store a new UBO
@@ -133,17 +131,28 @@ void Shader::SetUniformObject(const char* name, int bindingPoint, int maxObjects
         uboMap[bindingPoint] = uboObjects;
         glBindBuffer(GL_UNIFORM_BUFFER, uboObjects);
         glBufferData(GL_UNIFORM_BUFFER, maxObjects * sizeObject, nullptr, _static ? GL_STATIC_DRAW : GL_DYNAMIC_DRAW);
-    } else {
+    } else
+    {
         // Reuse existing UBO
         uboObjects = uboMap[bindingPoint];
-        glBindBuffer(GL_UNIFORM_BUFFER, uboObjects);
+        
+        // Validate the UBO
+        if (glIsBuffer(uboObjects) == GL_FALSE) {
+            Logger::Log(LogLevel::Warning,  "Warning: UBO " + to_string(uboObjects) + " is invalid. Recreating.\n");
+            glGenBuffers(1, &uboObjects);
+            uboMap[bindingPoint] = uboObjects;
+            glBindBuffer(GL_UNIFORM_BUFFER, uboObjects);
+            glBufferData(GL_UNIFORM_BUFFER, maxObjects * sizeObject, nullptr, _static ? GL_STATIC_DRAW : GL_DYNAMIC_DRAW);
+        } else {
+            glBindBuffer(GL_UNIFORM_BUFFER, uboObjects);
+        }
     }
 
     // Update UBO contents
     if (objects != nullptr) {
         glBufferSubData(GL_UNIFORM_BUFFER, 0, maxObjects * sizeObject, objects);
     }
-
+    
     // Bind the UBO to the specified binding point
     glBindBufferBase(GL_UNIFORM_BUFFER, bindingPoint, uboObjects);
 

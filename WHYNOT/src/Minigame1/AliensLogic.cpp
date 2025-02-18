@@ -30,21 +30,22 @@ std::shared_ptr<AliensLogic> AliensLogic::GetInstance()
 
 vec2 AliensLogic::GetXBounds() const
 {
-    return vec2(playgroundCenter.x - playgroundDimensions.x / 2, playgroundCenter.x + playgroundDimensions.x / 2);
+    return vec2(playgroundCenter.x - playgroundDimensions.x * 0.5f, playgroundCenter.x + playgroundDimensions.x * 0.5f);
 }
 
 vec2 AliensLogic::GetYBounds() const
 {
-    return vec2(playgroundCenter.y - playgroundDimensions.y / 2, playgroundCenter.y + playgroundDimensions.y / 2);
+    return vec2(playgroundCenter.y - playgroundDimensions.y * 0.5f, playgroundCenter.y + playgroundDimensions.y * 0.5f);
 }
 
 vec2 AliensLogic::GetZBounds() const
 {
-    return vec2(playgroundCenter.z - playgroundDimensions.z / 2, playgroundCenter.z + playgroundDimensions.z / 2);
+    return vec2(playgroundCenter.z - playgroundDimensions.z * 0.5f, playgroundCenter.z + playgroundDimensions.z * 0.5f);
 }
 
 void AliensLogic::AlienDestroyed(const std::shared_ptr<Alien>& _alien)
 {
+    Logger::Log(LogLevel::Info, "AlienDestroying: " + _alien->GetName());
     aliens.erase(ranges::find(aliens, _alien));
     OnTextChangedDelegate.Execute("Aliens : " + std::to_string(aliens.size()));
     _alien->Destroy();
@@ -56,7 +57,7 @@ void AliensLogic::AlienDestroyed(const std::shared_ptr<Alien>& _alien)
 
 void AliensLogic::PrepareGame(unsigned int _totalAliens)
 {
-    totalAliens = _totalAliens;
+    totalAliens = _totalAliens <= 0 ? totalAliens : _totalAliens;
     for (unsigned int i = 0; i < totalAliens; i++)
     {
         std::shared_ptr<Alien> temp = std::make_shared<Alien>();
@@ -105,6 +106,7 @@ void AliensLogic::ShootProjectile()
 
 void AliensLogic::RemoveProjectile(const std::shared_ptr<Projectile>& _projectile)
 {
+    Logger::Log(LogLevel::Info, "ProjDestroying: " + _projectile->GetName());
     _projectile->DisableProjectile();
     
     if (usedProjectiles.empty() && availableProjectiles.empty()) return; // Game is stopping and data is being cleaned already

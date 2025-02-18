@@ -5,6 +5,12 @@
 class Helper
 {
     static GLFWwindow* window;
+    static vec3 sceneDimensions;
+    static vec3 sceneCenter;
+
+    static vec2 XBounds;
+    static vec2 YBounds;
+    static vec2 ZBounds;
     
 public:
     static float windowWidth;
@@ -17,6 +23,12 @@ public:
     static void Draw();
     static void Terminate();
     static void SetCursorVisible(bool _isVisible);
+
+    static vec3 GetSceneDimensions() { return sceneDimensions; }
+    static vec3 GetSceneCenter() { return sceneCenter; }
+    static vec2 GetXBounds() { return XBounds; }
+    static vec2 GetYBounds() { return YBounds; }
+    static vec2 GetZBounds() { return ZBounds; }
 
     // Generate sphere vertices
     static void generateSphere(std::vector<float>& vertices, std::vector<unsigned int>& indices, float radius, int sectors, int stacks);

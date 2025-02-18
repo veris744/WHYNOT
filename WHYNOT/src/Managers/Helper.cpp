@@ -15,6 +15,12 @@ GLFWwindow* Helper::window = nullptr;
 float Helper::windowHeight = 600;
 float Helper::windowWidth = 800;
 
+vec3 Helper::sceneDimensions = vec3(30, 30, 30);
+vec3 Helper::sceneCenter = vec3(0, 0, 0);
+vec2 Helper::XBounds = vec2(sceneCenter.x - sceneDimensions.x * 0.5f, sceneCenter.x + sceneDimensions.x * 0.5f);
+vec2 Helper::YBounds = vec2(sceneCenter.y - sceneDimensions.y * 0.5f, sceneCenter.y + sceneDimensions.y * 0.5f);
+vec2 Helper::ZBounds = vec2(sceneCenter.z - sceneDimensions.z * 0.5f, sceneCenter.z + sceneDimensions.z * 0.5f);
+
 void Helper::InitializeGlfw()
 {
     glfwInit();
@@ -74,8 +80,9 @@ void Helper::SetCursorVisible(bool _isVisible)
     glfwSetInputMode(window, GLFW_CURSOR, _isVisible ? GLFW_CURSOR_NORMAL : GLFW_CURSOR_DISABLED);
 }
 
+
 void Helper::generateSphere(std::vector<float>& vertices, std::vector<unsigned int>& indices, float radius, int sectors,
-    int stacks)
+                            int stacks)
 {
     const float PI = 3.14159265359f;
 

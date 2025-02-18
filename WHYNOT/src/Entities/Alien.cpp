@@ -103,6 +103,7 @@ void Alien::OnCollision(const std::shared_ptr<Entity>& _otherEntity, vec3 _norma
     if (std::dynamic_pointer_cast<Projectile>(_otherEntity))
     {
         std::shared_ptr<Alien> self = std::static_pointer_cast<Alien>(shared_from_this());
+        isActive = false;
         AliensLogic::GetInstance()->AlienDestroyed(self);
         return;
     }

@@ -6,10 +6,12 @@
 #include "Components/Camera.h"
 #include "Components/Collider.h"
 #include "Components/LightSource.h"
+#include "Graphics/Shader.h"
 #include "Input/InputManager.h"
 #include "Minigame1/AliensLogic.h"
 #include "UI/Widget.h"
 #include "Reader/AssetReader.h"
+#include "Utils/OctreeNode.h"
 #include "Utils/Timer.h"
 
 std::shared_ptr<World> World::instance = nullptr;
@@ -61,31 +63,31 @@ void World::Update(float deltaTime)
 
 void World::CheckCollisions()
 {
-    for (auto it = entities.begin(); it != entities.end(); it++)
-    {
-        if (!it->second || !it->second->isActive)
-        {
-            continue;
+    AABB worldBounds = {vec3(Helper::GetXBounds().x, Helper::GetYBounds().x, Helper::GetZBounds().x), 
+        vec3(Helper::GetXBounds().y, Helper::GetYBounds().y, Helper::GetZBounds().y)};
+    
+    OctreeNode root(worldBounds);
+    for (auto& [id, entity] : entities) {
+        if (entity && entity->isActive && entity->HasCollision()) {
+            root.Insert(entity);
         }
-        if (it->second->HasCollision())
-        {
-            for (auto it2 = std::next(it); it2 != entities.end(); it2++)
-            {
-                if (it2->second && it2->second->HasCollision() && it2->second->isActive)
-                {
-                    std::shared_ptr<Collider> c1 = it->second->GetComponent<Collider>();
-                    std::shared_ptr<Collider> c2 = it2->second->GetComponent<Collider>();
-                    if (c1->Collides(c2))
-                    {
-                        c1->CollisionDelegate.Execute(it2->second, normalize(c1->GetWorldPosition() - c2->GetWorldPosition()));
-                        c2->CollisionDelegate.Execute(it->second, normalize(c2->GetWorldPosition() - c1->GetWorldPosition()));
-                    }
-                }
-                if (!it->second || !it->second->isActive)
-                {
-                    break;
-                }
-            }
+    }
+    
+    std::set<pair<std::shared_ptr<Entity>, std::shared_ptr<Entity>>> collisions;
+    root.QueryCollisions(collisions);
+    
+    for (const auto& collisionPair  : collisions) {
+        const auto& e1 = collisionPair.first;
+        const auto& e2 = collisionPair.second;
+        
+        if (!e1->isActive || !e2->isActive) continue;
+        
+        auto c1 = e1->GetComponent<Collider>();
+        auto c2 = e2->GetComponent<Collider>();
+        if (c1->Collides(c2)) {
+            vec3 normal = normalize(c1->GetWorldPosition() - c2->GetWorldPosition());
+            c1->CollisionDelegate.Execute(e2, normal);
+            c2->CollisionDelegate.Execute(e1, -normal);
         }
     }
 }
@@ -263,6 +265,10 @@ void World::UnloadScene()
     playerEntity = nullptr;
     currentCameraIndex = 0;
     InputManager::GetInstance()->Clear();
+    for (const auto& shader : Renderer::GetInstance()->shaders_loaded)
+    {
+        shader->CleanUp();
+    }
 }
 
 void World::EndApplication()

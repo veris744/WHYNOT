@@ -99,5 +99,5 @@ public:
     static bool IsSceneLoaded() { return isSceneLoaded; }
     void EndApplication();
 
-    static void ShowLoading();
+    // static void ShowLoading();
 };
