@@ -23,6 +23,7 @@ public:
     string name;
     vec2 position;
     vec2 size;
+    unsigned int layer = 0;
 
     bool isActive = true;
 

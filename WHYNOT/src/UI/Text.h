@@ -67,5 +67,6 @@ REGISTER_CLASS(Text, {
     REGISTER_MEMBER(Text, position),
     REGISTER_MEMBER(Text, align),
     REGISTER_MEMBER(Text, alignVertical),
-    REGISTER_MEMBER(Text, padding),    
+    REGISTER_MEMBER(Text, padding),
+    REGISTER_MEMBER(Text, layer)
 });

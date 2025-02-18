@@ -35,7 +35,7 @@ public:
     static void InitFreeType();
     void LoadFont(const string& _fontPath = "");
     
-    void RenderText(string text, float x, float y, float scale, vec3 color);
+    void RenderText(string text, float x, float y, float scale, vec3 color, unsigned int layer);
     void Clear();
 
     const std::map<GLchar, Character>& GetCharacters() const { return Characters; };

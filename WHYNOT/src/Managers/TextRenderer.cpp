@@ -83,12 +83,13 @@ void TextRenderer::LoadFont(const string& _fontPath)
 
 }
 
-void TextRenderer::RenderText(string text, float x, float y, float scale, vec3 color)
+void TextRenderer::RenderText(string text, float x, float y, float scale, vec3 color, unsigned int layer)
 {
     defaultShader->Bind();
     defaultShader->SetUniformVec3("textColor", color);
     mat4 projection = glm::ortho(0.0f, Helper::windowWidth, Helper::windowHeight, 0.0f);
     defaultShader->SetUniformMat4("projection", projection);
+    defaultShader->SetUniformFloat("layer", 0.1f * layer);
     glActiveTexture(GL_TEXTURE0);
     glBindVertexArray(VAO);
 

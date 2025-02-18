@@ -60,6 +60,7 @@ void Image2D::Render()
     shader->SetUniformVec2("uPosWidget", GetPixelPosition());
     shader->SetUniformVec2("uSize", size);
     shader->SetUniformVec3("uColor", color);
+    shader->SetUniformFloat("uLayer", 0.1f * layer);
     
     mat4 projection = glm::ortho(0.0f, Helper::windowWidth, Helper::windowHeight, 0.0f);
     shader->SetUniformMat4("uProjection", projection);

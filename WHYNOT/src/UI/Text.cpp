@@ -53,7 +53,7 @@ void Text::Render()
         pixelPos.y = pixelPos.y + parentSize.y * 0.5f - size.y - padding.y;
     }
     
-    TextRenderer::GetInstance()->RenderText(text, pixelPos.x, pixelPos.y, scale, color);
+    TextRenderer::GetInstance()->RenderText(text, pixelPos.x, pixelPos.y, scale, color, layer);
 }
 
 void Text::Clear()
