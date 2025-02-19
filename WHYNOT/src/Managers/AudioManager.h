@@ -1,5 +1,4 @@
 #pragma once
-#include <memory>
 #include <string>
 #include <unordered_map>
 #include <AL/al.h>
@@ -9,23 +8,14 @@ using namespace std;
 
 class AudioManager
 {
-    static std::shared_ptr<AudioManager> instance;
+    static unordered_map<std::string, ALuint> loadedSounds;
 
-    ALCdevice* device = nullptr;
-    ALCcontext* context = nullptr;
+    static ALCdevice* device;
+    static ALCcontext* context;
 
-    AudioManager() = default;
 public:
-    AudioManager(const AudioManager&);
-    ~AudioManager();
-    static std::shared_ptr<AudioManager> GetInstance();
+    static void Initialize();
+    static void ShutDown();
+    static ALuint LoadWav(const string& _filename);
 
-    void Initialize();
-    void PlaySound(const string& _filename, bool loop = false);
-
-
-private:
-    unordered_map<std::string, ALuint> soundBuffers;
-    ALuint LoadWav(const string& _filename);
-    
 };

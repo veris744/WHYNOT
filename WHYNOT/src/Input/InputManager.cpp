@@ -296,7 +296,7 @@ void InputManager::EnableInput(bool value)
         isInputEnabled = false;
         glfwSetInputMode(Helper::GetWindow(), GLFW_STICKY_KEYS, GLFW_FALSE);
         glfwSetInputMode(Helper::GetWindow(), GLFW_STICKY_MOUSE_BUTTONS, GLFW_FALSE);
-        Logger::Log(LogLevel::Info, "Input disabled");
+        // Logger::Log(LogLevel::Info, "Input disabled");
     }
     else
     {
@@ -311,7 +311,7 @@ void InputManager::EnableInput(bool value)
         {
             glfwSetInputMode(Helper::GetWindow(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
         }
-        Logger::Log(LogLevel::Info, "Input enabled");
+        // Logger::Log(LogLevel::Info, "Input enabled");
     }
 }
 

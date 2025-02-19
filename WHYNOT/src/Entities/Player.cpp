@@ -1,5 +1,6 @@
 #include "Player.h"
 
+#include "Components/Audio.h"
 #include "Components/Camera.h"
 #include "Components/PlayerController.h"
 #include "Components/Transform.h"
@@ -31,6 +32,14 @@ void Player::Initialize()
         std::shared_ptr<PlayerController> controller = std::make_shared<PlayerController>();
         controller->SetPositionLocked(false);
         AddComponent(controller);
+    }
+
+    if (!GetComponent<Audio>())
+    {
+        std::shared_ptr<Audio> audioSource = std::make_shared<Audio>();
+        audioSource->AddAudioSource(AudioSource("Shoot", "assets/sounds/shoot.wav"));
+        audioSource->AddAudioSource(AudioSource("NoShot", "assets/sounds/noshot.wav"));
+        AddComponent(audioSource);
     }
     
     World::GetInstance()->SetPlayer(std::static_pointer_cast<Player>(shared_from_this()));

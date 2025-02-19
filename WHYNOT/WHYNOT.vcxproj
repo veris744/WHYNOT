@@ -138,6 +138,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\include\glad\src\glad.c" />
+    <ClCompile Include="src\Components\Audio.cpp" />
     <ClCompile Include="src\Components\Camera.cpp" />
     <ClCompile Include="src\Components\CircleCollider.cpp" />
     <ClCompile Include="src\Components\Collider.cpp" />
@@ -988,6 +989,7 @@
     <ClCompile Include="WHYNOT.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Components\Audio.h" />
     <ClInclude Include="src\Components\Camera.h" />
     <ClInclude Include="src\Components\CircleCollider.h" />
     <ClInclude Include="src\Components\Collider.h" />

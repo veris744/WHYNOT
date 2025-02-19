@@ -16,13 +16,9 @@ int main()
 	{
 		return -1;
 	}
+	
 	Helper::InitializeGlad();
-	bool b = std::is_same_v<vec3, vec3>;
-	if (b)
-	{
-		std::cout << b << std::endl;
-	}
-	AudioManager::GetInstance()->Initialize();
+	AudioManager::Initialize();
 	World::GetInstance()->Initialize();
 	Renderer::GetInstance()->Initialize();
 	Renderer2D::GetInstance()->Initialize();
@@ -42,7 +38,6 @@ int main()
 		
 		if (World::IsSceneLoaded())
 		{
-			//InputManager::EnableInput(true);
 			World::GetInstance()->Update(deltaTime);
 			
 			Renderer::GetInstance()->Render();
@@ -56,6 +51,7 @@ int main()
 		Helper::EndUpdate(deltaTime);
 	}
 
+	AudioManager::ShutDown();
 	Helper::Terminate();
 	return 0;
 }

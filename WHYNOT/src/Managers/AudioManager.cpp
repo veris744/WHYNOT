@@ -1,41 +1,12 @@
 #include "AudioManager.h"
 
 #include <fstream>
-#include <thread>
 
 #include "Utils/Logger.h"
 
-std::shared_ptr<AudioManager> AudioManager::instance = nullptr;
-
-AudioManager::AudioManager(const AudioManager&)
-{
-    
-}
-
-AudioManager::~AudioManager()
-{
-    for (const auto& buffer : soundBuffers) {
-        alDeleteBuffers(1, &buffer.second);
-    }
-    if (context) {
-        alcMakeContextCurrent(nullptr);
-        alcDestroyContext(context);
-        context = nullptr;
-    }
-    if (device) {
-        alcCloseDevice(device);
-        device = nullptr;
-    }
-}
-
-std::shared_ptr<AudioManager> AudioManager::GetInstance()
-{
-    if (!instance)
-    {
-        instance = std::make_shared<AudioManager>(AudioManager());
-    }
-    return instance;
-}
+unordered_map<string, ALuint> AudioManager::loadedSounds;
+ALCdevice* AudioManager::device = nullptr;
+ALCcontext* AudioManager::context = nullptr;
 
 void AudioManager::Initialize()
 {
@@ -56,41 +27,18 @@ void AudioManager::Initialize()
     alcMakeContextCurrent(context);
 }
 
-void AudioManager::PlaySound(const string& _filename, bool loop)
+void AudioManager::ShutDown()
 {
-    ALuint buffer = LoadWav(_filename);
-    if (buffer == 0) {
-        Logger::Log(LogLevel::Error, "Failed to load sound: " + _filename);
-        return;
-    }
-
-    ALuint source;
-    alGenSources(1, &source);
-    alSourcei(source, AL_BUFFER, buffer);
-    
-    // Set looping mode
-    alSourcei(source, AL_LOOPING, loop ? AL_TRUE : AL_FALSE);
-
-    alSourcePlay(source);
-
-    // If the sound is not looping, delete the source after it finishes playing
-    if (!loop) {
-        thread([source]() {
-            ALint state;
-            do {
-                alGetSourcei(source, AL_SOURCE_STATE, &state);
-            } while (state == AL_PLAYING);
-
-            alDeleteSources(1, &source);
-        }).detach();
+    for (const auto& [name, source] : loadedSounds)
+    {
+        alDeleteSources(1, &source);
     }
 }
 
-
 ALuint AudioManager::LoadWav(const string& _filename)
 {
-    if (soundBuffers.find(_filename) != soundBuffers.end()) {
-        return soundBuffers[_filename];
+    if (loadedSounds.find(_filename) != loadedSounds.end()) {
+        return loadedSounds[_filename];
     }
 
     ifstream file(_filename, std::ios::binary);
@@ -126,6 +74,6 @@ ALuint AudioManager::LoadWav(const string& _filename)
     alGenBuffers(1, &buffer);
     alBufferData(buffer, format, data.data(), dataSize, sampleRate);
 
-    soundBuffers[_filename] = buffer;
+    loadedSounds[_filename] = buffer;
     return buffer;
 }

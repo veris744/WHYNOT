@@ -2,6 +2,7 @@
 
 #include <random>
 
+#include "Components/Audio.h"
 #include "Components/CircleCollider.h"
 #include "Components/Movement.h"
 #include "Components/Transform.h"
@@ -94,14 +95,14 @@ void AliensLogic::ShootProjectile()
 {
     if (availableProjectiles.empty())
     {
-        AudioManager::GetInstance()->PlaySound("assets/sounds/noshot.wav");
+        World::GetInstance()->GetPlayer()->GetComponent<Audio>()->Play("NoShot");
         return;
     }
     usedProjectiles.push_back(availableProjectiles.front());
     availableProjectiles.pop();
 
     usedProjectiles.back()->GetShot();
-    AudioManager::GetInstance()->PlaySound("assets/sounds/shoot.wav");
+    World::GetInstance()->GetPlayer()->GetComponent<Audio>()->Play("Shoot");
 }
 
 void AliensLogic::RemoveProjectile(const std::shared_ptr<Projectile>& _projectile)
