@@ -20,4 +20,5 @@ public:
     Entity* parent;
 
     virtual void Update(float deltaTime) = 0;
+    virtual void Initialize() {};
 };

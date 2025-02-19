@@ -49,7 +49,7 @@ void Alien::Initialize()
     if (!GetComponent<Movement>())
     {
         movement = std::make_shared<Movement>();
-        movement->maxSpeed = 4.0f;
+        movement->maxSpeed = 3.0f;
         AddComponent(movement);
     }
     else

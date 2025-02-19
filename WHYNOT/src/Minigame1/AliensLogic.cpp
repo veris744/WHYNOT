@@ -9,7 +9,9 @@
 #include "Entities/Alien.h"
 #include "Entities/Projectile.h"
 #include "Managers/AudioManager.h"
+#include "Managers/Helper.h"
 #include "Managers/World.h"
+#include "Utils/Parser.h"
 
 float getRandomFloat(float min, float max) {
     static std::random_device rd;
@@ -46,7 +48,6 @@ vec2 AliensLogic::GetZBounds() const
 
 void AliensLogic::AlienDestroyed(const std::shared_ptr<Alien>& _alien)
 {
-    Logger::Log(LogLevel::Info, "AlienDestroying: " + _alien->GetName());
     aliens.erase(ranges::find(aliens, _alien));
     OnTextChangedDelegate.Execute("Aliens : " + std::to_string(aliens.size()));
     _alien->Destroy();
@@ -83,9 +84,12 @@ void AliensLogic::PrepareGame(unsigned int _totalAliens)
 
 void AliensLogic::StartGame()
 {
+    Logger::Log(LogLevel::Info, "Bounds x: " + Parser::Parse(GetXBounds())
+        + " Bounds y: " + Parser::Parse(GetYBounds()) + " Bounds z: " + Parser::Parse(GetZBounds()));
     for (const auto& alien : aliens)
     {
         CalculateRandomPosition(alien);
+        Logger::Log(LogLevel::Info, "Alien pos: " + Parser::Parse(alien->GetComponent<Transform>()->position));
         CalculateRandomDirection(alien);
         alien->isActive = true;
     }
@@ -107,7 +111,6 @@ void AliensLogic::ShootProjectile()
 
 void AliensLogic::RemoveProjectile(const std::shared_ptr<Projectile>& _projectile)
 {
-    Logger::Log(LogLevel::Info, "ProjDestroying: " + _projectile->GetName());
     _projectile->DisableProjectile();
     
     if (usedProjectiles.empty() && availableProjectiles.empty()) return; // Game is stopping and data is being cleaned already
@@ -134,10 +137,12 @@ void AliensLogic::CalculateRandomPosition(const std::shared_ptr<Alien>& alien)
     vec2 xBounds = GetXBounds();
     vec2 yBounds = GetYBounds();
     vec2 zBounds = GetZBounds();
+
+    float radius = alien->GetComponent<CircleCollider>()->radius;
     
-    alien->GetComponent<Transform>()->position = vec3(getRandomFloat(xBounds.x, xBounds.y),
-        getRandomFloat(yBounds.x, yBounds.y),
-        getRandomFloat(zBounds.x, zBounds.y));
+    alien->GetComponent<Transform>()->position = vec3(getRandomFloat(xBounds.x+radius, xBounds.y-radius),
+        getRandomFloat(yBounds.x+radius, yBounds.y-radius),
+        getRandomFloat(zBounds.x+radius, zBounds.y-radius));
 
     for (const auto& otherAlien : aliens)
     {

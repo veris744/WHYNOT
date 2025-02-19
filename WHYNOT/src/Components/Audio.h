@@ -32,7 +32,7 @@ public:
     
     vector<AudioSource> audios;
 
-    void Initialize();
+    void Initialize() override;
     void Update(float deltaTime) override {};
     void AddAudioSource(const AudioSource& audio);
     void Play(const string& audioName);

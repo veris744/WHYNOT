@@ -51,6 +51,7 @@ public:
         else if (is_base_of_v<Model, T>)   isRendered = true;
         
         _component->parent = this;
+        _component->Initialize();
         components.push_back(_component);
     }
 
