@@ -13,12 +13,12 @@ public:
         type = ColliderType::CIRCLE;
     }
     
-    bool Collides(const std::shared_ptr<Collider>& other) override;
+    bool Collides(Collider* other) override;
     bool Collides(float _rad1, vec3 _pos1) override;
     bool CheckInBounds(const vec2& xBounds, const vec2& yBounds, const vec2& zBounds, bool triggerDelegate = true) override;
     bool OverlapsBounds(const vec2& xBounds, const vec2& yBounds, const vec2& zBounds, bool triggerDelegate = true) override;
     void Render() override;
-    void Update(float deltaTime) override;
+    void Update(float deltaTime) override {};
     
     SingleDelegate<vec3> OnOutOfBoundsDelegate;
     

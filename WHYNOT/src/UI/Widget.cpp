@@ -1,6 +1,7 @@
 #include "Widget.h"
 
 #include "Managers/Helper.h"
+#include "Managers/World.h"
 
 
 void Widget::AddWidget(std::shared_ptr<Widget> _widget)
@@ -23,6 +24,11 @@ void Widget::Clear()
     {
         widget->Clear();
     }
+}
+
+void Widget::Destroy()
+{
+    World::GetInstance()->MarkForDestruction(shared_from_this());
 }
 
 vec2 Widget::GetPixelPosition() const

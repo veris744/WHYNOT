@@ -49,6 +49,7 @@ public:
     Material(const vector<std::shared_ptr<Texture>>& _texures, const string& _vertexShaderPath = DEFAULT_VERTEX_SHADER_PATH,
         const string& _fragmentShaderPath = DEFAULT_FRAGMENT_SHADER_PATH, MaterialData _materialData = MaterialData());
     Material() = default;
+    ~Material() = default;
 
     MaterialData materialData;
     string vertexShaderPath = DEFAULT_VERTEX_SHADER_PATH;

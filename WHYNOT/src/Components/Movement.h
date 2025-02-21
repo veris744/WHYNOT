@@ -10,7 +10,7 @@ class Transform;
 
 class Movement : public Component
 {
-    std::shared_ptr<Transform> transform;
+    Transform* transform;
     
 public:
     vec3 speed;
@@ -22,8 +22,9 @@ public:
     {
         name = "MOVEMENT";
     }
+    ~Movement() override = default;
 
-    void Update(float deltaTime);
+    void Update(float deltaTime) override;
     void QuickStop()
     {
         speed = vec3(0, 0, 0);

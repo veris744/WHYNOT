@@ -32,5 +32,5 @@ void Entity::Update(float deltaTime)
 
 void Entity::Destroy()
 {
-    World::GetInstance()->MarkForDestruction(name);
+    World::GetInstance()->MarkForDestruction(shared_from_this());
 }

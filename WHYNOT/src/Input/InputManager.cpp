@@ -35,12 +35,6 @@ std::shared_ptr<InputManager> InputManager::GetInstance()
     return instance;
 }
 
-
-// void InputManager::Initialize()
-// {
-//     
-// }
-
 void InputManager::InitKeys()
 {
     for (const auto& actionPair : actions)
@@ -231,7 +225,7 @@ void InputManager::HandleMouseButtonPress(int key)
         glfwGetCursorPos(Helper::GetWindow(), &xpos, &ypos);
         OnClickDelegate.Execute(vec2(xpos, ypos));
     }
-    else if (inputMode == InputMode::GameOnly)
+    else if (inputMode == InputMode::GameOnly && key == GLFW_MOUSE_BUTTON_LEFT)
     {
         if (!playerController) return;
         playerController->Shoot();

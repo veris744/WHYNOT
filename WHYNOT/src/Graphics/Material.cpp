@@ -13,8 +13,13 @@ Material::Material(const char* _texturePath, const string& _vertexShaderPath, co
     InitializeShader();
     if (std::strcmp(_texturePath, ""))
     {
-        std::shared_ptr<Texture> texture = std::make_shared<Texture>(_texturePath);
+        std::shared_ptr<Texture> texture = Renderer::GetInstance()->GetLoadedTexture(_texturePath);
+        if (!texture)
+        {
+            texture = std::make_shared<Texture>(_texturePath);
+        }
         textures.push_back(texture);
+        Renderer::GetInstance()->textures_loaded.push_back(texture);
     }
 }
 
@@ -26,8 +31,13 @@ Material::Material(const vector<string>& _texturePaths, const string& _vertexSha
 
     for (string texturePath : _texturePaths)
     {
-        std::shared_ptr<Texture> texture = std::make_shared<Texture>(texturePath);
+        std::shared_ptr<Texture> texture = Renderer::GetInstance()->GetLoadedTexture(texturePath);
+        if (!texture)
+        {
+            texture = std::make_shared<Texture>(texturePath);
+        }
         textures.push_back(texture);
+        Renderer::GetInstance()->textures_loaded.push_back(texture);
     }    
     
 }

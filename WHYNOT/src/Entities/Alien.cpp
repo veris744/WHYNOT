@@ -22,25 +22,25 @@ void Alien::Initialize()
 
     if (!GetComponent<Transform>())
     {
-        std::shared_ptr<Transform> transform = std::make_shared<Transform>();
+        std::unique_ptr<Transform> transform = std::make_unique<Transform>();
         transform->scale = vec3(0.3f, 0.3f, 0.3f);
-        AddComponent(transform);
+        AddComponent(std::move(transform));
     }
 
     if (!GetComponent<Model>())
     {
-        std::shared_ptr<Material> mat = std::make_shared<Material>("", DEFAULT_VERTEX_SHADER_PATH, "shaders/fragmentColor.glsl");
+        Material* mat = new Material("", DEFAULT_VERTEX_SHADER_PATH, "shaders/fragmentColor.glsl");
         mat->materialData.type = MaterialType::COLOR;
-        std::shared_ptr<Model> model = std::make_shared<Model>("assets/ufo/PinkAlien.obj", mat);
+        std::unique_ptr<Model> model = std::make_unique<Model>("assets/ufo/PinkAlien.obj", mat);
         model->position = vec3(-0.3f, -0.3f, -0.35f);
-        AddComponent(model);
+        AddComponent(std::move(model));
     }
 
     
     if (!GetComponent<CircleCollider>())
     {
-        std::shared_ptr<CircleCollider> collider = std::make_shared<CircleCollider>(0.65);
-        AddComponent(collider);
+        std::unique_ptr<CircleCollider> collider = std::make_unique<CircleCollider>(0.65);
+        AddComponent(std::move(collider));
     }
     
     GetComponent<CircleCollider>()->OnOutOfBoundsDelegate.Bind(&Alien::OnOutOfBounds, this);
@@ -48,9 +48,10 @@ void Alien::Initialize()
 
     if (!GetComponent<Movement>())
     {
-        movement = std::make_shared<Movement>();
+        std::unique_ptr<Movement> temp = std::make_unique<Movement>();
+        movement = temp.get();
         movement->maxSpeed = 3.0f;
-        AddComponent(movement);
+        AddComponent(std::move(temp));
     }
     else
     {
@@ -64,13 +65,19 @@ void Alien::Update(float _deltaTime)
 {
     Entity::Update(_deltaTime);
     
-    std::shared_ptr<CircleCollider> collider = GetComponent<CircleCollider>();
+    CircleCollider* collider = GetComponent<CircleCollider>();
     collider->CheckInBounds(AliensLogic::GetInstance()->GetXBounds(),
         AliensLogic::GetInstance()->GetYBounds(),
         AliensLogic::GetInstance()->GetZBounds());
     
     GetComponent<Transform>()->SetRotation(GetComponent<Transform>()->rotation.pitch,
     GetComponent<Transform>()->rotation.yaw += 20*_deltaTime,GetComponent<Transform>()->rotation.roll);
+}
+
+void Alien::ClearComponents()
+{
+    movement = nullptr;
+    Entity::ClearComponents();
 }
 
 

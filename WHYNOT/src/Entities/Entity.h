@@ -16,7 +16,7 @@ class Entity : public std::enable_shared_from_this<Entity>
     static unsigned int counter;
     
 protected:
-    vector<std::shared_ptr<Component>> components = vector<std::shared_ptr<Component>>();
+    vector<std::unique_ptr<Component>> components = vector<std::unique_ptr<Component>>();
     bool isCamera = false;
     bool isLight = false;
     bool isRendered = false;
@@ -31,14 +31,17 @@ public:
     Entity(const string& _name, bool _isCamera = false, bool _isLight = false)
         : isCamera(_isCamera), isLight(_isLight), name(_name)
         {}
-    virtual ~Entity() = default;
+    virtual ~Entity()
+    {
+        //Logger::Log(LogLevel::Info, "Deleting Entity " + name);
+    };
     virtual void Initialize();
     
     string name;
     bool isActive = true;
     
     template <typename T>
-    void AddComponent(const std::shared_ptr<T>& _component)
+    void AddComponent(std::unique_ptr<T> _component)
     {
         if (GetComponent<T>())
         {
@@ -52,15 +55,15 @@ public:
         
         _component->parent = this;
         _component->Initialize();
-        components.push_back(_component);
+        components.push_back(std::move(_component));
     }
 
     template <typename T>
-    std::shared_ptr<T> GetComponent()
+    T* GetComponent()
     {
         for (const auto& component : components)
         {
-            std::shared_ptr<T> derived = std::dynamic_pointer_cast<T>(component);
+            T* derived = dynamic_cast<T*>(component.get());
             if (derived)
             {
                 return derived;
@@ -80,7 +83,7 @@ public:
     void UpdateTrigger(float deltaTime);
     virtual void Update(float deltaTime);
     virtual void Destroy();
-    void ClearComponents()
+    virtual void ClearComponents()
     {
         components.clear();
     }

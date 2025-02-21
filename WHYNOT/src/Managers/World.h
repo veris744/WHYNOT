@@ -12,11 +12,12 @@ class World
 {
     static std::shared_ptr<World> instance;
     unordered_map<string, std::shared_ptr<Entity>> entities;
-    vector<std::shared_ptr<Camera>> cameras;
-    vector<std::shared_ptr<LightSource>> lights;
+    vector<Camera*> cameras;
+    vector<LightSource*> lights;
     std::shared_ptr<Player> playerEntity;
 
-    std::vector<std::shared_ptr<Entity>> toBeDestroyed;
+    set<std::shared_ptr<Entity>> toBeDestroyed;
+    set<std::shared_ptr<Widget>> toBeDestroyedWidgets;
 
     vector<std::shared_ptr<Widget>> widgets;
 
@@ -58,19 +59,22 @@ public:
     
         if (_entity->IsCamera())
         {
-            std::shared_ptr<Camera> camera = _entity->template GetComponent<Camera>();
+            Camera* camera = _entity->template GetComponent<Camera>();
             cameras.push_back(camera);
         }
         if (_entity->IsLight())
         {
-            std::shared_ptr<LightSource> light = _entity->template GetComponent<LightSource>();
+            LightSource* light = _entity->template GetComponent<LightSource>();
             lights.push_back(light);
         }
     }
 
-    void MarkForDestruction(const string& _entityName);
+    void MarkForDestruction(const std::shared_ptr<Entity>& _entity);
+    void MarkForDestruction(const std::shared_ptr<Widget>& _widget);
 private:
-    void RemoveEntity(const string& _entityName);
+    void DestroyAsset(const std::shared_ptr<Entity>& _entity);
+    void DestroyAsset(const std::shared_ptr<Widget>& _widget);
+    
     std::shared_ptr<Widget> FindWidget(const string& _name, const vector<std::shared_ptr<Widget>>& _widgets) const;
 
 public:
@@ -79,13 +83,13 @@ public:
     unordered_map<string, std::shared_ptr<Entity>> GetEntities() const { return entities; }
 
     unsigned int GetCameraCount() const { return cameras.size(); }
-    std::shared_ptr<Camera> GetCamera(unsigned int _index) const;
-    std::shared_ptr<Camera> GetCurrentCamera() const;
+    Camera* GetCamera(unsigned int _index) const;
+    Camera* GetCurrentCamera() const;
     void SetCurrentCamera(unsigned int _index) { currentCameraIndex = _index; }
     void SetCurrentCamera(const string& _entityName);
     
     unsigned int GetLightCount() const { return lights.size(); }
-    std::shared_ptr<LightSource> GetLightSource(unsigned int _index) const;
+    LightSource* GetLightSource(unsigned int _index) const;
     vector<LightData> GetLightDataList() const;
 
     vector<std::shared_ptr<Widget>> GetWidgets() const { return widgets; }

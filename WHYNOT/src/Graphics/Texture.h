@@ -27,14 +27,7 @@ class Texture
     public:
         Texture(const string& filePath);
         Texture(unsigned char *_data, unsigned int _bufferSize, int _width, int _height, int _channels);
-        ~Texture()
-        {
-            if (data)
-            {
-                delete[] data;
-                data = nullptr;
-            }
-        }
+        ~Texture();
         Texture(const Texture& _texture)
         {
             id = _texture.id;

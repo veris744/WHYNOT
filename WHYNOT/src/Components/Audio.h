@@ -28,7 +28,10 @@ class Audio : public Component
     unordered_map<string, AudioSource> audioSources;
     
 public:
-    Audio() = default;
+    Audio()
+    {
+        name = "AUDIO";
+    }
     
     vector<AudioSource> audios;
 

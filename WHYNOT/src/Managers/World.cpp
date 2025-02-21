@@ -96,38 +96,52 @@ void World::Clean()
 {
     for (const auto& entity : toBeDestroyed)
     {
-        RemoveEntity(entity->GetName());
+        DestroyAsset(entity);
     }
     toBeDestroyed.clear();
+    for (const auto& widget : toBeDestroyedWidgets)
+    {
+        DestroyAsset(widget);
+    }
+    toBeDestroyedWidgets.clear();
 }
 
-void World::MarkForDestruction(const string& _entityName)
+
+void World::MarkForDestruction(const std::shared_ptr<Entity>& _entity)
 {
-    auto it = std::find_if(toBeDestroyed.begin(), toBeDestroyed.end(), [&](const std::shared_ptr<Entity>& entity) {
-        return entity->GetName() == _entityName;
-    });
-    if (it == toBeDestroyed.end())
-    {
-        toBeDestroyed.push_back(entities.at(_entityName));
-    }
+    toBeDestroyed.insert(_entity);
 }
 
-void World::RemoveEntity(const string& _entityName)
+void World::MarkForDestruction(const std::shared_ptr<Widget>& _widget)
 {
-    std::shared_ptr<Entity> entity = entities.at(_entityName);
-    if (entity->IsCamera())
-    {
-        cameras.erase(std::find(cameras.begin(), cameras.end(), entity->GetComponent<Camera>()));
-    }
-    if (entity->IsLight())
-    {
-        lights.erase(std::find(lights.begin(), lights.end(), entity->GetComponent<LightSource>()));
-    }
-    entities.erase(entity->GetName());
-    entity->ClearComponents();
+    toBeDestroyedWidgets.insert(_widget);
 }
 
-std::shared_ptr<Camera> World::GetCamera(unsigned int _index) const
+void World::DestroyAsset(const std::shared_ptr<Entity>& _entity)
+{
+    if (_entity->IsCamera())
+    {
+        cameras.erase(ranges::find(cameras, _entity->GetComponent<Camera>()));
+    }
+    if (_entity->IsLight())
+    {
+        lights.erase(ranges::find(lights, _entity->GetComponent<LightSource>()));
+    }
+    entities.erase(_entity->GetName());
+    _entity->ClearComponents();
+}
+
+void World::DestroyAsset(const std::shared_ptr<Widget>& _widget)
+{
+    auto it = ranges::find(widgets, _widget);
+    if (it != widgets.end())
+    {
+        widgets.erase(it);
+    }
+    _widget->ClearChildren();
+}
+
+Camera* World::GetCamera(unsigned int _index) const
 {
     if (_index >= cameras.size())
     {
@@ -137,7 +151,7 @@ std::shared_ptr<Camera> World::GetCamera(unsigned int _index) const
     return cameras[_index];
 }
 
-std::shared_ptr<Camera> World::GetCurrentCamera() const
+Camera* World::GetCurrentCamera() const
 {
     return cameras.at(currentCameraIndex);
 }
@@ -157,7 +171,7 @@ void World::SetCurrentCamera(const string& _entityName)
     Logger::Log<World>(LogLevel::Error, "No camera found");
 }
 
-std::shared_ptr<LightSource> World::GetLightSource(unsigned int _index) const
+LightSource* World::GetLightSource(unsigned int _index) const
 {
     if (_index >= lights.size())
     {
@@ -255,13 +269,17 @@ void World::DoLoad()
 
 void World::UnloadScene()
 {
+    Renderer::GetInstance()->textures_loaded;
     isSceneLoaded = false;
     InputManager::EnableInput(false);
     for (const auto& entity : entities)
     {
         entity.second->Destroy();
     }
-    widgets.clear();
+    for (const auto& widget : widgets)
+    {
+        widget->Destroy();
+    }
     playerEntity = nullptr;
     currentCameraIndex = 0;
     InputManager::GetInstance()->Clear();
@@ -273,7 +291,7 @@ void World::UnloadScene()
 
 void World::EndApplication()
 {
-    isSceneLoaded = false;
+    UnloadScene();
     InputManager::EnableInput(false);
     Renderer::GetInstance()->CleanUp();
     glfwSetWindowShouldClose(Helper::GetWindow(), true);

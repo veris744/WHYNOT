@@ -5,7 +5,7 @@
 #include "Graphics/Texture.h"
 #include "Reflection/Reflection.h"
 
-class Material;
+
 class Camera;
 class Shader;
 class VertexArray;
@@ -37,6 +37,9 @@ public:
     void Render();
     void Clear();
     void CleanUp();
+
+    const std::shared_ptr<Texture>& GetLoadedTexture(const string& path) const;
+    const std::shared_ptr<Shader>& GetLoadedShader(const string& pathVertex, const string& pathFragment) const;
 
     static const vector<float> GetCubeVertex() { return cubeVertex; }
     static const vector<float> GetSphereVertex() { return sphereVertex; }

@@ -84,12 +84,9 @@ void AliensLogic::PrepareGame(unsigned int _totalAliens)
 
 void AliensLogic::StartGame()
 {
-    Logger::Log(LogLevel::Info, "Bounds x: " + Parser::Parse(GetXBounds())
-        + " Bounds y: " + Parser::Parse(GetYBounds()) + " Bounds z: " + Parser::Parse(GetZBounds()));
     for (const auto& alien : aliens)
     {
         CalculateRandomPosition(alien);
-        Logger::Log(LogLevel::Info, "Alien pos: " + Parser::Parse(alien->GetComponent<Transform>()->position));
         CalculateRandomDirection(alien);
         alien->isActive = true;
     }

@@ -7,17 +7,20 @@ class Transform;
 
 class PlayerController : public Component
 {
-    vec3 speed;
-    vec3 acceleration;
-    vec3 currentInput;
-    std::shared_ptr<Transform> transform;
+    vec3 speed = vec3(0);
+    vec3 acceleration = vec3(0);
+    vec3 currentInput = vec3(0);
+    Transform* transform;
 
     bool isPositionLocked = false;
     bool bCanShood = true;
 
     
 public:
-    PlayerController() = default;
+    PlayerController()
+    {
+        name = "PLAYERCONTROLLER";
+    };
     
     float maxSpeed = 5;
     float maxAcceleration = 5;

@@ -9,8 +9,9 @@ class Projectile : public Entity
 {
     static unsigned int counter;
 
-    std::shared_ptr<Movement> movementComp = nullptr;
-    std::shared_ptr<Transform> transformComp = nullptr;
+    Movement* movementComp = nullptr;
+    Transform* transformComp = nullptr;
+    Transform* playerTransform = nullptr;
 public:
 
     void OnCollision(const std::shared_ptr<Entity>& _otherEntity, vec3 normal);
@@ -19,11 +20,16 @@ public:
     Projectile(const string& _name = "")
     {
         name = _name.empty() ? "Projectile" + std::to_string(++counter) : _name;
+        //Logger::Log(LogLevel::Warning, "Projectile constructor: "   + name);
     }
-    ~Projectile() override = default;
+    ~Projectile() override
+    {        
+        //Logger::Log(LogLevel::Warning, "Projectile destructor: " + name);
+    };
     
     void Initialize() override;
     void Update(float _deltaTime) override;
+    void ClearComponents() override;
     void GetShot();
     void DisableProjectile();
 };

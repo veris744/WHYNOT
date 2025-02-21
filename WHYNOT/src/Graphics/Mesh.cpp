@@ -5,10 +5,10 @@
 #include "VertexArray.h"
 #include "Managers/World.h"
 
-Mesh::Mesh(const vector<float>& _vertex, const std::shared_ptr<Material>& _material)
-    : material(_material)
+Mesh::Mesh(const vector<float>& _vertex, const Material& _material)
+    : material(make_unique<Material>(_material))
 {
-    vertexArray = std::make_shared<VertexArray>();
+    vertexArray = std::make_unique<VertexArray>();
     vertexArray->Bind();
     vertexArray->AddVertexBuffer(_vertex.data(), _vertex.size());
     
@@ -21,11 +21,11 @@ Mesh::Mesh(const vector<float>& _vertex, const std::shared_ptr<Material>& _mater
     );
 }
 
-Mesh::Mesh(const vector<float>& _vertex,const vector<unsigned int>& _index, const std::shared_ptr<Material>& _material)
-    : material(_material)
+Mesh::Mesh(const vector<float>& _vertex,const vector<unsigned int>& _index, const Material& _material)
+    : material(make_unique<Material>(_material))
 {
     
-    vertexArray = std::make_shared<VertexArray>();
+    vertexArray = std::make_unique<VertexArray>();
     vertexArray->Bind();
     vertexArray->AddVertexBuffer(_vertex.data(), _vertex.size());
 
@@ -65,7 +65,7 @@ void Mesh::Render(const mat4& _modelMatrix)
     
 }
 
-void Mesh::Clear()
+void Mesh::Clear() const
 {
     vertexArray->Unbind();
     material->UnbindShader();

@@ -10,7 +10,10 @@ protected:
     
 public:
     Component() = default;
-    virtual ~Component() = default;
+    virtual ~Component()
+    {
+        //Logger::Log(LogLevel::Warning, "Component::~Component(): " + name);
+    };
 
     string GetName()
     {

@@ -3,6 +3,7 @@
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 
+#include "Transform.h"
 #include "Graphics/Mesh.h"
 #include "Reflection/Reflection.h"
 
@@ -12,13 +13,15 @@ class Mesh;
 
 class Model : public Component
 {
-    vector<std::shared_ptr<Mesh>> meshes;
+    vector<std::unique_ptr<Mesh>> meshes;
     string directory;
 
-    void processNode(aiNode *node, const aiScene *scene, const std::shared_ptr<Material>& material);
-    std::shared_ptr<Mesh> processMesh(aiMesh *mesh, const aiScene *scene, const std::shared_ptr<Material>& material);
+    void processNode(aiNode *node, const aiScene *scene, Material* material);
+    std::unique_ptr<Mesh> processMesh(aiMesh *mesh, const aiScene *scene, Material* material);
     vector<std::shared_ptr<Texture>> loadMaterialTextures(aiMaterial *_mat, aiTextureType _type, 
                                          string _typeName);
+
+    Transform* transform;
     
 public:
     string path;
@@ -33,7 +36,7 @@ public:
         name = "MODEL";
         LoadModel(path);
     }
-    Model (const char* _path, const std::shared_ptr<Material>& material)
+    Model (const char* _path, Material* material)
         : path(_path)
     {
         name = "MODEL";
@@ -41,15 +44,15 @@ public:
     }
     ~Model() override = default;
 
-    void LoadModel(string _path, const std::shared_ptr<Material>& material = nullptr);
-    void AddMesh(const std::shared_ptr<Mesh>& _mesh);
+    void LoadModel(string _path, Material* material = nullptr);
+    void AddMesh(std::unique_ptr<Mesh> _mesh);
     
     void Render();
     void Update(float deltaTime) override;
     void Clear();
 
-    bool HasMeshes() { return !meshes.empty(); }
-    const vector<std::shared_ptr<Mesh>>& GetMeshes() { return meshes; }
+    bool HasMeshes() const { return !meshes.empty(); }
+    const vector<std::unique_ptr<Mesh>>& GetMeshes() { return meshes; }
 };
 REGISTER_CLASS(Model, {
     REGISTER_MEMBER(Model, path),

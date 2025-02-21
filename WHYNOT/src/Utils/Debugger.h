@@ -5,7 +5,7 @@ class Mesh;
 
 class Debugger
 {
-    static std::shared_ptr<Mesh> mesh;
+    static std::unique_ptr<Mesh> mesh;
 
     static void SetSphereMesh();
     

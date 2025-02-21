@@ -17,6 +17,7 @@ public:
 
     virtual ~Widget()
     {
+        //Logger::Log(LogLevel::Info, "Widget Destructor " + name);
         children.clear();
     }
     
@@ -32,12 +33,15 @@ public:
 
     void AddWidget(std::shared_ptr<Widget> _widget);
     const vector<std::shared_ptr<Widget>>& GetChildren() const { return children; }
+    void ClearChildren() {  children.clear(); }
     
     const string& GetName() const { return name; }
     virtual void SetAutoName() = 0;
     
     virtual void Render();
     virtual void Clear();
+
+    void Destroy();
 
     vec2 GetPixelPosition() const;
     

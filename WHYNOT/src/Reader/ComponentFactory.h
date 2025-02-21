@@ -22,7 +22,7 @@ private:
     static std::shared_ptr<ComponentFactory> instance;
     std::unordered_map<std::string, ComponentCreator> creators;
     
-    static std::shared_ptr<Mesh> ReadMesh(const YAML::Node& asset);
+    static std::unique_ptr<Mesh> ReadMesh(const YAML::Node& asset);
     
 public:
     ComponentFactory() = default;

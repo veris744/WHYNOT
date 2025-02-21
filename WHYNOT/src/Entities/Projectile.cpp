@@ -22,8 +22,9 @@ void Projectile::Initialize()
 
     if (!GetComponent<Transform>())
     {
-        transformComp = std::make_shared<Transform>();
-        AddComponent(transformComp);
+        std::unique_ptr<Transform> temp = std::make_unique<Transform>();
+        transformComp = temp.get();
+        AddComponent(std::move(temp));
     }
 
     if (!GetComponent<Model>())
@@ -32,32 +33,33 @@ void Projectile::Initialize()
         vector<float> vertex = Renderer::GetSphereVertex();
         vector<unsigned int> index = Renderer::GetShereIndex();
 
-        std::shared_ptr<Material> mat = std::make_shared<Material>(vector<string>(), DEFAULT_VERTEX_SHADER_PATH,
+        Material* mat = new Material(vector<string>(), DEFAULT_VERTEX_SHADER_PATH,
             "shaders/neonFragment.glsl");
         mat->materialData.color = vec3(0.0f, 0.0f, 1.0f);
         mat->materialData.type = MaterialType::NEON;
         mat->materialData.shininess = 32;
     
-        std::shared_ptr<Mesh> sphereMesh = std::make_shared<Mesh>(vertex, index, mat);
+        std::unique_ptr<Mesh> sphereMesh = std::make_unique<Mesh>(vertex, index, *mat);
     
-        std::shared_ptr<Model> model = std::make_shared<Model>();
-        model->AddMesh(sphereMesh);
-        AddComponent(model);
+        std::unique_ptr model = std::make_unique<Model>();
+        model->AddMesh(std::move(sphereMesh));
+        AddComponent(std::move(model));
     }
 
     if (!GetComponent<CircleCollider>())
     {
-        std::shared_ptr<CircleCollider> collider = std::make_shared<CircleCollider>(0.2);
-        AddComponent(collider);
+        std::unique_ptr<CircleCollider> collider = std::make_unique<CircleCollider>(0.2);
+        AddComponent(std::move(collider));
     }
     GetComponent<CircleCollider>()->OnOutOfBoundsDelegate.Bind(&Projectile::OnOutOfBounds, this);
     GetComponent<CircleCollider>()->CollisionDelegate.Bind(&Projectile::OnCollision, this);
 
     if (!GetComponent<Movement>())
     {
-        movementComp = std::make_shared<Movement>();
+        std::unique_ptr<Movement> temp = std::make_unique<Movement>();
+        movementComp = temp.get();
         movementComp->maxSpeed = 40;
-        AddComponent(movementComp);
+        AddComponent(std::move(temp));
     }
     else
     {
@@ -73,6 +75,13 @@ void Projectile::Update(float _deltaTime)
     Entity::Update(_deltaTime);
 }
 
+void Projectile::ClearComponents()
+{
+    movementComp = nullptr;
+    transformComp = nullptr;
+    Entity::ClearComponents();
+}
+
 void Projectile::GetShot()
 {
     std::shared_ptr<Player> player = World::GetInstance()->GetPlayer();
@@ -81,8 +90,10 @@ void Projectile::GetShot()
         Logger::Log(LogLevel::Error, "No Player Found");
         return;
     }
-    std::shared_ptr<Transform> playerTransform = player->GetComponent<Transform>();
-    
+    if (!playerTransform)
+    {
+        playerTransform = player->GetComponent<Transform>();
+    }
     isActive = true;
     movementComp->speed = playerTransform->forward * 5.f;
     transformComp->position = playerTransform->position + playerTransform->forward * 2.f;

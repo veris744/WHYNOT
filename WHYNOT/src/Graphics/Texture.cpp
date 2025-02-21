@@ -28,6 +28,15 @@ Texture::Texture(unsigned char* _data, unsigned int _bufferSize, int _width, int
     ProcessTexture();
 }
 
+Texture::~Texture()
+{
+    if (data)
+    {
+        delete[] data;
+        data = nullptr;
+    }
+}
+
 void Texture::LoadTexture(const string& filePath)
 {
     int width;
@@ -46,7 +55,6 @@ void Texture::ProcessTexture()
     Bind();
     SetParameters();
     Generate();
-    Renderer::GetInstance()->textures_loaded.push_back(std::make_shared<Texture>(*this));
 }
 
 void Texture::SetParameters() const

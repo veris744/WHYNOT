@@ -11,7 +11,7 @@
 
 class Transform;
 
-void Model::LoadModel(string _path, const std::shared_ptr<Material>& material)
+void Model::LoadModel(string _path, Material* material)
 {
     Assimp::Importer import;
     const aiScene *scene = import.ReadFile(_path.c_str(), aiProcess_Triangulate | aiProcess_JoinIdenticalVertices | aiProcess_SortByPType );	
@@ -26,13 +26,14 @@ void Model::LoadModel(string _path, const std::shared_ptr<Material>& material)
     processNode(scene->mRootNode, scene, material);
 }
 
-void Model::processNode(aiNode* node, const aiScene* scene, const std::shared_ptr<Material>& material)
+void Model::processNode(aiNode* node, const aiScene* scene, Material* material)
 {
     // process all the node's meshes (if any)
     for(unsigned int i = 0; i < node->mNumMeshes; i++)
     {
-        aiMesh *mesh = scene->mMeshes[node->mMeshes[i]]; 
-        meshes.push_back(processMesh(mesh, scene, material));			
+        aiMesh *mesh = scene->mMeshes[node->mMeshes[i]];
+        std::unique_ptr<Mesh> mesh_ptr = processMesh(mesh, scene, material);
+        meshes.push_back(std::move(mesh_ptr));			
     }
     // then do the same for each of its children
     for(unsigned int i = 0; i < node->mNumChildren; i++)
@@ -41,7 +42,7 @@ void Model::processNode(aiNode* node, const aiScene* scene, const std::shared_pt
     }
 }
 
-std::shared_ptr<Mesh> Model::processMesh(aiMesh* mesh, const aiScene* scene, const std::shared_ptr<Material>& _material)
+std::unique_ptr<Mesh> Model::processMesh(aiMesh* mesh, const aiScene* scene, Material* _material)
 {
     vector<float> vertices;
     vector<unsigned int> indices;
@@ -92,13 +93,13 @@ std::shared_ptr<Mesh> Model::processMesh(aiMesh* mesh, const aiScene* scene, con
                                             aiTextureType_SPECULAR, "texture_specular");
         textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
     }
-    std::shared_ptr<Material> material;
+    Material* material = nullptr;
     if(!_material)
     {
-        material = std::make_shared<Material>(textures);
+        material = new Material(textures);
     }
     
-    std::shared_ptr<Mesh> temp = std::make_shared<Mesh>(vertices, indices, _material ? _material : material);
+    std::unique_ptr<Mesh> temp = std::make_unique<Mesh>(vertices, indices, _material ? *_material : *material);
     vertices.clear();
     return temp;
 }
@@ -116,7 +117,7 @@ vector<std::shared_ptr<Texture>> Model::loadMaterialTextures(aiMaterial* _mat, a
         const vector<std::shared_ptr<Texture>>& texturesLoaded = Renderer::GetInstance()->textures_loaded;
         for (const auto& j : texturesLoaded)
         {
-            if(j->GetPath().compare(path) == 0)
+            if(j->GetPath() == path)
             {
                 textures.push_back(j);
                 skip = true; 
@@ -128,6 +129,7 @@ vector<std::shared_ptr<Texture>> Model::loadMaterialTextures(aiMaterial* _mat, a
         {
             std::shared_ptr<Texture> texture = std::make_shared<Texture>(path);
             textures.push_back(texture);
+            Renderer::GetInstance()->textures_loaded.push_back(texture);
         }
     }
     return textures;
@@ -138,14 +140,17 @@ Model::Model()
     name = "MODEL";
 }
 
-void Model::AddMesh(const std::shared_ptr<Mesh>& _mesh)
+void Model::AddMesh(std::unique_ptr<Mesh> _mesh)
 {
-    meshes.push_back(_mesh);
+    meshes.push_back(std::move(_mesh));
 }
 
 void Model::Render()
 {
-    std::shared_ptr<Transform> transform = parent->GetComponent<Transform>();
+    if (!transform)
+    {
+        transform = parent->GetComponent<Transform>();
+    }
     for (const auto& mesh : meshes)
     {
         mat4 modelMatrix = transform->GetModelMatrix(position, invertTexture);
@@ -160,7 +165,7 @@ void Model::Update(float deltaTime)
 
 void Model::Clear()
 {
-    for (auto mesh : meshes)
+    for (const auto& mesh : meshes)
     {
         mesh->Clear();
     }

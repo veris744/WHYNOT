@@ -14,7 +14,7 @@ class AliensLogic
     std::vector<std::shared_ptr<Alien>> aliens;
     std::queue<std::shared_ptr<Projectile>> availableProjectiles;
     std::vector<std::shared_ptr<Projectile>> usedProjectiles;
-    unsigned int totalAliens = 10;
+    unsigned int totalAliens = 8;
     unsigned int totalProjectiles = 10;
 
     vec3 playgroundDimensions = vec3(10,10,5);

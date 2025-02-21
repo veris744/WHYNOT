@@ -6,6 +6,7 @@
 #include "Graphics/VertexArray.h"
 #include "Graphics/VertexBuffer.h"
 #include "Managers/Helper.h"
+#include "Managers/Renderer.h"
 #include "Managers/Renderer2D.h"
 #include "Managers/World.h"
 
@@ -34,14 +35,27 @@ void Image2D::Initialize()
             LayoutElement("uUV", ShaderDataType::VEC2),
         }
     );
-    texture = std::make_shared<Texture>(path);
+
+    texture = Renderer::GetInstance()->GetLoadedTexture(path);
+    if (!texture)
+    {
+       texture = std::make_shared<Texture>(path);
+    }
+    Renderer::GetInstance()->textures_loaded.push_back(texture);
     
-    string shaderName = "shaders/fragment2D.glsl";
+    string shaderNameFrag = "shaders/fragment2D.glsl";
     if (texture->GetNbChannels() == 1)
-        shaderName = "shaders/fragment2DBW.glsl" ;
+        shaderNameFrag = "shaders/fragment2DBW.glsl" ;
     if (texture->GetNbChannels() == 2)
-        shaderName = "shaders/fragment2D2Ch.glsl" ;
-    shader = std::make_shared<Shader>("shaders/vertex2D.glsl", shaderName);
+        shaderNameFrag = "shaders/fragment2D2Ch.glsl" ;
+
+    string shaderNameVer = "shaders/vertex2D.glsl";
+    shader = Renderer::GetInstance()->GetLoadedShader(shaderNameVer, shaderNameFrag);
+    if (!shader)
+    {
+        shader = std::make_shared<Shader>(shaderNameVer, shaderNameFrag);
+    }
+    Renderer::GetInstance()->shaders_loaded.push_back(shader);
     
     shader->Compile();
     shader->Bind();

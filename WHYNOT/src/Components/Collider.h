@@ -16,7 +16,7 @@ class Collider : public Component
 protected:
     ColliderType type;
 
-    std::shared_ptr<Transform> transform = nullptr;
+    Transform* transform = nullptr;
    
     
 public:
@@ -25,7 +25,7 @@ public:
         name = "COLLIDER";
     }
     virtual ~Collider() = default;
-    
+
     vec3 position = vec3(0, 0, 0);
 
     ColliderType GetType() const {  return type; }
@@ -38,7 +38,7 @@ public:
     bool CheckSquareSquare(vec3 _width1, vec3 _height1, vec3 _depth1, vec3 _pos1, vec3 _width2, vec3 _height2, vec3 _depth2, vec3 _pos2) const;
     
     virtual bool Collides(float _rad1, vec3 _pos1) = 0;
-    virtual bool Collides(const std::shared_ptr<Collider>& other) = 0;
+    virtual bool Collides(Collider* other) = 0;
     virtual bool CheckInBounds(const vec2& xBounds, const vec2& yBounds, const vec2& zBounds, bool triggerDelegate = true) = 0;
     virtual bool OverlapsBounds(const vec2& xBounds, const vec2& yBounds, const vec2& zBounds, bool triggerDelegate = true) = 0;
 

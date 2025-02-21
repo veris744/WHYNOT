@@ -52,8 +52,8 @@ class InputManager
     void ScapeInput() const;
 
     //USEFUL ASSETS
-    std::shared_ptr<PlayerController> playerController;
-    std::shared_ptr<Transform> playerTransform;
+    PlayerController* playerController;
+    Transform* playerTransform;
 
     static bool isInputEnabled;
     

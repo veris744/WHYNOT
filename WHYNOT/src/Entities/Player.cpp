@@ -17,29 +17,29 @@ void Player::Initialize()
 
     if (!GetComponent<Camera>())
     {
-        std::shared_ptr<Camera> camera = std::make_shared<Camera>();
-        AddComponent(camera);
+        std::unique_ptr<Camera> camera = std::make_unique<Camera>();
+        AddComponent(std::move(camera));
     }
 
     if (!GetComponent<Transform>())
     {
-        std::shared_ptr<Transform> transform = std::make_shared<Transform>(vec3(0));
-        AddComponent(transform);
+        std::unique_ptr<Transform> transform = std::make_unique<Transform>(vec3(0));
+        AddComponent(std::move(transform));
     }
 
     if (!GetComponent<PlayerController>())
     {
-        std::shared_ptr<PlayerController> controller = std::make_shared<PlayerController>();
+        std::unique_ptr<PlayerController> controller = std::make_unique<PlayerController>();
         controller->SetPositionLocked(false);
-        AddComponent(controller);
+        AddComponent(std::move(controller));
     }
 
     if (!GetComponent<Audio>())
     {
-        std::shared_ptr<Audio> audioSource = std::make_shared<Audio>();
+        std::unique_ptr<Audio> audioSource = std::make_unique<Audio>();
         audioSource->AddAudioSource(AudioSource("Shoot", "assets/sounds/shoot.wav"));
         audioSource->AddAudioSource(AudioSource("NoShot", "assets/sounds/noshot.wav"));
-        AddComponent(audioSource);
+        AddComponent(std::move(audioSource));
     }
     
     World::GetInstance()->SetPlayer(std::static_pointer_cast<Player>(shared_from_this()));

@@ -23,21 +23,21 @@ void ComponentFactory::ComponentFactorySetup()
 {
     RegisterComponent("TRANSFORM", [](const std::shared_ptr<Entity>& entity, const YAML::Node& data) ->
         void {
-            std::shared_ptr<Transform> transform = std::make_shared<Transform>();
+            std::unique_ptr<Transform> transform = std::make_unique<Transform>();
             deserialize(data, transform);
-            entity->AddComponent<Transform>(transform);
+            entity->AddComponent(std::move(transform));
         });
     
     RegisterComponent("CAMERA", [](const std::shared_ptr<Entity>& entity, const YAML::Node& data) ->
         void {
-            std::shared_ptr<Camera> camera = std::make_shared<Camera>();
+            std::unique_ptr<Camera> camera = std::make_unique<Camera>();
             deserialize(data, camera);
-            entity->AddComponent<Camera>(camera);
+            entity->AddComponent(std::move(camera));
         });
     
     RegisterComponent("MODEL", [](const std::shared_ptr<Entity>& entity, const YAML::Node& data) ->
         void {
-            std::shared_ptr<Model> model = std::make_shared<Model>();
+            std::unique_ptr<Model> model = std::make_unique<Model>();
             deserialize(data, model);
             if (!model->path.empty())
             {
@@ -47,21 +47,21 @@ void ComponentFactory::ComponentFactorySetup()
             {
                 model->AddMesh(ReadMesh(data["mesh"]));
             }
-            entity->AddComponent<Model>(model);
+            entity->AddComponent(std::move(model));
         });
     
     RegisterComponent("LIGHT", [](const std::shared_ptr<Entity>& entity, const YAML::Node& data) ->
         void {
-            std::shared_ptr<LightSource> ls = std::make_shared<LightSource>();
+            std::unique_ptr<LightSource> ls = std::make_unique<LightSource>();
             deserialize(data, ls);
-            entity->AddComponent<LightSource>(ls);
+            entity->AddComponent(std::move(ls));
     });
     
     RegisterComponent("MOVEMENT", [](const std::shared_ptr<Entity>& entity, const YAML::Node& data) ->
         void {
-            std::shared_ptr<Movement> move = std::make_shared<Movement>();
+            std::unique_ptr<Movement> move = std::make_unique<Movement>();
             deserialize(data, move);
-            entity->AddComponent<Movement>(move);
+            entity->AddComponent(std::move(move));
         });
 
     
@@ -69,9 +69,9 @@ void ComponentFactory::ComponentFactorySetup()
         void {
             if (ReadString(data, "type") == "CIRCLE")
             {
-                std::shared_ptr<CircleCollider> collider = std::make_shared<CircleCollider>();
+                std::unique_ptr<CircleCollider> collider = std::make_unique<CircleCollider>();
                 deserialize(data, collider);
-                entity->AddComponent<CircleCollider>(collider);
+                entity->AddComponent(std::move(collider));
             }
         });
 
@@ -92,7 +92,7 @@ void ComponentFactory::CreateComponent(const std::string& type, const std::share
 }
 
 
-std::shared_ptr<Mesh> ComponentFactory::ReadMesh(const YAML::Node& asset)
+std::unique_ptr<Mesh> ComponentFactory::ReadMesh(const YAML::Node& asset)
 {
     // INITIALIZE MESH VERTEX
     vector<float> vertex;
@@ -115,25 +115,30 @@ std::shared_ptr<Mesh> ComponentFactory::ReadMesh(const YAML::Node& asset)
     }
 
     // INITIALIZE MATERIAL
-    std::shared_ptr<Material> material = std::make_shared<Material>();
+    std::shared_ptr<Material> material = std::make_unique<Material>();
     deserialize(asset["material"], material);
     material->InitializeShader();
 
     for (const string& texturePath : material->texturePaths)
     {
-        std::shared_ptr<Texture> texture = std::make_shared<Texture>(texturePath);
+        std::shared_ptr<Texture> texture = Renderer::GetInstance()->GetLoadedTexture(texturePath);
+        if (!texture)
+        {
+            texture = std::make_unique<Texture>(texturePath);
+            Renderer::GetInstance()->textures_loaded.push_back(texture);
+        }
         material->AddTexture(texture);
     }
 
     // INITIALIZE MESH
-    std::shared_ptr<Mesh> mesh = nullptr;
+    std::unique_ptr<Mesh> mesh = nullptr;
     if (index.empty())
     {
-        mesh = std::make_shared<Mesh>(vertex, material);
+        mesh = std::make_unique<Mesh>(vertex, *material);
     }
     else
     {
-        mesh = std::make_shared<Mesh>(vertex, index, material);
+        mesh = std::make_unique<Mesh>(vertex, index, *material);
     }
     return mesh;
 }

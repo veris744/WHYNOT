@@ -16,13 +16,11 @@ mat4 Camera::GetProjectionMatrix2D() const
     return glm::ortho(0.f, Helper::windowWidth, Helper::windowHeight, 0.f, -1.f, 1.f);
 }
 
-mat4 Camera::GetViewMatrix() const
+mat4 Camera::GetViewMatrix()
 {
-    std::shared_ptr<Transform> transform = parent->GetComponent<Transform>();
     if (!transform)
     {
-        Logger::Log<Camera>(LogLevel::Error, "No Camera Transform");
-        return mat4();
+        transform = parent->GetComponent<Transform>();
     }
     
     mat4 view = lookAt(transform->position, transform->position + transform->forward, transform->up);
@@ -30,13 +28,11 @@ mat4 Camera::GetViewMatrix() const
     
 }
 
-vec3 Camera::GetViewPos() const
+vec3 Camera::GetViewPos()
 {
-    std::shared_ptr<Transform> transform = parent->GetComponent<Transform>();
     if (!transform)
     {
-        Logger::Log<Camera>(LogLevel::Error, "No Camera Transform");
-        return vec3(0, 0, 0);
+        transform = parent->GetComponent<Transform>();
     }
     
     return transform->position;

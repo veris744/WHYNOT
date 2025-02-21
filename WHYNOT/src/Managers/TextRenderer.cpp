@@ -52,6 +52,10 @@ void TextRenderer::LoadFont(const string& _fontPath)
                 Logger::Log<TextRenderer>(LogLevel::Error, "ERROR::FREETYPE: Failed to load Glyph");
                 continue;
             }
+            if (!face->glyph->bitmap.buffer)
+            {
+                continue;
+            }
             // generate texture
             std::unique_ptr<Texture> texture = std::make_unique<Texture>(face->glyph->bitmap.buffer,
                 face->glyph->bitmap.rows * face->glyph->bitmap.pitch,

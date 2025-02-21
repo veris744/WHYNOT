@@ -11,7 +11,7 @@ class Alien : public Entity
     void OnOutOfBounds(vec3 _normal);
     void OnCollision(const std::shared_ptr<Entity>& _otherEntity, vec3 normal);
 
-    std::shared_ptr<Movement> movement;
+    Movement* movement;
     
 public:
     Alien(const string& _name = "")
@@ -22,6 +22,8 @@ public:
 
     void Initialize() override;
     void Update(float _deltaTime) override;
+    void ClearComponents() override;
+    
 };
 REGISTER_CLASS(Alien, {
     REGISTER_MEMBER(Alien, name)

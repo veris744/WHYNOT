@@ -5,6 +5,7 @@
 #include "WidgetFactory.h"
 #include "Components/Model.h"
 #include "Managers/World.h"
+#include "Graphics/Material.h"
 
 
 void AssetReader::ReadAssets(const char* filePath)

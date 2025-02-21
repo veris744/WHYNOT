@@ -7,16 +7,15 @@
 #include "Managers/Helper.h"
 
 bool Debugger::collisionDebugEnabled = false;
-std::shared_ptr<Mesh> Debugger::mesh = nullptr;
+std::unique_ptr<Mesh> Debugger::mesh = nullptr;
 
 void Debugger::SetSphereMesh()
 {
     vector<float> vertices;
     vector<unsigned int> indices;
     Helper::generateSphere(vertices, indices, 1, 16, 8);
-    std::shared_ptr<Material> material = std::make_shared<Material>("",
-        DEFAULT_VERTEX_SHADER_PATH, "shaders/debugFragment.glsl");
-    mesh = std::make_shared<Mesh>(vertices, indices, material);
+    Material* material = new Material("", DEFAULT_VERTEX_SHADER_PATH, "shaders/debugFragment.glsl");
+    mesh = std::make_unique<Mesh>(vertices, indices, *material);
 }
 
 void Debugger::DrawSphereDebug(float _radius, vec3 _position, vec3 _color)

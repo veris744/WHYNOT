@@ -5,12 +5,12 @@
 #include "Utils/Debugger.h"
 
 
-bool CircleCollider::Collides(const std::shared_ptr<Collider>& other) 
+bool CircleCollider::Collides(Collider* other) 
 {
     return other->Collides(radius, GetWorldPosition());
 }
 
-bool CircleCollider::Collides(float _rad1, vec3 _pos1)  
+bool CircleCollider::Collides(float _rad1, vec3 _pos1)
 {
     return CheckCircleCircle(radius, GetWorldPosition(), _rad1, _pos1);
 }
@@ -82,9 +82,6 @@ void CircleCollider::Render()
     Debugger::DrawSphereDebug(radius, GetWorldPosition());    
 }
 
-void CircleCollider::Update(float deltaTime)
-{
-    
-}
+
 
 

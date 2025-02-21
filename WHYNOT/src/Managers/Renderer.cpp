@@ -4,6 +4,7 @@
 #include "World.h"
 #include "Components/Collider.h"
 #include "Graphics/Mesh.h"
+#include "Graphics/Material.h"
 #include "Components/Model.h"
 #include "Graphics/Shader.h"
 #include "Utils/Debugger.h"
@@ -99,7 +100,7 @@ void Renderer::Render()
         }
         if (entity.second->IsRendered())
         {
-            std::shared_ptr<Model> model = entity.second->GetComponent<Model>();
+            Model* model = entity.second->GetComponent<Model>();
             if (!model)
             {
                 Logger::Log<Renderer>(LogLevel::Warning,  "Renderable entity does not have a model");
@@ -111,7 +112,7 @@ void Renderer::Render()
 
         if (Debugger::collisionDebugEnabled && entity.second->HasCollision())
         {
-            std::shared_ptr<Collider> collider = entity.second->GetComponent<Collider>();
+            Collider* collider = entity.second->GetComponent<Collider>();
             collider->Render();
         }
     }
@@ -124,7 +125,7 @@ void Renderer::Clear()
         {
             continue;
         }
-        std::shared_ptr<Model> model = entity.second->GetComponent<Model>();
+        Model* model = entity.second->GetComponent<Model>();
         if (!model || !model->HasMeshes())
         {
             Logger::Log<Renderer>(LogLevel::Warning,  "Renderable entity does not have a model");
@@ -146,4 +147,22 @@ void Renderer::CleanUp()
     }
     textures_loaded.clear();
     shaders_loaded.clear();
+}
+
+const std::shared_ptr<Texture>& Renderer::GetLoadedTexture(const string& path) const
+{
+    for (const auto& texture : textures_loaded)
+    {
+        if (texture->GetPath() == path) return texture;
+    }
+    return nullptr;
+}
+
+const std::shared_ptr<Shader>& Renderer::GetLoadedShader(const string& pathVertex, const string& pathFragment) const
+{
+    for (const auto& shader : shaders_loaded)
+    {
+        if (shader->vertexShaderPath == pathVertex && shader->fragmentShaderPath == pathFragment) return shader;
+    }
+    return nullptr;
 }
