@@ -16,8 +16,8 @@ class Model : public Component
     vector<std::unique_ptr<Mesh>> meshes;
     string directory;
 
-    void processNode(aiNode *node, const aiScene *scene, Material* material);
-    std::unique_ptr<Mesh> processMesh(aiMesh *mesh, const aiScene *scene, Material* material);
+    void processNode(aiNode *node, const aiScene *scene, std::shared_ptr<Material> material);
+    std::unique_ptr<Mesh> processMesh(aiMesh *mesh, const aiScene *scene, std::shared_ptr<Material> material);
     vector<std::shared_ptr<Texture>> loadMaterialTextures(aiMaterial *_mat, aiTextureType _type, 
                                          string _typeName);
 
@@ -36,7 +36,7 @@ public:
         name = "MODEL";
         LoadModel(path);
     }
-    Model (const char* _path, Material* material)
+    Model (const char* _path, std::shared_ptr<Material> material)
         : path(_path)
     {
         name = "MODEL";
@@ -44,7 +44,7 @@ public:
     }
     ~Model() override = default;
 
-    void LoadModel(string _path, Material* material = nullptr);
+    void LoadModel(string _path, std::shared_ptr<Material> material = nullptr);
     void AddMesh(std::unique_ptr<Mesh> _mesh);
     
     void Render();

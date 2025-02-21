@@ -115,7 +115,7 @@ std::unique_ptr<Mesh> ComponentFactory::ReadMesh(const YAML::Node& asset)
     }
 
     // INITIALIZE MATERIAL
-    std::shared_ptr<Material> material = std::make_unique<Material>();
+    std::shared_ptr<Material> material = std::make_shared<Material>();
     deserialize(asset["material"], material);
     material->InitializeShader();
 
@@ -134,11 +134,11 @@ std::unique_ptr<Mesh> ComponentFactory::ReadMesh(const YAML::Node& asset)
     std::unique_ptr<Mesh> mesh = nullptr;
     if (index.empty())
     {
-        mesh = std::make_unique<Mesh>(vertex, *material);
+        mesh = std::make_unique<Mesh>(vertex, material);
     }
     else
     {
-        mesh = std::make_unique<Mesh>(vertex, index, *material);
+        mesh = std::make_unique<Mesh>(vertex, index, material);
     }
     return mesh;
 }

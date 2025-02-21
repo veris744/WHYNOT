@@ -11,7 +11,7 @@
 
 class Transform;
 
-void Model::LoadModel(string _path, Material* material)
+void Model::LoadModel(string _path, std::shared_ptr<Material> material)
 {
     Assimp::Importer import;
     const aiScene *scene = import.ReadFile(_path.c_str(), aiProcess_Triangulate | aiProcess_JoinIdenticalVertices | aiProcess_SortByPType );	
@@ -26,7 +26,7 @@ void Model::LoadModel(string _path, Material* material)
     processNode(scene->mRootNode, scene, material);
 }
 
-void Model::processNode(aiNode* node, const aiScene* scene, Material* material)
+void Model::processNode(aiNode* node, const aiScene* scene, std::shared_ptr<Material> material)
 {
     // process all the node's meshes (if any)
     for(unsigned int i = 0; i < node->mNumMeshes; i++)
@@ -42,7 +42,7 @@ void Model::processNode(aiNode* node, const aiScene* scene, Material* material)
     }
 }
 
-std::unique_ptr<Mesh> Model::processMesh(aiMesh* mesh, const aiScene* scene, Material* _material)
+std::unique_ptr<Mesh> Model::processMesh(aiMesh* mesh, const aiScene* scene, std::shared_ptr<Material> _material)
 {
     vector<float> vertices;
     vector<unsigned int> indices;
@@ -93,13 +93,13 @@ std::unique_ptr<Mesh> Model::processMesh(aiMesh* mesh, const aiScene* scene, Mat
                                             aiTextureType_SPECULAR, "texture_specular");
         textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
     }
-    Material* material = nullptr;
+    std::shared_ptr<Material> material = nullptr;
     if(!_material)
     {
-        material = new Material(textures);
+        material = std::make_shared<Material>(textures);
     }
     
-    std::unique_ptr<Mesh> temp = std::make_unique<Mesh>(vertices, indices, _material ? *_material : *material);
+    std::unique_ptr<Mesh> temp = std::make_unique<Mesh>(vertices, indices, _material ? _material : material);
     vertices.clear();
     return temp;
 }

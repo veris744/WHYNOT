@@ -33,13 +33,13 @@ void Projectile::Initialize()
         vector<float> vertex = Renderer::GetSphereVertex();
         vector<unsigned int> index = Renderer::GetShereIndex();
 
-        Material* mat = new Material(vector<string>(), DEFAULT_VERTEX_SHADER_PATH,
+        std::shared_ptr<Material> mat = std::make_shared<Material>(vector<string>(), DEFAULT_VERTEX_SHADER_PATH,
             "shaders/neonFragment.glsl");
         mat->materialData.color = vec3(0.0f, 0.0f, 1.0f);
         mat->materialData.type = MaterialType::NEON;
         mat->materialData.shininess = 32;
     
-        std::unique_ptr<Mesh> sphereMesh = std::make_unique<Mesh>(vertex, index, *mat);
+        std::unique_ptr<Mesh> sphereMesh = std::make_unique<Mesh>(vertex, index, mat);
     
         std::unique_ptr model = std::make_unique<Model>();
         model->AddMesh(std::move(sphereMesh));

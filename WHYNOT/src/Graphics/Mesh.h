@@ -11,12 +11,12 @@ class VertexArray;
 class Mesh
 {
     std::unique_ptr<VertexArray> vertexArray;
-    std::unique_ptr<Material> material;
+    std::shared_ptr<Material> material;
 
 public:
-    Mesh(const vector<float>& _vertex, const Material& _material);
+    Mesh(const vector<float>& _vertex, const std::shared_ptr<Material>& _material);
     Mesh(const vector<float>& _vertex, const vector<unsigned int>& _index,
-         const Material& _material);
+         const std::shared_ptr<Material>& _material);
 
     ~Mesh()
     {

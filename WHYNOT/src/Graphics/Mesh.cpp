@@ -5,8 +5,8 @@
 #include "VertexArray.h"
 #include "Managers/World.h"
 
-Mesh::Mesh(const vector<float>& _vertex, const Material& _material)
-    : material(make_unique<Material>(_material))
+Mesh::Mesh(const vector<float>& _vertex, const std::shared_ptr<Material>& _material)
+    : material(_material)
 {
     vertexArray = std::make_unique<VertexArray>();
     vertexArray->Bind();
@@ -21,8 +21,8 @@ Mesh::Mesh(const vector<float>& _vertex, const Material& _material)
     );
 }
 
-Mesh::Mesh(const vector<float>& _vertex,const vector<unsigned int>& _index, const Material& _material)
-    : material(make_unique<Material>(_material))
+Mesh::Mesh(const vector<float>& _vertex,const vector<unsigned int>& _index, const std::shared_ptr<Material>& _material)
+    : material(_material)
 {
     
     vertexArray = std::make_unique<VertexArray>();

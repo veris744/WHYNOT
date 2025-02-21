@@ -29,7 +29,7 @@ void Alien::Initialize()
 
     if (!GetComponent<Model>())
     {
-        Material* mat = new Material("", DEFAULT_VERTEX_SHADER_PATH, "shaders/fragmentColor.glsl");
+        std::shared_ptr<Material> mat = std::make_shared<Material>("", DEFAULT_VERTEX_SHADER_PATH, "shaders/fragmentColor.glsl");
         mat->materialData.type = MaterialType::COLOR;
         std::unique_ptr<Model> model = std::make_unique<Model>("assets/ufo/PinkAlien.obj", mat);
         model->position = vec3(-0.3f, -0.3f, -0.35f);
