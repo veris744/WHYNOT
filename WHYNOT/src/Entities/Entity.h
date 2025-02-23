@@ -39,6 +39,7 @@ public:
     
     string name;
     bool isActive = true;
+    bool debugEnabled = false;
     
     template <typename T>
     void AddComponent(std::unique_ptr<T> _component)
@@ -71,6 +72,8 @@ public:
         }
         return nullptr;
     }
+
+    const vector<std::unique_ptr<Component>>& GetComponents() const { return components; }
     
     bool IsCamera() const { return isCamera; }
     bool IsLight() const { return isLight; }
@@ -89,6 +92,7 @@ public:
     }
 };
 REGISTER_CLASS(Entity, {
-    REGISTER_MEMBER(Entity, name)
+    REGISTER_MEMBER(Entity, name),
+    REGISTER_MEMBER(Entity, debugEnabled)
 })
 

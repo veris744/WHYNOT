@@ -54,6 +54,13 @@ void VertexArray::DrawElementBuffer()
 	glDrawElements(GL_TRIANGLES, indexBuffer->GetCount(), GL_UNSIGNED_INT, 0);
 }
 
+void VertexArray::DrawLinesVertexBuffer()
+{
+    glLineWidth(3);
+    unsigned int count = vertexBuffers.front()->GetCount();
+    glDrawArrays(GL_LINES, 0, count);
+}
+
 void VertexArray::SetLayout(const vector<LayoutElement>& _elements)
 {
     int i = 0;

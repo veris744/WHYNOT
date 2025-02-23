@@ -5,6 +5,7 @@
 #include "Components/LightSource.h"
 #include "Managers/Renderer.h"
 #include "Managers/World.h"
+#include "Utils/Parser.h"
 
 
 Material::Material(const char* _texturePath, const string& _vertexShaderPath, const string& _fragmentShaderPath, MaterialData _materialData)
@@ -86,7 +87,11 @@ void Material::SetUniforms(const mat4& _model, const mat4& _view, const mat4& _p
     shader->SetUniformMat4("uView", _view);
     shader->SetUniformMat4("uProjection", _projection);
     shader->SetUniformVec3("uViewPos", _viewPosition);
-    
+    //
+    // Logger::Log(LogLevel::Info, "VIEW: " + Parser::Parse(_view));
+    // Logger::Log(LogLevel::Warning, "PROJ: " + Parser::Parse(_projection));
+    // Logger::Log(LogLevel::Error, "MODEL: " + Parser::Parse(_model));
+    //
     shader->SetUniformInt("uAmbient", materialData.ambient);
     shader->SetUniformInt("uDiffuse", materialData.diffuse);
     shader->SetUniformInt("uSpecular", materialData.specular);

@@ -1,12 +1,13 @@
 #pragma once
 #include <includes.h>
+#include <Utils/Rotation.h>
 
 #include "Component.h"
 #include "Reflection/Reflection.h"
-#include "Utils/Rotation.h"
 
 class Transform : public Component
 {
+    static vec3 worldUp;
     
 public:
     Transform(vec3 _pos = vec3(0))
@@ -17,7 +18,6 @@ public:
         right(vec3(1, 0, 0))
     {
         name = "TRANSFORM";
-        rotation.SetRotationFromDirection(forward, up);
     }
 
     vec3 position;
@@ -29,9 +29,15 @@ public:
     vec3 right;
 
 
-    mat4 GetModelMatrix(vec3 _relativePosition = vec3(0,0,0), bool _invert = false) const;
+    mat4 GetModelMatrix(vec3 _relativePosition = vec3(0,0,0),
+        vec3 relativeRotation = {0,0,0},
+        vec3 relativeScale = {0,0,0}) const;
     void Update(float deltaTime) override;
     void SetRotation(float pitch, float yaw, float roll);
+    void Initialize() override;
+    void RenderDebug() override;
+
+    void LookAt(vec3 target);
 };
 REGISTER_CLASS(Transform, 
     REGISTER_MEMBER(Transform, position),

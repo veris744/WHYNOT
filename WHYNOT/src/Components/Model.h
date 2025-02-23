@@ -25,7 +25,9 @@ class Model : public Component
     
 public:
     string path;
-    vec3 position = vec3(0,0,0);
+    vec3 position = {0,0,0};
+    vec3 rotation = {0,0,0};
+    vec3 scale = vec3(1,1,1);
     bool invertTexture = false;
     bool enableCulling = true;
     
@@ -57,6 +59,8 @@ public:
 REGISTER_CLASS(Model, {
     REGISTER_MEMBER(Model, path),
     REGISTER_MEMBER(Model, position),
+    REGISTER_MEMBER(Model, rotation),
+    REGISTER_MEMBER(Model, scale),
     REGISTER_MEMBER(Model, invertTexture),
     REGISTER_MEMBER(Model, enableCulling)
 });

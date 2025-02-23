@@ -10,10 +10,7 @@ protected:
     
 public:
     Component() = default;
-    virtual ~Component()
-    {
-        //Logger::Log(LogLevel::Warning, "Component::~Component(): " + name);
-    };
+    virtual ~Component() = default;
 
     string GetName()
     {
@@ -23,5 +20,8 @@ public:
     Entity* parent;
 
     virtual void Update(float deltaTime) = 0;
-    virtual void Initialize() {};
+    virtual void Initialize() {}
+    virtual void RenderDebug() {}
+
+    bool debugEnabled = false;
 };

@@ -18,10 +18,12 @@ public:
         vertexBuffers.clear();
     
         Unbind();
+        glDeleteVertexArrays(1, &VAO);
         glDeleteBuffers(1, &VAO);
     }
     
     unsigned int VAO;
+    bool isLines = false;
 
     void Bind();
     void Unbind();
@@ -32,6 +34,7 @@ public:
     void BindIndexBuffer();
     void DrawVertexBuffers();
     void DrawElementBuffer();
+    void DrawLinesVertexBuffer();
     void SetLayout(const vector<LayoutElement>& _elements);
     
 };

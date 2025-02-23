@@ -23,7 +23,7 @@ public:
         vertexArray = nullptr;
         material = nullptr;
     }
-    
+    void SetLinesVertexArray() const;
     void Render(const mat4& _modelMatrix);
     void Clear() const;
     Material* GetMaterial() const { return material.get(); }

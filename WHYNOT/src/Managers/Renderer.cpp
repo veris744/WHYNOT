@@ -81,14 +81,14 @@ void Renderer::Initialize()
 {
     // glEnable(GL_DEPTH_TEST);
     // glEnable(GL_BLEND);
-    // glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 void Renderer::Render()
 {
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
-    glEnable(GL_CULL_FACE);
+    glDisable(GL_CULL_FACE);
     glCullFace(GL_BACK);
     glDisable(GL_BLEND);
     
@@ -110,11 +110,20 @@ void Renderer::Render()
             if (!model->enableCulling)  glEnable(GL_CULL_FACE);
         }
 
-        if (Debugger::collisionDebugEnabled && entity.second->HasCollision())
+#ifdef _DEBUG
+        glEnable(GL_BLEND);
+        if (entity.second->debugEnabled)
         {
-            Collider* collider = entity.second->GetComponent<Collider>();
-            collider->Render();
+            for (const auto& comp : entity.second->GetComponents())
+            {
+                if (comp->debugEnabled)
+                {
+                    comp->RenderDebug();
+                }
+            }
         }
+        glDisable(GL_BLEND);
+#endif
     }
 }
 void Renderer::Clear()

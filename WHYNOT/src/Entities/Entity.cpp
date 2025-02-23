@@ -7,6 +7,7 @@ unsigned int Entity::counter = 0;
 
 void Entity::Initialize()
 {
+    isActive = true;
     World::GetInstance()->AddEntity(shared_from_this());
 }
 

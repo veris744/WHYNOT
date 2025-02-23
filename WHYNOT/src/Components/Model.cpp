@@ -153,7 +153,7 @@ void Model::Render()
     }
     for (const auto& mesh : meshes)
     {
-        mat4 modelMatrix = transform->GetModelMatrix(position, invertTexture);
+        mat4 modelMatrix = transform->GetModelMatrix(position, rotation, scale);
         
         mesh->Render(modelMatrix);
     }

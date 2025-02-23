@@ -3,6 +3,7 @@
 #include "BoxCollider.h"
 #include "Managers/Renderer.h"
 #include "Utils/Debugger.h"
+#include "Utils/Parser.h"
 
 
 bool CircleCollider::Collides(Collider* other) 
@@ -77,9 +78,14 @@ bool CircleCollider::OverlapsBounds(const vec2& xBounds, const vec2& yBounds, co
     return distanceSquared <= (radius * radius);
 }
 
-void CircleCollider::Render()
+void CircleCollider::RenderDebug()
 {
-    Debugger::DrawSphereDebug(radius, GetWorldPosition());    
+    if (Debugger::GetCollisionDebugEnabled())
+    {
+        Debugger::DrawSphereDebug(radius, GetWorldPosition());
+        
+        //Logger::Log(LogLevel::Warning, Parser::Parse(GetWorldPosition()));
+    }
 }
 
 

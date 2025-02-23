@@ -1040,6 +1040,7 @@
     <ClInclude Include="src\Utils\MultiDelegate.h" />
     <ClInclude Include="src\Utils\OctreeNode.h" />
     <ClInclude Include="src\Utils\Parser.h" />
+    <ClInclude Include="src\Utils\Rotation.h" />
     <ClInclude Include="src\Utils\SingleDelegate.h" />
     <ClInclude Include="src\Utils\Timer.h" />
   </ItemGroup>

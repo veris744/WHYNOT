@@ -41,8 +41,6 @@ public:
     virtual bool Collides(Collider* other) = 0;
     virtual bool CheckInBounds(const vec2& xBounds, const vec2& yBounds, const vec2& zBounds, bool triggerDelegate = true) = 0;
     virtual bool OverlapsBounds(const vec2& xBounds, const vec2& yBounds, const vec2& zBounds, bool triggerDelegate = true) = 0;
-
-    virtual void Render() = 0;
-
+    
     SingleDelegate<const std::shared_ptr<Entity>&, vec3> CollisionDelegate;
 };

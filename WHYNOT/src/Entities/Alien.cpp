@@ -7,7 +7,9 @@
 #include "Components/Movement.h"
 #include "Components/Transform.h"
 #include "Graphics/Material.h"
+#include "Managers/World.h"
 #include "Minigame1/AliensLogic.h"
+#include "Utils/Parser.h"
 
 unsigned int Alien::counter = 0;
 
@@ -19,12 +21,17 @@ void Alien::Initialize()
     isRendered = true;
     hasCollision = true;
     isActive = false;
+    debugEnabled = true;
 
     if (!GetComponent<Transform>())
     {
-        std::unique_ptr<Transform> transform = std::make_unique<Transform>();
-        transform->scale = vec3(0.3f, 0.3f, 0.3f);
-        AddComponent(std::move(transform));
+        std::unique_ptr<Transform> transformPtr = std::make_unique<Transform>();
+        transform = transformPtr.get();
+        AddComponent(std::move(transformPtr));
+    }
+    else
+    {
+        transform = GetComponent<Transform>();
     }
 
     if (!GetComponent<Model>())
@@ -32,14 +39,16 @@ void Alien::Initialize()
         std::shared_ptr<Material> mat = std::make_shared<Material>("", DEFAULT_VERTEX_SHADER_PATH, "shaders/fragmentColor.glsl");
         mat->materialData.type = MaterialType::COLOR;
         std::unique_ptr<Model> model = std::make_unique<Model>("assets/ufo/PinkAlien.obj", mat);
-        model->position = vec3(-0.3f, -0.3f, -0.35f);
+        model->position = vec3(-0.5, -0.45, -0.5);
+        model->rotation = vec3(0, -45, 0);
+        model->scale = vec3(0.4, 0.4, 0.4);
         AddComponent(std::move(model));
     }
 
     
     if (!GetComponent<CircleCollider>())
     {
-        std::unique_ptr<CircleCollider> collider = std::make_unique<CircleCollider>(0.65);
+        std::unique_ptr<CircleCollider> collider = std::make_unique<CircleCollider>(0.75f);
         AddComponent(std::move(collider));
     }
     
@@ -69,9 +78,17 @@ void Alien::Update(float _deltaTime)
     collider->CheckInBounds(AliensLogic::GetInstance()->GetXBounds(),
         AliensLogic::GetInstance()->GetYBounds(),
         AliensLogic::GetInstance()->GetZBounds());
+
+    if (!playerTransform)
+    {
+        playerTransform = World::GetInstance()->GetPlayer()->GetComponent<Transform>();
+    }
+    transform->LookAt(playerTransform->position);
     
-    GetComponent<Transform>()->SetRotation(GetComponent<Transform>()->rotation.pitch,
-    GetComponent<Transform>()->rotation.yaw += 20*_deltaTime,GetComponent<Transform>()->rotation.roll);
+    //transform->SetRotation(transform->rotation.pitch + 20 * _deltaTime, transform->rotation.yaw , transform->rotation.roll);
+    //transform->rotation = Rotation(transform->rotation.pitch , transform->rotation.yaw + 3 * _deltaTime, transform->rotation.roll);
+    //transform->rotation = Rotation(transform->rotation.pitch, transform->rotation.yaw, transform->rotation.roll + 5 * _deltaTime);
+
 }
 
 void Alien::ClearComponents()

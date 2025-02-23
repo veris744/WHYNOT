@@ -40,6 +40,11 @@ Mesh::Mesh(const vector<float>& _vertex,const vector<unsigned int>& _index, cons
     );
 }
 
+void Mesh::SetLinesVertexArray() const
+{
+    vertexArray->isLines = true;
+}
+
 void Mesh::Render(const mat4& _modelMatrix)
 {
     material->BindShader();
@@ -52,6 +57,10 @@ void Mesh::Render(const mat4& _modelMatrix)
     material->BindTexture();
     vertexArray->Bind();
 
+    if (vertexArray->isLines)
+    {
+        vertexArray->DrawLinesVertexBuffer();
+    }
     if (!vertexArray->GetIndexBuffer())
     {
         vertexArray->DrawVertexBuffers();

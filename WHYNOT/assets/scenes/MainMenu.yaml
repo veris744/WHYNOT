@@ -35,3 +35,4 @@ entities:
         scale: [0.5,0.5,0.5]
       - name: "MODEL"
         path: "assets/backpack/backpack.obj"
+    debugEnabled: true

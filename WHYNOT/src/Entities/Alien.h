@@ -11,7 +11,9 @@ class Alien : public Entity
     void OnOutOfBounds(vec3 _normal);
     void OnCollision(const std::shared_ptr<Entity>& _otherEntity, vec3 normal);
 
-    Movement* movement;
+    Movement* movement = nullptr;
+    Transform* transform = nullptr;
+    Transform* playerTransform = nullptr;
     
 public:
     Alien(const string& _name = "")
