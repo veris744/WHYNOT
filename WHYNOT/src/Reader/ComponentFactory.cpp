@@ -134,11 +134,11 @@ std::unique_ptr<Mesh> ComponentFactory::ReadMesh(const YAML::Node& asset)
     std::unique_ptr<Mesh> mesh = nullptr;
     if (index.empty())
     {
-        mesh = std::make_unique<Mesh>(vertex, material);
+        mesh = std::make_unique<Mesh>(vertex, vertex.size(), material);
     }
     else
     {
-        mesh = std::make_unique<Mesh>(vertex, index, material);
+        mesh = std::make_unique<Mesh>(vertex, vertex.size(), index, material);
     }
     return mesh;
 }

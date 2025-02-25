@@ -82,7 +82,6 @@ void Material::AddTexture(const std::shared_ptr<Texture>& _texture)
 
 void Material::SetUniforms(const mat4& _model, const mat4& _view, const mat4& _projection, const vec3& _viewPosition)
 {
-    
     shader->SetUniformMat4("uModel", _model);
     shader->SetUniformMat4("uView", _view);
     shader->SetUniformMat4("uProjection", _projection);
@@ -114,10 +113,9 @@ void Material::SetUniforms(const mat4& _model, const mat4& _view, const mat4& _p
     shader->SetUniformObject("u_Lights", 1,
         World::GetInstance()->GetLightCount(),
         sizeof(LightSource), World::GetInstance()->GetLightDataList().data());
-
     shader->SetUniformInt("uNumLights", World::GetInstance()->GetLightCount());
 
-    
+
 #ifdef _DEBUG
     GLenum error = glGetError();
     if (error != GL_NO_ERROR) {

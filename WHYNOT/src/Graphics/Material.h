@@ -65,6 +65,9 @@ public:
     
     void BindShader() const;
     void UnbindShader() const;
+
+    Shader* GetShader() const { return shader.get(); };
+    const vector<std::shared_ptr<Texture>>& GetTexture() const { return textures; }; ;
     
 };
 REGISTER_CLASS(Material, {

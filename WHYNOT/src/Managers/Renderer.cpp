@@ -92,6 +92,7 @@ void Renderer::Render()
     glCullFace(GL_BACK);
     glDisable(GL_BLEND);
     
+    
     for (const auto& entity : World::GetInstance()->GetEntities())
     {
         if (!entity.second->isActive)
@@ -125,6 +126,7 @@ void Renderer::Render()
         glDisable(GL_BLEND);
 #endif
     }
+    Debugger::Render();
 }
 void Renderer::Clear()
 {
@@ -142,6 +144,7 @@ void Renderer::Clear()
         }
         model->Clear();
     }
+    Debugger::Clear();
 }
 
 void Renderer::CleanUp()

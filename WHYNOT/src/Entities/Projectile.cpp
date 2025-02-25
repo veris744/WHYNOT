@@ -39,7 +39,7 @@ void Projectile::Initialize()
         mat->materialData.type = MaterialType::NEON;
         mat->materialData.shininess = 32;
     
-        std::unique_ptr<Mesh> sphereMesh = std::make_unique<Mesh>(vertex, index, mat);
+        std::unique_ptr<Mesh> sphereMesh = std::make_unique<Mesh>(vertex, vertex.size(), index, mat);
     
         std::unique_ptr model = std::make_unique<Model>();
         model->AddMesh(std::move(sphereMesh));

@@ -1,5 +1,6 @@
 #include "Transform.h"
 #include "includes.h"
+#include "Utils/Debugger.h"
 #include "Utils/Parser.h"
 
 vec3 Transform::worldUp = vec3(0.0f, 1.0f, 0.0f);
@@ -73,9 +74,9 @@ void Transform::Initialize()
 
 void Transform::RenderDebug()
 {
-    //Debugger::DrawLineDebug(position, position + 5.f * forward + 5.f * up, vec3(1.0f, 0.0f, 0.0f));
-    //Debugger::DrawLineDebug(position, position + 10.f * up, vec3(0.0f, 1.0f, 0.0f));
-    //Debugger::DrawLineDebug(position, position + 10.f * right, vec3(0.0f, 0.0f, 1.0f));
+    Debugger::DrawLineDebug(position, position + 2.f * forward, vec3(1.0f, 0.0f, 0.0f));
+    Debugger::DrawLineDebug(position, position + 2.f * up, vec3(0.0f, 1.0f, 0.0f));
+    Debugger::DrawLineDebug(position, position + 2.f * right, vec3(0.0f, 0.0f, 1.0f));
 }
 
 void Transform::LookAt(vec3 target)

@@ -9,16 +9,8 @@
 #include "Managers/World.h"
 
 bool Debugger::collisionDebugEnabled = false;
-std::unique_ptr<Mesh> Debugger::mesh = nullptr;
+unordered_map<std::unique_ptr<Mesh>, mat4> Debugger::meshesToRender;
 
-void Debugger::SetSphereMesh()
-{
-    vector<float> vertices;
-    vector<unsigned int> indices;
-    Helper::generateSphere(vertices, indices, 1, 16, 8);
-    std::shared_ptr<Material> material = std::make_shared<Material>("", DEFAULT_VERTEX_SHADER_PATH, "shaders/debugFragment.glsl");
-    mesh = std::make_unique<Mesh>(vertices, indices, material);
-}
 
 void Debugger::SetCollisionDebug(bool isEnabled)
 {
@@ -35,17 +27,19 @@ void Debugger::SetCollisionDebug(bool isEnabled)
 
 void Debugger::DrawSphereDebug(float _radius, vec3 _position, vec3 _color)
 {
-    if (mesh == nullptr)
-    {
-        SetSphereMesh();
-    }
+    vector<float> vertices;
+    vector<unsigned int> indices;
+    Helper::generateSphere(vertices, indices, 1, 16, 8);
+    std::shared_ptr<Material> material = std::make_shared<Material>("", DEFAULT_VERTEX_SHADER_PATH, "shaders/debugFragment.glsl");
+    std::unique_ptr<Mesh> sphereMesh = std::make_unique<Mesh>(vertices, vertices.size(), indices, material);
     
-    mesh->GetMaterial()->materialData.type = MaterialType::COLOR;
-    mesh->GetMaterial()->materialData.color = _color;
+    sphereMesh->GetMaterial()->materialData.type = MaterialType::COLOR;
+    sphereMesh->GetMaterial()->materialData.color = _color;
     mat4 mat = mat4(1.0f);
     mat = translate(mat, _position);
     mat = scale(mat, vec3(_radius));
-    mesh->Render(mat);
+
+    meshesToRender[std::move(sphereMesh)] = mat;
 }
 
 void Debugger::DrawLineDebug(vec3 _start, vec3 _end, vec3 _color)
@@ -56,9 +50,24 @@ void Debugger::DrawLineDebug(vec3 _start, vec3 _end, vec3 _color)
     std::shared_ptr<Material> material = std::make_shared<Material>("", DEFAULT_VERTEX_SHADER_PATH, "shaders/debugFragment.glsl");
     material->materialData.type = MaterialType::COLOR;
     material->materialData.color = _color;
-    std::unique_ptr<Mesh> mesh = std::make_unique<Mesh>(vertices, material);
+    std::unique_ptr<Mesh> mesh = std::make_unique<Mesh>(vertices, 2, material, 1);
     mesh->SetLinesVertexArray();
     
     mat4 mat = mat4(1.0f);
     mesh->Render(mat);
+
+    meshesToRender[std::move(mesh)] = mat;
+}
+
+void Debugger::Render()
+{
+    for (const auto& [mesh, mat] : meshesToRender)
+    {
+        mesh->Render(mat);
+    }
+}
+
+void Debugger::Clear()
+{
+    meshesToRender.clear();
 }

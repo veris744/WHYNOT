@@ -7,7 +7,7 @@ class VertexBuffer
     unsigned int size;
     
 public:
-    VertexBuffer(const float* _vertex, unsigned int _count);
+    VertexBuffer(const float* _vertex, unsigned int _count, unsigned int _size);
     ~VertexBuffer()
     {
         Unbind();

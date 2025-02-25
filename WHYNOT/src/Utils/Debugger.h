@@ -5,9 +5,8 @@ class Mesh;
 
 class Debugger
 {
-    static std::unique_ptr<Mesh> mesh;
+    static unordered_map<std::unique_ptr<Mesh>, mat4> meshesToRender;
 
-    static void SetSphereMesh();
     static bool collisionDebugEnabled;
     
 public:
@@ -15,5 +14,8 @@ public:
     static bool GetCollisionDebugEnabled() { return collisionDebugEnabled; }
     static void DrawSphereDebug(float _radius, vec3 _position, vec3 _color = vec3(1, 0, 0));
     static void DrawLineDebug(vec3 _start, vec3 _end, vec3 _color = vec3(1, 0, 0));
+
+    static void Render();
+    static void Clear();
     
 };

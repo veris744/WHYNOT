@@ -174,10 +174,10 @@ void InputManager::HandleKeyPress(int key, int mods)
             playerController->SetInput(vec3(-1,0,0));
             break;
         case GLFW_KEY_S:
-            playerController->SetInput(vec3(0,0,-1));
+            playerController->SetInput(vec3(0,0,1));
             break;
         case GLFW_KEY_W:
-            playerController->SetInput(vec3(0,0,1));
+            playerController->SetInput(vec3(0,0,-1));
             break;
     case GLFW_KEY_1:
             Debugger::SetCollisionDebug(!Debugger::GetCollisionDebugEnabled());
@@ -260,7 +260,7 @@ void InputManager::HandleMouseMove(double x, double y)
         yoffset *= -sensitivity;
 
         rotation.yaw -= xoffset;
-        rotation.pitch -= yoffset;
+        rotation.pitch += yoffset;
 
         if(rotation.pitch > 89.0f)
             rotation.pitch = 89.0f;

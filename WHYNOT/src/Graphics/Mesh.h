@@ -14,9 +14,9 @@ class Mesh
     std::shared_ptr<Material> material;
 
 public:
-    Mesh(const vector<float>& _vertex, const std::shared_ptr<Material>& _material);
-    Mesh(const vector<float>& _vertex, const vector<unsigned int>& _index,
-         const std::shared_ptr<Material>& _material);
+    Mesh(const vector<float>& _vertex, unsigned int _vertexCount, const std::shared_ptr<Material>& _material, unsigned int _elementCount = 3);
+    Mesh(const vector<float>& _vertex, unsigned int _vertexCount, const vector<unsigned int>& _index,
+         const std::shared_ptr<Material>& _material, unsigned int _elementCount = 3);
 
     ~Mesh()
     {

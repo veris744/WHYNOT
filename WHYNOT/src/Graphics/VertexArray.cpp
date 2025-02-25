@@ -17,9 +17,9 @@ void VertexArray::Unbind()
     glBindVertexArray(0);
 }
 
-void VertexArray::AddVertexBuffer(const float* _vertex, unsigned int _count)
+void VertexArray::AddVertexBuffer(const float* _vertex, unsigned int _count, unsigned int _size)
 {
-    std::unique_ptr<VertexBuffer> buff = std::make_unique<VertexBuffer>(_vertex, _count);
+    std::unique_ptr<VertexBuffer> buff = std::make_unique<VertexBuffer>(_vertex, _count, _size);
     vertexBuffers.push_back(std::move(buff));
     vertexBuffers.back()->Bind();
 }
@@ -57,8 +57,7 @@ void VertexArray::DrawElementBuffer()
 void VertexArray::DrawLinesVertexBuffer()
 {
     glLineWidth(3);
-    unsigned int count = vertexBuffers.front()->GetCount();
-    glDrawArrays(GL_LINES, 0, count);
+    glDrawArrays(GL_LINES, 0, vertexBuffers.front()->GetCount());
 }
 
 void VertexArray::SetLayout(const vector<LayoutElement>& _elements)

@@ -19,7 +19,6 @@ public:
     
         Unbind();
         glDeleteVertexArrays(1, &VAO);
-        glDeleteBuffers(1, &VAO);
     }
     
     unsigned int VAO;
@@ -27,7 +26,7 @@ public:
 
     void Bind();
     void Unbind();
-    void AddVertexBuffer(const float* _vertex, unsigned int _count);
+    void AddVertexBuffer(const float* _vertex, unsigned int _count, unsigned int _size);
     void SetIndexBuffer(const unsigned int* _index, unsigned int _count);
     const std::unique_ptr<IndexBuffer>& GetIndexBuffer() const { return indexBuffer; }
     void BindVertexBuffers();

@@ -1,14 +1,13 @@
 #include "Image2D.h"
 
 #include "Components/Camera.h"
+#include "Graphics/Material.h"
 #include "Graphics/Shader.h"
 #include "Graphics/Texture.h"
 #include "Graphics/VertexArray.h"
-#include "Graphics/VertexBuffer.h"
 #include "Managers/Helper.h"
 #include "Managers/Renderer.h"
 #include "Managers/Renderer2D.h"
-#include "Managers/World.h"
 
 
 unsigned int Image2D::counter = 0;
@@ -24,19 +23,18 @@ Image2D::Image2D(const string& _path, vec2 _pos, vec2 _size, const string& _name
 void Image2D::Initialize()
 {
     vector<float> vertex = Renderer2D::quadVertices;
-
     vertexArray = std::make_shared<VertexArray>();
     vertexArray->Bind();
-    vertexArray->AddVertexBuffer(vertex.data(), vertex.size());
-
+    vertexArray->AddVertexBuffer(vertex.data(), 0.5f * vertex.size(), vertex.size() * sizeof(float));
+    
     vertexArray->SetLayout(
         {
             LayoutElement("uPos", ShaderDataType::VEC2),
             LayoutElement("uUV", ShaderDataType::VEC2),
         }
     );
-
-    texture = Renderer::GetInstance()->GetLoadedTexture(path);
+    
+    std::shared_ptr<Texture> texture = Renderer::GetInstance()->GetLoadedTexture(path);
     if (!texture)
     {
        texture = std::make_shared<Texture>(path);
@@ -48,17 +46,10 @@ void Image2D::Initialize()
         shaderNameFrag = "shaders/fragment2DBW.glsl" ;
     if (texture->GetNbChannels() == 2)
         shaderNameFrag = "shaders/fragment2D2Ch.glsl" ;
-
-    string shaderNameVer = "shaders/vertex2D.glsl";
-    shader = Renderer::GetInstance()->GetLoadedShader(shaderNameVer, shaderNameFrag);
-    if (!shader)
-    {
-        shader = std::make_shared<Shader>(shaderNameVer, shaderNameFrag);
-    }
-    Renderer::GetInstance()->shaders_loaded.push_back(shader);
     
-    shader->Compile();
-    shader->Bind();
+    string shaderNameVer = "shaders/vertex2D.glsl";
+    
+    material = std::make_unique<Material>(path.c_str(), shaderNameVer, shaderNameFrag);
 }
 
 void Image2D::Render()
@@ -69,15 +60,18 @@ void Image2D::Render()
         Initialize();
 
     vertexArray->Bind();
-    texture->Bind();
-    shader->Bind();
-    shader->SetUniformVec2("uPosWidget", GetPixelPosition());
-    shader->SetUniformVec2("uSize", size);
-    shader->SetUniformVec3("uColor", color);
-    shader->SetUniformFloat("uLayer", 0.1f * layer);
+    
+    material->BindTexture();
+    material->BindShader();
+
+    material->GetShader()->SetUniformVec2("uPosWidget", GetPixelPosition());
+    material->GetShader()->SetUniformVec2("uSize", size);
+    material->GetShader()->SetUniformVec3("uColor", color);
+    material->GetShader()->SetUniformFloat("uLayer", 0.1f * layer);
     
     mat4 projection = glm::ortho(0.0f, Helper::windowWidth, Helper::windowHeight, 0.0f);
-    shader->SetUniformMat4("uProjection", projection);
+    material->GetShader()->SetUniformMat4("uProjection", projection);
+    
     if (vertexArray->GetIndexBuffer())
     {
         vertexArray->DrawElementBuffer();        
@@ -92,8 +86,8 @@ void Image2D::Clear()
 {
     Widget::Clear();
     vertexArray->Unbind();
-    shader->Unbind();
-    texture->Unbind();
+    material->UnbindTexture();
+    material->UnbindShader();
 }
 
 void Image2D::SetAutoName()

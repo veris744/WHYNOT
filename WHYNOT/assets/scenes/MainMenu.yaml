@@ -19,7 +19,7 @@ entities:
   - type: "PLAYER"
     components:
       - name: "TRANSFORM"
-        position: [0, 0, -5]
+        position: [0, 0, 5]
   - name: "Ambient"
     components:
       - name: "LIGHT"
@@ -29,9 +29,9 @@ entities:
           type: "AMBIENT"
   - components:
       - name: "TRANSFORM"
-        position: [1, 0, 0]
+        position: [-2, 0, 0]
         rotation:
-          yaw: 120
+          yaw: 90
         scale: [0.5,0.5,0.5]
       - name: "MODEL"
         path: "assets/backpack/backpack.obj"

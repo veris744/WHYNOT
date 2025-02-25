@@ -1,10 +1,9 @@
 #include "VertexBuffer.h"
 #include <includes.h>
 
-VertexBuffer::VertexBuffer(const float* _vertex, unsigned int _count)
-    : vertexCount(_count)
+VertexBuffer::VertexBuffer(const float* _vertex, unsigned int _count, unsigned int _size)
+    : vertexCount(_count), size(_size)
 {
-    size = _count * sizeof(float);
     glGenBuffers(1, &VBO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, size, _vertex, GL_STATIC_DRAW);

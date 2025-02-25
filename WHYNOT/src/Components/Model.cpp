@@ -99,7 +99,7 @@ std::unique_ptr<Mesh> Model::processMesh(aiMesh* mesh, const aiScene* scene, std
         material = std::make_shared<Material>(textures);
     }
     
-    std::unique_ptr<Mesh> temp = std::make_unique<Mesh>(vertices, indices, _material ? _material : material);
+    std::unique_ptr<Mesh> temp = std::make_unique<Mesh>(vertices, 0.125 * vertices.size(), indices, _material ? _material : material);
     vertices.clear();
     return temp;
 }

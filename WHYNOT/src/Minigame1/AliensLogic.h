@@ -18,7 +18,7 @@ class AliensLogic
     unsigned int totalProjectiles = 10;
 
     vec3 playgroundDimensions = vec3(12,12,6);
-    vec3 playgroundCenter = vec3(0,0,8);
+    vec3 playgroundCenter = vec3(0,0,-8);
     
     void CalculateRandomPosition(const std::shared_ptr<Alien>& alien);
     void CalculateRandomDirection(const std::shared_ptr<Alien>& alien);

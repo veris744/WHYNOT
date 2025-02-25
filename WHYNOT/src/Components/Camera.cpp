@@ -23,7 +23,7 @@ mat4 Camera::GetViewMatrix()
         transform = parent->GetComponent<Transform>();
     }
     
-    mat4 view = lookAt(transform->position, transform->position + transform->forward, transform->up);
+    mat4 view = lookAt(transform->position, transform->position - transform->forward, transform->up);
     return view;
     
 }

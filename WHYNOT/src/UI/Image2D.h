@@ -1,5 +1,6 @@
 #pragma once
 #include "Widget.h"
+#include "Graphics/Material.h"
 
 class Shader;
 class Texture;
@@ -9,8 +10,9 @@ class Image2D : public Widget
 {
     static unsigned int counter;
     std::shared_ptr<VertexArray> vertexArray;
-    std::shared_ptr<Texture> texture;
-    std::shared_ptr<Shader> shader;
+    std::unique_ptr<Material> material;
+    //std::shared_ptr<Texture> texture;
+    //std::shared_ptr<Shader> shader;
 
     void Initialize();
     
