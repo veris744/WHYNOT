@@ -9,6 +9,7 @@
 #include "Managers/Renderer.h"
 #include "Managers/World.h"
 #include "Minigame1/AliensLogic.h"
+#include "Utils/Parser.h"
 
 unsigned int Projectile::counter = 0;
 

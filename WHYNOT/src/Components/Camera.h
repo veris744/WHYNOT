@@ -12,6 +12,8 @@ class Camera : public Component
     float far = 100.f;
     float fov = 45.0f;
 
+    vec3 cameraForward;
+
     Transform* transform;
     
 public:

@@ -11,7 +11,6 @@ public:
     using Callback = std::function<void(Args...)>;
 
 private:
-    //vector<Callback> callbacks;
     Callback callback;
     
 public:

@@ -20,19 +20,20 @@ enum class Action
 
 enum class InputMode
 {
-    UIOnly, GameOnly, GameAndUI 
+    UIOnly, GameOnly, Editor 
 };
 
-static unordered_map<Action, unsigned int> actions =
+static unordered_map<unsigned int, Action> actions =
 {
-    {Action::MoveForward, GLFW_KEY_W},
-    {Action::MoveBackwards, GLFW_KEY_S},
-    {Action::MoveRight, GLFW_KEY_D},
-    {Action::MoveLeft, GLFW_KEY_A}, 
-    {Action::MoveUp, GLFW_KEY_UP},
-    {Action::MoveDown, GLFW_KEY_DOWN},
-    {Action::Quit, GLFW_KEY_ESCAPE},
-    {Action::Click, GLFW_MOUSE_BUTTON_1},
+    {GLFW_KEY_W, Action::MoveForward},
+    {GLFW_KEY_S, Action::MoveBackwards},
+    {GLFW_KEY_D, Action::MoveRight},
+    {GLFW_KEY_A, Action::MoveLeft},
+    {GLFW_KEY_UP, Action::MoveUp},
+    {GLFW_KEY_DOWN, Action::MoveDown},
+    {GLFW_KEY_ESCAPE, Action::Quit},
+    {GLFW_MOUSE_BUTTON_1, Action::Click},
+    {GLFW_MOUSE_BUTTON_2, Action::Click},
 };
 
 class InputManager
@@ -84,7 +85,7 @@ public:
     static InputMode GetInputMode() { return inputMode; };
     static void EnableInput(bool value);
     
-    SingleDelegate<vec2> OnClickDelegate;
+    MultiDelegate<vec2> OnClickDelegate;
 
     void Clear();
 };

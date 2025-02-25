@@ -39,7 +39,11 @@ Material::Material(const vector<string>& _texturePaths, const string& _vertexSha
         }
         textures.push_back(texture);
         Renderer::GetInstance()->textures_loaded.push_back(texture);
-    }    
+    }
+    if (textures.size() == 2)
+    {
+        materialData.specular = 1;
+    }
     
 }
 

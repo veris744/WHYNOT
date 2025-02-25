@@ -5,7 +5,6 @@
 #include "Managers/Helper.h"
 #include "Managers/World.h"
 #include "Components/Transform.h"
-#include "Managers/Renderer.h"
 #include "Minigame1/AliensLogic.h"
 #include "Utils/Debugger.h"
 
@@ -39,7 +38,7 @@ void InputManager::InitKeys()
 {
     for (const auto& actionPair : actions)
     {
-        keysStatus[actionPair.second] = KeyStatus::RELEASED;
+        keysStatus[actionPair.first] = KeyStatus::RELEASED;
     }
 }
 
@@ -63,10 +62,12 @@ void InputManager::KeyCallback(GLFWwindow* window, int key, int scancode, int ac
     if (action == GLFW_RELEASE)
     {
         event.type = EventType::KeyRelease;
+        keysStatus[key] = KeyStatus::RELEASED;
     }
     else
     {
         event.type = EventType::KeyPress;
+        keysStatus[key] = KeyStatus::PRESSED;
     }
     eventsBuffer->AddEvent(event);
 }
@@ -82,10 +83,12 @@ void InputManager::MouseButtonCallback(GLFWwindow* window, int button, int actio
     if (action == GLFW_RELEASE)
     {
         event.type = EventType::MouseButtonRelease;
+        keysStatus[button] = KeyStatus::RELEASED;
     }
     else
     {
         event.type = EventType::MouseButtonPress;
+        keysStatus[button] = KeyStatus::PRESSED;
     }
     eventsBuffer->AddEvent(event);
 }
@@ -168,16 +171,16 @@ void InputManager::HandleKeyPress(int key, int mods)
             playerController->SetInput(vec3(0,-1,0));
             break;
         case GLFW_KEY_A:
-            playerController->SetInput(vec3(1,0,0));
-            break;
-        case GLFW_KEY_D:
             playerController->SetInput(vec3(-1,0,0));
             break;
+        case GLFW_KEY_D:
+            playerController->SetInput(vec3(1,0,0));
+            break;
         case GLFW_KEY_S:
-            playerController->SetInput(vec3(0,0,1));
+            playerController->SetInput(vec3(0,0,-1));
             break;
         case GLFW_KEY_W:
-            playerController->SetInput(vec3(0,0,-1));
+            playerController->SetInput(vec3(0,0,1));
             break;
     case GLFW_KEY_1:
             Debugger::SetCollisionDebug(!Debugger::GetCollisionDebugEnabled());
@@ -239,7 +242,8 @@ void InputManager::HandleMouseButtonRelease(int key)
 void InputManager::HandleMouseMove(double x, double y)
 {
     if (!playerTransform)   return;
-    if (inputMode == InputMode::GameOnly || inputMode == InputMode::GameAndUI)
+    if (inputMode == InputMode::GameOnly
+        || (inputMode == InputMode::Editor && keysStatus[GLFW_MOUSE_BUTTON_2] == KeyStatus::PRESSED))
     {
         vec2 pos = {x, y};
         if (firstMouse)
@@ -259,8 +263,8 @@ void InputManager::HandleMouseMove(double x, double y)
         xoffset *= sensitivity;
         yoffset *= -sensitivity;
 
-        rotation.yaw -= xoffset;
-        rotation.pitch += yoffset;
+        rotation.yaw += xoffset;
+        rotation.pitch -= yoffset;
 
         if(rotation.pitch > 89.0f)
             rotation.pitch = 89.0f;
@@ -279,6 +283,11 @@ void InputManager::HandleMouseScroll(double x, double y)
 void InputManager::SetInputMode(InputMode _mode)
 {
     inputMode = _mode;
+    if (inputMode == InputMode::UIOnly)
+        World::GetInstance()->GetPlayer()->GetComponent<PlayerController>()->SetPositionLocked(true);
+    
+    if (inputMode == InputMode::Editor)
+        World::GetInstance()->GetPlayer()->GetComponent<PlayerController>()->SetPositionLocked(false);
 }
 
 void InputManager::EnableInput(bool value)
@@ -313,6 +322,7 @@ void InputManager::Clear()
 {
     playerController = nullptr;
     playerTransform = nullptr;
+    OnClickDelegate.Clear();
 }
 
 void InputManager::ScapeInput() const 

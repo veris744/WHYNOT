@@ -251,9 +251,14 @@ void World::DoLoad()
         InputManager::SetInputMode(InputMode::GameOnly);
         Helper::SetCursorVisible(false);
     }
-    if (currentScene == "MainMenu")
+    else if (currentScene == "MainMenu")
     {
         InputManager::SetInputMode(InputMode::UIOnly);
+        Helper::SetCursorVisible(true);
+    }
+    else if (currentScene == "Editor")
+    {
+        InputManager::SetInputMode(InputMode::Editor);
         Helper::SetCursorVisible(true);
     }
 

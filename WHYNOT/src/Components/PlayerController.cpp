@@ -62,8 +62,8 @@ void PlayerController::Update(float deltaTime)
 
 void PlayerController::Shoot()
 {
-    if (!bCanShood) return;
+    if (!bCanShoot) return;
     AliensLogic::GetInstance()->ShootProjectile();
-    bCanShood = false;
+    bCanShoot = false;
     Timer::StartTimer(0.3f, this, &PlayerController::SetCanShoot, true);
 }

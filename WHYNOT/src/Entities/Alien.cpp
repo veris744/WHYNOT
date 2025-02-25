@@ -21,7 +21,7 @@ void Alien::Initialize()
     isRendered = true;
     hasCollision = true;
     isActive = false;
-    debugEnabled = true;
+    debugEnabled = false;
 
     if (!GetComponent<Transform>())
     {
@@ -83,7 +83,7 @@ void Alien::Update(float _deltaTime)
     {
         playerTransform = World::GetInstance()->GetPlayer()->GetComponent<Transform>();
     }
-    transform->LookAt(playerTransform->position);
+    //transform->LookAt(playerTransform->position);
     
     //transform->SetRotation(transform->rotation.pitch + 20 * _deltaTime, transform->rotation.yaw , transform->rotation.roll);
     //transform->rotation = Rotation(transform->rotation.pitch , transform->rotation.yaw + 3 * _deltaTime, transform->rotation.roll);

@@ -13,14 +13,15 @@ class PlayerController : public Component
     Transform* transform;
 
     bool isPositionLocked = false;
-    bool bCanShood = true;
+    bool bCanShoot = true;
 
     
 public:
-    PlayerController()
+    PlayerController(): transform(nullptr)
     {
         name = "PLAYERCONTROLLER";
-    };
+    }
+    ;
     
     float maxSpeed = 5;
     float maxAcceleration = 5;
@@ -62,7 +63,7 @@ public:
     {
         return currentInput;
     }
-    void SetCanShoot(bool _canShoot) { bCanShood = _canShoot; }
+    void SetCanShoot(bool _canShoot) { bCanShoot = _canShoot; }
 
     void Update(float deltaTime) override;
     void Shoot();

@@ -8,12 +8,12 @@ Button::Button(const vec2& _pos, const vec2& _size, const string& _name)
     : Widget(_pos, _size)
 {
     name = _name.empty() ? "Button" + std::to_string(++counter) : _name;
-    InputManager::GetInstance()->OnClickDelegate.Bind(&Button::OnClickTrigger, this);
+    InputManager::GetInstance()->OnClickDelegate.Add(&Button::OnClickTrigger, this);
 }
 
 Button::Button()
 {
-    InputManager::GetInstance()->OnClickDelegate.Bind(&Button::OnClickTrigger, this);
+    InputManager::GetInstance()->OnClickDelegate.Add(&Button::OnClickTrigger, this);
 }
 
 void Button::SetAutoName()

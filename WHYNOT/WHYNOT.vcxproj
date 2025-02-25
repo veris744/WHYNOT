@@ -1064,6 +1064,7 @@
     <Content Include="assets\crate.jpg" />
     <Content Include="assets\fonts\default.ttf" />
     <Content Include="assets\scenes\Aliens.yaml" />
+    <Content Include="assets\scenes\Editor.yaml" />
     <Content Include="assets\scenes\MainMenu.yaml" />
     <Content Include="assets\sounds\noshot.wav" />
     <Content Include="assets\sounds\shoot.wav" />

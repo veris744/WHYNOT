@@ -7,7 +7,7 @@
 mat4 Camera::GetProjectionMatrix() const
 {
     float aspect = Helper::windowWidth / Helper::windowHeight;
-    mat4 proj = glm::perspective(glm::radians(fov), aspect, near, far);
+    mat4 proj = glm::perspective(radians(fov), aspect, near, far);
     return proj;
 }
 
@@ -22,8 +22,8 @@ mat4 Camera::GetViewMatrix()
     {
         transform = parent->GetComponent<Transform>();
     }
-    
-    mat4 view = lookAt(transform->position, transform->position - transform->forward, transform->up);
+    cameraForward = transform->forward;
+    mat4 view = lookAt(transform->position, transform->position + cameraForward, transform->up);
     return view;
     
 }

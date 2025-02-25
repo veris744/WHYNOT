@@ -53,7 +53,7 @@ void Transform::SetRotation(float pitch, float yaw, float roll)
     
     // Calculate forward vector
     vec3 direction;
-    direction.z = cos(radians(yaw)) * cos(radians(pitch));
+    direction.z = -cos(radians(yaw)) * cos(radians(pitch));
     direction.y = sin(radians(pitch));
     direction.x = sin(radians(yaw)) * cos(radians(pitch));
     forward = normalize(direction);
