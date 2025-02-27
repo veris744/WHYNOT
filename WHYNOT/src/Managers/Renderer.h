@@ -23,13 +23,15 @@ REGISTER_ENUM(PrimitiveType,
 class Renderer
 {
     Renderer();
-    static std::shared_ptr<Renderer> instance;
     static const vector<float> cubeVertex;
     static vector<float> sphereVertex;
     static vector<unsigned int> sphereIndex;
     
 public:
-    static std::shared_ptr<Renderer> GetInstance();
+    static Renderer& instance() {
+        static Renderer INSTANCE;
+        return INSTANCE;
+    }
     vector<std::shared_ptr<Texture>> textures_loaded; 
     vector<std::shared_ptr<Shader>> shaders_loaded;
 

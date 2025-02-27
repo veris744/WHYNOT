@@ -12,9 +12,6 @@
 
 class Model;
 
-
-std::shared_ptr<Renderer> Renderer::instance = nullptr;
-
 vector<float> Renderer::sphereVertex = {};
 vector<unsigned int> Renderer::sphereIndex = {};
 const vector<float> Renderer::cubeVertex = {
@@ -67,21 +64,11 @@ Renderer::Renderer()
 
 }
 
-std::shared_ptr<Renderer> Renderer::GetInstance()
-{
-    if (instance == nullptr)
-    {
-        instance = std::make_shared<Renderer>(Renderer());
-    }
-    return instance;
-}
-
 
 void Renderer::Initialize()
 {
     // glEnable(GL_DEPTH_TEST);
     // glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 void Renderer::Render()
@@ -113,6 +100,7 @@ void Renderer::Render()
 
 #ifdef _DEBUG
         glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         if (entity.second->debugEnabled)
         {
             for (const auto& comp : entity.second->GetComponents())
@@ -123,10 +111,10 @@ void Renderer::Render()
                 }
             }
         }
-        glDisable(GL_BLEND);
-#endif
     }
     Debugger::Render();
+    glDisable(GL_BLEND);
+#endif
 }
 void Renderer::Clear()
 {

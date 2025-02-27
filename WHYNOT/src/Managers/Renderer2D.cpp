@@ -16,8 +16,6 @@ const vector<float> Renderer2D::quadVertices = {
 };
 
 
-std::shared_ptr<Renderer2D> Renderer2D::instance = nullptr;
-
 void Renderer2D::PrepareOpaqueRendering()
 {
     glDisable(GL_BLEND);
@@ -29,15 +27,6 @@ void Renderer2D::PrepareTransparentRendering()
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glDepthMask(GL_FALSE);
-}
-
-std::shared_ptr<Renderer2D> Renderer2D::GetInstance()
-{
-    if (instance == nullptr)
-    {
-        instance = std::make_shared<Renderer2D>(Renderer2D());
-    }
-    return instance;
 }
 
 Renderer2D::Renderer2D()

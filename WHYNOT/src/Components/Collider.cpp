@@ -1,5 +1,7 @@
 #include "Collider.h"
 
+#include "Entities/Entity.h"
+
 vec3 Collider::GetWorldPosition()
 {
     if (!transform)

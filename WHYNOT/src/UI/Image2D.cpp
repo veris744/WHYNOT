@@ -34,12 +34,12 @@ void Image2D::Initialize()
         }
     );
     
-    std::shared_ptr<Texture> texture = Renderer::GetInstance()->GetLoadedTexture(path);
+    std::shared_ptr<Texture> texture = Renderer::instance().GetLoadedTexture(path);
     if (!texture)
     {
        texture = std::make_shared<Texture>(path);
     }
-    Renderer::GetInstance()->textures_loaded.push_back(texture);
+    Renderer::instance().textures_loaded.push_back(texture);
     
     string shaderNameFrag = "shaders/fragment2D.glsl";
     if (texture->GetNbChannels() == 1)

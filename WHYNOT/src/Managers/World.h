@@ -10,7 +10,7 @@ class Widget;
 
 class World
 {
-    static std::shared_ptr<World> instance;
+    static World* instance;
     unordered_map<string, std::shared_ptr<Entity>> entities;
     vector<Camera*> cameras;
     vector<LightSource*> lights;
@@ -33,11 +33,10 @@ public:
     
     unsigned int currentCameraIndex = 0;
     
-    static std::shared_ptr<World> GetInstance();
+    static World* GetInstance();
     void Initialize();
     void PrepareLoad();
     void Update(float deltaTime);
-    void CheckCollisions();
     void Clean();
 
     std::shared_ptr<Player> GetPlayer() const { return playerEntity; }

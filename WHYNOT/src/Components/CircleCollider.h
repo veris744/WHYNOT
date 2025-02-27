@@ -1,16 +1,15 @@
 #pragma once
 #include "Collider.h"
-#include "Reflection/Reflection.h"
 
 class CircleCollider : public Collider
 {
 public:
     float radius;
     
-    CircleCollider(float _radius = 0)
+    CircleCollider(float _radius = 1)
         : radius(_radius)
     {
-        type = ColliderType::CIRCLE;
+        type = ColliderShape::CIRCLE;
     }
     
     bool Collides(Collider* other) override;
@@ -24,5 +23,6 @@ public:
     
 };
 REGISTER_CLASS(CircleCollider, {
-    REGISTER_MEMBER(CircleCollider, radius)
+    REGISTER_MEMBER(CircleCollider, radius),
+    REGISTER_MEMBER(CircleCollider, profile)
 });

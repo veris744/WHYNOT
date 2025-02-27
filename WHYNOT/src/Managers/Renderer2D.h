@@ -8,7 +8,6 @@ class VertexArray;
 class Renderer2D
 {
     Renderer2D();
-    static std::shared_ptr<Renderer2D> instance;
     
     std::shared_ptr<VertexArray> vertexArray;
     std::shared_ptr<Shader> defaultShader;
@@ -18,7 +17,10 @@ class Renderer2D
     void PrepareTransparentRendering();
     
 public:
-    static std::shared_ptr<Renderer2D> GetInstance();
+    static Renderer2D& instance() {
+        static Renderer2D INSTANCE;
+        return INSTANCE;
+    }
     static const vector<float> quadVertices;
     
     void Initialize();

@@ -52,6 +52,7 @@ void Alien::Initialize()
         AddComponent(std::move(collider));
     }
     
+    GetComponent<CircleCollider>()->profile = {ColliderType::Dynamic, ColliderMode::All};
     GetComponent<CircleCollider>()->OnOutOfBoundsDelegate.Bind(&Alien::OnOutOfBounds, this);
     GetComponent<CircleCollider>()->CollisionDelegate.Bind(&Alien::OnCollision, this);
 

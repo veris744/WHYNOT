@@ -3,11 +3,12 @@
 #include "Managers/Helper.h"
 #include "Managers/TextRenderer.h"
 
+
 unsigned int Text::counter = 0;
 
 vec2 Text::CalculateSize()
 {
-    auto map = TextRenderer::GetInstance()->GetCharacters();
+    auto map = TextRenderer::instance().GetCharacters();
 
     float width = 0.0f;
     float maxHeight = 0.0f;
@@ -53,14 +54,14 @@ void Text::Render()
         pixelPos.y = pixelPos.y + parentSize.y * 0.5f - size.y - padding.y;
     }
     
-    TextRenderer::GetInstance()->RenderText(text, pixelPos.x, pixelPos.y, scale, color, layer);
+    TextRenderer::instance().RenderText(text, pixelPos.x, pixelPos.y, scale, color, layer);
 }
 
 void Text::Clear()
 {
     Widget::Clear();
     
-    TextRenderer::GetInstance()->Clear();
+    TextRenderer::instance().Clear();
 }
 
 void Text::SetAutoName()

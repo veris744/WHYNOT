@@ -36,7 +36,7 @@ void Projectile::Initialize()
 
         std::shared_ptr<Material> mat = std::make_shared<Material>(vector<string>(), DEFAULT_VERTEX_SHADER_PATH,
             "shaders/neonFragment.glsl");
-        mat->materialData.color = vec3(0.0f, 0.0f, 1.0f);
+        mat->materialData.color = vec4(0.0f, 0.0f, 1.0f, 1.0f);
         mat->materialData.type = MaterialType::NEON;
         mat->materialData.shininess = 32;
     
@@ -52,6 +52,7 @@ void Projectile::Initialize()
         std::unique_ptr<CircleCollider> collider = std::make_unique<CircleCollider>(0.2);
         AddComponent(std::move(collider));
     }
+    GetComponent<CircleCollider>()->profile = {ColliderType::Dynamic, ColliderMode::All};
     GetComponent<CircleCollider>()->OnOutOfBoundsDelegate.Bind(&Projectile::OnOutOfBounds, this);
     GetComponent<CircleCollider>()->CollisionDelegate.Bind(&Projectile::OnCollision, this);
 

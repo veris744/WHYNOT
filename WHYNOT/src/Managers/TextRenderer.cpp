@@ -5,20 +5,7 @@
 #include "Graphics/Shader.h"
 #include "Graphics/Texture.h"
 
-std::shared_ptr<TextRenderer> TextRenderer::instance = nullptr;
 std::unique_ptr<FT_Library> TextRenderer::ftLibrary = nullptr;
-
-TextRenderer::TextRenderer()
-= default;
-
-std::shared_ptr<TextRenderer> TextRenderer::GetInstance()
-{
-    if (!instance)
-    {
-        instance = std::make_shared<TextRenderer>();
-    }
-    return instance;
-}
 
 void TextRenderer::InitFreeType()
 {

@@ -3,9 +3,9 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
+#include "Graphics/Shader.h"
 
 class VertexArray;
-class Shader;
 
 struct Character {
     unsigned int TextureID; 
@@ -16,8 +16,6 @@ struct Character {
 
 class TextRenderer
 {
-    static std::shared_ptr<TextRenderer> instance;
-
     string fontPathDefault = "assets/fonts/default.ttf";
     static std::unique_ptr<FT_Library> ftLibrary;
     std::map<GLchar, Character> Characters;
@@ -26,11 +24,13 @@ class TextRenderer
     string defaultVertexShaderPath = "shaders/textVertexShader.glsl";
     string defaultFragmentShaderPath = "shaders/textFragmentShader.glsl";
     std::unique_ptr<Shader> defaultShader;
-    //std::unique_ptr<VertexArray> vertexArray;
     
 public:
-    TextRenderer();
-    static std::shared_ptr<TextRenderer> GetInstance();
+    TextRenderer() = default;
+    static TextRenderer& instance() {
+        static TextRenderer INSTANCE;
+        return INSTANCE;
+    }
 
     static void InitFreeType();
     void LoadFont(const string& _fontPath = "");

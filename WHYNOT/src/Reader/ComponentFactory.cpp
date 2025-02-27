@@ -121,11 +121,11 @@ std::unique_ptr<Mesh> ComponentFactory::ReadMesh(const YAML::Node& asset)
 
     for (const string& texturePath : material->texturePaths)
     {
-        std::shared_ptr<Texture> texture = Renderer::GetInstance()->GetLoadedTexture(texturePath);
+        std::shared_ptr<Texture> texture = Renderer::instance().GetLoadedTexture(texturePath);
         if (!texture)
         {
             texture = std::make_unique<Texture>(texturePath);
-            Renderer::GetInstance()->textures_loaded.push_back(texture);
+            Renderer::instance().textures_loaded.push_back(texture);
         }
         material->AddTexture(texture);
     }

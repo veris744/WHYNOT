@@ -114,7 +114,7 @@ vector<std::shared_ptr<Texture>> Model::loadMaterialTextures(aiMaterial* _mat, a
         string path = directory + "/" + std::string(str.C_Str());
         
         bool skip = false;
-        const vector<std::shared_ptr<Texture>>& texturesLoaded = Renderer::GetInstance()->textures_loaded;
+        const vector<std::shared_ptr<Texture>>& texturesLoaded = Renderer::instance().textures_loaded;
         for (const auto& j : texturesLoaded)
         {
             if(j->GetPath() == path)
@@ -129,7 +129,7 @@ vector<std::shared_ptr<Texture>> Model::loadMaterialTextures(aiMaterial* _mat, a
         {
             std::shared_ptr<Texture> texture = std::make_shared<Texture>(path);
             textures.push_back(texture);
-            Renderer::GetInstance()->textures_loaded.push_back(texture);
+            Renderer::instance().textures_loaded.push_back(texture);
         }
     }
     return textures;

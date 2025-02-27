@@ -1,5 +1,12 @@
 entities:
   - type: "PLAYER"
+  - name: "Ambient"
+    components:
+      - name: "LIGHT"
+        lightData:
+          color: [0.5, 0.5, 0.5, 1]
+          ambient: 0.2
+          type: "AMBIENT"
   - components:
       - name: "TRANSFORM"
         position: [1, -1, -5]
@@ -8,3 +15,9 @@ entities:
         scale: [0.5,0.5,0.5]
       - name: "MODEL"
         path: "assets/backpack/backpack.obj"
+      - name: "COLLIDER"
+        type: "CIRCLE"
+        radius: 2
+        profile:
+          type: "STATIC"
+          mode: "QUERY"

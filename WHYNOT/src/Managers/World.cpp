@@ -4,25 +4,24 @@
 
 #include "Renderer.h"
 #include "Components/Camera.h"
-#include "Components/Collider.h"
 #include "Components/LightSource.h"
 #include "Graphics/Shader.h"
 #include "Input/InputManager.h"
 #include "Minigame1/AliensLogic.h"
+#include "Physics/CollisionManager.h"
 #include "UI/Widget.h"
 #include "Reader/AssetReader.h"
-#include "Utils/OctreeNode.h"
 #include "Utils/Timer.h"
 
-std::shared_ptr<World> World::instance = nullptr;
+World* World::instance = nullptr;
 bool World::isSceneLoaded = false;
 string World::currentScene = "";
 
-std::shared_ptr<World> World::GetInstance()
+World* World::GetInstance()
 {
     if (!instance)
     {
-        instance = std::make_shared<World>(World());
+        instance = new World();
     }
     return instance;
 }
@@ -58,38 +57,7 @@ void World::Update(float deltaTime)
         }
         entity.second->UpdateTrigger(deltaTime);
     }
-    CheckCollisions();
-}
-
-void World::CheckCollisions()
-{
-    AABB worldBounds = {vec3(Helper::GetXBounds().x, Helper::GetYBounds().x, Helper::GetZBounds().x), 
-        vec3(Helper::GetXBounds().y, Helper::GetYBounds().y, Helper::GetZBounds().y)};
-    
-    OctreeNode root(worldBounds);
-    for (auto& [id, entity] : entities) {
-        if (entity && entity->isActive && entity->HasCollision()) {
-            root.Insert(entity);
-        }
-    }
-    
-    std::set<pair<std::shared_ptr<Entity>, std::shared_ptr<Entity>>> collisions;
-    root.QueryCollisions(collisions);
-    
-    for (const auto& collisionPair  : collisions) {
-        const auto& e1 = collisionPair.first;
-        const auto& e2 = collisionPair.second;
-        
-        if (!e1->isActive || !e2->isActive) continue;
-        
-        auto c1 = e1->GetComponent<Collider>();
-        auto c2 = e2->GetComponent<Collider>();
-        if (c1->Collides(c2)) {
-            vec3 normal = normalize(c1->GetWorldPosition() - c2->GetWorldPosition());
-            c1->CollisionDelegate.Execute(e2, normal);
-            c2->CollisionDelegate.Execute(e1, -normal);
-        }
-    }
+    CollisionManager::CheckCollisions();
 }
 
 void World::Clean()
@@ -219,6 +187,7 @@ std::shared_ptr<Widget> World::FindWidget(const string& _name, const vector<std:
     return nullptr;
 }
 
+
 void World::AddWidget(const std::shared_ptr<Widget>& _widget)
 {
     auto it = std::find_if(widgets.begin(), widgets.end(), [&](const std::shared_ptr<Widget>& widget) {
@@ -267,6 +236,8 @@ void World::DoLoad()
         Logger::Log(LogLevel::FatalError,"Failed to load playerEntity");
     }
     playerEntity->isActive = true;
+
+    CollisionManager::PrepareOctree();
     
     isSceneLoaded = true;
     Timer::StartTimer(0.2, &InputManager::EnableInput, true);
@@ -274,7 +245,7 @@ void World::DoLoad()
 
 void World::UnloadScene()
 {
-    Renderer::GetInstance()->textures_loaded;
+    Renderer::instance().textures_loaded;
     isSceneLoaded = false;
     InputManager::EnableInput(false);
     for (const auto& entity : entities)
@@ -288,7 +259,7 @@ void World::UnloadScene()
     playerEntity = nullptr;
     currentCameraIndex = 0;
     InputManager::GetInstance()->Clear();
-    for (const auto& shader : Renderer::GetInstance()->shaders_loaded)
+    for (const auto& shader : Renderer::instance().shaders_loaded)
     {
         shader->CleanUp();
     }
@@ -298,7 +269,7 @@ void World::EndApplication()
 {
     UnloadScene();
     InputManager::EnableInput(false);
-    Renderer::GetInstance()->CleanUp();
+    Renderer::instance().CleanUp();
     glfwSetWindowShouldClose(Helper::GetWindow(), true);
 }
 

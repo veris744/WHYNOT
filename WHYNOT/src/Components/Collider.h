@@ -1,12 +1,8 @@
 #pragma once
-#include "Component.h"
 #include "Transform.h"
-#include "Entities/Entity.h"
+#include "Physics/CollisionPresets.h"
 
-class BoxCollider;
-class CircleCollider;
-
-enum class ColliderType
+enum class ColliderShape
 {
     CIRCLE, BOX
 };
@@ -14,7 +10,7 @@ enum class ColliderType
 class Collider : public Component
 {
 protected:
-    ColliderType type;
+    ColliderShape type;
 
     Transform* transform = nullptr;
    
@@ -28,7 +24,7 @@ public:
 
     vec3 position = vec3(0, 0, 0);
 
-    ColliderType GetType() const {  return type; }
+    ColliderShape GetType() const {  return type; }
 
     vec3 GetWorldPosition();
 
@@ -43,4 +39,6 @@ public:
     virtual bool OverlapsBounds(const vec2& xBounds, const vec2& yBounds, const vec2& zBounds, bool triggerDelegate = true) = 0;
     
     SingleDelegate<const std::shared_ptr<Entity>&, vec3> CollisionDelegate;
+
+    CollisionProfile profile;
 };

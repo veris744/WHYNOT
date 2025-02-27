@@ -20,10 +20,10 @@ int main()
 	Helper::InitializeGlad();
 	AudioManager::Initialize();
 	World::GetInstance()->Initialize();
-	Renderer::GetInstance()->Initialize();
-	Renderer2D::GetInstance()->Initialize();
-	TextRenderer::GetInstance()->InitFreeType();
-	TextRenderer::GetInstance()->LoadFont();
+	Renderer::instance().Initialize();
+	Renderer2D::instance().Initialize();
+	TextRenderer::InitFreeType();
+	TextRenderer::instance().LoadFont();
 	
 	double lastTime = glfwGetTime();
 	while (!glfwWindowShouldClose(Helper::GetWindow()))
@@ -40,11 +40,11 @@ int main()
 		{
 			World::GetInstance()->Update(deltaTime);
 			
-			Renderer::GetInstance()->Render();
-			Renderer::GetInstance()->Clear();
+			Renderer::instance().Render();
+			Renderer::instance().Clear();
 		
-			Renderer2D::GetInstance()->Render();
-			Renderer2D::GetInstance()->Clear();
+			Renderer2D::instance().Render();
+			Renderer2D::instance().Clear();
 		}
 		
 		World::GetInstance()->Clean();

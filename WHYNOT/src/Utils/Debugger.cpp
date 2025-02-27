@@ -34,7 +34,7 @@ void Debugger::DrawSphereDebug(float _radius, vec3 _position, vec3 _color)
     std::unique_ptr<Mesh> sphereMesh = std::make_unique<Mesh>(vertices, vertices.size(), indices, material);
     
     sphereMesh->GetMaterial()->materialData.type = MaterialType::COLOR;
-    sphereMesh->GetMaterial()->materialData.color = _color;
+    sphereMesh->GetMaterial()->materialData.color = vec4(_color, 0.4);
     mat4 mat = mat4(1.0f);
     mat = translate(mat, _position);
     mat = scale(mat, vec3(_radius));
@@ -49,7 +49,7 @@ void Debugger::DrawLineDebug(vec3 _start, vec3 _end, vec3 _color)
         _end.x, _end.y, _end.z};
     std::shared_ptr<Material> material = std::make_shared<Material>("", DEFAULT_VERTEX_SHADER_PATH, "shaders/debugFragment.glsl");
     material->materialData.type = MaterialType::COLOR;
-    material->materialData.color = _color;
+    material->materialData.color = vec4(_color, 1);
     std::unique_ptr<Mesh> mesh = std::make_unique<Mesh>(vertices, 2, material, 1);
     mesh->SetLinesVertexArray();
     

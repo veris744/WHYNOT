@@ -221,6 +221,7 @@
       <LinkCompiled>true</LinkCompiled>
     </ClCompile>
     <ClCompile Include="src\Components\Transform.cpp" />
+    <ClCompile Include="src\Editor\EditorMode.cpp" />
     <ClCompile Include="src\Entities\Alien.cpp" />
     <ClCompile Include="src\Entities\Entity.cpp" />
     <ClCompile Include="src\Entities\Player.cpp" />
@@ -607,6 +608,7 @@
     </ClCompile>
     <ClCompile Include="src\Managers\World.cpp" />
     <ClCompile Include="src\Minigame1\AliensLogic.cpp" />
+    <ClCompile Include="src\Physics\CollisionManager.cpp" />
     <ClCompile Include="src\Reader\AssetReader.cpp">
       <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -1001,6 +1003,7 @@
     <ClInclude Include="src\Components\PlayerController.h" />
     <ClInclude Include="src\Components\BoxCollider.h" />
     <ClInclude Include="src\Components\Transform.h" />
+    <ClInclude Include="src\Editor\EditorMode.h" />
     <ClInclude Include="src\Entities\Alien.h" />
     <ClInclude Include="src\Entities\Entity.h" />
     <ClInclude Include="src\Entities\Player.h" />
@@ -1023,6 +1026,8 @@
     <ClInclude Include="src\Managers\TextRenderer.h" />
     <ClInclude Include="src\Managers\World.h" />
     <ClInclude Include="src\Minigame1\AliensLogic.h" />
+    <ClInclude Include="src\Physics\CollisionManager.h" />
+    <ClInclude Include="src\Physics\CollisionPresets.h" />
     <ClInclude Include="src\Reader\AssetReader.h" />
     <ClInclude Include="src\Reader\ComponentFactory.h" />
     <ClInclude Include="src\Reader\EntityFactory.h" />

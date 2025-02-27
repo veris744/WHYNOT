@@ -11,7 +11,7 @@ class BoxCollider //: public Collider
 //     BoxCollider(float _width, float _height, float _depth)
 //         : width(_width), height(_height), depth(_depth)
 //     {
-//         type = ColliderType::BOX;
+//         type = ColliderShape::BOX;
 //     }
 //     
 //     bool Collides(const CircleCollider& other) override;

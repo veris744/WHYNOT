@@ -6,7 +6,7 @@ in vec3 aFragPosition;
 in vec3 aNormal;
 
 uniform vec3 uViewPos;
-uniform vec3 uColor;
+uniform vec4 uColor;
 
 uniform float uShininess;
 
@@ -36,14 +36,14 @@ void main()
     vec3 diffuseTotal   = vec3(0);
     vec3 specularTotal  = vec3(0);
     vec3 ambient        = vec3(0);
-
+    vec3 color          = vec3(uColor.x, uColor.y, uColor.z);
 
     for (int i = 0; i < uNumLights; i++)
     {
         if (uLights[i].type == 3)
         {
             // Ambient
-            ambient = uLights[0].color * uLights[0].ambient * uColor;
+            ambient = uLights[0].color * uLights[0].ambient * color;
             continue;
         }
         
@@ -86,13 +86,13 @@ void main()
             // Diffuse
             vec3  norm      = normalize(aNormal);
             float diff      = max(dot(norm, LightDir), 0.0);
-            diffuse         = diff * uLights[i].color * uLights[i].diffuse * uColor * f_Attenuation * f_Intensity;
+            diffuse         = diff * uLights[i].color * uLights[i].diffuse * color * f_Attenuation * f_Intensity;
             
             // Specular
             vec3 viewDir    = normalize(uViewPos - aFragPosition);
             vec3 reflectDir = reflect(-LightDir, aNormal);
             float spec      = pow(max(dot(viewDir, reflectDir), 0.0), uShininess);
-            specular        = uLights[i].color * uLights[i].specular * spec * uColor * f_Attenuation * f_Intensity;
+            specular        = uLights[i].color * uLights[i].specular * spec * color * f_Attenuation * f_Intensity;
 
         }
         diffuseTotal    = diffuseTotal + diffuse;

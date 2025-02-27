@@ -26,7 +26,7 @@ struct MaterialData
     int diffuse = 0;
     int specular = 0;
     float shininess = 32;
-    vec3 color = vec3(1, 1, 1);
+    vec4 color = vec4(1, 1, 1, 1);
 };
 REGISTER_CLASS(MaterialData, {
     REGISTER_MEMBER(MaterialData, type),

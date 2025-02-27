@@ -14,13 +14,13 @@ Material::Material(const char* _texturePath, const string& _vertexShaderPath, co
     InitializeShader();
     if (std::strcmp(_texturePath, ""))
     {
-        std::shared_ptr<Texture> texture = Renderer::GetInstance()->GetLoadedTexture(_texturePath);
+        std::shared_ptr<Texture> texture = Renderer::instance().GetLoadedTexture(_texturePath);
         if (!texture)
         {
             texture = std::make_shared<Texture>(_texturePath);
         }
         textures.push_back(texture);
-        Renderer::GetInstance()->textures_loaded.push_back(texture);
+        Renderer::instance().textures_loaded.push_back(texture);
     }
 }
 
@@ -32,13 +32,13 @@ Material::Material(const vector<string>& _texturePaths, const string& _vertexSha
 
     for (string texturePath : _texturePaths)
     {
-        std::shared_ptr<Texture> texture = Renderer::GetInstance()->GetLoadedTexture(texturePath);
+        std::shared_ptr<Texture> texture = Renderer::instance().GetLoadedTexture(texturePath);
         if (!texture)
         {
             texture = std::make_shared<Texture>(texturePath);
         }
         textures.push_back(texture);
-        Renderer::GetInstance()->textures_loaded.push_back(texture);
+        Renderer::instance().textures_loaded.push_back(texture);
     }
     if (textures.size() == 2)
     {
@@ -60,7 +60,7 @@ Material::Material(const vector<std::shared_ptr<Texture>>& _textures, const stri
 void Material::InitializeShader()
 {
     bool skip = false;
-    for (const auto& shaderLoaded : Renderer::GetInstance()->shaders_loaded)
+    for (const auto& shaderLoaded : Renderer::instance().shaders_loaded)
     {
         if (shaderLoaded->vertexShaderPath == vertexShaderPath
             && shaderLoaded->fragmentShaderPath == fragmentShaderPath)
@@ -75,7 +75,7 @@ void Material::InitializeShader()
         shader = std::make_shared<Shader>(vertexShaderPath, fragmentShaderPath);
         shader->Compile();
     
-        Renderer::GetInstance()->shaders_loaded.push_back(shader);
+        Renderer::instance().shaders_loaded.push_back(shader);
     }
 }
 
@@ -105,7 +105,7 @@ void Material::SetUniforms(const mat4& _model, const mat4& _view, const mat4& _p
     }
     else if (materialData.type == MaterialType::COLOR)
     {
-        shader->SetUniformVec3("uColor", materialData.color);
+        shader->SetUniformVec4("uColor", materialData.color);
     }
     else if (materialData.type == MaterialType::NEON)
     {
