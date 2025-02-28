@@ -48,7 +48,7 @@ void World::PrepareLoad()
 void World::Update(float deltaTime)
 {
     if (!isSceneLoaded) return;
-    
+
     for (const auto& entity : entities)
     {
         if (!entity.second->isActive)
@@ -58,6 +58,7 @@ void World::Update(float deltaTime)
         entity.second->UpdateTrigger(deltaTime);
     }
     CollisionManager::CheckCollisions();
+    
 }
 
 void World::Clean()
@@ -237,7 +238,10 @@ void World::DoLoad()
     }
     playerEntity->isActive = true;
 
-    CollisionManager::PrepareOctree();
+    if (InputManager::GetInputMode() == InputMode::GameOnly)
+    {
+        CollisionManager::PrepareOctree();
+    }
     
     isSceneLoaded = true;
     Timer::StartTimer(0.2, &InputManager::EnableInput, true);
@@ -263,6 +267,7 @@ void World::UnloadScene()
     {
         shader->CleanUp();
     }
+    CollisionManager::ClearOctree();
 }
 
 void World::EndApplication()

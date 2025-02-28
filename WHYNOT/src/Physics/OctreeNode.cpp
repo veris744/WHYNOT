@@ -1,5 +1,6 @@
 #include "OctreeNode.h"
 
+#include "Hit.h"
 #include "Components/Collider.h"
 #include "Entities/Entity.h"
 
@@ -127,6 +128,44 @@ void OctreeNode::QueryCollisions(std::set<pair<std::shared_ptr<Entity>, std::sha
     }
 }
 
+void OctreeNode::QueryRayCollisions(std::set<Hit>& collisions, vec3 rayStart, vec3 rayDir)
+{
+    if (!bounds.IntersectsRay(rayStart, rayDir)) {
+        return;
+    }
+
+    if (isLeaf) {
+        for (const auto& entity : dynamicEntities) {
+            if (!entity || !entity->isActive) continue;
+            Collider* collider = entity->GetComponent<Collider>();
+            Hit hit;
+            collider->Collides(rayStart, rayDir, hit);
+            if (hit.hasHit)
+            {
+                collisions.insert(hit);
+            }
+        }
+        
+        for (const auto& entity : staticEntities) {
+            if (!entity || !entity->isActive) continue;
+            Collider* collider = entity->GetComponent<Collider>();
+            Hit hit;
+            collider->Collides(rayStart, rayDir, hit);
+            if (hit.hasHit)
+            {
+                collisions.insert(hit);
+            }
+        }
+    } 
+    else {
+        for (const auto& child : children) {
+            if (child) {
+                child->QueryRayCollisions(collisions, rayStart, rayDir);
+            }
+        }
+    }
+}
+
 void OctreeNode::ClearDynamic()
 {
     if (isLeaf)
@@ -139,4 +178,24 @@ void OctreeNode::ClearDynamic()
             child->ClearDynamic();
         }
     }
+}
+
+void OctreeNode::ClearStatic()
+{
+    if (isLeaf)
+    {
+        staticEntities.clear();
+    }
+    else
+    {
+        for (const auto& child : children) {
+            child->ClearStatic();
+        }
+    }
+}
+
+void OctreeNode::Clear()
+{
+    ClearDynamic();
+    ClearStatic();
 }

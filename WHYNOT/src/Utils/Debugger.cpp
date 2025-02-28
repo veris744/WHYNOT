@@ -1,6 +1,7 @@
 #include "Debugger.h"
 
 #include "Parser.h"
+#include "Timer.h"
 #include "Components/Collider.h"
 #include "Graphics/Mesh.h"
 #include "Components/Model.h"
@@ -9,7 +10,8 @@
 #include "Managers/World.h"
 
 bool Debugger::collisionDebugEnabled = false;
-unordered_map<std::unique_ptr<Mesh>, mat4> Debugger::meshesToRender;
+unordered_map<std::unique_ptr<Mesh>, mat4> Debugger::meshesToRenderInFrame;
+map<std::unique_ptr<Mesh>, mat4> Debugger::meshesToRender;
 
 
 void Debugger::SetCollisionDebug(bool isEnabled)
@@ -42,7 +44,7 @@ void Debugger::DrawSphereDebug(float _radius, vec3 _position, vec3 _color)
     meshesToRender[std::move(sphereMesh)] = mat;
 }
 
-void Debugger::DrawLineDebug(vec3 _start, vec3 _end, vec3 _color)
+void Debugger::DrawLineDebug(vec3 _start, vec3 _end, vec3 _color, float timer)
 {
     vector<float> vertices =
         {_start.x, _start.y, _start.z, 
@@ -56,7 +58,15 @@ void Debugger::DrawLineDebug(vec3 _start, vec3 _end, vec3 _color)
     mat4 mat = mat4(1.0f);
     mesh->Render(mat);
 
-    meshesToRender[std::move(mesh)] = mat;
+    if (timer <= 0.f)
+    {
+        meshesToRenderInFrame[std::move(mesh)] = mat;
+    }
+    else
+    {
+        Timer::StartTimer(timer, &Debugger::StopRenderingMesh, mesh.get());
+        meshesToRender[std::move(mesh)] = mat;
+    }
 }
 
 void Debugger::Render()
@@ -65,9 +75,24 @@ void Debugger::Render()
     {
         mesh->Render(mat);
     }
+    for (const auto& [mesh, mat] : meshesToRenderInFrame)
+    {
+        mesh->Render(mat);
+    }
 }
 
 void Debugger::Clear()
 {
-    meshesToRender.clear();
+    meshesToRenderInFrame.clear();
+}
+
+void Debugger::StopRenderingMesh(Mesh* _mesh)
+{
+    for (const auto& [mesh, mat] : meshesToRender) {
+        if (mesh.get() == _mesh)
+        {
+            meshesToRender.erase(mesh);
+            return;
+        }
+    }
 }

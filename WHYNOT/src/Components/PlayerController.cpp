@@ -3,6 +3,7 @@
 #include "Transform.h"
 #include "Entities/Entity.h"
 #include "Minigame1/AliensLogic.h"
+#include "Utils/Parser.h"
 #include "Utils/Timer.h"
 
 void PlayerController::StopForwardMovement()
@@ -28,6 +29,8 @@ void PlayerController::Update(float deltaTime)
     {
         transform = parent->GetComponent<Transform>();
     }
+    // Logger::Log(LogLevel::Warning, Parser::Parse(transform->rotation.vector()));
+    // Logger::Log(LogLevel::Info, Parser::Parse(transform->forward));
 
     if (isPositionLocked)   return;
     

@@ -1,10 +1,7 @@
 #include "Renderer.h"
 
-#include "Renderer2D.h"
 #include "World.h"
-#include "Components/Collider.h"
 #include "Graphics/Mesh.h"
-#include "Graphics/Material.h"
 #include "Components/Model.h"
 #include "Graphics/Shader.h"
 #include "Utils/Debugger.h"

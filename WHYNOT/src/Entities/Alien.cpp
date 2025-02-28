@@ -9,7 +9,6 @@
 #include "Graphics/Material.h"
 #include "Managers/World.h"
 #include "Minigame1/AliensLogic.h"
-#include "Utils/Parser.h"
 
 unsigned int Alien::counter = 0;
 
@@ -49,12 +48,10 @@ void Alien::Initialize()
     if (!GetComponent<CircleCollider>())
     {
         std::unique_ptr<CircleCollider> collider = std::make_unique<CircleCollider>(0.75f);
+        collider->profile = {ColliderType::Dynamic, ColliderMode::All};
         AddComponent(std::move(collider));
     }
     
-    GetComponent<CircleCollider>()->profile = {ColliderType::Dynamic, ColliderMode::All};
-    GetComponent<CircleCollider>()->OnOutOfBoundsDelegate.Bind(&Alien::OnOutOfBounds, this);
-    GetComponent<CircleCollider>()->CollisionDelegate.Bind(&Alien::OnCollision, this);
 
     if (!GetComponent<Movement>())
     {
@@ -84,12 +81,7 @@ void Alien::Update(float _deltaTime)
     {
         playerTransform = World::GetInstance()->GetPlayer()->GetComponent<Transform>();
     }
-    //transform->LookAt(playerTransform->position);
-    
-    //transform->SetRotation(transform->rotation.pitch + 20 * _deltaTime, transform->rotation.yaw , transform->rotation.roll);
-    //transform->rotation = Rotation(transform->rotation.pitch , transform->rotation.yaw + 3 * _deltaTime, transform->rotation.roll);
-    //transform->rotation = Rotation(transform->rotation.pitch, transform->rotation.yaw, transform->rotation.roll + 5 * _deltaTime);
-
+    transform->LookAt(playerTransform->position);
 }
 
 void Alien::ClearComponents()

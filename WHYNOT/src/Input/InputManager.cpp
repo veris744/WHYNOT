@@ -5,8 +5,12 @@
 #include "Managers/Helper.h"
 #include "Managers/World.h"
 #include "Components/Transform.h"
+#include "Editor/EditorMode.h"
 #include "Minigame1/AliensLogic.h"
+#include "Physics/CollisionManager.h"
+#include "Physics/Hit.h"
 #include "Utils/Debugger.h"
+#include "Utils/Parser.h"
 
 
 ////////////////////////////////////////////////////////
@@ -99,6 +103,30 @@ void InputManager::ScrollCallback(GLFWwindow* window, double xoffset, double yof
     
     InputEvent event = {EventType::MouseScroll, -1, -1, xoffset, yoffset};
     eventsBuffer->AddEvent(event);
+}
+
+vec3 InputManager::GetMousePos3D()
+{
+    double mouseX, mouseY;
+    glfwGetCursorPos(Helper::GetWindow(), &mouseX, &mouseY);
+    
+    // Step 1: Convert mouse position to NDC
+    float x = (2.0f * mouseX) / Helper::windowWidth - 1.0f;
+    float y = 1.0f - (2.0f * mouseY) / Helper::windowHeight; // Flip Y because screen space is top-left origin
+    vec4 rayClip = vec4(x, y, -1.0f, 1.0f); // Ray starts at near plane
+
+    // Step 2: Convert from clip space to view space
+    mat4 invProj = inverse(World::GetInstance()->GetCurrentCamera()->GetProjectionMatrix());
+    vec4 rayEye = invProj * rayClip;
+    rayEye = vec4(rayEye.x, rayEye.y, -1.0f, 0.0f); // Set depth to -1 and w to 0
+
+    // Step 3: Convert from view space to world space
+    mat4 invView = glm::inverse(World::GetInstance()->GetCurrentCamera()->GetViewMatrix());
+    vec4 rayWorld = invView * rayEye;
+    vec3 rayDir = glm::normalize(vec3(rayWorld)); // Normalize direction
+
+    // Step 4: Return ray starting point (camera position) and direction
+    return GetInstance()->playerTransform->position + rayDir; // Mouse 3D world position
 }
 
 
@@ -222,16 +250,34 @@ void InputManager::HandleKeyRelease(int key, int mods)
 
 void InputManager::HandleMouseButtonPress(int key)
 {
-    if (inputMode == InputMode::UIOnly)
+    if (inputMode == InputMode::UIOnly && key == GLFW_MOUSE_BUTTON_1)
     {
         double xpos, ypos;
         glfwGetCursorPos(Helper::GetWindow(), &xpos, &ypos);
         OnClickDelegate.Execute(vec2(xpos, ypos));
     }
-    else if (inputMode == InputMode::GameOnly && key == GLFW_MOUSE_BUTTON_LEFT)
+    else if (inputMode == InputMode::GameOnly && key == GLFW_MOUSE_BUTTON_1)
     {
         if (!playerController) return;
         playerController->Shoot();
+    }
+    else if (inputMode == InputMode::Editor && key == GLFW_MOUSE_BUTTON_1)
+    {
+        vec3 mousePos3D = GetMousePos3D();
+        Hit hit = CollisionManager::ThrowRay(playerTransform->position, mousePos3D - playerTransform->position, true, 4.f);
+        if (hit.hasHit)
+        {
+            hit.entity->OnClicked();
+            EditorMode::SelectEntity(hit.entity);
+        }
+        else
+        {
+            EditorMode::Unselect();
+        }
+    }
+    else if (inputMode == InputMode::Editor && key == GLFW_MOUSE_BUTTON_2)
+    {
+        firstMouse = true;
     }
 }
 
@@ -329,5 +375,3 @@ void InputManager::ScapeInput() const
 {
     World::GetInstance()->EndApplication();
 }
-
-

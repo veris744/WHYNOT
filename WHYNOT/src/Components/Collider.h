@@ -1,6 +1,9 @@
 #pragma once
 #include "Transform.h"
 #include "Physics/CollisionPresets.h"
+#include "Physics/Hit.h"
+
+class Hit;
 
 enum class ColliderShape
 {
@@ -27,6 +30,7 @@ public:
     ColliderShape GetType() const {  return type; }
 
     vec3 GetWorldPosition();
+    void Initialize() override;
 
     bool CheckCircleCircle(float _rad1, vec3 _pos1, float _rad2, vec3 _pos2) const;
     bool CheckCirclePlane(float _rad1, vec3 _pos1, vec3 _point, vec3 _normal) const;
@@ -35,10 +39,13 @@ public:
     
     virtual bool Collides(float _rad1, vec3 _pos1) = 0;
     virtual bool Collides(Collider* other) = 0;
+    virtual bool Collides(vec3 _rayOrigin, vec3 _rayDir, Hit& hit) = 0;
     virtual bool CheckInBounds(const vec2& xBounds, const vec2& yBounds, const vec2& zBounds, bool triggerDelegate = true) = 0;
     virtual bool OverlapsBounds(const vec2& xBounds, const vec2& yBounds, const vec2& zBounds, bool triggerDelegate = true) = 0;
     
     SingleDelegate<const std::shared_ptr<Entity>&, vec3> CollisionDelegate;
+    SingleDelegate<vec3> OnOutOfBoundsDelegate;
+    SingleDelegate<> OnClickedDelegate;
 
     CollisionProfile profile;
 };

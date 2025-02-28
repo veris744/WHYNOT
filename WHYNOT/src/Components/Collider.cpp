@@ -11,6 +11,21 @@ vec3 Collider::GetWorldPosition()
     return transform->position + position;
 }
 
+void Collider::Initialize()
+{
+    Component::Initialize();
+    
+    if (profile.mode == ColliderMode::All || profile.mode == ColliderMode::Query)
+    {
+        OnClickedDelegate.Bind(&Entity::OnClicked, parent);
+    }
+    if (profile.mode == ColliderMode::All)
+    {
+        OnOutOfBoundsDelegate.Bind(&Entity::OnOutOfBounds, parent);
+        CollisionDelegate.Bind(&Entity::OnCollision, parent);
+    }
+}
+
 bool Collider::CheckCircleCircle(float _rad1, vec3 _pos1, float _rad2, vec3 _pos2) const
 {
     if (distance(_pos1, _pos2) <= _rad1 + _rad2)
