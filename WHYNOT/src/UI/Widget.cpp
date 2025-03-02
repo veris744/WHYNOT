@@ -8,6 +8,7 @@ void Widget::AddWidget(std::shared_ptr<Widget> _widget)
 {
     _widget->parent = shared_from_this();
     children.push_back(_widget);
+    _widget->Initialize();
 }
 
 void Widget::Render()
@@ -37,6 +38,12 @@ vec2 Widget::GetPixelPosition() const
     {
         float x = Helper::windowWidth * position.x * 0.01f ;
         float y = Helper::windowHeight * position.y * 0.01f;
+        
+        x += padding.w;
+        y += padding.z;
+        x -= padding.y;
+        y -= padding.x;
+        
         return vec2(x, y);
     }
 
@@ -46,6 +53,31 @@ vec2 Widget::GetPixelPosition() const
 
     float x = parentPos.x + parentWidth * position.x * 0.01f;
     float y = parentPos.y + parentHeight * position.y * 0.01f;
-
+    
+    x += padding.w;
+    y += padding.z;
+    x -= padding.y;
+    y -= padding.x;
+    
     return vec2(x, y);
+}
+
+vec2 Widget::GetAutoSize() const
+{
+    vec2 autoSize = size;
+    if (autoSizing == AutoSizing::HORIZONTAL || autoSizing == AutoSizing::ALL)
+    {
+        if (parent)
+            autoSize.x = parent->size.x;
+        else
+            autoSize.x = Helper::windowWidth;
+    }
+    if (autoSizing == AutoSizing::VERTICAL || autoSizing == AutoSizing::ALL)
+    {
+        if (parent)
+            autoSize.y = parent->size.y;
+        else
+            autoSize.y = Helper::windowWidth;
+    }
+    return autoSize;
 }

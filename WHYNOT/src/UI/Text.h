@@ -54,6 +54,7 @@ public:
     TextAlignVertical alignVertical;
     vec2 padding;
 
+    void Initialize() override;
     vec2 CalculateSize();
     void Render() override;
     void Clear() override;

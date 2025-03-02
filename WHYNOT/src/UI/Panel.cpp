@@ -1,25 +1,12 @@
-#include "Image2D.h"
+#include "Panel.h"
 
-#include "Components/Camera.h"
-#include "Graphics/Material.h"
 #include "Graphics/Shader.h"
-#include "Graphics/Texture.h"
-#include "Graphics/VertexArray.h"
 #include "Managers/Helper.h"
-#include "Managers/Renderer.h"
 #include "Managers/Renderer2D.h"
 
+unsigned int Panel::counter = 0;
 
-unsigned int Image2D::counter = 0;
-
-Image2D::Image2D(const string& _path, vec2 _pos, vec2 _size, const string& _name)
-    : Widget(_pos, _size)
-{
-    name = _name.empty() ? "Image2D" + std::to_string(++counter) : _name;
-    path = _path;
-}
-
-void Image2D::Initialize()
+void Panel::Initialize()
 {
     Widget::Initialize();
     
@@ -35,30 +22,24 @@ void Image2D::Initialize()
         }
     );
     
-    std::shared_ptr<Texture> texture = Renderer::instance().GetLoadedTexture(path);
-    if (!texture)
-    {
-       texture = std::make_shared<Texture>(path);
-    }
-    Renderer::instance().textures_loaded.push_back(texture);
-    
-    string shaderNameFrag = "shaders/fragment2D.glsl";
-    if (texture->GetNbChannels() == 1)
-        shaderNameFrag = "shaders/fragment2DBW.glsl" ;
-    if (texture->GetNbChannels() == 2)
-        shaderNameFrag = "shaders/fragment2D2Ch.glsl" ;
-    
     string shaderNameVer = "shaders/vertex2D.glsl";
+    string shaderNameFrag = "shaders/fragment2DColor.glsl";
     
-    material = std::make_unique<Material>(path.c_str(), shaderNameVer, shaderNameFrag);
+    material = std::make_unique<Material>("", shaderNameVer, shaderNameFrag);
     
     size = GetAutoSize();
 }
 
-void Image2D::Render()
+Panel::Panel(vec2 _pos, vec2 _size, const string& _name)
+    : Widget(_pos, _size)
+{
+    name = _name.empty() ? "Panel" + std::to_string(++counter) : _name;
+}
+
+void Panel::Render()
 {
     Widget::Render();
-
+    
     if (!vertexArray)
         Initialize();
 
@@ -66,11 +47,10 @@ void Image2D::Render()
     
     material->BindTexture();
     material->BindShader();
-    material->GetShader()->SetUniformInt("uSampler2D", 0);
     material->GetShader()->SetUniformVec2("uPosWidget", GetPixelPosition());
     size = GetAutoSize();
     material->GetShader()->SetUniformVec2("uSize", size);
-    material->GetShader()->SetUniformVec3("uColor", color);
+    material->GetShader()->SetUniformVec4("uColor", background);
     material->GetShader()->SetUniformFloat("uLayer", 0.1f * layer);
     
     mat4 projection = glm::ortho(0.0f, Helper::windowWidth, Helper::windowHeight, 0.0f);
@@ -86,7 +66,7 @@ void Image2D::Render()
     }
 }
 
-void Image2D::Clear()
+void Panel::Clear()
 {
     Widget::Clear();
     vertexArray->Unbind();
@@ -94,8 +74,8 @@ void Image2D::Clear()
     material->UnbindShader();
 }
 
-void Image2D::SetAutoName()
+void Panel::SetAutoName()
 {
     if (name.empty())
-        name = "Image2D" + std::to_string(++counter);
+        name = "Panel" + std::to_string(++counter);
 }

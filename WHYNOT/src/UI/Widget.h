@@ -2,6 +2,18 @@
 #include <includes.h>
 #include "Reflection/Reflection.h"
 
+enum class AutoSizing
+{
+    NONE, HORIZONTAL, VERTICAL, ALL
+};
+REGISTER_ENUM(AutoSizing,
+    {"NONE", AutoSizing::NONE},
+    {"HORIZONTAL", AutoSizing::HORIZONTAL},
+    {"VERTICAL", AutoSizing::VERTICAL},
+    {"ALL", AutoSizing::ALL},
+);
+
+
 class Widget : public std::enable_shared_from_this<Widget>
 {
 protected:
@@ -20,10 +32,15 @@ public:
         //Logger::Log(LogLevel::Info, "Widget Destructor " + name);
         children.clear();
     }
+    virtual void Initialize() {}
     
     string name;
     vec2 position;
     vec2 size;
+    AutoSizing autoSizing = AutoSizing::NONE;
+    
+    // top, right, bottom, left (TEMP IMPLEMENTATION, ONLY WITHOUT AUTOSIZING)
+    vec4 padding = {0,0,0,0};
 
     // NOTE: Currently, layers only work with opaque widgets
     unsigned int layer = 0;
@@ -44,5 +61,6 @@ public:
     void Destroy();
 
     vec2 GetPixelPosition() const;
+    vec2 GetAutoSize() const;
     
 };

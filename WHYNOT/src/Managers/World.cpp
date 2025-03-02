@@ -200,6 +200,7 @@ void World::AddWidget(const std::shared_ptr<Widget>& _widget)
         return;
     }
     widgets.push_back(_widget);
+    _widget->Initialize();
 }
 
 

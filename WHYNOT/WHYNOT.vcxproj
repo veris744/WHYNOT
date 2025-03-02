@@ -1134,6 +1134,7 @@
     </ClCompile>
     <ClCompile Include="src\UI\Buttons\LoadSceneButton.cpp" />
     <ClCompile Include="src\UI\Image2D.cpp" />
+    <ClCompile Include="src\UI\Panel.cpp" />
     <ClCompile Include="src\UI\Text.cpp" />
     <ClCompile Include="src\UI\Widget.cpp" />
     <ClCompile Include="src\Utils\Debugger.cpp" />
@@ -1189,6 +1190,7 @@
     <ClInclude Include="src\UI\Buttons\Button.h" />
     <ClInclude Include="src\UI\Buttons\LoadSceneButton.h" />
     <ClInclude Include="src\UI\Image2D.h" />
+    <ClInclude Include="src\UI\Panel.h" />
     <ClInclude Include="src\UI\Text.h" />
     <ClInclude Include="src\UI\Widget.h" />
     <ClInclude Include="src\Utils\Debugger.h" />
@@ -1235,6 +1237,7 @@
     <Content Include="shaders\fragment2D.glsl" />
     <Content Include="shaders\fragment2D2Ch.glsl" />
     <Content Include="shaders\fragment2DBW.glsl" />
+    <Content Include="shaders\fragment2DColor.glsl" />
     <Content Include="shaders\fragmentColor.glsl" />
     <Content Include="shaders\fragmentSky.glsl" />
     <Content Include="shaders\neonFragment.glsl" />

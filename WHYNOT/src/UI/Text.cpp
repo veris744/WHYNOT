@@ -6,6 +6,13 @@
 
 unsigned int Text::counter = 0;
 
+void Text::Initialize()
+{
+    Widget::Initialize();
+
+    size = CalculateSize();
+}
+
 vec2 Text::CalculateSize()
 {
     auto map = TextRenderer::instance().GetCharacters();

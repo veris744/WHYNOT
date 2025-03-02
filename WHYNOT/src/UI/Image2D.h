@@ -1,24 +1,19 @@
 #pragma once
 #include "Widget.h"
 #include "Graphics/Material.h"
-
-class Shader;
-class Texture;
-class VertexArray;
+#include "Graphics/VertexArray.h"
 
 class Image2D : public Widget
 {
     static unsigned int counter;
     std::shared_ptr<VertexArray> vertexArray;
     std::unique_ptr<Material> material;
-    //std::shared_ptr<Texture> texture;
-    //std::shared_ptr<Shader> shader;
 
-    void Initialize();
+    void Initialize() override;
     
 public:
     Image2D(const string& _path, vec2 _pos, vec2 _size, const string& _name = "");
-    Image2D(){};
+    Image2D() = default;
     void Render() override;
     void Clear() override;
     void SetAutoName() override;
@@ -33,5 +28,7 @@ REGISTER_CLASS(Image2D, {
     REGISTER_MEMBER(Image2D, position),
     REGISTER_MEMBER(Image2D, size),
     REGISTER_MEMBER(Image2D, layer),
-    REGISTER_MEMBER(Image2D, hasTransparency)
+    REGISTER_MEMBER(Image2D, hasTransparency),
+    REGISTER_MEMBER(Image2D, autoSizing),
+    REGISTER_MEMBER(Image2D, padding)
 })

@@ -7,7 +7,7 @@ widgets:
     sceneName: "Aliens"
     widgets:
       - type: "IMAGE2D"
-        size: [200, 50]
+        autoSizing: "ALL"
         path: "assets/box.jpg"
       - type: "TEXT"
         text: "ALIENS"
@@ -22,7 +22,7 @@ widgets:
     sceneName: "Editor"
     widgets:
       - type: "IMAGE2D"
-        size: [200, 50]
+        autoSizing: "ALL"
         path: "assets/box.jpg"
       - type: "TEXT"
         text: "EDITOR"

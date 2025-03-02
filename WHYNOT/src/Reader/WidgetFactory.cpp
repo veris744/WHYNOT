@@ -4,6 +4,7 @@
 #include "Managers/World.h"
 #include "UI/Image2D.h"
 #include "UI/Text.h"
+#include "UI/Panel.h"
 #include "UI/Buttons/LoadSceneButton.h"
 
 using namespace Reader;
@@ -35,7 +36,14 @@ void WidgetFactory::WidgetFactorySetup()
         std::shared_ptr<Widget> {
             std::shared_ptr<Text> widget = std::shared_ptr<Text>();
             deserialize(asset, widget);
-            widget->size = widget->CalculateSize();
+            SaveWidget(widget, parent);
+            return widget;
+        });
+    
+    RegisterWidget("PANEL", [](const YAML::Node& asset, const std::shared_ptr<Widget>& parent) ->
+        std::shared_ptr<Widget> {
+            std::shared_ptr<Panel> widget = std::shared_ptr<Panel>();
+            deserialize(asset, widget);
             SaveWidget(widget, parent);
             return widget;
         });
