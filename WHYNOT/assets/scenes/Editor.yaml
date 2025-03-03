@@ -36,16 +36,16 @@ entities:
           type: "STATIC"
           mode: "QUERY"
 widgets:
-  - type: "PANEL"
+  - type: "ENTITY_PANEL"
     autoSizing: "VERTICAL"
     size: [250, 0]
     background: [0.3, 0.3, 0.3, 1]
     position: [0, 50]
     padding: [0,0,0,125]
-  - type: "PANEL"
-    autoSizing: "VERTICAL"
-    size: [250, 0]
-    background: [0.3, 0.3, 0.3, 1]
-    position: [100, 50]
-    padding: [0,125,0,0]
+#  - type: "PANEL"
+#    autoSizing: "VERTICAL"
+#    size: [250, 0]
+#    background: [0.3, 0.3, 0.3, 1]
+#    position: [100, 50]
+#    padding: [0,125,0,0]
   

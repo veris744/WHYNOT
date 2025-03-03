@@ -60,7 +60,6 @@ namespace Reflection
 {
     template <typename T>
     void deserialize(const YAML::Node& node, T& obj) {
-        string name = Reader::demangleTypeName(typeid(T).name());
         const auto* typeInfo = TypeRegistry::instance().getTypeInfo(Reader::demangleTypeName(typeid(T).name()));
         if (typeInfo) {
             for (const auto& member : typeInfo->members) {

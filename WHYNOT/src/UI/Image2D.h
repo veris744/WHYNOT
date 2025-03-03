@@ -6,7 +6,7 @@
 class Image2D : public Widget
 {
     static unsigned int counter;
-    std::shared_ptr<VertexArray> vertexArray;
+    std::unique_ptr<VertexArray> vertexArray;
     std::unique_ptr<Material> material;
 
     void Initialize() override;

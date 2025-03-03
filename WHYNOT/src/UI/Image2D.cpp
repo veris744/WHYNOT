@@ -24,7 +24,7 @@ void Image2D::Initialize()
     Widget::Initialize();
     
     vector<float> vertex = Renderer2D::quadVertices;
-    vertexArray = std::make_shared<VertexArray>();
+    vertexArray = std::make_unique<VertexArray>();
     vertexArray->Bind();
     vertexArray->AddVertexBuffer(vertex.data(), 0.5f * vertex.size(), vertex.size() * sizeof(float));
     

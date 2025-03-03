@@ -4,8 +4,9 @@
 #include "Managers/World.h"
 #include "UI/Image2D.h"
 #include "UI/Text.h"
-#include "UI/Panel.h"
+#include "UI/Containers/Panel.h"
 #include "UI/Buttons/LoadSceneButton.h"
+#include "UI/Containers/EntityPanel.h"
 
 using namespace Reader;
 using namespace Reflection;
@@ -43,6 +44,14 @@ void WidgetFactory::WidgetFactorySetup()
     RegisterWidget("PANEL", [](const YAML::Node& asset, const std::shared_ptr<Widget>& parent) ->
         std::shared_ptr<Widget> {
             std::shared_ptr<Panel> widget = std::shared_ptr<Panel>();
+            deserialize(asset, widget);
+            SaveWidget(widget, parent);
+            return widget;
+    });
+    
+    RegisterWidget("ENTITY_PANEL", [](const YAML::Node& asset, const std::shared_ptr<Widget>& parent) ->
+        std::shared_ptr<Widget> {
+            std::shared_ptr<EntityPanel> widget = std::shared_ptr<EntityPanel>();
             deserialize(asset, widget);
             SaveWidget(widget, parent);
             return widget;

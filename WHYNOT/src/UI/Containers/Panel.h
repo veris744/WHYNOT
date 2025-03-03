@@ -1,5 +1,5 @@
 #pragma once
-#include "Widget.h"
+#include "UI/Widget.h"
 #include "Graphics/Material.h"
 #include "Graphics/VertexArray.h"
 
@@ -7,7 +7,9 @@
 class Panel : public Widget
 {
     static unsigned int counter;
-    std::shared_ptr<VertexArray> vertexArray;
+    
+protected:
+    std::unique_ptr<VertexArray> vertexArray;
     std::unique_ptr<Material> material;
 
     void Initialize() override;
