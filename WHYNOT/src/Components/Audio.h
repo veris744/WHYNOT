@@ -18,9 +18,9 @@ struct AudioSource
     // float volume;
 };
 REGISTER_CLASS(AudioSource, {
-    REGISTER_MEMBER(AudioSource, name),
-    REGISTER_MEMBER(AudioSource, filename),
-    REGISTER_MEMBER(AudioSource, loops)
+    REGISTER_MEMBER(AudioSource, name, MemberProperty::Viewable),
+    REGISTER_MEMBER(AudioSource, filename, MemberProperty::Viewable),
+    REGISTER_MEMBER(AudioSource, loops, MemberProperty::Viewable)
 });
 
 class Audio : public Component

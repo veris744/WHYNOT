@@ -34,18 +34,18 @@ struct LightData
     LightSourceType type = LightSourceType::DIRECTIONAL;
 };
 REGISTER_CLASS(LightData, {
-    REGISTER_MEMBER(LightData, position),
-    REGISTER_MEMBER(LightData, color),
-    REGISTER_MEMBER(LightData, direction),
-    REGISTER_MEMBER(LightData, specular),
-    REGISTER_MEMBER(LightData, diffuse),
-    REGISTER_MEMBER(LightData, ambient),
-    REGISTER_MEMBER(LightData, constantAtt),
-    REGISTER_MEMBER(LightData, linearAtt),
-    REGISTER_MEMBER(LightData, quadAtt),
-    REGISTER_MEMBER(LightData, angle),
-    REGISTER_MEMBER(LightData, outerAngle),
-    REGISTER_MEMBER(LightData, type)
+    REGISTER_MEMBER(LightData, position, MemberProperty::Viewable),
+    REGISTER_MEMBER(LightData, color, MemberProperty::Viewable),
+    REGISTER_MEMBER(LightData, direction, MemberProperty::Viewable),
+    REGISTER_MEMBER(LightData, specular, MemberProperty::Viewable),
+    REGISTER_MEMBER(LightData, diffuse, MemberProperty::Viewable),
+    REGISTER_MEMBER(LightData, ambient, MemberProperty::Viewable),
+    REGISTER_MEMBER(LightData, constantAtt, MemberProperty::Viewable),
+    REGISTER_MEMBER(LightData, linearAtt, MemberProperty::Viewable),
+    REGISTER_MEMBER(LightData, quadAtt, MemberProperty::Viewable),
+    REGISTER_MEMBER(LightData, angle, MemberProperty::Viewable),
+    REGISTER_MEMBER(LightData, outerAngle, MemberProperty::Viewable),
+    REGISTER_MEMBER(LightData, type, MemberProperty::NonViewable)
 });
 
 class LightSource : public Component
@@ -66,5 +66,5 @@ public:
     LightData lightData;    
 };
 REGISTER_CLASS(LightSource, {
-    REGISTER_MEMBER(LightSource, lightData)
+    REGISTER_MEMBER(LightSource, lightData, MemberProperty::NonViewable)
 });

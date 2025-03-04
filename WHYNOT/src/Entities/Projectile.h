@@ -34,5 +34,5 @@ public:
     void DisableProjectile();
 };
 REGISTER_CLASS(Projectile, {
-    REGISTER_MEMBER(Projectile, name)
+    REGISTER_MEMBER(Projectile, name, MemberProperty::Viewable)
 });

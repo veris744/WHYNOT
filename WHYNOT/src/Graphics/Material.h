@@ -29,11 +29,11 @@ struct MaterialData
     vec4 color = vec4(1, 1, 1, 1);
 };
 REGISTER_CLASS(MaterialData, {
-    REGISTER_MEMBER(MaterialData, type),
-    REGISTER_MEMBER(MaterialData, diffuse),
-    REGISTER_MEMBER(MaterialData, specular),
-    REGISTER_MEMBER(MaterialData, shininess),
-    REGISTER_MEMBER(MaterialData, color),
+    REGISTER_MEMBER(MaterialData, type, MemberProperty::NonViewable),
+    REGISTER_MEMBER(MaterialData, diffuse, MemberProperty::Viewable),
+    REGISTER_MEMBER(MaterialData, specular, MemberProperty::Viewable),
+    REGISTER_MEMBER(MaterialData, shininess, MemberProperty::Viewable),
+    REGISTER_MEMBER(MaterialData, color, MemberProperty::Viewable),
 });
 
 class Material
@@ -71,8 +71,8 @@ public:
     
 };
 REGISTER_CLASS(Material, {
-    REGISTER_MEMBER(Material, materialData),
-    REGISTER_MEMBER(Material, vertexShaderPath),
-    REGISTER_MEMBER(Material, fragmentShaderPath),
-    REGISTER_MEMBER(Material, texturePaths)
+    REGISTER_MEMBER(Material, materialData, MemberProperty::NonViewable),
+    REGISTER_MEMBER(Material, vertexShaderPath, MemberProperty::Viewable),
+    REGISTER_MEMBER(Material, fragmentShaderPath, MemberProperty::Viewable),
+    REGISTER_MEMBER(Material, texturePaths, MemberProperty::Hidden)
 });

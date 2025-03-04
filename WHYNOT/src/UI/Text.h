@@ -63,12 +63,12 @@ public:
     void SetText(const string& _text);
 };
 REGISTER_CLASS(Text, {
-    REGISTER_MEMBER(Text, name),
-    REGISTER_MEMBER(Text, text),
-    REGISTER_MEMBER(Text, scale),
-    REGISTER_MEMBER(Text, color),
-    REGISTER_MEMBER(Text, position),
-    REGISTER_MEMBER(Text, align),
-    REGISTER_MEMBER(Text, alignVertical),
-    REGISTER_MEMBER(Text, padding)
+    REGISTER_MEMBER(Text, name, MemberProperty::Viewable),
+    REGISTER_MEMBER(Text, text, MemberProperty::Viewable),
+    REGISTER_MEMBER(Text, scale, MemberProperty::Viewable),
+    REGISTER_MEMBER(Text, color, MemberProperty::Viewable),
+    REGISTER_MEMBER(Text, position, MemberProperty::Viewable),
+    REGISTER_MEMBER(Text, align, MemberProperty::Viewable),
+    REGISTER_MEMBER(Text, alignVertical, MemberProperty::Viewable),
+    REGISTER_MEMBER(Text, pixelCorrection, MemberProperty::Viewable)
 });

@@ -40,12 +40,10 @@ vec2 Widget::GetPixelPosition() const
         float x = Helper::windowWidth * position.x * 0.01f ;
         float y = Helper::windowHeight * position.y * 0.01f;
         
-        x += padding.w;
-        y += padding.z;
-        x -= padding.y;
-        y -= padding.x;
-        
-        return vec2(x, y);
+        x += pixelCorrection.x;
+        y += pixelCorrection.y;
+
+        return {x, y};
     }
 
     vec2 parentPos = parent->GetPixelPosition();
@@ -55,12 +53,10 @@ vec2 Widget::GetPixelPosition() const
     float x = parentPos.x + parentWidth * position.x * 0.01f;
     float y = parentPos.y + parentHeight * position.y * 0.01f;
     
-    x += padding.w;
-    y += padding.z;
-    x -= padding.y;
-    y -= padding.x;
+    x += pixelCorrection.x;
+    y += pixelCorrection.y;
     
-    return vec2(x, y);
+    return {x, y};
 }
 
 vec2 Widget::GetAutoSize() const

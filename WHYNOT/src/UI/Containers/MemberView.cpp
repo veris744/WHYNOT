@@ -1,6 +1,7 @@
 #include "MemberView.h"
 
 #include "UI/Text.h"
+#include "Utils/Parser.h"
 
 unsigned int MemberView::counter = 0;
 
@@ -25,7 +26,22 @@ void MemberView::SetAutoName()
         name = "MemberView" + std::to_string(++counter);
 }
 
-void MemberView::SetMemberInfo(const string& info)
+void MemberView::SetMemberInfo(const MemberInfo& info, const string& value)
 {
-    text->SetText(info);
+    string res = "";
+    
+    if (!HasProperty(info.properties, MemberProperty::Hidden))
+    {
+        res += info.name;
+    }
+    if (HasProperty(info.properties, MemberProperty::Viewable))
+    {
+        res += ": " + value;
+    }
+    text->SetText(res);
+}
+
+void MemberView::SetMemberInfo(const string& value)
+{
+    text->SetText(value);
 }

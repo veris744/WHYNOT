@@ -18,5 +18,6 @@ public:
     MemberView(vec2 _pos, vec2 _size, const string& _name = "");
     MemberView() = default;
     void SetAutoName() override;
-    void SetMemberInfo(const string& info);
+    void SetMemberInfo(const MemberInfo& info, const string& value = "");
+    void SetMemberInfo(const string& value);
 };

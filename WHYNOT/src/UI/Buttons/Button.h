@@ -17,7 +17,7 @@ public:
     virtual void OnClick(vec2 _mousePos);
 };
 REGISTER_CLASS(Button, {
-    REGISTER_MEMBER(Button, name),
-    REGISTER_MEMBER(Button, position),
-    REGISTER_MEMBER(Button, size),
+    REGISTER_MEMBER(Button, name, MemberProperty::Viewable),
+    REGISTER_MEMBER(Button, position, MemberProperty::Viewable),
+    REGISTER_MEMBER(Button, size, MemberProperty::Viewable),
 });

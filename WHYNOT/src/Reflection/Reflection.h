@@ -3,15 +3,50 @@
 #include <string>
 #include <unordered_map>
 #include <Reader/Reader.h>
+#include <Utils/Parser.h>
 
 using namespace std;
 using FactoryFunction = std::function<void*()>;
+
+enum class MemberProperty : uint32_t
+{
+    Hidden = 0,
+    Viewable = 1 << 0,
+    Editable = 1 << 1,
+    NonViewable = 1 << 2
+};
+
+inline const char* to_string(MemberProperty e)
+{
+    switch (e)
+    {
+    case MemberProperty::Hidden: return "Hidden";
+    case MemberProperty::Viewable: return "Viewable";
+    case MemberProperty::Editable: return "Editable";
+    case MemberProperty::NonViewable: return "NonViewable";
+    default: return "unknown";
+    }
+}
+
+inline MemberProperty operator|(MemberProperty a, MemberProperty b) {
+    return static_cast<MemberProperty>(
+        static_cast<std::underlying_type_t<MemberProperty>>(a) |
+        static_cast<std::underlying_type_t<MemberProperty>>(b)
+    );
+}
+inline bool HasProperty(MemberProperty properties, MemberProperty flag) {
+    return (static_cast<std::underlying_type_t<MemberProperty>>(properties) &
+            static_cast<std::underlying_type_t<MemberProperty>>(flag)) != 0;
+}
+
 
 struct MemberInfo
 {
     string name;
     string type_name;
+    MemberProperty properties; 
     function<void(void*, const YAML::Node&)> setter;
+    std::function<std::string(void*)> getter;
 };
 
 struct TypeInfo {
@@ -99,8 +134,8 @@ namespace Reflection
         static type##Register global_##type##Register; \
     }
 
-#define REGISTER_MEMBER(type, member) \
-    MemberInfo{#member, #type, [](void* obj, const YAML::Node& node) { \
+#define REGISTER_MEMBER(type, member, properties) \
+    MemberInfo{#member, #type, properties, [](void* obj, const YAML::Node& node) { \
         auto& instance = *static_cast<type*>(obj); \
         using MemberT = std::decay_t<decltype(instance.member)>; \
         if constexpr (std::is_class_v<MemberT> && !Reader::IsGLMType<MemberT>() \
@@ -113,4 +148,11 @@ namespace Reflection
                 instance.member = Reader::ReadValue<MemberT>(node, #member); \
             } \
         } \
-    }}
+    }, \
+    ((static_cast<uint32_t>(properties) & static_cast<uint32_t>(MemberProperty::Viewable)) != 0) ? \
+        static_cast<std::function<std::string(void*)>>([](void* obj) -> std::string { \
+            auto& instance = *static_cast<type*>(obj); \
+            using MemberT = std::decay_t<decltype(instance.member)>; \
+            return Parser::ParseValue(instance.member); \
+        }) : nullptr \
+    }

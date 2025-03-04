@@ -24,12 +24,12 @@ public:
     vec4 background = vec4(0, 0, 0, 0);
 };
 REGISTER_CLASS(Panel, {
-    REGISTER_MEMBER(Panel, name),
-    REGISTER_MEMBER(Panel, background),
-    REGISTER_MEMBER(Panel, position),
-    REGISTER_MEMBER(Panel, size),
-    REGISTER_MEMBER(Panel, layer),
-    REGISTER_MEMBER(Panel, hasTransparency),
-    REGISTER_MEMBER(Panel, autoSizing),
-    REGISTER_MEMBER(Panel, padding)
+    REGISTER_MEMBER(Panel, name, MemberProperty::Viewable),
+    REGISTER_MEMBER(Panel, background, MemberProperty::Viewable),
+    REGISTER_MEMBER(Panel, position, MemberProperty::Viewable),
+    REGISTER_MEMBER(Panel, size, MemberProperty::Viewable),
+    REGISTER_MEMBER(Panel, layer, MemberProperty::Viewable),
+    REGISTER_MEMBER(Panel, hasTransparency, MemberProperty::Viewable),
+    REGISTER_MEMBER(Panel, autoSizing, MemberProperty::Viewable),
+    REGISTER_MEMBER(Panel, pixelCorrection, MemberProperty::Viewable)
 })

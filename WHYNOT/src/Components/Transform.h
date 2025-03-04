@@ -40,7 +40,7 @@ public:
     void LookAt(vec3 target);
 };
 REGISTER_CLASS(Transform, 
-    REGISTER_MEMBER(Transform, position),
-    REGISTER_MEMBER(Transform, scale),
-    REGISTER_MEMBER(Transform, rotation)
+    REGISTER_MEMBER(Transform, position, MemberProperty::Viewable),
+    REGISTER_MEMBER(Transform, scale, MemberProperty::Viewable),
+    REGISTER_MEMBER(Transform, rotation, MemberProperty::NonViewable)
 );

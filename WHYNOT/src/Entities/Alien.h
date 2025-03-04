@@ -28,5 +28,5 @@ public:
     
 };
 REGISTER_CLASS(Alien, {
-    REGISTER_MEMBER(Alien, name)
+    REGISTER_MEMBER(Alien, name, MemberProperty::Viewable)
 });

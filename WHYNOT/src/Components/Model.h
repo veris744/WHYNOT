@@ -57,10 +57,10 @@ public:
     const vector<std::unique_ptr<Mesh>>& GetMeshes() { return meshes; }
 };
 REGISTER_CLASS(Model, {
-    REGISTER_MEMBER(Model, path),
-    REGISTER_MEMBER(Model, position),
-    REGISTER_MEMBER(Model, rotation),
-    REGISTER_MEMBER(Model, scale),
-    REGISTER_MEMBER(Model, invertTexture),
-    REGISTER_MEMBER(Model, enableCulling)
+    REGISTER_MEMBER(Model, path, MemberProperty::Viewable),
+    REGISTER_MEMBER(Model, position, MemberProperty::Viewable),
+    REGISTER_MEMBER(Model, rotation, MemberProperty::Viewable),
+    REGISTER_MEMBER(Model, scale, MemberProperty::Viewable),
+    REGISTER_MEMBER(Model, invertTexture, MemberProperty::Viewable),
+    REGISTER_MEMBER(Model, enableCulling, MemberProperty::Viewable)
 });

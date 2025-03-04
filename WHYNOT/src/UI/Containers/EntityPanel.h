@@ -13,12 +13,12 @@ public:
     
 };
 REGISTER_CLASS(EntityPanel, {
-    REGISTER_MEMBER(EntityPanel, name),
-    REGISTER_MEMBER(EntityPanel, background),
-    REGISTER_MEMBER(EntityPanel, position),
-    REGISTER_MEMBER(EntityPanel, size),
-    REGISTER_MEMBER(EntityPanel, layer),
-    REGISTER_MEMBER(EntityPanel, hasTransparency),
-    REGISTER_MEMBER(EntityPanel, autoSizing),
-    REGISTER_MEMBER(EntityPanel, padding)
+    REGISTER_MEMBER(EntityPanel, name, MemberProperty::Viewable),
+    REGISTER_MEMBER(EntityPanel, background, MemberProperty::Viewable),
+    REGISTER_MEMBER(EntityPanel, position, MemberProperty::Viewable),
+    REGISTER_MEMBER(EntityPanel, size, MemberProperty::Viewable),
+    REGISTER_MEMBER(EntityPanel, layer, MemberProperty::Viewable),
+    REGISTER_MEMBER(EntityPanel, hasTransparency, MemberProperty::Viewable),
+    REGISTER_MEMBER(EntityPanel, autoSizing, MemberProperty::Viewable),
+    REGISTER_MEMBER(EntityPanel, pixelCorrection, MemberProperty::Viewable)
 })

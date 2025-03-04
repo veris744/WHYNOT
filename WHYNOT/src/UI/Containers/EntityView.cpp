@@ -21,6 +21,7 @@ void EntityView::Render()
 {
     if (!entity) return;
     
+    size = GetAutoSize();
     Widget::Render();
 }
 
@@ -28,35 +29,39 @@ void EntityView::SetContent()
 {
     if (!entity) return;
 
-    float padding = 0;
-    float separation = 25;
+    float yCorrection = 0;
+    float separation = 20;
     
-    std::shared_ptr<MemberView> entityView = std::make_shared<MemberView>(vec2(0), vec2(0, 20), "EntityNameText");
+    std::shared_ptr<MemberView> entityView = std::make_shared<MemberView>(vec2(-45, -20), vec2(0, 20), "EntityNameText");
     entityView->autoSizing = AutoSizing::HORIZONTAL;
-    entityView->padding = {250, 0, padding, -100};
+    entityView->pixelCorrection = {0, yCorrection};
     AddWidget(entityView);
     entityView->SetMemberInfo(entity->GetName());
     
     for (const auto& comp : entity->GetComponents())
     {
-        padding += separation;
+        yCorrection += separation;
         const auto* typeInfo = TypeRegistry::instance().getTypeInfo(Reader::demangleTypeName(typeid(*comp.get()).name()));
         if (!typeInfo)  continue;
         
-        std::shared_ptr<MemberView> compView = std::make_shared<MemberView>(vec2(0), vec2(0, 20));
+        std::shared_ptr<MemberView> compView = std::make_shared<MemberView>(vec2(-40, -20), vec2(0, 20));
         compView->autoSizing = AutoSizing::HORIZONTAL;
-        compView->padding = {250, 0, padding, -100};
+        compView->pixelCorrection = {0, yCorrection};
         AddWidget(compView);
         compView->SetMemberInfo(typeInfo->type_name);
         
         for (const auto& member : typeInfo->members)
         {
-            padding += separation;
-            std::shared_ptr<MemberView> memberView = std::make_shared<MemberView>(vec2(0), vec2(0, 20));
+            yCorrection += separation;
+            std::shared_ptr<MemberView> memberView = std::make_shared<MemberView>(vec2(-35, -20), vec2(0, 20));
             memberView->autoSizing = AutoSizing::HORIZONTAL;
-            memberView->padding = {250, 0, padding, -100};
+            memberView->pixelCorrection = {0, yCorrection};
             AddWidget(memberView);
-            memberView->SetMemberInfo(member.name);
+            std::string valueStr;
+            if (member.getter) {
+                valueStr = member.getter(comp.get());
+            }
+            memberView->SetMemberInfo(member, valueStr);
         }
     }
 }

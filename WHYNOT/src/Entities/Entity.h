@@ -99,7 +99,7 @@ public:
     }
 };
 REGISTER_CLASS(Entity, {
-    REGISTER_MEMBER(Entity, name),
-    REGISTER_MEMBER(Entity, debugEnabled)
+    REGISTER_MEMBER(Entity, name, MemberProperty::Viewable),
+    REGISTER_MEMBER(Entity, debugEnabled, MemberProperty::Viewable)
 })
 

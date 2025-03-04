@@ -40,7 +40,7 @@ public:
     AutoSizing autoSizing = AutoSizing::NONE;
     
     // top, right, bottom, left (TEMP IMPLEMENTATION, ONLY WITHOUT AUTOSIZING)
-    vec4 padding = {0,0,0,0};
+    vec2 pixelCorrection = {0,0};
 
     // NOTE: Currently, layers only work with opaque widgets
     unsigned int layer = 0;

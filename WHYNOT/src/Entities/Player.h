@@ -17,5 +17,5 @@ public:
     void Update(float _deltaTime) override;
 };
 REGISTER_CLASS(Player, {
-    REGISTER_MEMBER(Player, name)
+    REGISTER_MEMBER(Player, name, MemberProperty::Viewable)
 });

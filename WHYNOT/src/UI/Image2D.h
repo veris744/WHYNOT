@@ -22,13 +22,13 @@ public:
     vec3 color = vec3(0, 0, 0);
 };
 REGISTER_CLASS(Image2D, {
-    REGISTER_MEMBER(Image2D, name),
-    REGISTER_MEMBER(Image2D, path),
-    REGISTER_MEMBER(Image2D, color),
-    REGISTER_MEMBER(Image2D, position),
-    REGISTER_MEMBER(Image2D, size),
-    REGISTER_MEMBER(Image2D, layer),
-    REGISTER_MEMBER(Image2D, hasTransparency),
-    REGISTER_MEMBER(Image2D, autoSizing),
-    REGISTER_MEMBER(Image2D, padding)
+    REGISTER_MEMBER(Image2D, name, MemberProperty::Viewable),
+    REGISTER_MEMBER(Image2D, path, MemberProperty::Viewable),
+    REGISTER_MEMBER(Image2D, color, MemberProperty::Viewable),
+    REGISTER_MEMBER(Image2D, position, MemberProperty::Viewable),
+    REGISTER_MEMBER(Image2D, size, MemberProperty::Viewable),
+    REGISTER_MEMBER(Image2D, layer, MemberProperty::Viewable),
+    REGISTER_MEMBER(Image2D, hasTransparency, MemberProperty::Viewable),
+    REGISTER_MEMBER(Image2D, autoSizing, MemberProperty::Viewable),
+    REGISTER_MEMBER(Image2D, pixelCorrection, MemberProperty::Viewable)
 })

@@ -13,8 +13,8 @@ public:
     string sceneName = "";
 };
 REGISTER_CLASS(LoadSceneButton, {
-    REGISTER_MEMBER(LoadSceneButton, name),
-    REGISTER_MEMBER(LoadSceneButton, position),
-    REGISTER_MEMBER(LoadSceneButton, size),
-    REGISTER_MEMBER(LoadSceneButton, sceneName),
+    REGISTER_MEMBER(LoadSceneButton, name, MemberProperty::Viewable),
+    REGISTER_MEMBER(LoadSceneButton, position, MemberProperty::Viewable),
+    REGISTER_MEMBER(LoadSceneButton, size, MemberProperty::Viewable),
+    REGISTER_MEMBER(LoadSceneButton, sceneName, MemberProperty::Viewable),
 });

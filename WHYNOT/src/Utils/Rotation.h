@@ -51,7 +51,7 @@ struct Rotation
     
 };
 REGISTER_CLASS(Rotation, {
-    REGISTER_MEMBER(Rotation, pitch),
-    REGISTER_MEMBER(Rotation, yaw),
-    REGISTER_MEMBER(Rotation, roll)
+    REGISTER_MEMBER(Rotation, pitch, MemberProperty::Viewable),
+    REGISTER_MEMBER(Rotation, yaw, MemberProperty::Viewable),
+    REGISTER_MEMBER(Rotation, roll, MemberProperty::Viewable)
 });

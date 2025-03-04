@@ -41,7 +41,7 @@ widgets:
     size: [250, 0]
     background: [0.3, 0.3, 0.3, 1]
     position: [0, 50]
-    padding: [0,0,0,125]
+    pixelCorrection: [125,0]
 #  - type: "PANEL"
 #    autoSizing: "VERTICAL"
 #    size: [250, 0]

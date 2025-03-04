@@ -70,8 +70,8 @@ public:
     void SetPositionLocked(bool _positionLocked) { isPositionLocked = _positionLocked; }
 };
 REGISTER_CLASS(PlayerController, {
-    REGISTER_MEMBER(PlayerController, maxSpeed),
-    REGISTER_MEMBER(PlayerController, maxAcceleration),
-    REGISTER_MEMBER(PlayerController, accelerationRate),
-    REGISTER_MEMBER(PlayerController, decelerationRate)
+    REGISTER_MEMBER(PlayerController, maxSpeed, MemberProperty::Viewable),
+    REGISTER_MEMBER(PlayerController, maxAcceleration, MemberProperty::Viewable),
+    REGISTER_MEMBER(PlayerController, accelerationRate, MemberProperty::Viewable),
+    REGISTER_MEMBER(PlayerController, decelerationRate, MemberProperty::Viewable)
 })

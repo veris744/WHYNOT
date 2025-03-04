@@ -28,6 +28,6 @@ struct CollisionProfile
     ColliderMode mode = ColliderMode::Query;
 };
 REGISTER_CLASS(CollisionProfile, {
-    REGISTER_MEMBER(CollisionProfile, type),
-    REGISTER_MEMBER(CollisionProfile, mode)
+    REGISTER_MEMBER(CollisionProfile, type, MemberProperty::NonViewable),
+    REGISTER_MEMBER(CollisionProfile, mode, MemberProperty::NonViewable)
 });

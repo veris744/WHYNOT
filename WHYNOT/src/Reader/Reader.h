@@ -66,9 +66,7 @@ namespace Reader
         else if constexpr (is_same_v<T, bool>) {
             return ReadBool(node, name);
         }
-        else {
-            Logger::Log(LogLevel::Error, "Unsupported type");
-        }
+        Logger::Log(LogLevel::Error, "Unsupported type");
     }
 
     template<typename T>

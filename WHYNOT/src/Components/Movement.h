@@ -33,8 +33,8 @@ public:
 };
 
 REGISTER_CLASS(Movement, {
-    REGISTER_MEMBER(Movement, maxSpeed),
-    REGISTER_MEMBER(Movement, maxAcceleration),
-    REGISTER_MEMBER(Movement, speed),
-    REGISTER_MEMBER(Movement, acceleration)
+    REGISTER_MEMBER(Movement, maxSpeed, MemberProperty::Viewable),
+    REGISTER_MEMBER(Movement, maxAcceleration, MemberProperty::Viewable),
+    REGISTER_MEMBER(Movement, speed, MemberProperty::Viewable),
+    REGISTER_MEMBER(Movement, acceleration, MemberProperty::Viewable)
 });

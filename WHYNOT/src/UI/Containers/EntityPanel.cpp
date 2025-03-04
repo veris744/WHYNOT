@@ -15,6 +15,7 @@ void EntityPanel::Initialize()
 
     std::shared_ptr<EntityView> entityView = std::make_shared<EntityView>();
     entityView->name = "EditorEntityView";
+    entityView->autoSizing = AutoSizing::ALL;
     AddWidget(entityView);
 }
 
