@@ -24,7 +24,7 @@ void TextRenderer::LoadFont(const string& _fontPath)
     
     FT_Face face;
     if (FT_New_Face(*ftLibrary, _fontPath.empty() ? fontPathDefault.c_str() : _fontPath.c_str(), 0, &face)) {
-        Logger::Log<TextRenderer>(LogLevel::FatalError, "ERROR::FREETYPE: Failed to load font");
+        Logger::Log<TextRenderer>(LogLevel::FatalError, "Failed to load font");
     }
     else
     {
@@ -88,10 +88,18 @@ void TextRenderer::RenderText(string text, float x, float y, float scale, vec3 c
     std::string::const_iterator c;
     for (c = text.begin(); c != text.end(); c++) 
     {
+        if (*c == ' ') {
+            x += (Characters[' '].Advance >> 6) * scale;
+            continue;
+        }
         Character ch = Characters[*c];
 
         float xpos = x + ch.Bearing.x * scale;
         float ypos = y - (ch.Size.y - ch.Bearing.y) * scale;
+        if (*c == '.' || *c == ',') 
+        {
+            ypos += 20.0f * scale; // tweak this value based on your visual results
+        }
 
         float w = ch.Size.x * scale;
         float h = ch.Size.y * scale;

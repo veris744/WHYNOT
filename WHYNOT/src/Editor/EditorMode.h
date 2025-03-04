@@ -1,12 +1,12 @@
 #pragma once
 #include "Entities/Entity.h"
 
-class EntityView;
+class EntityPanel;
 
 class EditorMode
 {
     static Entity* selectedEntity;
-    static EntityView* entityViewer;
+    static EntityPanel* entityViewer;
 
 public:
     static void SelectEntity(Entity* entity);

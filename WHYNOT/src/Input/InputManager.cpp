@@ -264,7 +264,7 @@ void InputManager::HandleMouseButtonPress(int key)
     else if (inputMode == InputMode::Editor && key == GLFW_MOUSE_BUTTON_1)
     {
         vec3 mousePos3D = GetMousePos3D();
-        Hit hit = CollisionManager::ThrowRay(playerTransform->position, mousePos3D - playerTransform->position, true, 4.f);
+        Hit hit = CollisionManager::ThrowRay(playerTransform->position, mousePos3D - playerTransform->position, false);
         if (hit.hasHit)
         {
             hit.entity->OnClicked();

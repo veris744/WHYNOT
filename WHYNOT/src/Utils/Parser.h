@@ -56,9 +56,15 @@ namespace Parser
         {
             return EnumRegistry::instance().toString(data);
         }
-        else if constexpr (std::is_same_v<T, float> || std::is_same_v<T, int> || std::is_same_v<T, unsigned int> || std::is_same_v<T, bool>)
+        else if constexpr (std::is_same_v<T, bool>)
         {
-            return std::to_string(data);
+            return data ? "true" : "false";
+        }
+        else if constexpr (std::is_same_v<T, float> || std::is_same_v<T, int> || std::is_same_v<T, unsigned int>)
+        {
+            std::ostringstream stream;
+            stream << std::fixed << std::setprecision(2) << data;
+            return stream.str();
         }
         else if constexpr (std::is_same_v<T, vec2>)
         {

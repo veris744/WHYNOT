@@ -3,7 +3,7 @@
 #include "Physics/CollisionPresets.h"
 #include "Physics/Hit.h"
 
-class Hit;
+struct Hit;
 
 enum class ColliderShape
 {

@@ -38,6 +38,10 @@ void MemberView::SetMemberInfo(const MemberInfo& info, const string& value)
     {
         res += ": " + value;
     }
+    else
+    {
+        res.append(": Non Viewable");
+    }
     text->SetText(res);
 }
 

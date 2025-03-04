@@ -3,7 +3,7 @@
 #include "includes.h"
 
 
-class Hit;
+struct Hit;
 class Entity;
 
 struct AABB {

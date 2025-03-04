@@ -1134,7 +1134,6 @@
     </ClCompile>
     <ClCompile Include="src\UI\Buttons\LoadSceneButton.cpp" />
     <ClCompile Include="src\UI\Containers\EntityPanel.cpp" />
-    <ClCompile Include="src\UI\Containers\EntityView.cpp" />
     <ClCompile Include="src\UI\Containers\MemberView.cpp" />
     <ClCompile Include="src\UI\Containers\Panel.cpp">
       <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
@@ -1267,7 +1266,6 @@
     <ClInclude Include="src\UI\Buttons\Button.h" />
     <ClInclude Include="src\UI\Buttons\LoadSceneButton.h" />
     <ClInclude Include="src\UI\Containers\EntityPanel.h" />
-    <ClInclude Include="src\UI\Containers\EntityView.h" />
     <ClInclude Include="src\UI\Containers\MemberView.h" />
     <ClInclude Include="src\UI\Containers\Panel.h" />
     <ClInclude Include="src\UI\Image2D.h" />

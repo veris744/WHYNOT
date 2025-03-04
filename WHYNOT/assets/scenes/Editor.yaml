@@ -37,11 +37,12 @@ entities:
           mode: "QUERY"
 widgets:
   - type: "ENTITY_PANEL"
+    name: "EntityPanel"
     autoSizing: "VERTICAL"
-    size: [250, 0]
+    size: [400, 0]
     background: [0.3, 0.3, 0.3, 1]
     position: [0, 50]
-    pixelCorrection: [125,0]
+    pixelCorrection: [200,0]
 #  - type: "PANEL"
 #    autoSizing: "VERTICAL"
 #    size: [250, 0]

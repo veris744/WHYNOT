@@ -2,16 +2,17 @@
 
 #include "Components/Transform.h"
 #include "Managers/World.h"
-#include "UI/Containers/EntityView.h"
+#include "UI/Containers/EntityPanel.h"
 
 Entity* EditorMode::selectedEntity = nullptr;
-EntityView* EditorMode::entityViewer = nullptr;
+EntityPanel* EditorMode::entityViewer = nullptr;
 
 void EditorMode::SelectEntity(Entity* entity)
 {
     if (selectedEntity)
     {
-        entityViewer->ClearContent();
+        if (entityViewer)
+            entityViewer->ClearContent();
         selectedEntity->debugEnabled = false;
         selectedEntity->GetComponent<Transform>()->debugEnabled = false;
     }
@@ -28,7 +29,8 @@ void EditorMode::Unselect()
         selectedEntity->debugEnabled = false;
         selectedEntity->GetComponent<Transform>()->debugEnabled = false;
         selectedEntity = nullptr;
-        entityViewer->ClearContent();
+        if (entityViewer)
+            entityViewer->ClearContent();
     }
 }
 
@@ -36,10 +38,10 @@ void EditorMode::SetEntityViewer()
 {
     if (!entityViewer)
     {
-        entityViewer = dynamic_pointer_cast<EntityView>(World::GetInstance()->GetWidget("EditorEntityView")).get();
+        entityViewer = dynamic_pointer_cast<EntityPanel>(World::GetInstance()->GetWidget("EntityPanel")).get();
         if  (!entityViewer)
         {
-            Logger::Log<EditorMode>(LogLevel::Warning, "Could not find entity viewer");
+            Logger::Log<EditorMode>(LogLevel::Warning, "Could not find entity panel");
             return;
         }
     }
