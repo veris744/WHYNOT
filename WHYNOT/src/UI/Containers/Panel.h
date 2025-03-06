@@ -21,7 +21,7 @@ public:
     void Clear() override;
     void SetAutoName() override;
 
-    vec4 background = vec4(0, 0, 0, 0);
+    vec4 background = vec4(1, 1, 1, 0);
 };
 REGISTER_CLASS(Panel, {
     REGISTER_MEMBER(Panel, name, MemberProperty::Viewable),

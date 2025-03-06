@@ -51,11 +51,7 @@ void EntityPanel::SetContent()
             memberView->autoSizing = AutoSizing::HORIZONTAL;
             memberView->pixelCorrection = {0, yCorrection};
             AddWidget(memberView);
-            std::string valueStr;
-            if (member.getter) {
-                valueStr = member.getter(comp.get());
-            }
-            memberView->SetMemberInfo(member, valueStr);
+            memberView->SetMemberInfo(member, comp.get());
         }
         yCorrection += 8;
     }

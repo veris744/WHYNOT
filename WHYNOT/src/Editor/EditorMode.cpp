@@ -3,9 +3,33 @@
 #include "Components/Transform.h"
 #include "Managers/World.h"
 #include "UI/Containers/EntityPanel.h"
+#include "UI/Text/InputText.h"
 
 Entity* EditorMode::selectedEntity = nullptr;
 EntityPanel* EditorMode::entityViewer = nullptr;
+InputText* EditorMode::inputText = nullptr;
+string EditorMode::lastInputText;
+bool EditorMode::isInputBoxOpen = false;
+bool EditorMode::isPanelOpen = false;
+SingleDelegate<const string&> EditorMode::OnEnterInput;
+
+void EditorMode::CreateEntityPanel()
+{
+    std::shared_ptr<EntityPanel> tempPanel = std::make_shared<EntityPanel>(vec2(0, 50), vec2(400, 0), "EntityPanel");
+    tempPanel->background = {0.3f, 0.3f, 0.3f, 1.f};
+    tempPanel->pixelCorrection = {200, 0};
+    tempPanel->autoSizing = AutoSizing::VERTICAL;
+    World::GetInstance()->AddWidget(tempPanel);
+
+    entityViewer = tempPanel.get();
+}
+
+void EditorMode::CreateInputBox()
+{
+    std::shared_ptr<InputText> tempInput = std::make_shared<InputText>();
+    inputText = tempInput.get();
+    World::GetInstance()->AddWidget(tempInput);
+}
 
 void EditorMode::SelectEntity(Entity* entity)
 {
@@ -20,6 +44,7 @@ void EditorMode::SelectEntity(Entity* entity)
     selectedEntity->debugEnabled = true;
     selectedEntity->GetComponent<Transform>()->debugEnabled = true;
     SetEntityViewer();
+    isPanelOpen = true;
 }
 
 void EditorMode::Unselect()
@@ -32,18 +57,14 @@ void EditorMode::Unselect()
         if (entityViewer)
             entityViewer->ClearContent();
     }
+    isPanelOpen = false;
 }
 
 void EditorMode::SetEntityViewer()
 {
     if (!entityViewer)
     {
-        entityViewer = dynamic_pointer_cast<EntityPanel>(World::GetInstance()->GetWidget("EntityPanel")).get();
-        if  (!entityViewer)
-        {
-            Logger::Log<EditorMode>(LogLevel::Warning, "Could not find entity panel");
-            return;
-        }
+        CreateEntityPanel();
     }
     if (selectedEntity)
     {
@@ -51,3 +72,36 @@ void EditorMode::SetEntityViewer()
         entityViewer->SetContent();
     }
 }
+
+void EditorMode::OpenInputBox()
+{
+    isInputBoxOpen = true;
+    lastInputText = "";
+    if (!inputText)
+    {
+        CreateInputBox();
+    }
+    inputText->isActive = true;
+}
+
+void EditorMode::AddInputChar(char c)
+{
+    inputText->UpdateText(c);
+}
+
+void EditorMode::CloseInputBox(bool _saveValue)
+{
+    isInputBoxOpen = false;
+    if (inputText)
+    {
+        if (_saveValue)
+        {
+            lastInputText = inputText->ReturnText();
+            OnEnterInput.Execute(lastInputText);
+        }
+        inputText->isActive = false;
+        inputText->ClearText();
+    }
+    OnEnterInput.Clear();
+}
+

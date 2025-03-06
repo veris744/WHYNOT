@@ -184,6 +184,32 @@ void InputManager::ProcessInput()
 
 void InputManager::HandleKeyPress(int key, int mods)
 {
+    if (EditorMode::isInputBoxOpen)
+    {
+        if (key == GLFW_KEY_ESCAPE)
+        {
+            EditorMode::CloseInputBox(false);
+        }
+        else if ((key >= GLFW_KEY_A && key <= GLFW_KEY_Z) ||
+            (key >= GLFW_KEY_0 && key <= GLFW_KEY_9) ||
+            (key == GLFW_KEY_COMMA))
+        {
+            EditorMode::AddInputChar(static_cast<char>(key));
+        }
+        else if (key == GLFW_KEY_ENTER)
+        {
+            EditorMode::CloseInputBox(true);
+        }
+        return;
+    }
+    if (EditorMode::isPanelOpen)
+    {
+        if (key == GLFW_KEY_ESCAPE)
+        {
+            EditorMode::Unselect();
+        }
+        return;
+    }
     switch(key)
     {
         case GLFW_KEY_ESCAPE:
@@ -223,6 +249,7 @@ void InputManager::HandleKeyPress(int key, int mods)
 
 void InputManager::HandleKeyRelease(int key, int mods)
 {
+    if (EditorMode::isInputBoxOpen || EditorMode::isPanelOpen) return;
     switch(key)
     {
     case GLFW_KEY_UP:
@@ -250,7 +277,10 @@ void InputManager::HandleKeyRelease(int key, int mods)
 
 void InputManager::HandleMouseButtonPress(int key)
 {
-    if (inputMode == InputMode::UIOnly && key == GLFW_MOUSE_BUTTON_1)
+    if (EditorMode::isInputBoxOpen) return;
+    
+    if ((inputMode == InputMode::UIOnly || EditorMode::isPanelOpen)
+        && key == GLFW_MOUSE_BUTTON_1)
     {
         double xpos, ypos;
         glfwGetCursorPos(Helper::GetWindow(), &xpos, &ypos);
@@ -287,6 +317,7 @@ void InputManager::HandleMouseButtonRelease(int key)
 
 void InputManager::HandleMouseMove(double x, double y)
 {
+    if (EditorMode::isInputBoxOpen) return;
     if (!playerTransform)   return;
     if (inputMode == InputMode::GameOnly
         || (inputMode == InputMode::Editor && keysStatus[GLFW_MOUSE_BUTTON_2] == KeyStatus::PRESSED))

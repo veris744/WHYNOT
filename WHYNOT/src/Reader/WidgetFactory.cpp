@@ -3,7 +3,7 @@
 #include "Reader.h"
 #include "Managers/World.h"
 #include "UI/Image2D.h"
-#include "UI/Text.h"
+#include "UI/Text/Text.h"
 #include "UI/Containers/Panel.h"
 #include "UI/Buttons/LoadSceneButton.h"
 #include "UI/Containers/EntityPanel.h"
@@ -12,20 +12,20 @@ using namespace Reader;
 using namespace Reflection;
 
 using WidgetCreator = std::function<std::shared_ptr<Widget>
-    (const YAML::Node&, const std::shared_ptr<Widget>& parent)>;
+    (const YAML::Node&, Widget* parent)>;
 
 std::shared_ptr<WidgetFactory> WidgetFactory::instance = nullptr;
 
 void WidgetFactory::WidgetFactorySetup()
 {
-    RegisterWidget("BUTTON", [](const YAML::Node& asset, const std::shared_ptr<Widget>& parent) ->
+    RegisterWidget("BUTTON", [](const YAML::Node& asset, Widget* parent) ->
         std::shared_ptr<Widget>  {
             std::shared_ptr<Button> widget = ReadButton(asset);
             SaveWidget(widget, parent);
             return widget;
         });
     
-    RegisterWidget("IMAGE2D", [](const YAML::Node& asset, const std::shared_ptr<Widget>& parent) ->
+    RegisterWidget("IMAGE2D", [](const YAML::Node& asset, Widget* parent) ->
         std::shared_ptr<Widget> {
             std::shared_ptr<Image2D> widget = std::shared_ptr<Image2D>();
             deserialize(asset, widget);
@@ -33,7 +33,7 @@ void WidgetFactory::WidgetFactorySetup()
             return widget;
         });
     
-    RegisterWidget("TEXT", [](const YAML::Node& asset, const std::shared_ptr<Widget>& parent) ->
+    RegisterWidget("TEXT", [](const YAML::Node& asset, Widget* parent) ->
         std::shared_ptr<Widget> {
             std::shared_ptr<Text> widget = std::shared_ptr<Text>();
             deserialize(asset, widget);
@@ -41,21 +41,13 @@ void WidgetFactory::WidgetFactorySetup()
             return widget;
         });
     
-    RegisterWidget("PANEL", [](const YAML::Node& asset, const std::shared_ptr<Widget>& parent) ->
+    RegisterWidget("PANEL", [](const YAML::Node& asset, Widget* parent) ->
         std::shared_ptr<Widget> {
             std::shared_ptr<Panel> widget = std::shared_ptr<Panel>();
             deserialize(asset, widget);
             SaveWidget(widget, parent);
             return widget;
     });
-    
-    RegisterWidget("ENTITY_PANEL", [](const YAML::Node& asset, const std::shared_ptr<Widget>& parent) ->
-        std::shared_ptr<Widget> {
-            std::shared_ptr<EntityPanel> widget = std::shared_ptr<EntityPanel>();
-            deserialize(asset, widget);
-            SaveWidget(widget, parent);
-            return widget;
-        });
 }
 
 void WidgetFactory::RegisterWidget(const std::string& type, WidgetCreator creator)
@@ -63,7 +55,7 @@ void WidgetFactory::RegisterWidget(const std::string& type, WidgetCreator creato
     creators[type] = std::move(creator);
 }
 
-std::shared_ptr<Widget> WidgetFactory::CreateWidget(const std::string& type, const YAML::Node& data, const std::shared_ptr<Widget>& parent) const
+std::shared_ptr<Widget> WidgetFactory::CreateWidget(const std::string& type, const YAML::Node& data, Widget* parent) const
 {
     auto it = creators.find(type);
     if (it != creators.end()) {
@@ -72,7 +64,7 @@ std::shared_ptr<Widget> WidgetFactory::CreateWidget(const std::string& type, con
     throw std::runtime_error("Unknown entity type: " + type);
 }
 
-void WidgetFactory::SaveWidget(const std::shared_ptr<Widget>& widget, const std::shared_ptr<Widget>& parent)
+void WidgetFactory::SaveWidget(const std::shared_ptr<Widget>& widget, Widget* parent)
 {
     widget->SetAutoName();
     if (parent)

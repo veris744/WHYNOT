@@ -2,18 +2,10 @@
 
 #include "Managers/World.h"
 
-unsigned int LoadSceneButton::counter = 0;
 
 LoadSceneButton::LoadSceneButton(const vec2& _pos, const vec2& _size, const string& _name)
-    : Button(_pos, _size)
+    : Button(_pos, _size, _name)
 {
-    name = _name.empty() ? "StartButton" + std::to_string(++counter) : _name;
-}
-
-void LoadSceneButton::SetAutoName()
-{
-    if (name.empty())
-        name = "StartButton" + std::to_string(++counter);
 }
 
 void LoadSceneButton::OnClick(vec2 _mousePos)

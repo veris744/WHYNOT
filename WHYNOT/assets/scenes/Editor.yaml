@@ -35,14 +35,7 @@ entities:
         profile:
           type: "STATIC"
           mode: "QUERY"
-widgets:
-  - type: "ENTITY_PANEL"
-    name: "EntityPanel"
-    autoSizing: "VERTICAL"
-    size: [400, 0]
-    background: [0.3, 0.3, 0.3, 1]
-    position: [0, 50]
-    pixelCorrection: [200,0]
+# widgets:
 #  - type: "PANEL"
 #    autoSizing: "VERTICAL"
 #    size: [250, 0]

@@ -3,11 +3,9 @@
 
 class LoadSceneButton : public Button
 {
-    static unsigned int counter;
 public:
     LoadSceneButton(const vec2& _pos, const vec2& _size, const string& _name = "");
-    LoadSceneButton(){};
-    void SetAutoName() override;
+    LoadSceneButton() = default;
     void OnClick(vec2 _mousePos) override;
 
     string sceneName = "";

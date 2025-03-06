@@ -1,7 +1,7 @@
 #pragma once
 #include <includes.h>
 
-#include "Widget.h"
+#include "UI/Widget.h"
 
 enum class TextAlign
 {
@@ -28,7 +28,7 @@ class Text : public Widget
     static unsigned int counter;
     
 public:
-    Text(): color(vec3(0, 0, 0)), scale(0), align(TextAlign::LEFT), alignVertical(TextAlignVertical::CENTER), padding()
+    Text(): color(vec3(0, 0, 0)), scale(0.5f), align(TextAlign::LEFT), alignVertical(TextAlignVertical::CENTER), padding()
     {
         hasTransparency = true;
     }

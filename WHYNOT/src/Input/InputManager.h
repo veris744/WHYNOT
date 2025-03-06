@@ -87,6 +87,7 @@ public:
     static void EnableInput(bool value);
     
     MultiDelegate<vec2> OnClickDelegate;
+    SingleDelegate<char> OnTypeDelegate;
 
     void Clear();
 };

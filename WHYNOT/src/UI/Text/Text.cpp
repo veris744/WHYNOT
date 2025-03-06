@@ -60,6 +60,9 @@ void Text::Render()
     case TextAlignVertical::BOTTOM:
         pixelPos.y = pixelPos.y + parentSize.y * 0.5f - size.y - padding.y;
     }
+
+    if (pixelPos.x < 0)  pixelPos.x = 0;
+    if (pixelPos.y < 0)  pixelPos.y = padding.y;
     
     TextRenderer::instance().RenderText(text, pixelPos.x, pixelPos.y, scale, color, layer);
 }

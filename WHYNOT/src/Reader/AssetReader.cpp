@@ -58,10 +58,10 @@ void AssetReader::SaveComponent(const std::shared_ptr<Entity>& entity, const YAM
     ComponentFactory::GetInstance()->CreateComponent(type, entity, asset);
 }
 
-void AssetReader::SaveWidget(const YAML::Node& asset, const std::shared_ptr<Widget>& parent)
+void AssetReader::SaveWidget(const YAML::Node& asset, Widget* parent)
 {
     string type = asset["type"].as<std::string>();
-    std::shared_ptr<Widget> widget = WidgetFactory::GetInstance()->CreateWidget(type, asset, parent);
+    Widget* widget = WidgetFactory::GetInstance()->CreateWidget(type, asset, parent).get();
     if (asset["widgets"])
     {
         for (const YAML::Node& widgetYAML : asset["widgets"])

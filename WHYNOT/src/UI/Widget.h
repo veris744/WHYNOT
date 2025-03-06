@@ -18,7 +18,7 @@ class Widget : public std::enable_shared_from_this<Widget>
 {
 protected:
 
-    std::shared_ptr<Widget> parent = nullptr;
+    Widget* parent = nullptr;
     vector<std::shared_ptr<Widget>> children;
     
 public:
@@ -48,7 +48,7 @@ public:
 
     bool isActive = true;
 
-    void AddWidget(std::shared_ptr<Widget> _widget);
+    void AddWidget(const std::shared_ptr<Widget>& _widget);
     const vector<std::shared_ptr<Widget>>& GetChildren() const { return children; }
     void ClearChildren() {  children.clear(); }
     

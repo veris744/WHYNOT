@@ -5,9 +5,9 @@
 #include "Utils/Parser.h"
 
 
-void Widget::AddWidget(std::shared_ptr<Widget> _widget)
+void Widget::AddWidget(const std::shared_ptr<Widget>& _widget)
 {
-    _widget->parent = shared_from_this();
+    _widget->parent = this;
     children.push_back(_widget);
     _widget->Initialize();
 }

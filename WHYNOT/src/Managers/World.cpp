@@ -161,14 +161,14 @@ vector<LightData> World::GetLightDataList() const
     return list;
 }
 
-std::shared_ptr<Widget> World::GetWidget(const string& _name) const
+Widget* World::GetWidget(const string& _name) const
 {
     std::shared_ptr<Widget> widget = FindWidget(_name, widgets);
     if (!widget)
     {
         Logger::Log<World>(LogLevel::Error, "Widget " + _name + " not found");
     }
-    return widget;
+    return widget.get();
 }
 
 std::shared_ptr<Widget> World::FindWidget(const string& _name, const vector<std::shared_ptr<Widget>>& _widgets) const
@@ -179,7 +179,7 @@ std::shared_ptr<Widget> World::FindWidget(const string& _name, const vector<std:
         {
             return widget;
         }
-        auto foundWidget = FindWidget(_name, widget->GetChildren());
+        shared_ptr<Widget> foundWidget = FindWidget(_name, widget->GetChildren());
         if (foundWidget)
         {
             return foundWidget;

@@ -92,7 +92,7 @@ public:
     vector<LightData> GetLightDataList() const;
 
     vector<std::shared_ptr<Widget>> GetWidgets() const { return widgets; }
-    std::shared_ptr<Widget> GetWidget(const string& _name) const;
+    Widget* GetWidget(const string& _name) const;
     void AddWidget(const std::shared_ptr<Widget>& _widget);
 
     void LoadScene(const string& _sceneName);

@@ -76,7 +76,7 @@ void AliensLogic::PrepareGame(unsigned int _totalAliens)
         temp->isActive = false;
         availableProjectiles.push(temp);
     }
-    alienText = std::static_pointer_cast<Text>(World::GetInstance()->GetWidget("AliensText")).get();
+    alienText = static_cast<Text*>(World::GetInstance()->GetWidget("AliensText"));
     alienText->isActive = true;
     OnTextChangedDelegate.Bind(&Text::SetText, alienText);
     OnTextChangedDelegate.Execute("Aliens : " + std::to_string(totalAliens));

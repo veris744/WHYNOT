@@ -1,7 +1,7 @@
 #pragma once
 #include <includes.h>
 
-#include "UI/Text.h"
+#include "UI/Text/Text.h"
 
 class Projectile;
 class Alien;

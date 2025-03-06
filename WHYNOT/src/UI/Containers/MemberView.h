@@ -2,7 +2,9 @@
 #include <string>
 
 #include "UI/Widget.h"
+#include "UI/Buttons/Button.h"
 
+class Component;
 class Text;
 
 class MemberView : public Widget
@@ -12,12 +14,16 @@ class MemberView : public Widget
     vec3 color = vec3(1);
     float scale = 0.5f;
 
-    Text * text = nullptr;
+    Component * component = nullptr;
+    const MemberInfo* memberInfo = nullptr;
+    Text * textWidget = nullptr;
+    Button * button = nullptr;
     
 public:
     MemberView(vec2 _pos, vec2 _size, const string& _name = "");
     MemberView() = default;
     void SetAutoName() override;
-    void SetMemberInfo(const MemberInfo& info, const string& value = "");
+    void SetMemberInfo(const MemberInfo& info, Component* component);
     void SetMemberInfo(const string& value);
+    void UpdateMember(const string& value);
 };

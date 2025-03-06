@@ -29,4 +29,9 @@ public:
     void Execute(Args... args) const {
         if (callback) callback(std::forward<Args>(args)...);
     }
+
+    void Clear()
+    {
+        callback = nullptr;
+    }
 };
