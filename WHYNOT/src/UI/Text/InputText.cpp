@@ -13,11 +13,12 @@ void InputText::Initialize()
         SetAutoName();
     }
 
-    size = {300, 100};
+    size = {300, 50};
     position = {50, 50};
     
     std::shared_ptr<Text> tempText = std::make_shared<Text>();
     textWidget = tempText.get();
+    textWidget->scale = 0.3f;
     textWidget->align = TextAlign::CENTER;
     textWidget->alignVertical = TextAlignVertical::CENTER;
 
@@ -33,9 +34,16 @@ void InputText::Initialize()
 
 void InputText::UpdateText(char ch)
 {
+    if (textWidget->text.length() >= maxChars) return;
+    
     string text = textWidget->text;
     text += ch;
     textWidget->SetText(text);
+}
+
+void InputText::RemoveLastCharacter()
+{
+    textWidget->SetText(textWidget->text.substr(0, textWidget->text.length() - 1));
 }
 
 string InputText::ReturnText()

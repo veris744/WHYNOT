@@ -8,7 +8,6 @@
 Entity* EditorMode::selectedEntity = nullptr;
 EntityPanel* EditorMode::entityViewer = nullptr;
 InputText* EditorMode::inputText = nullptr;
-string EditorMode::lastInputText;
 bool EditorMode::isInputBoxOpen = false;
 bool EditorMode::isPanelOpen = false;
 SingleDelegate<const string&> EditorMode::OnEnterInput;
@@ -76,17 +75,11 @@ void EditorMode::SetEntityViewer()
 void EditorMode::OpenInputBox()
 {
     isInputBoxOpen = true;
-    lastInputText = "";
     if (!inputText)
     {
         CreateInputBox();
     }
     inputText->isActive = true;
-}
-
-void EditorMode::AddInputChar(char c)
-{
-    inputText->UpdateText(c);
 }
 
 void EditorMode::CloseInputBox(bool _saveValue)
@@ -96,12 +89,33 @@ void EditorMode::CloseInputBox(bool _saveValue)
     {
         if (_saveValue)
         {
-            lastInputText = inputText->ReturnText();
-            OnEnterInput.Execute(lastInputText);
+            OnEnterInput.Execute(inputText->ReturnText());
         }
         inputText->isActive = false;
         inputText->ClearText();
     }
     OnEnterInput.Clear();
+}
+
+void EditorMode::ProcessUserInput(int key)
+{
+    if (key == GLFW_KEY_ESCAPE)
+    {
+        CloseInputBox(false);
+    }
+    else if ((key >= GLFW_KEY_A && key <= GLFW_KEY_Z) ||
+        (key >= GLFW_KEY_0 && key <= GLFW_KEY_9) ||
+        key == GLFW_KEY_COMMA || key == GLFW_KEY_PERIOD)
+    {
+        inputText->UpdateText(static_cast<char>(key));
+    }
+    else if (key == GLFW_KEY_BACKSPACE)
+    {
+        inputText->RemoveLastCharacter();
+    }
+    else if (key == GLFW_KEY_ENTER)
+    {
+        CloseInputBox(true);
+    }
 }
 

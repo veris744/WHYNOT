@@ -16,6 +16,11 @@ Button::Button()
     InputManager::GetInstance()->OnClickDelegate.Add(&Button::OnClickTrigger, this);
 }
 
+Button::~Button()
+{
+    InputManager::GetInstance()->OnClickDelegate.Remove(this);
+}
+
 void Button::SetAutoName()
 {
     if (name.empty())

@@ -186,20 +186,7 @@ void InputManager::HandleKeyPress(int key, int mods)
 {
     if (EditorMode::isInputBoxOpen)
     {
-        if (key == GLFW_KEY_ESCAPE)
-        {
-            EditorMode::CloseInputBox(false);
-        }
-        else if ((key >= GLFW_KEY_A && key <= GLFW_KEY_Z) ||
-            (key >= GLFW_KEY_0 && key <= GLFW_KEY_9) ||
-            (key == GLFW_KEY_COMMA))
-        {
-            EditorMode::AddInputChar(static_cast<char>(key));
-        }
-        else if (key == GLFW_KEY_ENTER)
-        {
-            EditorMode::CloseInputBox(true);
-        }
+        EditorMode::ProcessUserInput(key);
         return;
     }
     if (EditorMode::isPanelOpen)
@@ -236,9 +223,9 @@ void InputManager::HandleKeyPress(int key, int mods)
         case GLFW_KEY_W:
             playerController->SetInput(vec3(0,0,1));
             break;
-    case GLFW_KEY_1:
+        case GLFW_KEY_1:
             Debugger::SetCollisionDebug(!Debugger::GetCollisionDebugEnabled());
-        break;
+            break;
         case GLFW_KEY_P:
             AliensLogic::GetInstance()->StopGame();
             break;

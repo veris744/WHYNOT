@@ -9,6 +9,7 @@ class Button : public Widget
 public:
     Button(const vec2& _pos, const vec2& _size, const string& _name = "");
     Button();
+    ~Button();
     void SetAutoName() override;
 
     bool IsClicking(const vec2& _mousePos) const;

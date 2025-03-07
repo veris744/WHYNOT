@@ -11,39 +11,38 @@ public:
     using Callback = std::function<void(Args...)>;
 
 private:
-    vector<Callback> callbacks;
+    std::vector<std::pair<Callback, void*>> callbacks;
     
 public:
 
-    void Add(Callback _callback) {
-        callbacks.push_back(std::move(_callback));
-    }
-
     template <typename T>
     void Add(void (T::*memberFunc)(Args...), T* instance) {
-        callbacks.push_back([memberFunc, instance](Args... args) {
-            (instance->*memberFunc)(args...);
-        });
-    }
-
-    void Remove(Callback _callback) {
-        callbacks.erase(
-            std::remove_if(callbacks.begin(), callbacks.end(),
-                           [&_callback](const Callback& existing) {
-                               return existing.target_type() == _callback.target_type();
-                           }),
-            callbacks.end()
+        callbacks.emplace_back(
+            [memberFunc, instance](Args... args) {
+                (instance->*memberFunc)(args...);
+            },
+            static_cast<void*>(instance)
         );
     }
+    
+    template <typename T>
+    void Remove(T* instance) {
+        callbacks.erase(std::remove_if(callbacks.begin(), callbacks.end(),
+            [instance](const auto& entry) {
+                void* storedInstance = entry.second;
+                return storedInstance == static_cast<void*>(instance); 
+            }),
+            callbacks.end());
+    }
+
 
     void Clear() {
         callbacks.clear();
     }
 
     void Execute(Args... args) const {
-        for (const auto& callback : callbacks)
-        {
-            if (callback) callback(std::forward<Args>(args)...);
+        for (const auto& callback : callbacks) {
+            callback.first(args...);
         }
     }
     

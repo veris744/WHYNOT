@@ -12,7 +12,7 @@ class MemberView : public Widget
     static unsigned int counter;
     void Initialize() override;
     vec3 color = vec3(1);
-    float scale = 0.5f;
+    float scale = 0.3f;
 
     Component * component = nullptr;
     const MemberInfo* memberInfo = nullptr;
