@@ -1,9 +1,10 @@
 #include "MemberView.h"
 
+#include "Components/CircleCollider.h"
 #include "UI/Image2D.h"
 #include "UI/Buttons/EditMemberButton.h"
 #include "UI/Text/Text.h"
-#include "Utils/Parser.h"
+#include "Components/Component.h"
 
 unsigned int MemberView::counter = 0;
 
@@ -30,15 +31,7 @@ void MemberView::SetAutoName()
 
 void MemberView::SetMemberInfo(const MemberInfo& info, Component* _component)
 {
-
-    std::shared_ptr<EditMemberButton> buttonTemp = std::make_shared<EditMemberButton>(vec2(100, 50), vec2(30,30));
-    std::shared_ptr<Image2D> image2D = std::make_shared<Image2D>("assets/bulb.jpg", vec2(0,0), vec2(0,0));
-    image2D->autoSizing = AutoSizing::ALL;
-    image2D->color = {1, 0.2, 0.8};
-    buttonTemp->AddWidget(image2D);
-    button = buttonTemp.get();
-    AddWidget(buttonTemp);
-    
+    textWidget->padding = vec2(20, 0);
     string res;
     memberInfo = &info;
     component =  _component;
@@ -62,6 +55,10 @@ void MemberView::SetMemberInfo(const MemberInfo& info, Component* _component)
     {
         res.append(": Non Viewable");
     }
+    if (HasProperty(memberInfo->properties, MemberProperty::Editable))
+    {
+        SetUpdateButton();
+    }
     textWidget->SetText(res);
 }
 
@@ -72,5 +69,17 @@ void MemberView::SetMemberInfo(const string& value)
 
 void MemberView::UpdateMember(const string& value)
 {
-    Logger::Log(LogLevel::Info, Parser::Parse(value));
+    YAML::Node node = YAML::Node(Reader::ConvertMemberToYaml(memberInfo->name, value));
+    memberInfo->setter(component, node);
+    SetMemberInfo(*memberInfo, component);
+}
+
+void MemberView::SetUpdateButton()
+{
+    std::shared_ptr<EditMemberButton> buttonTemp = std::make_shared<EditMemberButton>(vec2(-47, 0), vec2(12,12));
+    std::shared_ptr<Image2D> image2D = std::make_shared<Image2D>("assets/2dImages/edit.png", vec2(0,0), vec2(0,0));
+    image2D->autoSizing = AutoSizing::ALL;
+    buttonTemp->AddWidget(image2D);
+    button = buttonTemp.get();
+    AddWidget(buttonTemp);
 }

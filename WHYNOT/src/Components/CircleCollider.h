@@ -23,6 +23,6 @@ public:
     
 };
 REGISTER_CLASS(CircleCollider, {
-    REGISTER_MEMBER(CircleCollider, radius, MemberProperty::Viewable),
+    REGISTER_MEMBER(CircleCollider, radius, MemberProperty::Viewable | MemberProperty::Editable),
     REGISTER_MEMBER(CircleCollider, profile, MemberProperty::NonViewable)
 });

@@ -32,7 +32,10 @@ public:
         //Logger::Log(LogLevel::Info, "Widget Destructor " + name);
         children.clear();
     }
-    virtual void Initialize() {}
+    virtual void Initialize()
+    {
+        size = GetAutoSize();
+    }
     
     string name;
     vec2 position;

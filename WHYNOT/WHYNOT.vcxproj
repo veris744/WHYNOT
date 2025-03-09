@@ -1433,6 +1433,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="assets\2dImages\aim.png" />
+    <Content Include="assets\2dImages\edit.png" />
     <Content Include="assets\2dImages\space.png" />
     <Content Include="assets\backpack\ao.jpg" />
     <Content Include="assets\backpack\backpack.mtl" />

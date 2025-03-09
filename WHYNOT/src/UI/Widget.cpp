@@ -14,10 +14,7 @@ void Widget::AddWidget(const std::shared_ptr<Widget>& _widget)
 
 void Widget::Render()
 {
-    // for (const auto& widget : children)
-    // {
-    //     widget->Render();
-    // }
+    size = GetAutoSize();
 }
 
 void Widget::Clear()

@@ -31,6 +31,33 @@ namespace Reader
     float ReadFloat(const YAML::Node& node, const string& name, float defaultValue = 0.0f);
     bool ReadBool(const YAML::Node& node, const string& name, bool defaultValue = false);
     vector<string> ReadStringVector(const YAML::Node& node, const std::string& name);
+
+    inline YAML::Node ConvertMemberToYaml(string _memberName, string _value)
+    {
+        string res;
+        bool isVector = _value.find(',') != std::string::npos;
+        YAML::Node node;
+        if (isVector)
+        {
+            std::vector<std::string> values;
+            std::stringstream ss(_value);
+            std::string item;
+        
+            while (std::getline(ss, item, ','))
+            {
+                values.push_back(item);
+            }
+            for (const auto& v : values)
+            {
+                node[_memberName].push_back(v);
+            }
+        }
+        else
+        {
+            node[_memberName] = res;
+        }
+        return node;
+    }
     
     template<typename T>
     T ReadValue(const YAML::Node& node, const string& name)

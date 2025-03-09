@@ -51,8 +51,6 @@ void Image2D::Initialize()
     string shaderNameVer = "shaders/vertex2D.glsl";
     
     material = std::make_unique<Material>(path.c_str(), shaderNameVer, shaderNameFrag);
-    
-    size = GetAutoSize();
 }
 
 void Image2D::Render()
@@ -68,7 +66,6 @@ void Image2D::Render()
     material->BindShader();
     material->GetShader()->SetUniformInt("uSampler2D", 0);
     material->GetShader()->SetUniformVec2("uPosWidget", GetPixelPosition());
-    size = GetAutoSize();
     material->GetShader()->SetUniformVec2("uSize", size);
     material->GetShader()->SetUniformVec3("uColor", color);
     material->GetShader()->SetUniformFloat("uLayer", 0.1f * layer);

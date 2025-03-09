@@ -58,9 +58,9 @@ public:
 };
 REGISTER_CLASS(Model, {
     REGISTER_MEMBER(Model, path, MemberProperty::Viewable),
-    REGISTER_MEMBER(Model, position, MemberProperty::Viewable),
-    REGISTER_MEMBER(Model, rotation, MemberProperty::Viewable),
-    REGISTER_MEMBER(Model, scale, MemberProperty::Viewable),
+    REGISTER_MEMBER(Model, position, MemberProperty::Viewable | MemberProperty::Editable),
+    REGISTER_MEMBER(Model, rotation, MemberProperty::Viewable | MemberProperty::Editable),
+    REGISTER_MEMBER(Model, scale, MemberProperty::Viewable | MemberProperty::Editable),
     REGISTER_MEMBER(Model, invertTexture, MemberProperty::Viewable),
     REGISTER_MEMBER(Model, enableCulling, MemberProperty::Viewable)
 });

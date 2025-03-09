@@ -1,5 +1,7 @@
 #include "Reader.h"
 
+#include "Utils/Parser.h"
+
 namespace Reader
 {
     vec3 ReadVec3(const YAML::Node& node, const string& name, const vec3& defaultValue)
@@ -61,4 +63,5 @@ namespace Reader
         }
         return result;
     }
+
 }

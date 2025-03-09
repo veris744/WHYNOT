@@ -26,4 +26,5 @@ public:
     void SetMemberInfo(const MemberInfo& info, Component* component);
     void SetMemberInfo(const string& value);
     void UpdateMember(const string& value);
+    void SetUpdateButton();
 };

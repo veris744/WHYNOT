@@ -109,6 +109,10 @@ void EditorMode::ProcessUserInput(int key)
     {
         inputText->UpdateText(static_cast<char>(key));
     }
+    else if(key == GLFW_KEY_SLASH || key == GLFW_KEY_KP_SUBTRACT)
+    {
+        inputText->UpdateText('-');
+    }
     else if (key == GLFW_KEY_BACKSPACE)
     {
         inputText->RemoveLastCharacter();

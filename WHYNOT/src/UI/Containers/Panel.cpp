@@ -26,8 +26,6 @@ void Panel::Initialize()
     string shaderNameFrag = "shaders/fragment2DColor.glsl";
     
     material = std::make_unique<Material>("", shaderNameVer, shaderNameFrag);
-    
-    size = GetAutoSize();
 }
 
 Panel::Panel(vec2 _pos, vec2 _size, const string& _name)
@@ -48,7 +46,6 @@ void Panel::Render()
     material->BindTexture();
     material->BindShader();
     material->GetShader()->SetUniformVec2("uPosWidget", GetPixelPosition());
-    size = GetAutoSize();
     material->GetShader()->SetUniformVec2("uSize", size);
     material->GetShader()->SetUniformVec4("uColor", background);
     material->GetShader()->SetUniformFloat("uLayer", 0.1f * layer);
