@@ -12,10 +12,13 @@ std::unique_ptr<OctreeNode> CollisionManager::root = nullptr;
 
 void CollisionManager::PrepareOctree()
 {
-    AABB worldBounds = {vec3(Helper::GetXBounds().x, Helper::GetYBounds().x, Helper::GetZBounds().x), 
-        vec3(Helper::GetXBounds().y, Helper::GetYBounds().y, Helper::GetZBounds().y)};
+    if (!root)
+    {
+        AABB worldBounds = {vec3(Helper::GetXBounds().x, Helper::GetYBounds().x, Helper::GetZBounds().x), 
+            vec3(Helper::GetXBounds().y, Helper::GetYBounds().y, Helper::GetZBounds().y)};
     
-    root = std::make_unique<OctreeNode>(worldBounds);
+        root = std::make_unique<OctreeNode>(worldBounds);
+    }
     
     for (const auto& [name, entity] : World::GetInstance()->GetEntities())
     {
@@ -125,6 +128,5 @@ void CollisionManager::ClearOctree()
     if (root)
     {
         root->Clear();
-        root = nullptr;
     }
 }

@@ -22,12 +22,12 @@ void EntityPanel::SetContent()
     if (!entity) return;
     isActive = true;
 
-    float yCorrection = 0;
+    float yCorrection = 10;
     float separation = 20;
     
-    std::shared_ptr<MemberView> entityView = std::make_shared<MemberView>(vec2(0, -30), vec2(0, 20), "EntityNameText");
+    std::shared_ptr<MemberView> entityView = std::make_shared<MemberView>(vec2(0, -50), vec2(0, 20), "EntityNameText");
     entityView->autoSizing = AutoSizing::HORIZONTAL;
-    entityView->pixelCorrection = {0, yCorrection};
+    entityView->pixelCorrection = {10, yCorrection};
     AddWidget(entityView);
     entityView->SetMemberInfo(entity->GetName());
     yCorrection += 8;
@@ -38,18 +38,18 @@ void EntityPanel::SetContent()
         const auto* typeInfo = TypeRegistry::instance().getTypeInfo(Reader::demangleTypeName(typeid(*comp.get()).name()));
         if (!typeInfo)  continue;
         
-        std::shared_ptr<MemberView> compView = std::make_shared<MemberView>(vec2(0, -30), vec2(0, 20));
+        std::shared_ptr<MemberView> compView = std::make_shared<MemberView>(vec2(0, -50), vec2(0, 20));
         compView->autoSizing = AutoSizing::HORIZONTAL;
-        compView->pixelCorrection = {0, yCorrection};
+        compView->pixelCorrection = {10, yCorrection};
         AddWidget(compView);
         compView->SetMemberInfo(typeInfo->type_name);
         
         for (const auto& member : typeInfo->members)
         {
             yCorrection += separation;
-            std::shared_ptr<MemberView> memberView = std::make_shared<MemberView>(vec2(0, -30), vec2(0, 20));
+            std::shared_ptr<MemberView> memberView = std::make_shared<MemberView>(vec2(0, -50), vec2(0, 20));
             memberView->autoSizing = AutoSizing::HORIZONTAL;
-            memberView->pixelCorrection = {0, yCorrection};
+            memberView->pixelCorrection = {10, yCorrection};
             AddWidget(memberView);
             memberView->SetMemberInfo(member, comp.get());
         }

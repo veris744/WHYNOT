@@ -4,6 +4,7 @@
 #include "includes.h"
 #include "Reader/EnumRegistry.h"
 
+struct Rotation;
 using namespace std;
 
 namespace Parser
@@ -48,6 +49,8 @@ namespace Parser
     {
         return data;
     }
+
+    string ParseRotation(const Rotation& data);
     
     template<typename T>
     string ParseValue(T data)
@@ -86,6 +89,10 @@ namespace Parser
             stream << std::fixed << std::setprecision(2)
                    << "(" << data.x << ", " << data.y << ", " << data.z << ", " << data.w << ")";
             return stream.str();
+        }
+        else if constexpr (std::is_same_v<T, Rotation>)
+        {
+            return ParseRotation(data);
         }
         return "Unknown";
     }

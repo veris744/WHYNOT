@@ -27,7 +27,7 @@ void Debugger::SetCollisionDebug(bool isEnabled)
     }
 }
 
-void Debugger::DrawSphereDebug(float _radius, vec3 _position, vec3 _color)
+void Debugger::DrawSphereDebug(float _radius, vec3 _position, vec3 _color, float timer)
 {
     vector<float> vertices;
     vector<unsigned int> indices;
@@ -41,7 +41,15 @@ void Debugger::DrawSphereDebug(float _radius, vec3 _position, vec3 _color)
     mat = translate(mat, _position);
     mat = scale(mat, vec3(_radius));
 
-    meshesToRender[std::move(sphereMesh)] = mat;
+    if (timer <= 0.f)
+    {
+        meshesToRenderInFrame[std::move(sphereMesh)] = mat;
+    }
+    else
+    {
+        Timer::StartTimer(timer, &Debugger::StopRenderingMesh, sphereMesh.get());
+        meshesToRender[std::move(sphereMesh)] = mat;
+    }
 }
 
 void Debugger::DrawLineDebug(vec3 _start, vec3 _end, vec3 _color, float timer)

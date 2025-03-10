@@ -27,4 +27,6 @@ public:
     static void ProcessUserInput(int key);
 
     static SingleDelegate<const string&> OnEnterInput;
+
+    static void ClearEditor();
 };

@@ -23,6 +23,7 @@ public:
     static void Draw();
     static void Terminate();
     static void SetCursorVisible(bool _isVisible);
+    static void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 
     static vec3 GetSceneDimensions() { return sceneDimensions; }
     static vec3 GetSceneCenter() { return sceneCenter; }
@@ -32,5 +33,8 @@ public:
 
     // Generate sphere vertices
     static void generateSphere(std::vector<float>& vertices, std::vector<unsigned int>& indices, float radius, int sectors, int stacks);
+
+    
+    static MultiDelegate<> OnWindowResizeDelegate;
 
 };

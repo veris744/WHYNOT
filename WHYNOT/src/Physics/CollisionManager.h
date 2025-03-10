@@ -15,5 +15,9 @@ public:
     static Hit ThrowRay(vec3 rayOrigin, vec3 rayDirection, bool showDebug = false, float timer = 3.f);
 
     static void ClearOctree();
+    static void ClearRoot()
+    {
+        root = nullptr;
+    }
     
 };

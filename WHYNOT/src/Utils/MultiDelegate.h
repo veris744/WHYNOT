@@ -43,6 +43,10 @@ public:
     void Execute(Args... args) const {
         for (const auto& callback : callbacks) {
             callback.first(args...);
+            if (callbacks.empty())
+            {
+                break;
+            }
         }
     }
     

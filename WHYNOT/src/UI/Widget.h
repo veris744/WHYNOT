@@ -1,5 +1,8 @@
 #pragma once
 #include <includes.h>
+
+#include "Input/InputManager.h"
+#include "Managers/Helper.h"
 #include "Reflection/Reflection.h"
 
 enum class AutoSizing
@@ -20,6 +23,7 @@ protected:
 
     Widget* parent = nullptr;
     vector<std::shared_ptr<Widget>> children;
+    vec2 pixelPosition = {0, 0};
     
 public:
     Widget(): position(vec2(0,0)), size(vec2(0,0)){}
@@ -31,10 +35,13 @@ public:
     {
         //Logger::Log(LogLevel::Info, "Widget Destructor " + name);
         children.clear();
+        Helper::OnWindowResizeDelegate.Remove(this);
     }
     virtual void Initialize()
     {
         size = GetAutoSize();
+        SetPixelPosition();
+        Helper::OnWindowResizeDelegate.Add(&Widget::OnWindowResize, this);
     }
     
     string name;
@@ -63,7 +70,10 @@ public:
 
     void Destroy();
 
-    vec2 GetPixelPosition() const;
+    vec2 GetPixelPosition() const { return pixelPosition; };
+    void SetPixelPosition();
     vec2 GetAutoSize() const;
+
+    void OnWindowResize();
     
 };

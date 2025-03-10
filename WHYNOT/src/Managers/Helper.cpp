@@ -3,17 +3,12 @@
 #include "Input/InputManager.h"
 
 
-void framebuffer_size_callback(GLFWwindow* window, int width, int height)
-{
-    glViewport(0, 0, width, height);
-    Helper::windowHeight = height;
-    Helper::windowWidth = width;
-}
 
 
 GLFWwindow* Helper::window = nullptr;
 float Helper::windowHeight = 600;
 float Helper::windowWidth = 800;
+MultiDelegate<> Helper::OnWindowResizeDelegate;
 
 vec3 Helper::sceneDimensions = vec3(30, 30, 30);
 vec3 Helper::sceneCenter = vec3(0, 0, 0);
@@ -56,6 +51,15 @@ GLFWwindow* Helper::GetWindow()
         glfwMakeContextCurrent(window);
     }
     return window;
+}
+
+
+void Helper::framebuffer_size_callback(GLFWwindow* window, int width, int height)
+{
+    glViewport(0, 0, width, height);
+    windowHeight = height;
+    windowWidth = width;
+    OnWindowResizeDelegate.Execute();
 }
 
 void Helper::EndUpdate(float deltaTime)

@@ -14,9 +14,9 @@ SingleDelegate<const string&> EditorMode::OnEnterInput;
 
 void EditorMode::CreateEntityPanel()
 {
-    std::shared_ptr<EntityPanel> tempPanel = std::make_shared<EntityPanel>(vec2(0, 50), vec2(400, 0), "EntityPanel");
+    std::shared_ptr<EntityPanel> tempPanel = std::make_shared<EntityPanel>(vec2(0, 50), vec2(300, 0), "EntityPanel");
     tempPanel->background = {0.3f, 0.3f, 0.3f, 1.f};
-    tempPanel->pixelCorrection = {200, 0};
+    tempPanel->pixelCorrection = {150, 0};
     tempPanel->autoSizing = AutoSizing::VERTICAL;
     World::GetInstance()->AddWidget(tempPanel);
 
@@ -121,5 +121,12 @@ void EditorMode::ProcessUserInput(int key)
     {
         CloseInputBox(true);
     }
+}
+
+void EditorMode::ClearEditor()
+{
+    selectedEntity = nullptr;
+    inputText = nullptr;
+    entityViewer = nullptr;
 }
 

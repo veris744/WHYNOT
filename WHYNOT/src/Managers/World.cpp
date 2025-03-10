@@ -5,6 +5,7 @@
 #include "Renderer.h"
 #include "Components/Camera.h"
 #include "Components/LightSource.h"
+#include "Editor/EditorMode.h"
 #include "Graphics/Shader.h"
 #include "Input/InputManager.h"
 #include "Minigame1/AliensLogic.h"
@@ -211,7 +212,9 @@ void World::LoadScene(const string& _sceneName)
 }
 
 void World::DoLoad()
-{    
+{
+    CollisionManager::ClearRoot();
+    
     string file = "assets/scenes/" + currentScene + ".yaml";
     AssetReader::ReadAssets(file.c_str());
 
@@ -269,6 +272,7 @@ void World::UnloadScene()
         shader->CleanUp();
     }
     CollisionManager::ClearOctree();
+    EditorMode::ClearEditor();
 }
 
 void World::EndApplication()

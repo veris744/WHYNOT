@@ -76,7 +76,7 @@ void MemberView::UpdateMember(const string& value)
 
 void MemberView::SetUpdateButton()
 {
-    std::shared_ptr<EditMemberButton> buttonTemp = std::make_shared<EditMemberButton>(vec2(-47, 0), vec2(12,12));
+    std::shared_ptr<EditMemberButton> buttonTemp = std::make_shared<EditMemberButton>(vec2(-50, 0), vec2(12,12));
     std::shared_ptr<Image2D> image2D = std::make_shared<Image2D>("assets/2dImages/edit.png", vec2(0,0), vec2(0,0));
     image2D->autoSizing = AutoSizing::ALL;
     buttonTemp->AddWidget(image2D);

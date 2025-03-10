@@ -30,7 +30,7 @@ void Widget::Destroy()
     World::GetInstance()->MarkForDestruction(shared_from_this());
 }
 
-vec2 Widget::GetPixelPosition() const
+void Widget::SetPixelPosition()
 {
     if (!parent)
     {
@@ -40,7 +40,8 @@ vec2 Widget::GetPixelPosition() const
         x += pixelCorrection.x;
         y += pixelCorrection.y;
 
-        return {x, y};
+        pixelPosition = {x, y};
+        return;
     }
 
     vec2 parentPos = parent->GetPixelPosition();
@@ -53,8 +54,39 @@ vec2 Widget::GetPixelPosition() const
     x += pixelCorrection.x;
     y += pixelCorrection.y;
     
-    return {x, y};
+    pixelPosition = {x, y};
+
+    for (const auto& widget : children)
+    {
+        widget->SetPixelPosition();
+    }
 }
+
+// vec2 Widget::GetPixelPosition() const
+// {
+//     if (!parent)
+//     {
+//         float x = Helper::windowWidth * position.x * 0.01f ;
+//         float y = Helper::windowHeight * position.y * 0.01f;
+//         
+//         x += pixelCorrection.x;
+//         y += pixelCorrection.y;
+//
+//         return {x, y};
+//     }
+//
+//     vec2 parentPos = parent->GetPixelPosition();
+//     float parentWidth = parent->size.x;
+//     float parentHeight = parent->size.y;
+//
+//     float x = parentPos.x + parentWidth * position.x * 0.01f;
+//     float y = parentPos.y + parentHeight * position.y * 0.01f;
+//     
+//     x += pixelCorrection.x;
+//     y += pixelCorrection.y;
+//     
+//     return {x, y};
+// }
 
 vec2 Widget::GetAutoSize() const
 {
@@ -71,7 +103,13 @@ vec2 Widget::GetAutoSize() const
         if (parent)
             autoSize.y = parent->size.y;
         else
-            autoSize.y = Helper::windowWidth;
+            autoSize.y = Helper::windowHeight;
     }
     return autoSize;
+}
+
+void Widget::OnWindowResize()
+{
+    size = GetAutoSize();
+    SetPixelPosition();
 }
