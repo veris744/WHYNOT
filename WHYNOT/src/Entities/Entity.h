@@ -11,7 +11,7 @@ class Camera;
 class Component;
 class Transform;
 
-class Entity : public std::enable_shared_from_this<Entity>
+class Entity : public std::enable_shared_from_this<Entity>, public ReflectedObject
 {
     static unsigned int counter;
     
@@ -31,10 +31,8 @@ public:
     Entity(const string& _name, bool _isCamera = false, bool _isLight = false)
         : isCamera(_isCamera), isLight(_isLight), name(_name)
         {}
-    virtual ~Entity()
-    {
-        //Logger::Log(LogLevel::Info, "Deleting Entity " + name);
-    };
+    virtual ~Entity() = default;
+    
     virtual void Initialize();
     
     string name;

@@ -1,9 +1,11 @@
 #pragma once
 #include <includes.h>
 
+#include "Reflection/ReflectedObject.h"
+
 class Entity;
 
-class Component
+class Component : public ReflectedObject
 {
 protected:
     string name;

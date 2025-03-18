@@ -8,6 +8,40 @@
 #include "Utils/Parser.h"
 
 
+struct gpuLightData
+{
+    vec4  position = vec4(0.f, 0.f,0.f,1);
+    vec4  color = vec4(0, 0,0,1);
+    vec3  direction = vec3(0);
+
+    float specular    = 0.f;
+    float diffuse     = 0.f;
+    float ambient     = 0.f;
+
+    float constantAtt = 0.f;
+    float linearAtt = 0.f;
+    float quadAtt = 0.f;
+
+    float angle = 0.f;
+    float outerAngle = 0.f;
+
+    LightSourceType type = LightSourceType::DIRECTIONAL;
+
+    gpuLightData(const LightData& other)
+        : position(other.position), 
+          color(other.color),
+          direction(other.direction),
+          specular(other.specular),
+          diffuse(other.diffuse),
+          ambient(other.ambient),
+          constantAtt(other.constantAtt),
+          linearAtt(other.linearAtt),
+          quadAtt(other.quadAtt),
+          angle(other.angle),
+          outerAngle(other.outerAngle),
+          type(other.type) {} 
+};
+
 Material::Material(const char* _texturePath, const string& _vertexShaderPath, const string& _fragmentShaderPath, MaterialData _materialData)
         : materialData(_materialData), vertexShaderPath(_vertexShaderPath), fragmentShaderPath(_fragmentShaderPath)
 {
@@ -90,11 +124,7 @@ void Material::SetUniforms(const mat4& _model, const mat4& _view, const mat4& _p
     shader->SetUniformMat4("uView", _view);
     shader->SetUniformMat4("uProjection", _projection);
     shader->SetUniformVec3("uViewPos", _viewPosition);
-    //
-    // Logger::Log(LogLevel::Info, "VIEW: " + Parser::Parse(_view));
-    // Logger::Log(LogLevel::Warning, "PROJ: " + Parser::Parse(_projection));
-    // Logger::Log(LogLevel::Error, "MODEL: " + Parser::Parse(_model));
-    //
+    
     shader->SetUniformInt("uAmbient", materialData.ambient);
     shader->SetUniformInt("uDiffuse", materialData.diffuse);
     shader->SetUniformInt("uSpecular", materialData.specular);
@@ -114,9 +144,14 @@ void Material::SetUniforms(const mat4& _model, const mat4& _view, const mat4& _p
         shader->SetUniformFloat("uEdgeGlow", 1.f);
     }
     
+    std::vector<gpuLightData> gpuLights;
+    for (const auto& light : World::GetInstance()->GetLightDataList()) {
+        gpuLights.push_back(gpuLightData(light));  // Extract only GPU-relevant data
+    }
+    
     shader->SetUniformObject("u_Lights", 1,
         World::GetInstance()->GetLightCount(),
-        sizeof(LightSource), World::GetInstance()->GetLightDataList().data());
+        sizeof(gpuLightData), gpuLights.data());
     shader->SetUniformInt("uNumLights", World::GetInstance()->GetLightCount());
 
 

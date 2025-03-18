@@ -1,9 +1,10 @@
 #pragma once
 #include <includes.h>
 
+#include "Reflection/ReflectedObject.h"
 #include "Reflection/Reflection.h"
 
-struct Rotation
+struct Rotation : ReflectedObject
 {
     float pitch = 0.0f;
     float yaw = 0.0f;

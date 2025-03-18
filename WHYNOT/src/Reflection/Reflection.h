@@ -4,6 +4,7 @@
 #include <unordered_map>
 #include <Reader/Reader.h>
 #include <Utils/Parser.h>
+#include "ReflectedObject.h"
 
 using namespace std;
 using FactoryFunction = std::function<void*()>;
@@ -46,7 +47,7 @@ struct MemberInfo
     string type_name;
     MemberProperty properties; 
     function<void(void*, const YAML::Node&)> setter;
-    std::function<std::string(void*)> getter;
+    std::function<std::string(ReflectedObject*)> getter;
 };
 
 struct TypeInfo {
@@ -150,9 +151,10 @@ namespace Reflection
         } \
     }, \
     ((static_cast<uint32_t>(properties) & static_cast<uint32_t>(MemberProperty::Viewable)) != 0) ? \
-        static_cast<std::function<std::string(void*)>>([](void* obj) -> std::string { \
-            auto& instance = *static_cast<type*>(obj); \
-            using MemberT = std::decay_t<decltype(instance.member)>; \
-            return Parser::ParseValue(instance.member); \
+        static_cast<std::function<std::string(ReflectedObject*)>>([](ReflectedObject* obj) -> std::string { \
+            auto* instance = dynamic_cast<type*>(obj); \
+            if (!instance) return "Invalid cast"; \
+            using MemberT = std::decay_t<decltype(instance->member)>; \
+            return Parser::ParseValue(instance->member); \
         }) : nullptr \
     }

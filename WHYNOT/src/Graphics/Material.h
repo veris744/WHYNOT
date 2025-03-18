@@ -19,7 +19,7 @@ REGISTER_ENUM(MaterialType,
     {"NEON", MaterialType::NEON},
 );
 
-struct MaterialData
+struct MaterialData : ReflectedObject
 {
     MaterialType type = MaterialType::TEXTURE;
     int ambient = 0;
@@ -36,7 +36,7 @@ REGISTER_CLASS(MaterialData, {
     REGISTER_MEMBER(MaterialData, color, MemberProperty::Viewable),
 });
 
-class Material
+class Material : public ReflectedObject
 {
     vector<std::shared_ptr<Texture>> textures;
     std::shared_ptr<Shader> shader;

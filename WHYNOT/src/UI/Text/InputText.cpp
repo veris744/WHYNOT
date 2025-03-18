@@ -6,15 +6,15 @@
 
 void InputText::Initialize()
 {
+    size = {300, 50};
+    position = {50, 50};
+    
     Widget::Initialize();
 
     if(name.empty())
     {
         SetAutoName();
     }
-
-    size = {300, 50};
-    position = {50, 50};
     
     std::shared_ptr<Text> tempText = std::make_shared<Text>();
     textWidget = tempText.get();

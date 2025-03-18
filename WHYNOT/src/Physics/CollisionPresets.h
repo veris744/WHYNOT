@@ -22,8 +22,11 @@ REGISTER_ENUM(ColliderMode,
     {"ALL", ColliderMode::All},
 );
 
-struct CollisionProfile
+struct CollisionProfile : ReflectedObject
 {
+    CollisionProfile() = default;
+    CollisionProfile(ColliderType type, ColliderMode mode)
+        : type(type), mode(mode) {}
     ColliderType type = ColliderType::Static;
     ColliderMode mode = ColliderMode::Query;
 };

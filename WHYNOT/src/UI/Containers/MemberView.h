@@ -14,7 +14,7 @@ class MemberView : public Widget
     vec3 color = vec3(1);
     float scale = 0.3f;
 
-    Component * component = nullptr;
+    ReflectedObject * component = nullptr;
     const MemberInfo* memberInfo = nullptr;
     Text * textWidget = nullptr;
     Button * button = nullptr;
@@ -23,7 +23,7 @@ public:
     MemberView(vec2 _pos, vec2 _size, const string& _name = "");
     MemberView() = default;
     void SetAutoName() override;
-    void SetMemberInfo(const MemberInfo& info, Component* component);
+    void SetMemberInfo(const MemberInfo& info, ReflectedObject* component);
     void SetMemberInfo(const string& value);
     void UpdateMember(const string& value);
     void SetUpdateButton();

@@ -14,7 +14,7 @@ REGISTER_ENUM(LightSourceType,
     {"AMBIENT", LightSourceType::AMBIENT}
 );
 
-struct LightData
+struct LightData : ReflectedObject
 {
     vec4  position = vec4(0.f, 0.f,0.f,1);
     vec4  color = vec4(0, 0,0,1);

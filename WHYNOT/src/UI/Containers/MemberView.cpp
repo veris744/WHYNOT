@@ -29,8 +29,9 @@ void MemberView::SetAutoName()
         name = "MemberView" + std::to_string(++counter);
 }
 
-void MemberView::SetMemberInfo(const MemberInfo& info, Component* _component)
+void MemberView::SetMemberInfo(const MemberInfo& info, ReflectedObject* _component)
 {
+    Component* comp = static_cast<Component*>(_component);
     textWidget->padding = vec2(20, 0);
     string res;
     memberInfo = &info;
@@ -44,7 +45,7 @@ void MemberView::SetMemberInfo(const MemberInfo& info, Component* _component)
     {
         if (info.getter)
         {
-            res += ": " + memberInfo->getter(component);
+            res += ": " + memberInfo->getter(_component);
         }
         else
         {
