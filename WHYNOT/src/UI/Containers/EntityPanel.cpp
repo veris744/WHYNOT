@@ -27,7 +27,7 @@ void EntityPanel::SetContent()
     
     std::shared_ptr<MemberView> entityView = std::make_shared<MemberView>(vec2(0, -50), vec2(0, 20), "EntityNameText");
     entityView->autoSizing = AutoSizing::HORIZONTAL;
-    entityView->pixelCorrection = {10, panelHeight};
+    entityView->pixelCorrection = {15, panelHeight};
     AddWidget(entityView);
     entityView->SetMemberInfo(entity->GetName());
     panelHeight += separation;
@@ -39,28 +39,12 @@ void EntityPanel::SetContent()
         
         std::shared_ptr<MemberView> compView = std::make_shared<MemberView>(vec2(0, -50), vec2(0, 20));
         compView->autoSizing = AutoSizing::HORIZONTAL;
-        compView->pixelCorrection = {10, panelHeight};
+        compView->pixelCorrection = {15, panelHeight};
         AddWidget(compView);
         compView->SetMemberInfo(typeInfo->type_name);
         panelHeight += separation;
         
-        CreateMemberView(comp.get(), *typeInfo, 0);
-        
-        // yCorrection += separation;
-        // const auto* typeInfo = TypeRegistry::instance().getTypeInfo(Reader::demangleTypeName(typeid(*comp.get()).name()));
-        // if (!typeInfo)  continue;
-        //
-        //
-        // for (const auto& member : typeInfo->members)
-        // {
-        //     yCorrection += separation;
-        //     std::shared_ptr<MemberView> memberView = std::make_shared<MemberView>(vec2(0, -50), vec2(0, 20));
-        //     memberView->autoSizing = AutoSizing::HORIZONTAL;
-        //     memberView->pixelCorrection = {10, yCorrection};
-        //     AddWidget(memberView);
-        //     memberView->SetMemberInfo(member, comp.get());
-        // }
-        // yCorrection += 8;
+        CreateMemberView(comp.get(), *typeInfo, 30);
     }
 }
 
@@ -81,13 +65,13 @@ void EntityPanel::CreateMemberView(ReflectedObject* _object, const TypeInfo& _ty
         {
             std::shared_ptr<MemberView> compView = std::make_shared<MemberView>(vec2(0, -50), vec2(0, 20));
             compView->autoSizing = AutoSizing::HORIZONTAL;
-            compView->pixelCorrection = {20, panelHeight};
+            compView->pixelCorrection = {_margin, panelHeight};
             AddWidget(compView);
-            compView->SetMemberInfo(member.type_name);
+            compView->SetMemberInfo(Reader::demangleTypeName(member.name));
             panelHeight += separation;
             
             ReflectedObject* memberObject = static_cast<ReflectedObject*>(member.getter(_object));
-            CreateMemberView(memberObject, *memberTypeInfo, _margin + 10);
+            CreateMemberView(memberObject, *memberTypeInfo, _margin + 15);
         }
         panelHeight += separation;
     }

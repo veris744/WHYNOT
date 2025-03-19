@@ -4,6 +4,7 @@
 #include <glm/detail/type_quat.hpp>
 
 #include "glm/glm.hpp"
+#include "Reader/EnumRegistry.h"
 
 //#include "Reader/EnumRegistry.h"
 
@@ -76,9 +77,9 @@ namespace Parser
             return Parse(*static_cast<float*>(value));
         }
         if (type == "bool") {
-            return Parse(*static_cast<bool*>(value));
+            return *static_cast<bool*>(value) ? "true" : "false";
         }
-        if (type == "std::string") {
+        if (type.find("string") != std::string::npos) {
             return *static_cast<std::string*>(value);
         }
         if (type == "struct glm::vec<2,float,0>") {
@@ -90,48 +91,12 @@ namespace Parser
         if (type == "struct glm::vec<4,float,0>") {
             return Parse(*static_cast<vec4*>(value));
         }
-        return "Unknown Type";
+        if (type.find("enum") != std::string::npos)
+        {
+            return EnumRegistry::instance().getEnumStringFromValue(type, *static_cast<int*>(value));
+        }
+        return "Unknown";
     }
-    //
-    // template<typename T>
-    // string ParseValue(T data)
-    // {
-    //     if constexpr (is_enum_v<T>)
-    //     {
-    //         return EnumRegistry::instance().toString(data);
-    //     }
-    //     else if constexpr (std::is_same_v<T, bool>)
-    //     {
-    //         return data ? "true" : "false";
-    //     }
-    //     else if constexpr (std::is_same_v<T, float> || std::is_same_v<T, int> || std::is_same_v<T, unsigned int>)
-    //     {
-    //         std::ostringstream stream;
-    //         stream << std::fixed << std::setprecision(2) << data;
-    //         return stream.str();
-    //     }
-    //     else if constexpr (std::is_same_v<T, vec2>)
-    //     {
-    //         std::ostringstream stream;
-    //         stream << std::fixed << std::setprecision(2)
-    //                << "(" << data.x << ", " << data.y << ")";
-    //         return stream.str();
-    //     }
-    //     else if constexpr (std::is_same_v<T, vec3>)
-    //     {
-    //         std::ostringstream stream;
-    //         stream << std::fixed << std::setprecision(2)
-    //                << "(" << data.x << ", " << data.y << ", " << data.z << ")";
-    //         return stream.str();
-    //     }
-    //     else if constexpr (std::is_same_v<T, vec4>)
-    //     {
-    //         std::ostringstream stream;
-    //         stream << std::fixed << std::setprecision(2)
-    //                << "(" << data.x << ", " << data.y << ", " << data.z << ", " << data.w << ")";
-    //         return stream.str();
-    //     }
-    //     return "Unknown";
-    // }
+    
     
 };

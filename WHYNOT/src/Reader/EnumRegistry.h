@@ -19,6 +19,16 @@ public:
         static EnumRegistry instance;
         return instance;
     }
+    
+    static string demangleEnumType(const string& mangledName)
+    {
+        string result = mangledName;
+        const string enumPrefix = "enum ";
+        if (result.find(enumPrefix) == 0) {
+            result = result.substr(enumPrefix.size());
+        }
+        return result;
+    }
 
     template<typename EnumType>
     void registerEnum(const initializer_list<pair<string, EnumType>>& entries) {
@@ -57,6 +67,18 @@ public:
             }
         }
         return "UnknownEnumValue";
+    }
+
+    string getEnumStringFromValue(const string& enumType, int enumValue) const {
+        auto it = enums.find(enumType);
+        if (it != enums.end()) {
+            const auto& info = it->second;
+            auto valIt = info.valueToName.find(enumValue);
+            if (valIt != info.valueToName.end()) {
+                return valIt->second;  // Return the enum string name
+            }
+        }
+        return "UnknownEnumValue";  // Return a default value if not found
     }
 };
 
