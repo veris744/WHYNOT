@@ -8,6 +8,8 @@
 class Transform : public Component
 {
     static vec3 worldUp;
+
+    vec3 old_rot = vec3(0, 0, 0);
     
 public:
     Transform(vec3 _pos = vec3(0))
@@ -42,5 +44,5 @@ public:
 REGISTER_CLASS(Transform, 
     REGISTER_MEMBER(Transform, position, MemberProperty::Viewable | MemberProperty::Editable),
     REGISTER_MEMBER(Transform, scale, MemberProperty::Viewable | MemberProperty::Editable),
-    REGISTER_MEMBER(Transform, rotation, MemberProperty::NonViewable)
+    REGISTER_MEMBER(Transform, rotation, MemberProperty::Viewable)
 );

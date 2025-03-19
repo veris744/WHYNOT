@@ -1,9 +1,9 @@
 #pragma once
+#include <any>
 #include <functional>
 #include <string>
 #include <unordered_map>
 #include <Reader/Reader.h>
-#include <Utils/Parser.h>
 #include "ReflectedObject.h"
 
 using namespace std;
@@ -16,6 +16,7 @@ enum class MemberProperty : uint32_t
     Editable = 1 << 1,
     NonViewable = 1 << 2
 };
+
 
 inline const char* to_string(MemberProperty e)
 {
@@ -47,7 +48,7 @@ struct MemberInfo
     string type_name;
     MemberProperty properties; 
     function<void(void*, const YAML::Node&)> setter;
-    std::function<std::string(ReflectedObject*)> getter;
+    std::function<void*(ReflectedObject*)> getter;
 };
 
 struct TypeInfo {
@@ -136,7 +137,7 @@ namespace Reflection
     }
 
 #define REGISTER_MEMBER(type, member, properties) \
-    MemberInfo{#member, #type, properties, [](void* obj, const YAML::Node& node) { \
+    MemberInfo{#member, typeid(std::decay_t<decltype(std::declval<type>().member)>).name(), properties, [](void* obj, const YAML::Node& node) { \
         auto& instance = *static_cast<type*>(obj); \
         using MemberT = std::decay_t<decltype(instance.member)>; \
         if constexpr (std::is_class_v<MemberT> && !Reader::IsGLMType<MemberT>() \
@@ -151,10 +152,14 @@ namespace Reflection
         } \
     }, \
     ((static_cast<uint32_t>(properties) & static_cast<uint32_t>(MemberProperty::Viewable)) != 0) ? \
-        static_cast<std::function<std::string(ReflectedObject*)>>([](ReflectedObject* obj) -> std::string { \
-            auto* instance = dynamic_cast<type*>(obj); \
-            if (!instance) return "Invalid cast"; \
-            using MemberT = std::decay_t<decltype(instance->member)>; \
-            return Parser::ParseValue(instance->member); \
-        }) : nullptr \
+            static_cast<std::function<void*(ReflectedObject*)>>([](ReflectedObject* obj) -> void* { \
+                auto* instance = dynamic_cast<type*>(obj); \
+                if (!instance) return {}; /* Return empty std::any on failure */ \
+                using MemberT = std::decay_t<decltype(instance->member)>; \
+                if constexpr (std::is_pointer_v<MemberT> && std::is_base_of_v<ReflectedObject, std::remove_pointer_t<MemberT>>) { \
+                    return static_cast<void*>(instance->member); /* Return pointer as void* */ \
+                } else { \
+                    return static_cast<void*>(&instance->member); /* Return actual member as void* */ \
+                } \
+            }) : nullptr \
     }

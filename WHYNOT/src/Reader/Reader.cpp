@@ -45,7 +45,15 @@ namespace Reader
 
     float ReadFloat(const YAML::Node& node, const string& name, float defaultValue)
     {
-        return node[name] ? node[name].as<float>() : defaultValue;
+        if (node[name] && node[name].IsDefined()) {
+            try {
+                return node[name].as<float>();
+            } catch (const std::exception& e) {
+                // Handle the exception (optional)
+                std::cerr << "Error converting YAML node to float: " << e.what() << std::endl;
+            }
+        }
+        return defaultValue;
     }
 
     bool ReadBool(const YAML::Node& node, const string& name, bool defaultValue)

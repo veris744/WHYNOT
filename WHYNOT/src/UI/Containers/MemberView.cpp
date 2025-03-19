@@ -5,6 +5,7 @@
 #include "UI/Buttons/EditMemberButton.h"
 #include "UI/Text/Text.h"
 #include "Components/Component.h"
+#include "Utils/Parser.h"
 
 unsigned int MemberView::counter = 0;
 
@@ -45,7 +46,7 @@ void MemberView::SetMemberInfo(const MemberInfo& info, ReflectedObject* _compone
     {
         if (info.getter)
         {
-            res += ": " + memberInfo->getter(_component);
+            res += ": " + Parser::ParseValue(memberInfo->getter(_component), memberInfo->type_name);
         }
         else
         {

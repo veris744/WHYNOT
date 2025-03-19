@@ -54,7 +54,7 @@ namespace Reader
         }
         else
         {
-            node[_memberName] = res;
+            node[_memberName] = _value;
         }
         return node;
     }

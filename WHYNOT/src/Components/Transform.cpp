@@ -7,8 +7,8 @@ vec3 Transform::worldUp = vec3(0.0f, 1.0f, 0.0f);
 
 mat4 Transform::GetModelMatrix(vec3 _relativePosition, vec3 relativeRotation, vec3 relativeScale) const
 {
-    glm::quat entityRotationQuat = rotation.quat;
-    glm::quat relativeRotationQuat = glm::quat(radians(relativeRotation));
+    quat entityRotationQuat = rotation.quat;
+    quat relativeRotationQuat = quat(radians(relativeRotation));
 
     // Scale the model's position relative to the entity
     vec3 scaled_model_position = scale * _relativePosition;
@@ -20,7 +20,7 @@ mat4 Transform::GetModelMatrix(vec3 _relativePosition, vec3 relativeRotation, ve
     vec3 final_position = position + rotated_model_position;
 
     // Compute the final rotation (concatenation of quaternions)
-    glm::quat final_rotation = entityRotationQuat * relativeRotationQuat;
+    quat final_rotation = entityRotationQuat * relativeRotationQuat;
 
     // Compute the final scale
     vec3 final_scale = scale * relativeScale;
@@ -29,22 +29,16 @@ mat4 Transform::GetModelMatrix(vec3 _relativePosition, vec3 relativeRotation, ve
     mat4 transform = translate(mat4(1.0f), final_position) *
                           mat4_cast(final_rotation) *
                           glm::scale(mat4(1.0f), final_scale);
-
-
-    // Logger::Log(LogLevel::Warning, Parser::Parse(rotation.vector()));
-    // Logger::Log(LogLevel::Info, Parser::Parse(rotation.quat));
-    // glm::vec3 eulerAngles = glm::degrees(glm::eulerAngles(rotation.quat));
-    // Logger::Log(LogLevel::Error, Parser::Parse(eulerAngles));
-    // Logger::Log(LogLevel::Info, Parser::Parse(entityRotation));
-    // Logger::Log(LogLevel::Info, Parser::Parse(relativeRotation));
-    // Logger::Log(LogLevel::Warning, Parser::Parse(final_rotation));
     
     return  transform;
 }
 
 void Transform::Update(float deltaTime)
 {
-    
+    if (old_rot != rotation.vector())
+    {
+        rotation.UpdateQuaternion();
+    }
 }
 
 void Transform::SetRotation(float pitch, float yaw, float roll)

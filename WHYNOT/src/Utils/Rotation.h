@@ -48,11 +48,16 @@ struct Rotation : ReflectedObject
         quat = glm::quat(radians(vec3(pitch, yaw, roll)));
     }
 
+    void UpdateQuaternion()
+    {
+        quat = glm::quat(radians(vec3(pitch, yaw, roll)));
+    }
+
     vec3 vector() const { return vec3(pitch, yaw, roll); };
     
 };
 REGISTER_CLASS(Rotation, {
-    REGISTER_MEMBER(Rotation, pitch, MemberProperty::Viewable),
-    REGISTER_MEMBER(Rotation, yaw, MemberProperty::Viewable),
-    REGISTER_MEMBER(Rotation, roll, MemberProperty::Viewable)
+    REGISTER_MEMBER(Rotation, pitch, MemberProperty::Viewable | MemberProperty::Editable),
+    REGISTER_MEMBER(Rotation, yaw, MemberProperty::Viewable | MemberProperty::Editable),
+    REGISTER_MEMBER(Rotation, roll, MemberProperty::Viewable | MemberProperty::Editable)
 });
