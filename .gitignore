@@ -40,3 +40,4 @@ x64/
 include/
 WHYNOT.sln.DotSettings.user
 WHYNOT.sln.DotSettings.user
+cmake-build-debug/
