@@ -37,7 +37,6 @@ x64/
 .idea/
 .vs/
 *.user
-include/
 WHYNOT.sln.DotSettings.user
 WHYNOT.sln.DotSettings.user
 cmake-build-debug/
