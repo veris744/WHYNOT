@@ -10,7 +10,7 @@
 #include "Physics/CollisionManager.h"
 #include "Physics/Hit.h"
 #include "Utils/Debugger.h"
-#include "Utils/Parser.h"
+#include "Managers/ConfigurationValues.h"
 
 
 ////////////////////////////////////////////////////////
@@ -20,7 +20,6 @@
 std::shared_ptr<InputManager> InputManager::instance = nullptr;
 unordered_map<unsigned int, KeyStatus> InputManager::keysStatus;
 std::unique_ptr<EventsBuffer> InputManager::eventsBuffer = std::make_unique<EventsBuffer>();
-InputMode InputManager::inputMode = InputMode::UIOnly;
 bool InputManager::isInputEnabled = false;
 
 std::shared_ptr<InputManager> InputManager::GetInstance()
@@ -266,48 +265,53 @@ void InputManager::HandleMouseButtonPress(int key)
 {
     if (EditorMode::isInputBoxOpen) return;
     
-    if ((inputMode == InputMode::UIOnly || EditorMode::isPanelOpen)
-        && key == GLFW_MOUSE_BUTTON_1)
+    if (ConfigurationValues::IsUIActive && key == GLFW_MOUSE_BUTTON_1)
     {
         double xpos, ypos;
         glfwGetCursorPos(Helper::GetWindow(), &xpos, &ypos);
         OnClickDelegate.Execute(vec2(xpos, ypos));
+
+        if (ConfigurationValues::IsEditorOpen)
+        {
+            vec3 mousePos3D = GetMousePos3D();
+            Hit hit = CollisionManager::ThrowRay(playerTransform->position, mousePos3D - playerTransform->position, false);
+            if (hit.hasHit)
+            {
+                hit.entity->OnClicked();
+                EditorMode::SelectEntity(hit.entity);
+            }
+            else
+            {
+                EditorMode::Unselect();
+            }
+        }
     }
-    else if (inputMode == InputMode::GameOnly && key == GLFW_MOUSE_BUTTON_1)
+    else if (ConfigurationValues::ActiveGame == "Aliens" && key == GLFW_MOUSE_BUTTON_1)
     {
         if (!playerController) return;
         playerController->Shoot();
     }
-    else if (inputMode == InputMode::Editor && key == GLFW_MOUSE_BUTTON_1)
+    else if (ConfigurationValues::IsEditorOpen && key == GLFW_MOUSE_BUTTON_2)
     {
-        vec3 mousePos3D = GetMousePos3D();
-        Hit hit = CollisionManager::ThrowRay(playerTransform->position, mousePos3D - playerTransform->position, false);
-        if (hit.hasHit)
-        {
-            hit.entity->OnClicked();
-            EditorMode::SelectEntity(hit.entity);
-        }
-        else
-        {
-            EditorMode::Unselect();
-        }
-    }
-    else if (inputMode == InputMode::Editor && key == GLFW_MOUSE_BUTTON_2)
-    {
+        ConfigurationValues::CanPlayerLook = true;
         firstMouse = true;
     }
 }
 
 void InputManager::HandleMouseButtonRelease(int key)
 {
+    if (ConfigurationValues::IsEditorOpen && key == GLFW_MOUSE_BUTTON_2)
+    {
+        ConfigurationValues::CanPlayerLook = false;
+        firstMouse = true;
+    }
 }
 
 void InputManager::HandleMouseMove(double x, double y)
 {
     if (EditorMode::isInputBoxOpen) return;
     if (!playerTransform)   return;
-    if (inputMode == InputMode::GameOnly
-        || (inputMode == InputMode::Editor && keysStatus[GLFW_MOUSE_BUTTON_2] == KeyStatus::PRESSED))
+    if (ConfigurationValues::CanPlayerLook)
     {
         vec2 pos = {x, y};
         if (firstMouse)
@@ -344,16 +348,6 @@ void InputManager::HandleMouseScroll(double x, double y)
     
 }
 
-void InputManager::SetInputMode(InputMode _mode)
-{
-    inputMode = _mode;
-    if (inputMode == InputMode::UIOnly)
-        World::GetInstance()->GetPlayer()->GetComponent<PlayerController>()->SetPositionLocked(true);
-    
-    if (inputMode == InputMode::Editor)
-        World::GetInstance()->GetPlayer()->GetComponent<PlayerController>()->SetPositionLocked(false);
-}
-
 void InputManager::EnableInput(bool value)
 {
     if (value == isInputEnabled)    return;
@@ -363,14 +357,13 @@ void InputManager::EnableInput(bool value)
         isInputEnabled = false;
         glfwSetInputMode(Helper::GetWindow(), GLFW_STICKY_KEYS, GLFW_FALSE);
         glfwSetInputMode(Helper::GetWindow(), GLFW_STICKY_MOUSE_BUTTONS, GLFW_FALSE);
-        // Logger::Log(LogLevel::Info, "Input disabled");
     }
     else
     {
         isInputEnabled = true;
         glfwSetInputMode(Helper::GetWindow(), GLFW_STICKY_KEYS, GLFW_TRUE); 
         glfwSetInputMode(Helper::GetWindow(), GLFW_STICKY_MOUSE_BUTTONS, GLFW_TRUE);
-        if (inputMode == InputMode::GameOnly)
+        if (!ConfigurationValues::IsUIActive)
         {
             glfwSetInputMode(Helper::GetWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
         }
@@ -378,7 +371,6 @@ void InputManager::EnableInput(bool value)
         {
             glfwSetInputMode(Helper::GetWindow(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
         }
-        // Logger::Log(LogLevel::Info, "Input enabled");
     }
 }
 

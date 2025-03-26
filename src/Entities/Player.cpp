@@ -30,7 +30,6 @@ void Player::Initialize()
     if (!GetComponent<PlayerController>())
     {
         std::unique_ptr<PlayerController> controller = std::make_unique<PlayerController>();
-        controller->SetPositionLocked(false);
         AddComponent(std::move(controller));
     }
 

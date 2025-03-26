@@ -36,13 +36,11 @@ void Image2D::Initialize()
         }
     );
 
-    // POR QUE NECESITO ESTA VUELTA???
-    Texture* texture = Renderer::instance().GetLoadedTexture(path).get();
-    if (!texture)
+    std::shared_ptr<Texture> texture = Renderer::instance().GetLoadedTexture(path);
+    if (texture.use_count() == 0)
     {
-        std::shared_ptr<Texture> texturePtr = std::make_shared<Texture>(path);
-        Renderer::instance().textures_loaded.push_back(texturePtr);
-        texture = texturePtr.get();
+        texture = std::make_shared<Texture>(path);
+        Renderer::instance().textures_loaded.push_back(texture);
     }
     
     string shaderNameFrag = "shaders/fragment2D.glsl";

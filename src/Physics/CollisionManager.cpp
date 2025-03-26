@@ -1,5 +1,7 @@
 #include "CollisionManager.h"
 
+#include <Managers/ConfigurationValues.h>
+
 #include "Hit.h"
 #include "Components/Collider.h"
 #include "Managers/Helper.h"
@@ -71,7 +73,7 @@ Hit CollisionManager::ThrowRay(vec3 rayOrigin, vec3 rayDirection, bool showDebug
     {
         Debugger::DrawLineDebug(rayOrigin, rayOrigin + 20.f * rayDirection, vec3(1,0,0), timer);
     }
-    if (InputManager::GetInputMode() == InputMode::Editor)
+    if (ConfigurationValues::IsEditorOpen)
     {
         return ThrowRayInEditor(rayOrigin, rayDirection);
     }

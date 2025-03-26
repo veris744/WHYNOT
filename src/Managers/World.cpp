@@ -2,6 +2,7 @@
 
 #include <thread>
 
+#include "ConfigurationValues.h"
 #include "Renderer.h"
 #include "Components/Camera.h"
 #include "Components/LightSource.h"
@@ -217,23 +218,36 @@ void World::DoLoad()
     
     string file = "assets/scenes/" + currentScene + ".yaml";
     AssetReader::ReadAssets(file.c_str());
+    ConfigurationValues::ActiveGame = currentScene;
 
     if (currentScene == "Aliens")
     {
         AliensLogic::GetInstance()->PrepareGame();
-        AliensLogic::GetInstance()->StartGame();  
-        InputManager::SetInputMode(InputMode::GameOnly);
+        AliensLogic::GetInstance()->StartGame();
         Helper::SetCursorVisible(false);
+        ConfigurationValues::CanPlayerLook = true;
+        ConfigurationValues::ArePhysicsActive = true;
+        ConfigurationValues::CanPlayerMove = false;
+        ConfigurationValues::IsEditorOpen = false;
+        ConfigurationValues::IsUIActive = false;
     }
     else if (currentScene == "MainMenu")
     {
-        InputManager::SetInputMode(InputMode::UIOnly);
         Helper::SetCursorVisible(true);
+        ConfigurationValues::CanPlayerLook = false;
+        ConfigurationValues::ArePhysicsActive = false;
+        ConfigurationValues::CanPlayerMove = false;
+        ConfigurationValues::IsEditorOpen = false;
+        ConfigurationValues::IsUIActive = true;
     }
     else if (currentScene == "Editor")
     {
-        InputManager::SetInputMode(InputMode::Editor);
         Helper::SetCursorVisible(true);
+        ConfigurationValues::CanPlayerLook = false;
+        ConfigurationValues::ArePhysicsActive = false;
+        ConfigurationValues::CanPlayerMove = true;
+        ConfigurationValues::IsEditorOpen = true;
+        ConfigurationValues::IsUIActive = true;
     }
 
     if (!playerEntity)
@@ -242,7 +256,7 @@ void World::DoLoad()
     }
     playerEntity->isActive = true;
 
-    if (InputManager::GetInputMode() == InputMode::GameOnly)
+    if (ConfigurationValues::ArePhysicsActive)
     {
         CollisionManager::PrepareOctree();
     }

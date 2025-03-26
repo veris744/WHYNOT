@@ -123,10 +123,8 @@ std::unique_ptr<Mesh> ComponentFactory::ReadMesh(const YAML::Node& asset)
 
     for (const string& texturePath : material->texturePaths)
     {
-        // POR QUE NECESITO ESTA VUELTA???
-        Texture* texture = Renderer::instance().GetLoadedTexture(texturePath).get();
         std::shared_ptr<Texture> texturePtr = Renderer::instance().GetLoadedTexture(texturePath);
-        if (!texture)
+        if (texturePtr.use_count() == 0)
         {
             texturePtr = std::make_unique<Texture>(texturePath);
             Renderer::instance().textures_loaded.push_back(texturePtr);

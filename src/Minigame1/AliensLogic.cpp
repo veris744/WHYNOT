@@ -1,6 +1,7 @@
 #include "AliensLogic.h"
 
 #include <random>
+#include <Managers/ConfigurationValues.h>
 
 #include "Components/Audio.h"
 #include "Components/CircleCollider.h"
@@ -85,7 +86,6 @@ void AliensLogic::PrepareGame(unsigned int _totalAliens)
 
 void AliensLogic::StartGame()
 {
-    World::GetInstance()->GetPlayer()->GetComponent<PlayerController>()->SetPositionLocked(true);
     for (const auto& alien : aliens)
     {
         CalculateRandomPosition(alien);

@@ -11,8 +11,6 @@ class PlayerController : public Component
     vec3 acceleration = vec3(0);
     vec3 currentInput = vec3(0);
     Transform* transform = nullptr;
-
-    bool isPositionLocked = false;
     bool bCanShoot = true;
 
     
@@ -67,7 +65,6 @@ public:
 
     void Update(float deltaTime) override;
     void Shoot();
-    void SetPositionLocked(bool _positionLocked) { isPositionLocked = _positionLocked; }
 };
 REGISTER_CLASS(PlayerController, {
     REGISTER_MEMBER(PlayerController, maxSpeed, MemberProperty::Viewable),

@@ -27,28 +27,37 @@ void WidgetFactory::WidgetFactorySetup()
             return w;
         });
     
-    RegisterWidget("IMAGE2D", [](const YAML::Node& asset, Widget* parent) ->
+    RegisterWidget("IMAGE2D", [this](const YAML::Node& asset, Widget* parent) ->
         std::shared_ptr<Widget> {
             std::shared_ptr<Image2D> widget = std::shared_ptr<Image2D>();
             deserialize(asset, widget);
             SaveWidget(widget, parent);
-            return widget;
+            std::shared_ptr<Widget> w = std::static_pointer_cast<Widget>(widget);
+            // POR QUE NECESITO ESTA VUELTA???
+            temp = w;
+            return w;
         });
     
-    RegisterWidget("TEXT", [](const YAML::Node& asset, Widget* parent) ->
+    RegisterWidget("TEXT", [this](const YAML::Node& asset, Widget* parent) ->
         std::shared_ptr<Widget> {
             std::shared_ptr<Text> widget = std::shared_ptr<Text>();
             deserialize(asset, widget);
             SaveWidget(widget, parent);
-            return widget;
+            std::shared_ptr<Widget> w = std::static_pointer_cast<Widget>(widget);
+            // POR QUE NECESITO ESTA VUELTA???
+            temp = w;
+            return w;
         });
     
-    RegisterWidget("PANEL", [](const YAML::Node& asset, Widget* parent) ->
+    RegisterWidget("PANEL", [this](const YAML::Node& asset, Widget* parent) ->
         std::shared_ptr<Widget> {
             std::shared_ptr<Panel> widget = std::shared_ptr<Panel>();
             deserialize(asset, widget);
             SaveWidget(widget, parent);
-            return widget;
+            std::shared_ptr<Widget> w = std::static_pointer_cast<Widget>(widget);
+            // POR QUE NECESITO ESTA VUELTA???
+            temp = w;
+            return w;
     });
 }
 

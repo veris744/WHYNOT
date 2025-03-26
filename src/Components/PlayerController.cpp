@@ -1,5 +1,7 @@
 #include "PlayerController.h"
 
+#include <Managers/ConfigurationValues.h>
+
 #include "Transform.h"
 #include "Entities/Entity.h"
 #include "Minigame1/AliensLogic.h"
@@ -32,7 +34,7 @@ void PlayerController::Update(float deltaTime)
     // Logger::Log(LogLevel::Warning, Parser::Parse(transform->rotation.vector()));
     // Logger::Log(LogLevel::Info, Parser::Parse(transform->forward));
 
-    if (isPositionLocked)   return;
+    if (!ConfigurationValues::CanPlayerMove)   return;
     
     if (length(currentInput) > 0.0f) {
         acceleration = currentInput * accelerationRate;
