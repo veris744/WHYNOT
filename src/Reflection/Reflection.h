@@ -48,12 +48,25 @@ struct MemberInfo
     string type_name;
     MemberProperty properties; 
     function<void(void*, const YAML::Node&)> setter;
-    std::function<void*(ReflectedObject*)> getter;
+    std::function<std::any(ReflectedObject*)> getter;
 };
 
 struct TypeInfo {
     std::string type_name;
     std::vector<MemberInfo> members;
+
+    const MemberInfo& GetMemberInfo(const string& memberName) const
+    {
+        for (const auto& member : members)
+        {
+            if (member.name == memberName)
+            {
+                return member;
+            }
+        }
+        Logger::Log(LogLevel::Error, "Unknown member type");
+        return MemberInfo();
+    }
 };
 
 
@@ -122,6 +135,22 @@ namespace Reflection
         }
         deserialize(node, *ptr);
     }
+
+    // template <typename T>
+    // YAML::Node serialize(const T& obj) {
+    //     YAML::Node node;
+    //     const auto* typeInfo = TypeRegistry::instance().getTypeInfo(Reader::demangleTypeName(typeid(T).name()));
+    //
+    //     if (typeInfo) {
+    //         for (const auto& member : typeInfo->members) {
+    //             node[member.name] = member.getter(&obj);
+    //         }
+    //     } else {
+    //         throw std::runtime_error("Type not registered: " + std::string(typeid(T).name()));
+    //     }
+    //
+    //     return node;
+    // }
 }
 
 
@@ -152,14 +181,16 @@ namespace Reflection
         } \
     }, \
     ((static_cast<uint32_t>(properties) & static_cast<uint32_t>(MemberProperty::Viewable)) != 0) ? \
-            static_cast<std::function<void*(ReflectedObject*)>>([](ReflectedObject* obj) -> void* { \
+            static_cast<std::function<std::any(ReflectedObject*)>>([](ReflectedObject* obj) -> std::any { \
                 auto* instance = dynamic_cast<type*>(obj); \
-                if (!instance) return {}; /* Return empty std::any on failure */ \
+                if (!instance) return std::any{}; \
                 using MemberT = std::decay_t<decltype(instance->member)>; \
                 if constexpr (std::is_pointer_v<MemberT> && std::is_base_of_v<ReflectedObject, std::remove_pointer_t<MemberT>>) { \
-                    return static_cast<void*>(instance->member); /* Return pointer as void* */ \
+                    return std::any(static_cast<ReflectedObject*>(instance->member)); \
+                } else if constexpr (std::is_base_of_v<ReflectedObject, MemberT>) { \
+                    return std::any(static_cast<ReflectedObject*>(&instance->member)); \
                 } else { \
-                    return static_cast<void*>(&instance->member); /* Return actual member as void* */ \
+                    return std::any(std::ref(instance->member)); /* Store reference wrapper in std::any */ \
                 } \
             }) : nullptr \
     }

@@ -69,8 +69,8 @@ void EntityPanel::CreateMemberView(ReflectedObject* _object, const TypeInfo& _ty
             AddWidget(compView);
             compView->SetMemberInfo(Reader::demangleTypeName(member.name));
             panelHeight += separation;
-            
-            ReflectedObject* memberObject = static_cast<ReflectedObject*>(member.getter(_object));
+            std::any a = member.getter(_object);
+            ReflectedObject* memberObject = any_cast<ReflectedObject*>(a);
             CreateMemberView(memberObject, *memberTypeInfo, _margin + 15);
         }
         panelHeight += separation;

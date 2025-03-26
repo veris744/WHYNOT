@@ -13,8 +13,8 @@ EditMemberButton::EditMemberButton(const vec2& _pos, const vec2& _size, const st
 void EditMemberButton::OnClick(vec2 _mousePos)
 {
     Button::OnClick(_mousePos);
-    MemberView* memberView = static_cast<MemberView*>(parent);
-    EditorMode::OnEnterInput.Bind(&MemberView::UpdateMember, memberView);
+    memberView = std::make_shared<MemberView>(*static_cast<MemberView*>(parent));
+    EditorMode::OnEnterInput.Bind(&MemberView::UpdateMember, memberView.get());
     EditorMode::OpenInputBox();
 }
 

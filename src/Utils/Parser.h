@@ -1,4 +1,5 @@
 #pragma once
+#include <any>
 #include <iomanip>
 #include <sstream>
 #include <glm/detail/type_quat.hpp>
@@ -69,32 +70,36 @@ namespace Parser
         return data;
     }
 
-    inline std::string ParseValue(void* value, const string& type) {
-        if (type == "int") {
-            return Parse(*static_cast<int*>(value));
+    inline std::string ParseValue(const std::any& value, const std::string& type) {
+        try {
+            if (value.type() == typeid(std::reference_wrapper<int>)) {
+                return Parse(std::any_cast<std::reference_wrapper<int>>(value).get());
+            }
+            if (value.type() == typeid(std::reference_wrapper<float>)) {
+                return Parse(std::any_cast<std::reference_wrapper<float>>(value).get());
+            }
+            if (value.type() == typeid(std::reference_wrapper<bool>)) {
+                return std::any_cast<std::reference_wrapper<bool>>(value).get() ? "true" : "false";
+            }
+            if (value.type() == typeid(std::reference_wrapper<std::string>)) {
+                return std::any_cast<std::reference_wrapper<std::string>>(value).get();
+            }
+            if (value.type() == typeid(std::reference_wrapper<vec2>)) {
+                return Parse(std::any_cast<std::reference_wrapper<vec2>>(value).get());
+            }
+            if (value.type() == typeid(std::reference_wrapper<vec3>)) {
+                return Parse(std::any_cast<std::reference_wrapper<vec3>>(value).get());
+            }
+            if (value.type() == typeid(std::reference_wrapper<vec4>)) {
+                return Parse(std::any_cast<std::reference_wrapper<vec4>>(value).get());
+            }
+            if (value.type() == typeid(std::reference_wrapper<int>)) {
+                return EnumRegistry::instance().getEnumStringFromValue(type, std::any_cast<std::reference_wrapper<int>>(value).get());
+            }
+        } catch (const std::bad_any_cast&) {
+            return "Invalid type conversion";
         }
-        if (type == "float") {
-            return Parse(*static_cast<float*>(value));
-        }
-        if (type == "bool") {
-            return *static_cast<bool*>(value) ? "true" : "false";
-        }
-        if (type.find("string") != std::string::npos) {
-            return *static_cast<std::string*>(value);
-        }
-        if (type == "struct glm::vec<2,float,0>") {
-            return Parse(*static_cast<vec2*>(value));
-        }
-        if (type == "struct glm::vec<3,float,0>") {
-            return Parse(*static_cast<vec3*>(value));
-        }
-        if (type == "struct glm::vec<4,float,0>") {
-            return Parse(*static_cast<vec4*>(value));
-        }
-        if (type.find("enum") != std::string::npos)
-        {
-            return EnumRegistry::instance().getEnumStringFromValue(type, *static_cast<int*>(value));
-        }
+
         return "Unknown";
     }
     

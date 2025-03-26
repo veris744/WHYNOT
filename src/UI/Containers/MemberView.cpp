@@ -37,7 +37,7 @@ void MemberView::SetMemberInfo(const MemberInfo& info, ReflectedObject* _compone
     string res;
     memberInfo = &info;
     component =  _component;
-    
+
     if (!HasProperty(memberInfo->properties, MemberProperty::Hidden))
     {
         res += memberInfo->name;

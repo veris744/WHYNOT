@@ -27,12 +27,15 @@ public:
     
     template <typename T>
     void Remove(T* instance) {
-        callbacks.erase(std::remove_if(callbacks.begin(), callbacks.end(),
+        auto it = std::find_if(callbacks.begin(), callbacks.end(),
             [instance](const auto& entry) {
                 void* storedInstance = entry.second;
-                return storedInstance == static_cast<void*>(instance); 
-            }),
-            callbacks.end());
+                return storedInstance == static_cast<void*>(instance);
+            });
+
+        if (it != callbacks.end()) {  // Check if instance exists
+            callbacks.erase(it);  // Remove the element if it exists
+        }
     }
 
 
@@ -42,6 +45,10 @@ public:
 
     void Execute(Args... args) const {
         for (const auto& callback : callbacks) {
+            if (!callback.first)
+            {
+                continue;
+            }
             callback.first(args...);
             if (callbacks.empty())
             {

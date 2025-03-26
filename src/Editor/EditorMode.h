@@ -1,4 +1,6 @@
 #pragma once
+#include <UI/Containers/MemberView.h>
+
 #include "Entities/Entity.h"
 #include "Utils/SingleDelegate.h"
 

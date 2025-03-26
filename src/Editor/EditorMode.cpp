@@ -1,5 +1,7 @@
 #include "EditorMode.h"
 
+#include <Managers/ConfigurationValues.h>
+
 #include "Components/Transform.h"
 #include "Managers/World.h"
 #include "UI/Containers/EntityPanel.h"
@@ -44,6 +46,7 @@ void EditorMode::SelectEntity(Entity* entity)
     selectedEntity->GetComponent<Transform>()->debugEnabled = true;
     SetEntityViewer();
     isPanelOpen = true;
+    ConfigurationValues::IsPanelOpen = true;
 }
 
 void EditorMode::Unselect()
@@ -57,6 +60,7 @@ void EditorMode::Unselect()
             entityViewer->ClearContent();
     }
     isPanelOpen = false;
+    ConfigurationValues::IsPanelOpen = false;
 }
 
 void EditorMode::SetEntityViewer()

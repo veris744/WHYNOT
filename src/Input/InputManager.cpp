@@ -271,7 +271,7 @@ void InputManager::HandleMouseButtonPress(int key)
         glfwGetCursorPos(Helper::GetWindow(), &xpos, &ypos);
         OnClickDelegate.Execute(vec2(xpos, ypos));
 
-        if (ConfigurationValues::IsEditorOpen)
+        if (ConfigurationValues::IsEditorOpen && !ConfigurationValues::IsPanelOpen)
         {
             vec3 mousePos3D = GetMousePos3D();
             Hit hit = CollisionManager::ThrowRay(playerTransform->position, mousePos3D - playerTransform->position, false);
