@@ -40,8 +40,9 @@ public:
 
     void LookAt(vec3 target);
 };
-REGISTER_CLASS(Transform, 
-    REGISTER_MEMBER(Transform, position, MemberProperty::Viewable | MemberProperty::Editable),
-    REGISTER_MEMBER(Transform, scale, MemberProperty::Viewable | MemberProperty::Editable),
-    REGISTER_MEMBER(Transform, rotation, MemberProperty::Viewable)
+REGISTER_CLASS(Transform,
+    REGISTER_MEMBER(Transform, name, MemberProperty::Serializable),
+    REGISTER_MEMBER(Transform, position, MemberProperty::Viewable | MemberProperty::Editable | MemberProperty::Serializable),
+    REGISTER_MEMBER(Transform, scale, MemberProperty::Viewable | MemberProperty::Editable | MemberProperty::Serializable),
+    REGISTER_MEMBER(Transform, rotation, MemberProperty::Viewable | MemberProperty::Serializable)
 );

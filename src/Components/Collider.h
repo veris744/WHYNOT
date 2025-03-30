@@ -10,16 +10,18 @@ enum class ColliderShape
 {
     CIRCLE, BOX
 };
+REGISTER_ENUM(ColliderShape,
+    {"CIRCLE", ColliderShape::CIRCLE},
+    {"BOX", ColliderShape::BOX}
+);
 
 class Collider : public Component
 {
 protected:
-    ColliderShape type;
-
     Transform* transform = nullptr;
-   
-    
+
 public:
+    ColliderShape type;
     Collider()
     {
         name = "COLLIDER";

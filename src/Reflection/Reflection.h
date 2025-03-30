@@ -14,7 +14,8 @@ enum class MemberProperty : uint32_t
     Hidden = 0,
     Viewable = 1 << 0,
     Editable = 1 << 1,
-    NonViewable = 1 << 2
+    Serializable = 1 << 2,
+    NonViewable = 1 << 3
 };
 
 
@@ -25,6 +26,7 @@ inline const char* to_string(MemberProperty e)
     case MemberProperty::Hidden: return "Hidden";
     case MemberProperty::Viewable: return "Viewable";
     case MemberProperty::Editable: return "Editable";
+    case MemberProperty::Serializable: return "Serializable";
     case MemberProperty::NonViewable: return "NonViewable";
     default: return "unknown";
     }
@@ -180,7 +182,7 @@ namespace Reflection
             } \
         } \
     }, \
-    ((static_cast<uint32_t>(properties) & static_cast<uint32_t>(MemberProperty::Viewable)) != 0) ? \
+    ((static_cast<uint32_t>(properties) & (static_cast<uint32_t>(MemberProperty::Viewable) | static_cast<uint32_t>(MemberProperty::Serializable))) != 0) ? \
             static_cast<std::function<std::any(ReflectedObject*)>>([](ReflectedObject* obj) -> std::any { \
                 auto* instance = dynamic_cast<type*>(obj); \
                 if (!instance) return std::any{}; \

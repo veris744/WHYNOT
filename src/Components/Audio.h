@@ -39,4 +39,6 @@ public:
     void AddAudioSource(const AudioSource& audio);
     void Play(const string& audioName);
 };
-REGISTER_CLASS(Audio);
+REGISTER_CLASS(Audio,
+    REGISTER_MEMBER(Audio, name, MemberProperty::Serializable)
+);

@@ -22,7 +22,9 @@ public:
     
     
 };
-REGISTER_CLASS(CircleCollider, {
-    REGISTER_MEMBER(CircleCollider, radius, MemberProperty::Viewable | MemberProperty::Editable),
-    REGISTER_MEMBER(CircleCollider, profile, MemberProperty::Viewable)
-});
+REGISTER_CLASS(CircleCollider,
+    REGISTER_MEMBER(CircleCollider, name, MemberProperty::Serializable),
+    REGISTER_MEMBER(CircleCollider, radius, MemberProperty::Viewable | MemberProperty::Editable | MemberProperty::Serializable),
+    REGISTER_MEMBER(CircleCollider, type, MemberProperty::Viewable | MemberProperty::Serializable),
+    REGISTER_MEMBER(CircleCollider, profile, MemberProperty::Viewable | MemberProperty::Serializable)
+);

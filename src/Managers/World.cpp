@@ -260,11 +260,7 @@ void World::DoLoad()
     else if (currentScene == "Editor")
     {
         Helper::SetCursorVisible(true);
-        ConfigurationValues::CanPlayerLook = false;
-        ConfigurationValues::ArePhysicsActive = false;
-        ConfigurationValues::CanPlayerMove = true;
-        ConfigurationValues::IsEditorOpen = true;
-        ConfigurationValues::IsUIActive = true;
+        EditorMode::EnterEditorMode();
     }
 
     if (!playerEntity)
@@ -288,7 +284,7 @@ void World::UnloadScene()
     {
         AliensLogic::GetInstance()->StopGame();
     }
-    
+
     Renderer::instance().textures_loaded;
     isSceneLoaded = false;
     InputManager::EnableInput(false);

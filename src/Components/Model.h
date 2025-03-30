@@ -56,11 +56,12 @@ public:
     bool HasMeshes() const { return !meshes.empty(); }
     const vector<std::unique_ptr<Mesh>>& GetMeshes() { return meshes; }
 };
-REGISTER_CLASS(Model, {
-    REGISTER_MEMBER(Model, path, MemberProperty::Viewable),
+REGISTER_CLASS(Model,
+    REGISTER_MEMBER(Model, name, MemberProperty::Serializable),
+    REGISTER_MEMBER(Model, path, MemberProperty::Viewable | MemberProperty::Serializable),
     REGISTER_MEMBER(Model, position, MemberProperty::Viewable | MemberProperty::Editable),
     REGISTER_MEMBER(Model, rotation, MemberProperty::Viewable | MemberProperty::Editable),
     REGISTER_MEMBER(Model, scale, MemberProperty::Viewable | MemberProperty::Editable),
     REGISTER_MEMBER(Model, invertTexture, MemberProperty::Viewable),
     REGISTER_MEMBER(Model, enableCulling, MemberProperty::Viewable)
-});
+);

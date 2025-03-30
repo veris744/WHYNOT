@@ -28,4 +28,6 @@ public:
     void Update(float deltaTime) override;
     
 };
-REGISTER_CLASS(Camera)
+REGISTER_CLASS(Camera,
+    REGISTER_MEMBER(Camera, name, MemberProperty::Serializable)
+);

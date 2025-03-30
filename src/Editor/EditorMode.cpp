@@ -6,23 +6,26 @@
 #include "Managers/World.h"
 #include "UI/Containers/EntityPanel.h"
 #include "UI/Text/InputText.h"
+#include "UI/Buttons/SerializeButton.h"
 
 Entity* EditorMode::selectedEntity = nullptr;
 EntityPanel* EditorMode::entityViewer = nullptr;
 InputText* EditorMode::inputText = nullptr;
+SerializeButton* EditorMode::serializeButton = nullptr;
 bool EditorMode::isInputBoxOpen = false;
 bool EditorMode::isPanelOpen = false;
 SingleDelegate<const string&> EditorMode::OnEnterInput;
 
 void EditorMode::CreateEntityPanel()
 {
-    std::shared_ptr<EntityPanel> tempPanel = std::make_shared<EntityPanel>(vec2(0, 50), vec2(300, 0), "EntityPanel");
+    std::shared_ptr<EntityPanel> tempPanel = std::make_shared<EntityPanel>(vec2(0, 50), vec2(400, 0), "EntityPanel");
     tempPanel->background = {0.3f, 0.3f, 0.3f, 1.f};
-    tempPanel->pixelCorrection = {150, 0};
+    tempPanel->pixelCorrection = {200, 0};
     tempPanel->autoSizing = AutoSizing::VERTICAL;
     World::GetInstance()->AddWidget(tempPanel);
 
     entityViewer = tempPanel.get();
+    entityViewer->ClearContent();
 }
 
 void EditorMode::CreateInputBox()
@@ -30,14 +33,48 @@ void EditorMode::CreateInputBox()
     std::shared_ptr<InputText> tempInput = std::make_shared<InputText>();
     inputText = tempInput.get();
     World::GetInstance()->AddWidget(tempInput);
+    inputText->isActive = false;
+}
+
+void EditorMode::CreateSerializeButton()
+{
+    std::shared_ptr<SerializeButton> tempButton = std::make_shared<SerializeButton>(vec2{90,10}, vec2{150, 50}, "SerializeButton");
+    serializeButton = tempButton.get();
+    World::GetInstance()->AddWidget(tempButton);
+}
+
+void EditorMode::EnterEditorMode()
+{
+    ConfigurationValues::IsEditorOpen = true;
+    ConfigurationValues::ArePhysicsActive = false;
+    ConfigurationValues::CanPlayerLook = false;
+    ConfigurationValues::CanPlayerMove = true;
+    ConfigurationValues::IsUIActive = true;
+
+    if (!entityViewer)
+    {
+        CreateEntityPanel();
+    }
+    if (!serializeButton)
+    {
+        CreateSerializeButton();
+    }
+    if (!inputText)
+    {
+        CreateInputBox();
+    }
 }
 
 void EditorMode::SelectEntity(Entity* entity)
 {
+    if (selectedEntity && selectedEntity == entity)
+    {
+        return;
+    }
+
     if (selectedEntity)
     {
-        if (entityViewer)
-            entityViewer->ClearContent();
+        entityViewer->ClearContent();
         selectedEntity->debugEnabled = false;
         selectedEntity->GetComponent<Transform>()->debugEnabled = false;
     }
@@ -55,18 +92,13 @@ void EditorMode::Unselect()
         selectedEntity->debugEnabled = false;
         selectedEntity->GetComponent<Transform>()->debugEnabled = false;
         selectedEntity = nullptr;
-        if (entityViewer)
-            entityViewer->ClearContent();
+        entityViewer->ClearContent();
     }
     isPanelOpen = false;
 }
 
 void EditorMode::SetEntityViewer()
 {
-    if (!entityViewer)
-    {
-        CreateEntityPanel();
-    }
     if (selectedEntity)
     {
         entityViewer->SetEntity(selectedEntity);
@@ -77,10 +109,6 @@ void EditorMode::SetEntityViewer()
 void EditorMode::OpenInputBox()
 {
     isInputBoxOpen = true;
-    if (!inputText)
-    {
-        CreateInputBox();
-    }
     inputText->isActive = true;
 }
 
@@ -130,5 +158,6 @@ void EditorMode::ClearEditor()
     selectedEntity = nullptr;
     inputText = nullptr;
     entityViewer = nullptr;
+    serializeButton = nullptr;
 }
 

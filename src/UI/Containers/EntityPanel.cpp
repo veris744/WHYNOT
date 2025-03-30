@@ -52,6 +52,7 @@ void EntityPanel::CreateMemberView(ReflectedObject* _object, const TypeInfo& _ty
 {
     for (const auto& member : _typeInfo.members)
     {
+        if (member.name == "name")  continue;
         const auto* memberTypeInfo = TypeRegistry::instance().getTypeInfo(Reader::demangleTypeName(member.type_name));
         if (!memberTypeInfo || !HasProperty(member.properties, MemberProperty::Viewable))
         {

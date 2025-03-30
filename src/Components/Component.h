@@ -8,10 +8,8 @@ class Entity;
 
 class Component : public ReflectedObject
 {
-protected:
-    string name;
-    
 public:
+    string name;
     Component() = default;
     virtual ~Component() = default;
 

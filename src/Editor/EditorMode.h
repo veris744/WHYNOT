@@ -6,19 +6,24 @@
 
 class InputText;
 class EntityPanel;
+class SerializeButton;
 
 class EditorMode
 {
     static Entity* selectedEntity;
     static EntityPanel* entityViewer;
     static InputText* inputText;
+    static SerializeButton* serializeButton;
     
     static void CreateEntityPanel();
     static void CreateInputBox();
+    static void CreateSerializeButton();
 
 public:
     static bool isInputBoxOpen;
     static bool isPanelOpen;
+
+    static void EnterEditorMode();
     
     static void SelectEntity(Entity* entity);
     static void Unselect();

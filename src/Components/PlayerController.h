@@ -66,9 +66,10 @@ public:
     void Update(float deltaTime) override;
     void Shoot();
 };
-REGISTER_CLASS(PlayerController, {
+REGISTER_CLASS(PlayerController,
+    REGISTER_MEMBER(PlayerController, name, MemberProperty::Serializable),
     REGISTER_MEMBER(PlayerController, maxSpeed, MemberProperty::Viewable),
     REGISTER_MEMBER(PlayerController, maxAcceleration, MemberProperty::Viewable),
     REGISTER_MEMBER(PlayerController, accelerationRate, MemberProperty::Viewable),
     REGISTER_MEMBER(PlayerController, decelerationRate, MemberProperty::Viewable)
-})
+)

@@ -61,7 +61,7 @@ struct Rotation : ReflectedObject
     
 };
 REGISTER_CLASS(Rotation, {
-    REGISTER_MEMBER(Rotation, pitch, MemberProperty::Viewable | MemberProperty::Editable),
-    REGISTER_MEMBER(Rotation, yaw, MemberProperty::Viewable | MemberProperty::Editable),
-    REGISTER_MEMBER(Rotation, roll, MemberProperty::Viewable | MemberProperty::Editable)
+    REGISTER_MEMBER(Rotation, pitch, MemberProperty::Viewable | MemberProperty::Editable | MemberProperty::Serializable),
+    REGISTER_MEMBER(Rotation, yaw, MemberProperty::Viewable | MemberProperty::Editable | MemberProperty::Serializable),
+    REGISTER_MEMBER(Rotation, roll, MemberProperty::Viewable | MemberProperty::Editable | MemberProperty::Serializable)
 });

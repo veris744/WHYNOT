@@ -65,6 +65,7 @@ public:
     }
     LightData lightData;    
 };
-REGISTER_CLASS(LightSource, {
-    REGISTER_MEMBER(LightSource, lightData, MemberProperty::NonViewable)
-});
+REGISTER_CLASS(LightSource,
+    REGISTER_MEMBER(LightSource, name, MemberProperty::Serializable),
+    REGISTER_MEMBER(LightSource, lightData, MemberProperty::Viewable)
+);
