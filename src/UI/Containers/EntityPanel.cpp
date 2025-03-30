@@ -1,5 +1,6 @@
 #include "EntityPanel.h"
 
+#include "Dropbox.h"
 #include "MemberView.h"
 #include "Entities/Entity.h"
 
@@ -21,34 +22,39 @@ void EntityPanel::SetContent()
 {
     if (!entity) return;
     isActive = true;
-
-    panelHeight = 10;
-
     
     std::shared_ptr<MemberView> entityView = std::make_shared<MemberView>(vec2(0, -50), vec2(0, 20), "EntityNameText");
     entityView->autoSizing = AutoSizing::HORIZONTAL;
-    entityView->pixelCorrection = {15, panelHeight};
+    entityView->pixelCorrection = {15, 0};
     AddWidget(entityView);
     entityView->SetMemberInfo(entity->GetName());
-    panelHeight += separation;
     
     for (const auto& comp : entity->GetComponents())
     {
         const auto* typeInfo = TypeRegistry::instance().getTypeInfo(Reader::demangleTypeName(typeid(*comp.get()).name()));
         if (!typeInfo)  continue;
+
+        std::shared_ptr<Dropbox> drop = std::make_shared<Dropbox>();
+        drop->position = vec2(0, -50);
+        drop->autoSizing = AutoSizing::HORIZONTAL;
+        drop->pixelCorrection = {15, 0};
+        AddWidget(drop);
+        drop->OnDroppedDelegate.Bind(&EntityPanel::Reorganize, this);
         
-        std::shared_ptr<MemberView> compView = std::make_shared<MemberView>(vec2(0, -50), vec2(0, 20));
+        std::shared_ptr<MemberView> compView = std::make_shared<MemberView>(vec2(0, 0), vec2(0, 20));
         compView->autoSizing = AutoSizing::HORIZONTAL;
-        compView->pixelCorrection = {15, panelHeight};
-        AddWidget(compView);
+        compView->pixelCorrection = {15, 0};
+        drop->SetTitleWidget(compView);
         compView->SetMemberInfo(typeInfo->type_name);
-        panelHeight += separation;
         
-        CreateMemberView(comp.get(), *typeInfo, 30);
+        CreateMemberView(comp.get(), *typeInfo, 30, drop.get());
+
+        drop->OrganizeWidgets();
     }
+    Reorganize();
 }
 
-void EntityPanel::CreateMemberView(ReflectedObject* _object, const TypeInfo& _typeInfo, float _margin)
+void EntityPanel::CreateMemberView(ReflectedObject* _object, const TypeInfo& _typeInfo, float _margin, Dropbox* _dropbox)
 {
     for (const auto& member : _typeInfo.members)
     {
@@ -56,28 +62,46 @@ void EntityPanel::CreateMemberView(ReflectedObject* _object, const TypeInfo& _ty
         const auto* memberTypeInfo = TypeRegistry::instance().getTypeInfo(Reader::demangleTypeName(member.type_name));
         if (!memberTypeInfo || !HasProperty(member.properties, MemberProperty::Viewable))
         {
-            std::shared_ptr<MemberView> memberView = std::make_shared<MemberView>(vec2(0, -50), vec2(0, 20));
+            std::shared_ptr<MemberView> memberView = std::make_shared<MemberView>(vec2(0, 0), vec2(0, 20));
             memberView->autoSizing = AutoSizing::HORIZONTAL;
-            memberView->pixelCorrection = {_margin, panelHeight};
-            AddWidget(memberView);
+            _dropbox ? _dropbox->AddDroppingWidget(memberView) : AddWidget(memberView);
             memberView->SetMemberInfo(member, _object);
         }
         else
         {
-            std::shared_ptr<MemberView> compView = std::make_shared<MemberView>(vec2(0, -50), vec2(0, 20));
+            std::shared_ptr<Dropbox> drop = std::make_shared<Dropbox>();
+            drop->position = vec2(0, 0);
+            drop->autoSizing = AutoSizing::HORIZONTAL;
+            drop->pixelCorrection = {_margin, 0};
+
+            std::shared_ptr<MemberView> compView = std::make_shared<MemberView>(vec2(0, 0), vec2(0, 20));
             compView->autoSizing = AutoSizing::HORIZONTAL;
-            compView->pixelCorrection = {_margin, panelHeight};
-            AddWidget(compView);
+            compView->pixelCorrection = {_margin, 0};
+            drop ? drop->SetTitleWidget(compView) : AddWidget(compView);
+
             compView->SetMemberInfo(Reader::demangleTypeName(member.name));
-            panelHeight += separation;
             std::any a = member.getter(_object);
             ReflectedObject* memberObject = any_cast<ReflectedObject*>(a);
-            CreateMemberView(memberObject, *memberTypeInfo, _margin + 15);
+
+            _dropbox->AddDroppingWidget(drop);
+            drop->OnDroppedDelegate.Bind(&EntityPanel::Reorganize, this);
+            CreateMemberView(memberObject, *memberTypeInfo, _margin + 15, drop.get());
         }
-        panelHeight += separation;
     }
     
 }
+
+void EntityPanel::Reorganize()
+{
+    float h = 10;
+    for (const auto& widget : GetChildren())
+    {
+        widget->pixelCorrection.y = h;
+        h += widget->size.y;
+        widget->SetPixelPosition();
+    }
+}
+
 
 void EntityPanel::ClearContent()
 {

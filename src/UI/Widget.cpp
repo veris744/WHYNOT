@@ -12,6 +12,28 @@ void Widget::AddWidget(const std::shared_ptr<Widget>& _widget)
     _widget->Initialize();
 }
 
+void Widget::SetActiveWithChildren(bool _active)
+{
+    isActive = _active;
+    for (const auto& widget : children)
+    {
+        widget->SetActiveWithChildren(_active);
+    }
+}
+
+bool Widget::AreParentsActive()
+{
+    if (!isActive)
+    {
+        return false;
+    }
+    if (parent)
+    {
+        return parent->AreParentsActive();
+    }
+    return isActive;
+}
+
 bool Widget::IsClicking(const vec2& _mousePos) const
 {
     if (_mousePos.x >= pixelPosition.x - size.x * 0.5 && _mousePos.x <= pixelPosition.x + size.x * 0.5 &&

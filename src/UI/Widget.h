@@ -64,6 +64,8 @@ public:
     
     const string& GetName() const { return name; }
     virtual void SetAutoName() = 0;
+    void SetActiveWithChildren(bool _active);
+    bool AreParentsActive();
 
     bool IsClicking(const vec2& _mousePos) const;
     virtual void OnClick(vec2 _mousePos) {}

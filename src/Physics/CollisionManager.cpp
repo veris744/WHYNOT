@@ -73,7 +73,7 @@ bool CollisionManager::CheckUIClicked(vec2 mousePos)
     bool isHitting = false;
     for (const auto& widget : World::GetInstance()->GetWidgetsChildOf())
     {
-        if (widget->isActive && widget->isBlocking)
+        if (widget->isBlocking && widget->AreParentsActive())
         {
             if (widget->IsClicking(mousePos))
             {

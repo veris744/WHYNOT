@@ -65,6 +65,7 @@ void Text::Render()
     if (pixelPos.x < 0)  pixelPos.x = 0;
     if (pixelPos.y < 0)  pixelPos.y = padding.y;
     
+
     TextRenderer::instance().RenderText(text, pixelPos.x, pixelPos.y, scale, color, layer);
 }
 
