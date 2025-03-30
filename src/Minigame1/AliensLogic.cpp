@@ -127,8 +127,6 @@ void AliensLogic::StopGame()
         availableProjectiles.pop();
     }
     alienText = nullptr;
-
-    World::GetInstance()->LoadScene("MainMenu");
 }
 
 void AliensLogic::CalculateRandomPosition(const std::shared_ptr<Alien>& alien)

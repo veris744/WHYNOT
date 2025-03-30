@@ -37,6 +37,7 @@ public:
     void PrepareLoad();
     void Update(float deltaTime);
     void Clean();
+    static string GetCurrentScene() { return currentScene; };
 
     std::shared_ptr<Player> GetPlayer() const { return playerEntity; }
     void SetPlayer(const std::shared_ptr<Player>& player) { playerEntity = player; }
@@ -91,6 +92,7 @@ public:
     vector<LightData> GetLightDataList() const;
 
     vector<std::shared_ptr<Widget>> GetWidgets() const { return widgets; }
+    vector<std::shared_ptr<Widget>> GetWidgetsChildOf(const Widget* _widget = nullptr) const;
     Widget* GetWidget(const string& _name) const;
     void AddWidget(const std::shared_ptr<Widget>& _widget);
 

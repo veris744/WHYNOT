@@ -104,30 +104,6 @@ void InputManager::ScrollCallback(GLFWwindow* window, double xoffset, double yof
     eventsBuffer->AddEvent(event);
 }
 
-vec3 InputManager::GetMousePos3D()
-{
-    double mouseX, mouseY;
-    glfwGetCursorPos(Helper::GetWindow(), &mouseX, &mouseY);
-    
-    // Step 1: Convert mouse position to NDC
-    float x = (2.0f * mouseX) / Helper::windowWidth - 1.0f;
-    float y = 1.0f - (2.0f * mouseY) / Helper::windowHeight; // Flip Y because screen space is top-left origin
-    vec4 rayClip = vec4(x, y, -1.0f, 1.0f); // Ray starts at near plane
-
-    // Step 2: Convert from clip space to view space
-    mat4 invProj = inverse(World::GetInstance()->GetCurrentCamera()->GetProjectionMatrix());
-    vec4 rayEye = invProj * rayClip;
-    rayEye = vec4(rayEye.x, rayEye.y, -1.0f, 0.0f); // Set depth to -1 and w to 0
-
-    // Step 3: Convert from view space to world space
-    mat4 invView = glm::inverse(World::GetInstance()->GetCurrentCamera()->GetViewMatrix());
-    vec4 rayWorld = invView * rayEye;
-    vec3 rayDir = glm::normalize(vec3(rayWorld)); // Normalize direction
-
-    // Step 4: Return ray starting point (camera position) and direction
-    return GetInstance()->playerTransform->position + rayDir; // Mouse 3D world position
-}
-
 
 ////////////////////////////////////////////////////////
 /// PROCESSING /////////////////////////////////////////
@@ -188,22 +164,11 @@ void InputManager::HandleKeyPress(int key, int mods)
         EditorMode::ProcessUserInput(key);
         return;
     }
-    if (EditorMode::isPanelOpen)
-    {
-        if (key == GLFW_KEY_ESCAPE)
-        {
-            EditorMode::Unselect();
-        }
-        return;
-    }
     switch(key)
     {
         case GLFW_KEY_ESCAPE:
-            ScapeInput();
-        break;
-        case GLFW_KEY_Q:
-            ScapeInput();
-        break;
+            EditorMode::isPanelOpen ? EditorMode::Unselect() : ScapeInput();
+            break;
         case GLFW_KEY_UP:
             playerController->SetInput(vec3(0,1,0));
             break;
@@ -235,7 +200,7 @@ void InputManager::HandleKeyPress(int key, int mods)
 
 void InputManager::HandleKeyRelease(int key, int mods)
 {
-    if (EditorMode::isInputBoxOpen || EditorMode::isPanelOpen) return;
+    if (EditorMode::isInputBoxOpen) return;
     switch(key)
     {
     case GLFW_KEY_UP:
@@ -269,21 +234,23 @@ void InputManager::HandleMouseButtonPress(int key)
     {
         double xpos, ypos;
         glfwGetCursorPos(Helper::GetWindow(), &xpos, &ypos);
-        OnClickDelegate.Execute(vec2(xpos, ypos));
 
-        if (ConfigurationValues::IsEditorOpen && !ConfigurationValues::IsPanelOpen)
+        if (ConfigurationValues::IsEditorOpen)
         {
-            vec3 mousePos3D = GetMousePos3D();
-            Hit hit = CollisionManager::ThrowRay(playerTransform->position, mousePos3D - playerTransform->position, false);
-            if (hit.hasHit)
+            Hit hit = CollisionManager::ThrowRayFromScreen(vec2{xpos,ypos}, playerTransform->position, false);
+            if (hit.hasHit && hit.type == HitType::World)
             {
                 hit.entity->OnClicked();
                 EditorMode::SelectEntity(hit.entity);
             }
-            else
+            else if (!hit.hasHit)
             {
                 EditorMode::Unselect();
             }
+        }
+        else
+        {
+            CollisionManager::CheckUIClicked(vec2{xpos,ypos});
         }
     }
     else if (ConfigurationValues::ActiveGame == "Aliens" && key == GLFW_MOUSE_BUTTON_1)
@@ -378,10 +345,12 @@ void InputManager::Clear()
 {
     playerController = nullptr;
     playerTransform = nullptr;
-    OnClickDelegate.Clear();
 }
 
 void InputManager::ScapeInput() const 
 {
-    World::GetInstance()->EndApplication();
+    if (World::GetCurrentScene() == "MainMenu")
+        World::GetInstance()->EndApplication();
+    else
+        World::GetInstance()->LoadScene("MainMenu");
 }

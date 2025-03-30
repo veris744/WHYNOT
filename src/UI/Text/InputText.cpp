@@ -28,8 +28,6 @@ void InputText::Initialize()
     
     AddWidget(tempText);
     AddWidget(tempPanel);
-
-    InputManager::GetInstance()->OnTypeDelegate.Bind(&InputText::UpdateText, this);
 }
 
 void InputText::UpdateText(char ch)

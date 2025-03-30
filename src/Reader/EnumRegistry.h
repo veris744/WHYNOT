@@ -1,4 +1,6 @@
 #pragma once
+#include <any>
+#include <functional>
 #include <stdexcept>
 #include <string>
 #include <unordered_map>
@@ -12,14 +14,14 @@ struct EnumInfo {
 
 class EnumRegistry
 {
-    unordered_map<string, EnumInfo> enums;
-
 public:
+    using EnumCaster = function<int(const std::any&)>;
+
     static EnumRegistry& instance() {
         static EnumRegistry instance;
         return instance;
     }
-    
+
     static string demangleEnumType(const string& mangledName)
     {
         string result = mangledName;
@@ -28,6 +30,24 @@ public:
             result = result.substr(enumPrefix.size());
         }
         return result;
+    }
+
+private:
+    unordered_map<string, EnumInfo> enums;
+    std::unordered_map<std::string, EnumCaster> enumCasters;
+
+public:
+
+    void registerEnumCaster(const std::string& enumName, EnumCaster caster) {
+        enumCasters[enumName] = caster;
+    }
+
+    int castEnumToInt(const std::string& enumName, const std::any& value) const {
+        auto it = enumCasters.find(enumName);
+        if (it != enumCasters.end()) {
+            return it->second(value); // Call the registered caster function
+        }
+        throw std::runtime_error("Unknown enum type: " + enumName);
     }
 
     template<typename EnumType>
@@ -39,6 +59,10 @@ public:
              info.nameToValue[entry.first] = static_cast<int>(entry.second);
              info.valueToName[static_cast<int>(entry.second)] = entry.first;
         }
+
+        enumCasters[enumName] = [](const std::any& value) -> int {
+            return static_cast<int>(std::any_cast<std::reference_wrapper<EnumType>>(value).get());
+        };
     }
 
     template<typename EnumType>
@@ -79,6 +103,12 @@ public:
             }
         }
         return "UnknownEnumValue";  // Return a default value if not found
+    }
+
+    string getEnumFromAny(const string& enumType, const std::any& value) const
+    {
+        int intValue = castEnumToInt(enumType, value);
+        return getEnumStringFromValue(enumType, intValue);
     }
 };
 

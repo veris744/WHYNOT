@@ -12,6 +12,16 @@ void Widget::AddWidget(const std::shared_ptr<Widget>& _widget)
     _widget->Initialize();
 }
 
+bool Widget::IsClicking(const vec2& _mousePos) const
+{
+    if (_mousePos.x >= pixelPosition.x - size.x * 0.5 && _mousePos.x <= pixelPosition.x + size.x * 0.5 &&
+        _mousePos.y >= pixelPosition.y - size.y * 0.5 && _mousePos.y <= pixelPosition.y + size.y * 0.5)
+    {
+        return true;
+    }
+    return false;
+}
+
 void Widget::Render()
 {
     size = GetAutoSize();

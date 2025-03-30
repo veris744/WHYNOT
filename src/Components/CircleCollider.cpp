@@ -67,6 +67,7 @@ bool CircleCollider::Collides(vec3 _rayOrigin, vec3 _rayDir, Hit& hit)
     float distSq = dot(hitPoint - _rayOrigin, hitPoint - _rayOrigin); // Squared distance
 
     hit.hasHit = true;
+    hit.type = HitType::World;
     hit.distSQ = distSq;
     hit.point = hitPoint;
     hit.normal = normalize(hitPoint - center);

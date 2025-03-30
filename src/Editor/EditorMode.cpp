@@ -46,7 +46,6 @@ void EditorMode::SelectEntity(Entity* entity)
     selectedEntity->GetComponent<Transform>()->debugEnabled = true;
     SetEntityViewer();
     isPanelOpen = true;
-    ConfigurationValues::IsPanelOpen = true;
 }
 
 void EditorMode::Unselect()
@@ -60,7 +59,6 @@ void EditorMode::Unselect()
             entityViewer->ClearContent();
     }
     isPanelOpen = false;
-    ConfigurationValues::IsPanelOpen = false;
 }
 
 void EditorMode::SetEntityViewer()

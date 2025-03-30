@@ -56,6 +56,7 @@ public:
     bool hasTransparency = false;
 
     bool isActive = true;
+    bool isBlocking = false;
 
     void AddWidget(const std::shared_ptr<Widget>& _widget);
     const vector<std::shared_ptr<Widget>>& GetChildren() const { return children; }
@@ -63,6 +64,9 @@ public:
     
     const string& GetName() const { return name; }
     virtual void SetAutoName() = 0;
+
+    bool IsClicking(const vec2& _mousePos) const;
+    virtual void OnClick(vec2 _mousePos) {}
     
     virtual void Render();
     virtual void Clear();

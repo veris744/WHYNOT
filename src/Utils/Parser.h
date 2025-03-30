@@ -72,6 +72,7 @@ namespace Parser
 
     inline std::string ParseValue(const std::any& value, const std::string& type) {
         try {
+            string _type = value.type().name();
             if (value.type() == typeid(std::reference_wrapper<int>)) {
                 return Parse(std::any_cast<std::reference_wrapper<int>>(value).get());
             }
@@ -93,8 +94,8 @@ namespace Parser
             if (value.type() == typeid(std::reference_wrapper<vec4>)) {
                 return Parse(std::any_cast<std::reference_wrapper<vec4>>(value).get());
             }
-            if (value.type() == typeid(std::reference_wrapper<int>)) {
-                return EnumRegistry::instance().getEnumStringFromValue(type, std::any_cast<std::reference_wrapper<int>>(value).get());
+            if (_type.find('enum') != std::string::npos) {
+                return EnumRegistry::instance().getEnumFromAny(type, value);
             }
         } catch (const std::bad_any_cast&) {
             return "Invalid type conversion";

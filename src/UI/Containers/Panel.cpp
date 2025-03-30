@@ -10,6 +10,8 @@ unsigned int Panel::counter = 0;
 void Panel::Initialize()
 {
     Widget::Initialize();
+
+    isBlocking = true;
     
     vector<float> vertex = Renderer2D::quadVertices;
     vertexArray = std::make_unique<VertexArray>();

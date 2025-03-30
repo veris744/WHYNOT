@@ -1,16 +1,17 @@
 #include "CollisionManager.h"
 
 #include <Managers/ConfigurationValues.h>
+#include <UI/Widget.h>
 
 #include "Hit.h"
 #include "Components/Collider.h"
 #include "Managers/Helper.h"
 #include "Managers/World.h"
 #include "OctreeNode.h"
-#include "Input/InputManager.h"
 #include "Utils/Debugger.h"
 
 std::unique_ptr<OctreeNode> CollisionManager::root = nullptr;
+
 
 void CollisionManager::PrepareOctree()
 {
@@ -67,21 +68,57 @@ void CollisionManager::CheckCollisions()
     root->ClearDynamic();
 }
 
+bool CollisionManager::CheckUIClicked(vec2 mousePos)
+{
+    bool isHitting = false;
+    for (const auto& widget : World::GetInstance()->GetWidgetsChildOf())
+    {
+        if (widget->isActive && widget->isBlocking)
+        {
+            if (widget->IsClicking(mousePos))
+            {
+                widget->OnClick(mousePos);
+                isHitting = true;
+            }
+        }
+    }
+    return isHitting;
+}
+
+Hit CollisionManager::ThrowRayFromScreen(vec2 mousePos, vec3 playerPosition, bool showDebug, float timer)
+{
+    if (CheckUIClicked(mousePos))
+    {
+        return Hit{true, HitType::UI, vec3(mousePos, 0)};
+    }
+
+    // Convert mouse position to NDC
+    float x = (2.0f * mousePos.x) / Helper::windowWidth - 1.0f;
+    float y = 1.0f - (2.0f * mousePos.y) / Helper::windowHeight;
+    vec4 rayClip = vec4(x, y, -1.0f, 1.0f);
+
+    // Convert from clip space to view space
+    mat4 invProj = inverse(World::GetInstance()->GetCurrentCamera()->GetProjectionMatrix());
+    vec4 rayEye = invProj * rayClip;
+    rayEye = vec4(rayEye.x, rayEye.y, -1.0f, 0.0f);
+
+    // Convert from view space to world space
+    mat4 invView = inverse(World::GetInstance()->GetCurrentCamera()->GetViewMatrix());
+    vec4 rayWorld = invView * rayEye;
+    vec3 rayDir = normalize(vec3(rayWorld));
+
+    vec3 mousePos3D = playerPosition + rayDir;
+
+    return ThrowRay(playerPosition, mousePos3D - playerPosition, showDebug, timer);
+}
+
 Hit CollisionManager::ThrowRay(vec3 rayOrigin, vec3 rayDirection, bool showDebug, float timer)
 {
     if (showDebug)
     {
         Debugger::DrawLineDebug(rayOrigin, rayOrigin + 20.f * rayDirection, vec3(1,0,0), timer);
     }
-    if (ConfigurationValues::IsEditorOpen)
-    {
-        return ThrowRayInEditor(rayOrigin, rayDirection);
-    }
-    return {false};
-}
 
-Hit CollisionManager::ThrowRayInEditor(vec3 rayOrigin, vec3 rayDirection)
-{
     if (!root)
     {
         AABB worldBounds = {vec3(Helper::GetXBounds().x, Helper::GetYBounds().x, Helper::GetZBounds().x), 

@@ -163,6 +163,23 @@ vector<LightData> World::GetLightDataList() const
     return list;
 }
 
+vector<std::shared_ptr<Widget>> World::GetWidgetsChildOf(const Widget* _widget) const
+{
+    vector<std::shared_ptr<Widget>> result;
+
+    vector<std::shared_ptr<Widget>> directChildren = _widget ? _widget->GetChildren() : GetWidgets();
+    result.reserve(directChildren.size());
+    result.insert(result.end(), directChildren.begin(), directChildren.end());
+
+    for (const auto& child : directChildren)
+    {
+        vector<std::shared_ptr<Widget>> grandchildren = GetWidgetsChildOf(child.get());
+        result.insert(result.end(), grandchildren.begin(), grandchildren.end());
+    }
+
+    return result;
+}
+
 Widget* World::GetWidget(const string& _name) const
 {
     std::shared_ptr<Widget> widget = FindWidget(_name, widgets);
@@ -267,6 +284,11 @@ void World::DoLoad()
 
 void World::UnloadScene()
 {
+    if (currentScene == "Aliens")
+    {
+        AliensLogic::GetInstance()->StopGame();
+    }
+    
     Renderer::instance().textures_loaded;
     isSceneLoaded = false;
     InputManager::EnableInput(false);

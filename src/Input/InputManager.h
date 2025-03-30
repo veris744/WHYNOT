@@ -70,7 +70,6 @@ public:
 
     static void MouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
     static void ScrollCallback(GLFWwindow* window, double xoffset, double yoffset);
-    static vec3 GetMousePos3D();
 
     void HandleKeyPress(int key, int mods);
     void HandleKeyRelease(int key, int mods);
@@ -80,9 +79,6 @@ public:
     void HandleMouseScroll(double x, double y);
 
     static void EnableInput(bool value);
-    
-    MultiDelegate<vec2> OnClickDelegate;
-    SingleDelegate<char> OnTypeDelegate;
 
     void Clear();
 };

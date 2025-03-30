@@ -11,7 +11,6 @@ struct ConfigurationValues
     static bool IsUIActive;
     static bool ArePhysicsActive;
     static bool IsEditorOpen;
-    static bool IsPanelOpen;
 
     static std::string ActiveGame;
 };

@@ -30,13 +30,12 @@ void MemberView::SetAutoName()
         name = "MemberView" + std::to_string(++counter);
 }
 
-void MemberView::SetMemberInfo(const MemberInfo& info, ReflectedObject* _component)
+void MemberView::SetMemberInfo(const MemberInfo& _info, ReflectedObject* _object)
 {
-    Component* comp = static_cast<Component*>(_component);
     textWidget->padding = vec2(20, 0);
     string res;
-    memberInfo = &info;
-    component =  _component;
+    memberInfo = &_info;
+    object =  _object;
 
     if (!HasProperty(memberInfo->properties, MemberProperty::Hidden))
     {
@@ -44,9 +43,9 @@ void MemberView::SetMemberInfo(const MemberInfo& info, ReflectedObject* _compone
     }
     if (HasProperty(memberInfo->properties, MemberProperty::Viewable))
     {
-        if (info.getter)
+        if (_info.getter)
         {
-            res += ": " + Parser::ParseValue(memberInfo->getter(_component), memberInfo->type_name);
+            res += ": " + Parser::ParseValue(memberInfo->getter(_object), memberInfo->type_name);
         }
         else
         {
@@ -64,7 +63,7 @@ void MemberView::SetMemberInfo(const MemberInfo& info, ReflectedObject* _compone
     textWidget->SetText(res);
 }
 
-void MemberView::SetMemberInfo(const string& value)
+void MemberView::SetMemberInfo(const string& value) const
 {
     textWidget->SetText(value);
 }
@@ -72,8 +71,8 @@ void MemberView::SetMemberInfo(const string& value)
 void MemberView::UpdateMember(const string& value)
 {
     YAML::Node node = YAML::Node(Reader::ConvertMemberToYaml(memberInfo->name, value));
-    memberInfo->setter(component, node);
-    SetMemberInfo(*memberInfo, component);
+    memberInfo->setter(object, node);
+    SetMemberInfo(*memberInfo, object);
 }
 
 void MemberView::SetUpdateButton()
