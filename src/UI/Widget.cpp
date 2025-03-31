@@ -68,12 +68,17 @@ void Widget::RemoveChild(const std::shared_ptr<Widget>& _widget)
     std::erase(children, _widget);
 }
 
+vec2 Widget::GetPixelPosition() const
+{
+    return pixelPosition;
+}
+
 void Widget::SetPixelPosition()
 {
     if (!parent)
     {
-        float x = Helper::windowWidth * position.x * 0.01f ;
-        float y = Helper::windowHeight * position.y * 0.01f;
+        float x = Helper::windowWidth * 0.5 + Helper::windowWidth * position.x * 0.01f ;
+        float y = Helper::windowHeight * 0.5 + Helper::windowHeight * position.y * 0.01f;
         
         x += pixelCorrection.x;
         y += pixelCorrection.y;

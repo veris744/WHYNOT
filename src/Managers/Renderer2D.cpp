@@ -1,5 +1,7 @@
 #include "Renderer2D.h"
 
+#include <Utils/Debugger.h>
+
 #include "World.h"
 #include "UI/Widget.h"
 
@@ -50,7 +52,15 @@ void Renderer2D::Render()
     PrepareOpaqueRendering();
     
     vector<std::shared_ptr<Widget>> widgets = World::GetInstance()->GetWidgets();
-    for (const auto& widget : widgets)
+    vector<std::shared_ptr<Widget>> allWidgets;
+    if (widgets.size() > 0)
+        allWidgets.insert(allWidgets.end(), widgets.begin(), widgets.end());
+    if (Debugger::widgetsToRender.size() > 0)
+        allWidgets.insert(allWidgets.end(), Debugger::widgetsToRender.begin(), Debugger::widgetsToRender.end());
+    if (Debugger::widgetsToRenderInFrame.size() > 0)
+        allWidgets.insert(allWidgets.end(), Debugger::widgetsToRenderInFrame.begin(), Debugger::widgetsToRenderInFrame.end());
+
+    for (const auto& widget : allWidgets)
     {
         if (!widget->isActive)  continue;
         RenderOpaqueWidget(widget);
@@ -91,6 +101,8 @@ void Renderer2D::Clear()
         if (!widget->isActive)  continue;
         widget->Clear();
     }
+
+    Debugger::widgetsToRenderInFrame.clear();
     
     glDisable(GL_BLEND);
     glDepthMask(GL_TRUE);

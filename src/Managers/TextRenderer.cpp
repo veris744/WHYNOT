@@ -59,6 +59,13 @@ void TextRenderer::LoadFont(const string& _fontPath)
             Characters.insert(std::pair<char, Character>(c, character));
         }
     }
+    Character character = {
+        0,
+        Characters['n'].Size,
+        Characters['n'].Bearing,
+        Characters['n'].Advance
+    };
+    Characters.insert(std::pair<char, Character>(' ', character));
     FT_Done_Face(face);
     FT_Done_FreeType(*ftLibrary);
 
@@ -91,14 +98,7 @@ void TextRenderer::RenderText(string text, float x, float y, float scale, vec3 c
     for (char c : text)
     {
         if (c == ' ') {
-            // Ensure space character exists in Characters map
-            if (Characters.find(' ') != Characters.end()) {
-                x += (Characters[' '].Advance >> 6) * scale;
-            } else {
-                // Fallback space width if not defined (typically about 1/3 of 'n' width)
-                float spaceWidth = (Characters['n'].Advance >> 6) * scale * 0.33f;
-                x += spaceWidth;
-            }
+            x += (Characters[c].Advance >> 6) * scale;
             continue;
         }
         Character ch = Characters[c];

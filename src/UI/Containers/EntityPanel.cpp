@@ -161,12 +161,14 @@ void EntityPanel::ClearPropertiesContent()
             if (memberView->IsMember())
             {
                 memberView->Destroy();
+                memberView->isActive = false;
             }
         }
         Dropbox* drop = dynamic_cast<Dropbox*>(widget.get());
         if (drop)
         {
             drop->Destroy();
+            drop->isActive = false;
         }
     }
 }

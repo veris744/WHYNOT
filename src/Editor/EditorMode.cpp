@@ -18,7 +18,7 @@ SingleDelegate<const string&> EditorMode::OnEnterInput;
 
 void EditorMode::CreateEntityPanel()
 {
-    std::shared_ptr<EntityPanel> tempPanel = std::make_shared<EntityPanel>(vec2(0, 50), vec2(350, 0), "EntityPanel");
+    std::shared_ptr<EntityPanel> tempPanel = std::make_shared<EntityPanel>(vec2(-50, 0), vec2(350, 0), "EntityPanel");
     tempPanel->background = {0.3f, 0.3f, 0.3f, 1.f};
     tempPanel->pixelCorrection = {175, 0};
     tempPanel->autoSizing = AutoSizing::VERTICAL;
@@ -40,7 +40,7 @@ void EditorMode::CreateInputBox()
 
 void EditorMode::CreateSerializeButton()
 {
-    std::shared_ptr<SerializeButton> tempButton = std::make_shared<SerializeButton>(vec2{90,10}, vec2{150, 50}, "SerializeButton");
+    std::shared_ptr<SerializeButton> tempButton = std::make_shared<SerializeButton>(vec2{40,-40}, vec2{150, 50}, "SerializeButton");
     serializeButton = tempButton.get();
     World::GetInstance()->AddWidget(tempButton);
 }
@@ -79,8 +79,12 @@ void EditorMode::SelectEntity(Entity* entity)
     if (selectedEntity)
     {
         entityViewer->ClearPropertiesContent();
+        entityViewer->Reorganize();
         selectedEntity->debugEnabled = false;
-        selectedEntity->GetComponent<Transform>()->debugEnabled = false;
+        if (Transform* tempTransform = selectedEntity->GetComponent<Transform>())
+        {
+            tempTransform->debugEnabled = true;
+        }
     }
     selectedEntity = entity;
     selectedEntity->debugEnabled = true;

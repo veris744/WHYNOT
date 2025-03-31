@@ -1,5 +1,7 @@
 #include "Debugger.h"
 
+#include <UI/Text/Text.h>
+
 #include "Parser.h"
 #include "Timer.h"
 #include "Components/Collider.h"
@@ -12,6 +14,8 @@
 bool Debugger::collisionDebugEnabled = false;
 unordered_map<std::unique_ptr<Mesh>, mat4> Debugger::meshesToRenderInFrame;
 map<std::unique_ptr<Mesh>, mat4> Debugger::meshesToRender;
+vector<shared_ptr<Widget>> Debugger::widgetsToRenderInFrame;
+vector<shared_ptr<Widget>> Debugger::widgetsToRender;
 
 
 void Debugger::SetCollisionDebug(bool isEnabled)
@@ -77,6 +81,24 @@ void Debugger::DrawLineDebug(vec3 _start, vec3 _end, vec3 _color, float timer)
     }
 }
 
+void Debugger::DrawTextDebug(const string& _text, vec3 _color, float timer)
+{
+    std::shared_ptr<Text> text = std::make_shared<Text>(_text, _color, 0.3, vec2{0, 0});
+    text->align = TextAlign::RIGHT;
+    text->alignVertical = TextAlignVertical::BOTTOM;
+    text->padding = {5, 5};
+    text->Initialize();
+    if (timer <= 0.f)
+    {
+        widgetsToRenderInFrame.push_back(text);
+    }
+    else
+    {
+        Timer::StartTimer(timer, &Debugger::StopRenderingWidget, static_cast<Widget*>(text.get()));
+        widgetsToRender.push_back(text);
+    }
+}
+
 void Debugger::Render()
 {
     for (const auto& [mesh, mat] : meshesToRender)
@@ -100,6 +122,18 @@ void Debugger::StopRenderingMesh(Mesh* _mesh)
         if (mesh.get() == _mesh)
         {
             meshesToRender.erase(mesh);
+            return;
+        }
+    }
+}
+
+void Debugger::StopRenderingWidget(Widget* _widget)
+{
+
+    for (const auto& widget : widgetsToRender) {
+        if (widget.get() == _widget)
+        {
+            erase(widgetsToRender, widget);
             return;
         }
     }

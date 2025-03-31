@@ -44,8 +44,8 @@ public:
     }
 
     string name;
-    vec2 position;
-    vec2 size;
+    vec2 position = vec2(0);
+    vec2 size = vec2(0);
     AutoSizing autoSizing = AutoSizing::NONE;
     
     // top, right, bottom, left (TEMP IMPLEMENTATION, ONLY WITHOUT AUTOSIZING)
@@ -77,7 +77,7 @@ public:
     void Destroy();
     void RemoveChild(const std::shared_ptr<Widget>& _widget);
 
-    vec2 GetPixelPosition() const { return pixelPosition; };
+    vec2 GetPixelPosition() const;
     void SetPixelPosition();
     vec2 GetAutoSize() const;
 

@@ -36,7 +36,7 @@ vec2 Text::CalculateSize()
 
 void Text::Render()
 {
-    Widget::Render();
+    //Widget::Render();
     vec2 pixelPos = GetPixelPosition();
     vec2 parentSize = parent ? parent->size : vec2(Helper::windowWidth, Helper::windowHeight);
     switch (align)

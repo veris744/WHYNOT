@@ -7,7 +7,7 @@
 void InputText::Initialize()
 {
     size = {300, 50};
-    position = {50, 50};
+    position = {0, 0};
     
     Widget::Initialize();
 

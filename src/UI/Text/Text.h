@@ -41,7 +41,7 @@ public:
         position = _position;
         align = TextAlign::LEFT;
         alignVertical = TextAlignVertical::CENTER;
-        size = CalculateSize();
+        size = {0,0};
         padding = vec2(0);
         hasTransparency = true;
     }

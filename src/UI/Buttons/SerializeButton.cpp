@@ -4,6 +4,7 @@
 #include <Managers/World.h>
 #include <UI/Containers/Panel.h>
 #include <UI/Text/Text.h>
+#include <Utils/Debugger.h>
 #include <Utils/Parser.h>
 
 
@@ -89,6 +90,7 @@ string SerializeButton::GenerateFile(const YAML::Node& node)
         file << out.c_str();
         file.close();
         Logger::Log<SerializeButton>(LogLevel::Info, "File serialized successfully in " + filename);
+        Debugger::DrawTextDebug("File serialized successfully in " + filename, vec3{0,1,0}, 3);
         return filename;
     }
     Logger::Log<SerializeButton>(LogLevel::Info, "Failed write YAML in file");
