@@ -68,8 +68,8 @@ public:
 };
 REGISTER_CLASS(PlayerController,
     REGISTER_MEMBER(PlayerController, name, MemberProperty::Serializable),
-    REGISTER_MEMBER(PlayerController, maxSpeed, MemberProperty::Viewable),
-    REGISTER_MEMBER(PlayerController, maxAcceleration, MemberProperty::Viewable),
-    REGISTER_MEMBER(PlayerController, accelerationRate, MemberProperty::Viewable),
-    REGISTER_MEMBER(PlayerController, decelerationRate, MemberProperty::Viewable)
+    REGISTER_MEMBER(PlayerController, maxSpeed, MemberProperty::Viewable | MemberProperty::Editable | MemberProperty::Serializable),
+    REGISTER_MEMBER(PlayerController, maxAcceleration, MemberProperty::Viewable | MemberProperty::Editable | MemberProperty::Serializable),
+    REGISTER_MEMBER(PlayerController, accelerationRate, MemberProperty::Viewable | MemberProperty::Editable | MemberProperty::Serializable),
+    REGISTER_MEMBER(PlayerController, decelerationRate, MemberProperty::Viewable | MemberProperty::Editable | MemberProperty::Serializable)
 )

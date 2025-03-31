@@ -18,6 +18,8 @@ class MemberView : public Widget
     const MemberInfo* memberInfo = nullptr;
     Text * textWidget = nullptr;
     Button * button = nullptr;
+
+    bool isMember = true;
     
 public:
     MemberView(vec2 _pos, vec2 _size, const string& _name = "");
@@ -27,4 +29,8 @@ public:
     void SetMemberInfo(const string& value) const;
     void UpdateMember(const string& value);
     void SetUpdateButton();
+    void SetRedirectButton(Entity * _entity);
+
+    void SetIsMember(bool _isMember) { isMember = _isMember; };
+    bool IsMember() const { return isMember; }
 };

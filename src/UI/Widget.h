@@ -42,7 +42,7 @@ public:
         SetPixelPosition();
         Helper::OnWindowResizeDelegate.Add(&Widget::OnWindowResize, this);
     }
-    
+
     string name;
     vec2 position;
     vec2 size;
@@ -66,6 +66,7 @@ public:
     virtual void SetAutoName() = 0;
     void SetActiveWithChildren(bool _active);
     bool AreParentsActive();
+    Widget* GetParent() const { return parent; }
 
     bool IsClicking(const vec2& _mousePos) const;
     virtual void OnClick(vec2 _mousePos) {}
@@ -74,11 +75,12 @@ public:
     virtual void Clear();
 
     void Destroy();
+    void RemoveChild(const std::shared_ptr<Widget>& _widget);
 
     vec2 GetPixelPosition() const { return pixelPosition; };
     void SetPixelPosition();
     vec2 GetAutoSize() const;
 
     void OnWindowResize();
-    
+
 };

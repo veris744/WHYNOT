@@ -1,5 +1,7 @@
 #include "MemberView.h"
 
+#include <UI/Buttons/ShowPropertiesButton.h>
+
 #include "Components/CircleCollider.h"
 #include "UI/Image2D.h"
 #include "UI/Buttons/EditMemberButton.h"
@@ -79,6 +81,17 @@ void MemberView::SetUpdateButton()
 {
     std::shared_ptr<EditMemberButton> buttonTemp = std::make_shared<EditMemberButton>(vec2(-50, 0), vec2(12,12));
     std::shared_ptr<Image2D> image2D = std::make_shared<Image2D>("assets/2dImages/edit.png", vec2(0,0), vec2(0,0));
+    image2D->autoSizing = AutoSizing::ALL;
+    buttonTemp->AddWidget(image2D);
+    button = buttonTemp.get();
+    AddWidget(buttonTemp);
+}
+
+void MemberView::SetRedirectButton(Entity * _entity)
+{
+    std::shared_ptr<ShowPropertiesButton> buttonTemp = std::make_shared<ShowPropertiesButton>(vec2(-50, 0), vec2(12,12), _entity);
+    std::shared_ptr<Image2D> image2D = std::make_shared<Image2D>("assets/2dImages/extend.png", vec2(0,0), vec2(0,0));
+    buttonTemp->pixelCorrection = {-12, 0};
     image2D->autoSizing = AutoSizing::ALL;
     buttonTemp->AddWidget(image2D);
     button = buttonTemp.get();

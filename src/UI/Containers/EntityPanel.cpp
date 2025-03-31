@@ -1,5 +1,7 @@
 #include "EntityPanel.h"
 
+#include <Managers/World.h>
+
 #include "Dropbox.h"
 #include "MemberView.h"
 #include "Entities/Entity.h"
@@ -17,15 +19,39 @@ void EntityPanel::Initialize()
     isActive = false;
 }
 
-
 void EntityPanel::SetContent()
 {
-    if (!entity) return;
+    float height = 10;
+    for (const auto& [name, entity] : World::GetInstance()->GetEntities())
+    {
+        std::shared_ptr<MemberView> entityView = std::make_shared<MemberView>(vec2(0, -50), vec2(0, 20));
+        entityView->autoSizing = AutoSizing::HORIZONTAL;
+        entityView->pixelCorrection = {30, height};
+        entityView->SetIsMember(false);
+        AddWidget(entityView);
+        entityView->SetMemberInfo(name);
+        entityView->SetRedirectButton(entity.get());
+        height += entityView->size.y;
+        entityViews.push_back(entityView.get());
+    }
+}
+
+void EntityPanel::ResetContent()
+{
+    ClearContent();
+    SetContent();
+}
+
+void EntityPanel::SetContent(Entity* _entity)
+{
+    if (!_entity) return;
+    entity = _entity;
     isActive = true;
     
     std::shared_ptr<MemberView> entityView = std::make_shared<MemberView>(vec2(0, -50), vec2(0, 20), "EntityNameText");
     entityView->autoSizing = AutoSizing::HORIZONTAL;
     entityView->pixelCorrection = {15, 0};
+    entityView->SetIsMember(true);
     AddWidget(entityView);
     entityView->SetMemberInfo(entity->GetName());
     
@@ -44,6 +70,7 @@ void EntityPanel::SetContent()
         std::shared_ptr<MemberView> compView = std::make_shared<MemberView>(vec2(0, 0), vec2(0, 20));
         compView->autoSizing = AutoSizing::HORIZONTAL;
         compView->pixelCorrection = {15, 0};
+        compView->SetIsMember(true);
         drop->SetTitleWidget(compView);
         compView->SetMemberInfo(typeInfo->type_name);
         
@@ -64,6 +91,7 @@ void EntityPanel::CreateMemberView(ReflectedObject* _object, const TypeInfo& _ty
         {
             std::shared_ptr<MemberView> memberView = std::make_shared<MemberView>(vec2(0, 0), vec2(0, 20));
             memberView->autoSizing = AutoSizing::HORIZONTAL;
+            memberView->SetIsMember(true);
             _dropbox ? _dropbox->AddDroppingWidget(memberView) : AddWidget(memberView);
             memberView->SetMemberInfo(member, _object);
         }
@@ -77,6 +105,7 @@ void EntityPanel::CreateMemberView(ReflectedObject* _object, const TypeInfo& _ty
             std::shared_ptr<MemberView> compView = std::make_shared<MemberView>(vec2(0, 0), vec2(0, 20));
             compView->autoSizing = AutoSizing::HORIZONTAL;
             compView->pixelCorrection = {_margin, 0};
+            compView->SetIsMember(true);
             drop ? drop->SetTitleWidget(compView) : AddWidget(compView);
 
             compView->SetMemberInfo(Reader::demangleTypeName(member.name));
@@ -96,9 +125,12 @@ void EntityPanel::Reorganize()
     float h = 10;
     for (const auto& widget : GetChildren())
     {
-        widget->pixelCorrection.y = h;
-        h += widget->size.y;
-        widget->SetPixelPosition();
+        if (widget->isActive)
+        {
+            widget->pixelCorrection.y = h;
+            h += widget->size.y;
+            widget->SetPixelPosition();
+        }
     }
 }
 
@@ -108,5 +140,34 @@ void EntityPanel::ClearContent()
     entity = nullptr;
     children.clear();
     isActive = false;
+}
+
+void EntityPanel::ShowEntities(bool _areShown)
+{
+    for (const auto& widget : entityViews)
+    {
+        widget->SetActiveWithChildren(_areShown);
+    }
+}
+
+void EntityPanel::ClearPropertiesContent()
+{
+    entity = nullptr;
+    for (const auto& widget : GetChildren())
+    {
+        MemberView* memberView = dynamic_cast<MemberView*>(widget.get());
+        if (memberView)
+        {
+            if (memberView->IsMember())
+            {
+                memberView->Destroy();
+            }
+        }
+        Dropbox* drop = dynamic_cast<Dropbox*>(widget.get());
+        if (drop)
+        {
+            drop->Destroy();
+        }
+    }
 }
 

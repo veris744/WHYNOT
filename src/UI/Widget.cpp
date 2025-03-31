@@ -62,6 +62,12 @@ void Widget::Destroy()
     World::GetInstance()->MarkForDestruction(shared_from_this());
 }
 
+void Widget::RemoveChild(const std::shared_ptr<Widget>& _widget)
+{
+    _widget->parent = nullptr;
+    std::erase(children, _widget);
+}
+
 void Widget::SetPixelPosition()
 {
     if (!parent)

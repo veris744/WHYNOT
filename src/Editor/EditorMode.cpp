@@ -18,14 +18,16 @@ SingleDelegate<const string&> EditorMode::OnEnterInput;
 
 void EditorMode::CreateEntityPanel()
 {
-    std::shared_ptr<EntityPanel> tempPanel = std::make_shared<EntityPanel>(vec2(0, 50), vec2(400, 0), "EntityPanel");
+    std::shared_ptr<EntityPanel> tempPanel = std::make_shared<EntityPanel>(vec2(0, 50), vec2(350, 0), "EntityPanel");
     tempPanel->background = {0.3f, 0.3f, 0.3f, 1.f};
-    tempPanel->pixelCorrection = {200, 0};
+    tempPanel->pixelCorrection = {175, 0};
     tempPanel->autoSizing = AutoSizing::VERTICAL;
     World::GetInstance()->AddWidget(tempPanel);
 
     entityViewer = tempPanel.get();
-    entityViewer->ClearContent();
+    entityViewer->SetContent();
+    entityViewer->isActive = true;
+    isPanelOpen = true;
 }
 
 void EditorMode::CreateInputBox()
@@ -72,17 +74,21 @@ void EditorMode::SelectEntity(Entity* entity)
         return;
     }
 
+    entityViewer->ShowEntities(false);
+
     if (selectedEntity)
     {
-        entityViewer->ClearContent();
+        entityViewer->ClearPropertiesContent();
         selectedEntity->debugEnabled = false;
         selectedEntity->GetComponent<Transform>()->debugEnabled = false;
     }
     selectedEntity = entity;
     selectedEntity->debugEnabled = true;
-    selectedEntity->GetComponent<Transform>()->debugEnabled = true;
+    if (Transform* tempTransform = selectedEntity->GetComponent<Transform>())
+    {
+        tempTransform->debugEnabled = true;
+    }
     SetEntityViewer();
-    isPanelOpen = true;
 }
 
 void EditorMode::Unselect()
@@ -90,19 +96,21 @@ void EditorMode::Unselect()
     if (selectedEntity)
     {
         selectedEntity->debugEnabled = false;
-        selectedEntity->GetComponent<Transform>()->debugEnabled = false;
+        if (Transform* tempTransform = selectedEntity->GetComponent<Transform>())
+        {
+            tempTransform->debugEnabled = true;
+        }
         selectedEntity = nullptr;
-        entityViewer->ClearContent();
+        entityViewer->ClearPropertiesContent();
+        entityViewer->ShowEntities(true);
     }
-    isPanelOpen = false;
 }
 
 void EditorMode::SetEntityViewer()
 {
     if (selectedEntity)
     {
-        entityViewer->SetEntity(selectedEntity);
-        entityViewer->SetContent();
+        entityViewer->SetContent(selectedEntity);
     }
 }
 

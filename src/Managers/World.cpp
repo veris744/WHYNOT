@@ -104,10 +104,14 @@ void World::DestroyAsset(const std::shared_ptr<Entity>& _entity)
 
 void World::DestroyAsset(const std::shared_ptr<Widget>& _widget)
 {
-    auto it = ranges::find(widgets, _widget);
-    if (it != widgets.end())
+    if (_widget->GetParent())
     {
-        widgets.erase(it);
+        _widget->GetParent()->RemoveChild(_widget);
+    }
+    else
+    {
+        if (const auto& it = ranges::find(widgets, _widget); it != widgets.end())
+            widgets.erase(it);
     }
     _widget->ClearChildren();
 }

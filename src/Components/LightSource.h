@@ -34,18 +34,18 @@ struct LightData : ReflectedObject
     LightSourceType type = LightSourceType::DIRECTIONAL;
 };
 REGISTER_CLASS(LightData, {
-    REGISTER_MEMBER(LightData, position, MemberProperty::Viewable),
-    REGISTER_MEMBER(LightData, color, MemberProperty::Viewable),
-    REGISTER_MEMBER(LightData, direction, MemberProperty::Viewable),
-    REGISTER_MEMBER(LightData, specular, MemberProperty::Viewable),
-    REGISTER_MEMBER(LightData, diffuse, MemberProperty::Viewable),
-    REGISTER_MEMBER(LightData, ambient, MemberProperty::Viewable),
-    REGISTER_MEMBER(LightData, constantAtt, MemberProperty::Viewable),
-    REGISTER_MEMBER(LightData, linearAtt, MemberProperty::Viewable),
-    REGISTER_MEMBER(LightData, quadAtt, MemberProperty::Viewable),
-    REGISTER_MEMBER(LightData, angle, MemberProperty::Viewable),
-    REGISTER_MEMBER(LightData, outerAngle, MemberProperty::Viewable),
-    REGISTER_MEMBER(LightData, type, MemberProperty::NonViewable)
+    REGISTER_MEMBER(LightData, position, MemberProperty::Viewable | MemberProperty::Editable | MemberProperty::Serializable),
+    REGISTER_MEMBER(LightData, color, MemberProperty::Viewable | MemberProperty::Editable | MemberProperty::Serializable),
+    REGISTER_MEMBER(LightData, direction, MemberProperty::Viewable | MemberProperty::Editable | MemberProperty::Serializable),
+    REGISTER_MEMBER(LightData, specular, MemberProperty::Viewable | MemberProperty::Editable | MemberProperty::Serializable),
+    REGISTER_MEMBER(LightData, diffuse, MemberProperty::Viewable | MemberProperty::Editable | MemberProperty::Serializable),
+    REGISTER_MEMBER(LightData, ambient, MemberProperty::Viewable | MemberProperty::Editable | MemberProperty::Serializable),
+    REGISTER_MEMBER(LightData, constantAtt, MemberProperty::Viewable | MemberProperty::Editable | MemberProperty::Serializable),
+    REGISTER_MEMBER(LightData, linearAtt, MemberProperty::Viewable | MemberProperty::Editable | MemberProperty::Serializable),
+    REGISTER_MEMBER(LightData, quadAtt, MemberProperty::Viewable | MemberProperty::Editable | MemberProperty::Serializable),
+    REGISTER_MEMBER(LightData, angle, MemberProperty::Viewable | MemberProperty::Editable | MemberProperty::Serializable),
+    REGISTER_MEMBER(LightData, outerAngle, MemberProperty::Viewable | MemberProperty::Editable | MemberProperty::Serializable),
+    REGISTER_MEMBER(LightData, type, MemberProperty::Viewable | MemberProperty::Serializable)
 });
 
 class LightSource : public Component
@@ -67,5 +67,5 @@ public:
 };
 REGISTER_CLASS(LightSource,
     REGISTER_MEMBER(LightSource, name, MemberProperty::Serializable),
-    REGISTER_MEMBER(LightSource, lightData, MemberProperty::Viewable)
+    REGISTER_MEMBER(LightSource, lightData, MemberProperty::Viewable | MemberProperty::Editable | MemberProperty::Serializable)
 );
