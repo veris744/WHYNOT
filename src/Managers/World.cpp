@@ -18,6 +18,7 @@
 World* World::instance = nullptr;
 bool World::isSceneLoaded = false;
 string World::currentScene = "";
+std::unique_ptr<GameManager> World::gameManager = nullptr;
 
 World* World::GetInstance()
 {
@@ -243,14 +244,9 @@ void World::DoLoad()
 
     if (currentScene == "Aliens")
     {
-        AliensLogic::GetInstance().PrepareGame();
-        AliensLogic::GetInstance().StartGame();
-        Helper::SetCursorVisible(false);
-        ConfigurationValues::CanPlayerLook = true;
-        ConfigurationValues::ArePhysicsActive = true;
-        ConfigurationValues::CanPlayerMove = false;
-        ConfigurationValues::IsEditorOpen = false;
-        ConfigurationValues::IsUIActive = false;
+        gameManager = std::make_unique<AliensLogic>();
+        gameManager->PrepareGame();
+        gameManager->StartGame();
     }
     else if (currentScene == "MainMenu")
     {
@@ -286,7 +282,7 @@ void World::UnloadScene()
 {
     if (currentScene == "Aliens")
     {
-        AliensLogic::GetInstance().EndGame();
+        gameManager->EndGame();
     }
 
     Renderer::instance().textures_loaded;
@@ -309,6 +305,7 @@ void World::UnloadScene()
     }
     CollisionManager::ClearOctree();
     EditorMode::ClearEditor();
+    gameManager.reset();
 }
 
 void World::EndApplication()

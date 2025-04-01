@@ -1,5 +1,7 @@
 #pragma once
 
+#include <GameManagers/GameManager.h>
+
 #include "Components/LightSource.h"
 #include "Components/Camera.h"
 #include "Entities/Entity.h"
@@ -20,6 +22,8 @@ class World
 
     vector<std::shared_ptr<Widget>> widgets;
 
+    static std::unique_ptr<GameManager> gameManager;
+
     static bool isSceneLoaded;
     static string currentScene;
     
@@ -37,7 +41,9 @@ public:
     void PrepareLoad();
     void Update(float deltaTime);
     void Clean();
-    static string GetCurrentScene() { return currentScene; };
+    static string GetCurrentScene() { return currentScene; }
+    static GameManager* GetGameManager() { return gameManager.get(); }
+
 
     std::shared_ptr<Player> GetPlayer() const { return playerEntity; }
     void SetPlayer(const std::shared_ptr<Player>& player) { playerEntity = player; }

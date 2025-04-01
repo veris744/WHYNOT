@@ -1,6 +1,7 @@
 #include "PlayerController.h"
 
 #include <Managers/ConfigurationValues.h>
+#include <Managers/World.h>
 
 #include "Transform.h"
 #include "Entities/Entity.h"
@@ -68,7 +69,7 @@ void PlayerController::Update(float deltaTime)
 void PlayerController::Shoot()
 {
     if (!bCanShoot) return;
-    AliensLogic::GetInstance().ShootProjectile();
+    World::GetGameManager()->OnPlayerShootDelegate.Execute();
     bCanShoot = false;
     Timer::StartTimer(0.3f, this, &PlayerController::SetCanShoot, true);
 }

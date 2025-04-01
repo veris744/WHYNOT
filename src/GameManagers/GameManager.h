@@ -1,11 +1,10 @@
 #pragma once
 #include <glm.hpp>
-#include <Reflection/ReflectedObject.h>
+#include <Utils/SingleDelegate.h>
 
 using namespace glm;
 
-template <typename T>
-class GameManager : ReflectedObject
+class GameManager
 {
     vec3 playgroundDimensions = vec3(12,12,6);
     vec3 playgroundCenter = vec3(0,0,-8);
@@ -30,8 +29,5 @@ public:
         return vec2(playgroundCenter.z - playgroundDimensions.z * 0.5f, playgroundCenter.z + playgroundDimensions.z * 0.5f);
     }
 
-    static T& GetInstance() {
-        static T instance;
-        return instance;
-    }
+    SingleDelegate<> OnPlayerShootDelegate;
 };

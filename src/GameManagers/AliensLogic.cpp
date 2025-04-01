@@ -1,16 +1,15 @@
 #include "AliensLogic.h"
 
 #include <random>
+#include <Components/PlayerController.h>
 #include <Managers/ConfigurationValues.h>
 
 #include "Components/Audio.h"
 #include "Components/CircleCollider.h"
 #include "Components/Movement.h"
-#include "Components/PlayerController.h"
 #include "Components/Transform.h"
 #include "Entities/Alien.h"
 #include "Entities/Projectile.h"
-#include "Managers/AudioManager.h"
 #include "Managers/Helper.h"
 #include "Managers/World.h"
 #include "Utils/Parser.h"
@@ -35,6 +34,13 @@ void AliensLogic::AlienDestroyed(const std::shared_ptr<Alien>& _alien)
 
 void AliensLogic::PrepareGame()
 {
+    Helper::SetCursorVisible(false);
+    ConfigurationValues::CanPlayerLook = true;
+    ConfigurationValues::ArePhysicsActive = true;
+    ConfigurationValues::CanPlayerMove = false;
+    ConfigurationValues::IsEditorOpen = false;
+    ConfigurationValues::IsUIActive = false;
+
     for (unsigned int i = 0; i < totalAliens; i++)
     {
         std::shared_ptr<Alien> temp = std::make_shared<Alien>();
@@ -54,6 +60,8 @@ void AliensLogic::PrepareGame()
     alienText->isActive = true;
     OnTextChangedDelegate.Bind(&Text::SetText, alienText);
     OnTextChangedDelegate.Execute("Aliens : " + std::to_string(totalAliens));
+
+    OnPlayerShootDelegate.Bind(&AliensLogic::ShootProjectile, this);
     
 }
 

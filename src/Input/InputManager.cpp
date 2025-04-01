@@ -167,7 +167,7 @@ void InputManager::HandleKeyPress(int key, int mods)
     switch(key)
     {
         case GLFW_KEY_ESCAPE:
-            EditorMode::isPanelOpen ? EditorMode::Unselect() : ScapeInput();
+            EditorMode::GetSelectedEntity() != nullptr ? EditorMode::Unselect() : ScapeInput();
             break;
         case GLFW_KEY_UP:
             playerController->SetInput(vec3(0,1,0));

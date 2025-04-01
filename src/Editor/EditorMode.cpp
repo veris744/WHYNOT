@@ -143,7 +143,8 @@ void EditorMode::ProcessUserInput(int key)
 {
     if (key == GLFW_KEY_ESCAPE)
     {
-        CloseInputBox(false);
+        if (isInputBoxOpen)
+            CloseInputBox(false);
     }
     else if ((key >= GLFW_KEY_A && key <= GLFW_KEY_Z) ||
         (key >= GLFW_KEY_0 && key <= GLFW_KEY_9) ||

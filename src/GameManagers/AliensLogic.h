@@ -8,7 +8,7 @@
 class Projectile;
 class Alien;
 
-class AliensLogic : public GameManager<AliensLogic>
+class AliensLogic : public GameManager
 {
     std::vector<std::shared_ptr<Alien>> aliens;
     queue<std::shared_ptr<Projectile>> availableProjectiles;

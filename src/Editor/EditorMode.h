@@ -37,4 +37,6 @@ public:
     static SingleDelegate<const string&> OnEnterInput;
 
     static void ClearEditor();
+
+    static const Entity* GetSelectedEntity() { return selectedEntity; }
 };

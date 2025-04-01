@@ -73,9 +73,9 @@ void Alien::Update(float _deltaTime)
     Entity::Update(_deltaTime);
     
     CircleCollider* collider = GetComponent<CircleCollider>();
-    collider->CheckInBounds(AliensLogic::GetInstance().GetXBounds(),
-        AliensLogic::GetInstance().GetYBounds(),
-        AliensLogic::GetInstance().GetZBounds());
+    collider->CheckInBounds(World::GetGameManager()->GetXBounds(),
+        World::GetGameManager()->GetYBounds(),
+        World::GetGameManager()->GetZBounds());
 
     if (!playerTransform)
     {
@@ -121,7 +121,8 @@ void Alien::OnCollision(const std::shared_ptr<Entity>& _otherEntity, vec3 _norma
     {
         std::shared_ptr<Alien> self = std::static_pointer_cast<Alien>(shared_from_this());
         isActive = false;
-        AliensLogic::GetInstance().AlienDestroyed(self);
+        if (AliensLogic* logic = dynamic_cast<AliensLogic*>(World::GetGameManager()))
+            logic->AlienDestroyed(self);
         return;
     }
     

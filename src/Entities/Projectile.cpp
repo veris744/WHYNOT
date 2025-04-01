@@ -67,7 +67,7 @@ void Projectile::Initialize()
     {
         movementComp = GetComponent<Movement>();
     }
-    
+    alienLogicManager = static_cast<AliensLogic*>(World::GetGameManager());
     Entity::Initialize();
 }
 
@@ -110,10 +110,12 @@ void Projectile::DisableProjectile()
 
 void Projectile::OnCollision(const std::shared_ptr<Entity>& _otherEntity, vec3 normal)
 {
-    AliensLogic::GetInstance().RemoveProjectile(std::static_pointer_cast<Projectile>(shared_from_this()));
+    if (alienLogicManager)
+        alienLogicManager->RemoveProjectile(std::static_pointer_cast<Projectile>(shared_from_this()));
 }
 
 void Projectile::OnOutOfBounds(vec3 _normal)
 {
-    AliensLogic::GetInstance().RemoveProjectile(std::static_pointer_cast<Projectile>(shared_from_this()));
+    if (alienLogicManager)
+        alienLogicManager->RemoveProjectile(std::static_pointer_cast<Projectile>(shared_from_this()));
 }

@@ -3,6 +3,7 @@
 #include "Reflection/Reflection.h"
 
 
+class AliensLogic;
 class Movement;
 
 class Projectile : public Entity
@@ -12,6 +13,7 @@ class Projectile : public Entity
     Movement* movementComp = nullptr;
     Transform* transformComp = nullptr;
     Transform* playerTransform = nullptr;
+    AliensLogic* alienLogicManager = nullptr;
 public:
 
     void OnCollision(const std::shared_ptr<Entity>& _otherEntity, vec3 normal);
