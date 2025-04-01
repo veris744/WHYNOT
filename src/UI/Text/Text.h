@@ -69,5 +69,6 @@ REGISTER_CLASS(Text, {
     REGISTER_MEMBER(Text, position, MemberProperty::Viewable),
     REGISTER_MEMBER(Text, align, MemberProperty::Viewable),
     REGISTER_MEMBER(Text, alignVertical, MemberProperty::Viewable),
-    REGISTER_MEMBER(Text, pixelCorrection, MemberProperty::Viewable)
+    REGISTER_MEMBER(Text, pixelCorrection, MemberProperty::Viewable),
+    REGISTER_MEMBER(Text, padding, MemberProperty::Viewable)
 });

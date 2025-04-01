@@ -1,7 +1,6 @@
 #include "Renderer2D.h"
 
 #include <Utils/Debugger.h>
-
 #include "World.h"
 #include "UI/Widget.h"
 
@@ -106,4 +105,21 @@ void Renderer2D::Clear()
     
     glDisable(GL_BLEND);
     glDepthMask(GL_TRUE);
+}
+
+void Renderer2D::RotateVertices(std::vector<float>& vertices, float angle)
+{
+    float radians = angle * M_PI / 180.0f; // Convert degrees to radians
+    float cosA = std::cos(radians);
+    float sinA = std::sin(radians);
+
+    for (size_t i = 0; i < vertices.size(); i += 4) // Assuming (x, y, u, v) format
+    {
+        float x = vertices[i];
+        float y = vertices[i + 1];
+
+        // Apply 2D rotation
+        vertices[i] = cosA * x - sinA * y;
+        vertices[i + 1] = sinA * x + cosA * y;
+    }
 }

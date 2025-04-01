@@ -4,7 +4,7 @@
 
 #include "Transform.h"
 #include "Entities/Entity.h"
-#include "Minigame1/AliensLogic.h"
+#include "GameManagers/AliensLogic.h"
 #include "Utils/Parser.h"
 #include "Utils/Timer.h"
 
@@ -68,7 +68,7 @@ void PlayerController::Update(float deltaTime)
 void PlayerController::Shoot()
 {
     if (!bCanShoot) return;
-    AliensLogic::GetInstance()->ShootProjectile();
+    AliensLogic::GetInstance().ShootProjectile();
     bCanShoot = false;
     Timer::StartTimer(0.3f, this, &PlayerController::SetCanShoot, true);
 }

@@ -46,8 +46,10 @@ void Image2D::Initialize()
     string shaderNameFrag = "shaders/fragment2D.glsl";
     if (texture->GetNbChannels() == 1)
         shaderNameFrag = "shaders/fragment2DBW.glsl" ;
-    if (texture->GetNbChannels() == 2)
+    else if (texture->GetNbChannels() == 2)
         shaderNameFrag = "shaders/fragment2D2Ch.glsl" ;
+    else if (texture->GetNbChannels() == 3)
+        shaderNameFrag = "shaders/fragment2D3Ch.glsl" ;
     
     string shaderNameVer = "shaders/vertex2D.glsl";
     
@@ -70,6 +72,7 @@ void Image2D::Render()
     material->GetShader()->SetUniformVec2("uSize", size);
     material->GetShader()->SetUniformVec3("uColor", color);
     material->GetShader()->SetUniformFloat("uLayer", 0.1f * layer);
+    material->GetShader()->SetUniformFloat("uRotation", rotation);
     
     mat4 projection = glm::ortho(0.0f, Helper::windowWidth, Helper::windowHeight, 0.0f);
     material->GetShader()->SetUniformMat4("uProjection", projection);

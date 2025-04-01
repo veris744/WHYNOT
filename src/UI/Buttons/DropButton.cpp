@@ -15,10 +15,13 @@ void DropButton::Initialize()
 {
     Button::Initialize();
 
-    std::shared_ptr<Image2D> image = std::make_shared<Image2D>("assets/2dImages/drop.jpg", vec2(0), vec2(0));
-    image->autoSizing = AutoSizing::ALL;
+    std::shared_ptr<Image2D> imagePtr = std::make_shared<Image2D>("assets/2dImages/drop.png", vec2(0), vec2(0));
+    imagePtr->autoSizing = AutoSizing::ALL;
+    imagePtr->hasTransparency = true;
+    imagePtr->rotation = 90;
 
-    AddWidget(image);
+    AddWidget(imagePtr);
+    image = imagePtr.get();
 
     dropbox = static_cast<Dropbox*>(parent);
 }
@@ -32,5 +35,10 @@ void DropButton::OnClick(vec2 _mousePos)
         dropbox = static_cast<Dropbox*>(parent);
 
     dropbox->Drop();
+
+    if (!dropbox->IsDropped())
+        image->rotation += 90;
+    else
+        image->rotation -= 90;
 
 }

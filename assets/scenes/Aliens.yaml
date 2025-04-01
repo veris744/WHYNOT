@@ -53,17 +53,7 @@ entities:
       - name: "TRANSFORM"
         position: [0, 0, 0]
         rotation: [0, 0, 0]
-#  - type: "ALIEN"
-#    components:
-#      - name: "TRANSFORM"
-#        position: [2, 0, 5]
-#  - type: "ALIEN"
-#    components:
-#      - name: "TRANSFORM"
-#        position: [0, 0, 5]
-#        rotation:
-#          pitch: -45
-        
+
 widgets:
   - type: "IMAGE2D"
     path: "assets/2dImages/aim.png"
@@ -79,4 +69,6 @@ widgets:
     align: "LEFT"
     alignVertical: "TOP"
     
-    
+managers:
+  - type: "AliensManager"
+    totalAliens: 10

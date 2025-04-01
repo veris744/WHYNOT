@@ -9,7 +9,7 @@
 #include "Editor/EditorMode.h"
 #include "Graphics/Shader.h"
 #include "Input/InputManager.h"
-#include "Minigame1/AliensLogic.h"
+#include "GameManagers/AliensLogic.h"
 #include "Physics/CollisionManager.h"
 #include "UI/Widget.h"
 #include "Reader/AssetReader.h"
@@ -243,8 +243,8 @@ void World::DoLoad()
 
     if (currentScene == "Aliens")
     {
-        AliensLogic::GetInstance()->PrepareGame();
-        AliensLogic::GetInstance()->StartGame();
+        AliensLogic::GetInstance().PrepareGame();
+        AliensLogic::GetInstance().StartGame();
         Helper::SetCursorVisible(false);
         ConfigurationValues::CanPlayerLook = true;
         ConfigurationValues::ArePhysicsActive = true;
@@ -286,7 +286,7 @@ void World::UnloadScene()
 {
     if (currentScene == "Aliens")
     {
-        AliensLogic::GetInstance()->StopGame();
+        AliensLogic::GetInstance().EndGame();
     }
 
     Renderer::instance().textures_loaded;

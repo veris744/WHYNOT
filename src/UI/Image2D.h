@@ -20,6 +20,7 @@ public:
 
     string path = "";
     vec3 color = vec3(0, 0, 0);
+    float rotation = 0.0f;
 };
 REGISTER_CLASS(Image2D, {
     REGISTER_MEMBER(Image2D, name, MemberProperty::Viewable),
@@ -30,5 +31,6 @@ REGISTER_CLASS(Image2D, {
     REGISTER_MEMBER(Image2D, layer, MemberProperty::Viewable),
     REGISTER_MEMBER(Image2D, hasTransparency, MemberProperty::Viewable),
     REGISTER_MEMBER(Image2D, autoSizing, MemberProperty::Viewable),
-    REGISTER_MEMBER(Image2D, pixelCorrection, MemberProperty::Viewable)
+    REGISTER_MEMBER(Image2D, pixelCorrection, MemberProperty::Viewable),
+    REGISTER_MEMBER(Image2D, rotation, MemberProperty::Viewable)
 })

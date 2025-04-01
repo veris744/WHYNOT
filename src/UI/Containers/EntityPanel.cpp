@@ -21,7 +21,15 @@ void EntityPanel::Initialize()
 
 void EntityPanel::SetContent()
 {
-    float height = 10;
+    float height = 20;
+    std::shared_ptr<MemberView> entityView = std::make_shared<MemberView>(vec2(0, -50), vec2(0, 20));
+    entityView->autoSizing = AutoSizing::HORIZONTAL;
+    entityView->pixelCorrection = {15, height};
+    entityView->SetIsMember(false);
+    AddWidget(entityView);
+    entityView->SetMemberInfo("ENTITIES");
+    height += entityView->size.y + 10;
+    entityViews.push_back(entityView.get());
     for (const auto& [name, entity] : World::GetInstance()->GetEntities())
     {
         std::shared_ptr<MemberView> entityView = std::make_shared<MemberView>(vec2(0, -50), vec2(0, 20));
@@ -122,7 +130,8 @@ void EntityPanel::CreateMemberView(ReflectedObject* _object, const TypeInfo& _ty
 
 void EntityPanel::Reorganize()
 {
-    float h = 10;
+    float h = 20;
+    bool isFirst = true;
     for (const auto& widget : GetChildren())
     {
         if (widget->isActive)
@@ -130,10 +139,14 @@ void EntityPanel::Reorganize()
             widget->pixelCorrection.y = h;
             h += widget->size.y;
             widget->SetPixelPosition();
+            if (isFirst)
+            {
+                h+=10;
+                isFirst = false;
+            }
         }
     }
 }
-
 
 void EntityPanel::ClearContent()
 {

@@ -8,7 +8,7 @@
 #include "Graphics/Material.h"
 #include "Managers/Renderer.h"
 #include "Managers/World.h"
-#include "Minigame1/AliensLogic.h"
+#include "GameManagers/AliensLogic.h"
 #include "Utils/Parser.h"
 
 unsigned int Projectile::counter = 0;
@@ -110,10 +110,10 @@ void Projectile::DisableProjectile()
 
 void Projectile::OnCollision(const std::shared_ptr<Entity>& _otherEntity, vec3 normal)
 {
-    AliensLogic::GetInstance()->RemoveProjectile(std::static_pointer_cast<Projectile>(shared_from_this()));
+    AliensLogic::GetInstance().RemoveProjectile(std::static_pointer_cast<Projectile>(shared_from_this()));
 }
 
 void Projectile::OnOutOfBounds(vec3 _normal)
 {
-    AliensLogic::GetInstance()->RemoveProjectile(std::static_pointer_cast<Projectile>(shared_from_this()));
+    AliensLogic::GetInstance().RemoveProjectile(std::static_pointer_cast<Projectile>(shared_from_this()));
 }

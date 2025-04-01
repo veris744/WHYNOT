@@ -22,32 +22,6 @@ float getRandomFloat(float min, float max) {
     return dist(gen);
 }
 
-std::shared_ptr<AliensLogic> AliensLogic::instance = nullptr;
-
-std::shared_ptr<AliensLogic> AliensLogic::GetInstance()
-{
-    if (instance == nullptr)
-    {
-        instance = std::make_shared<AliensLogic>(AliensLogic());
-    }
-    return instance;
-}
-
-vec2 AliensLogic::GetXBounds() const
-{
-    return vec2(playgroundCenter.x - playgroundDimensions.x * 0.5f, playgroundCenter.x + playgroundDimensions.x * 0.5f);
-}
-
-vec2 AliensLogic::GetYBounds() const
-{
-    return vec2(playgroundCenter.y - playgroundDimensions.y * 0.5f, playgroundCenter.y + playgroundDimensions.y * 0.5f);
-}
-
-vec2 AliensLogic::GetZBounds() const
-{
-    return vec2(playgroundCenter.z - playgroundDimensions.z * 0.5f, playgroundCenter.z + playgroundDimensions.z * 0.5f);
-}
-
 void AliensLogic::AlienDestroyed(const std::shared_ptr<Alien>& _alien)
 {
     aliens.erase(ranges::find(aliens, _alien));
@@ -55,13 +29,12 @@ void AliensLogic::AlienDestroyed(const std::shared_ptr<Alien>& _alien)
     _alien->Destroy();
     if (aliens.empty())
     {
-        StopGame();
+        World::GetInstance()->LoadScene("MainMenu");
     }
 }
 
-void AliensLogic::PrepareGame(unsigned int _totalAliens)
+void AliensLogic::PrepareGame()
 {
-    totalAliens = _totalAliens <= 0 ? totalAliens : _totalAliens;
     for (unsigned int i = 0; i < totalAliens; i++)
     {
         std::shared_ptr<Alien> temp = std::make_shared<Alien>();
@@ -118,7 +91,7 @@ void AliensLogic::RemoveProjectile(const std::shared_ptr<Projectile>& _projectil
     availableProjectiles.push(_projectile);
 }
 
-void AliensLogic::StopGame()
+void AliensLogic::EndGame()
 {
     aliens.clear();
     usedProjectiles.clear();

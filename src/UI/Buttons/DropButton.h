@@ -6,7 +6,8 @@ class Dropbox;
 
 class DropButton : public Button
 {
-    Dropbox* dropbox;
+    Dropbox* dropbox = nullptr;
+    Image2D* image = nullptr;
 
 public:
     DropButton(const vec2& _pos, const vec2& _size, const string& _name = "");

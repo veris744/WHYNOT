@@ -6,6 +6,10 @@ class Widget;
 class Shader;
 class VertexArray;
 
+#ifndef M_PI
+# define M_PI           3.14159265358979323846
+#endif
+
 class Renderer2D
 {
     Renderer2D();
@@ -28,4 +32,6 @@ public:
     void Render();
     void RenderOpaqueWidget(const std::shared_ptr<Widget>& _widget);
     void Clear();
+
+    void RotateVertices(std::vector<float>& vertices, float angle);
 };

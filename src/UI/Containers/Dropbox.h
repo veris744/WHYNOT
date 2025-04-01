@@ -22,6 +22,7 @@ public:
     void OrganizeWidgets();
     void Drop();
     void UpdateParentDropboxes() const;
+    bool IsDropped() const { return isDropped; };
 
     SingleDelegate<> OnDroppedDelegate;
 };

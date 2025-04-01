@@ -6,7 +6,7 @@
 #include "Managers/World.h"
 #include "Components/Transform.h"
 #include "Editor/EditorMode.h"
-#include "Minigame1/AliensLogic.h"
+#include "GameManagers/AliensLogic.h"
 #include "Physics/CollisionManager.h"
 #include "Physics/Hit.h"
 #include "Utils/Debugger.h"
@@ -189,9 +189,6 @@ void InputManager::HandleKeyPress(int key, int mods)
             break;
         case GLFW_KEY_1:
             Debugger::SetCollisionDebug(!Debugger::GetCollisionDebugEnabled());
-            break;
-        case GLFW_KEY_P:
-            AliensLogic::GetInstance()->StopGame();
             break;
         default: 
             break;
