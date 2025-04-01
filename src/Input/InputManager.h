@@ -19,7 +19,7 @@ enum class KeyStatus
 
 enum class Action
 {
-    MoveForward, MoveBackwards, MoveRight, MoveLeft, MoveUp, MoveDown, Quit, Click
+    MoveForward, MoveBackwards, MoveRight, MoveLeft, MoveUp, MoveDown, Quit, LeftClick, RightClick, OpenEditorMode
 };
 
 static unordered_map<unsigned int, Action> actions =
@@ -31,8 +31,9 @@ static unordered_map<unsigned int, Action> actions =
     {GLFW_KEY_UP, Action::MoveUp},
     {GLFW_KEY_DOWN, Action::MoveDown},
     {GLFW_KEY_ESCAPE, Action::Quit},
-    {GLFW_MOUSE_BUTTON_1, Action::Click},
-    {GLFW_MOUSE_BUTTON_2, Action::Click},
+    {GLFW_MOUSE_BUTTON_1, Action::LeftClick},
+    {GLFW_MOUSE_BUTTON_2, Action::RightClick},
+    {GLFW_KEY_F1, Action::OpenEditorMode},
 };
 
 class InputManager

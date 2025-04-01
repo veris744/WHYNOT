@@ -51,6 +51,11 @@ void World::PrepareLoad()
 void World::Update(float deltaTime)
 {
     if (!isSceneLoaded) return;
+    if (isPaused)
+    {
+        playerEntity->Update(deltaTime);
+        return;
+    }
 
     for (const auto& entity : entities)
     {
@@ -259,8 +264,12 @@ void World::DoLoad()
     }
     else if (currentScene == "Editor")
     {
-        Helper::SetCursorVisible(true);
-        EditorMode::EnterEditorMode();
+        Helper::SetCursorVisible(false);
+        ConfigurationValues::CanPlayerLook = true;
+        ConfigurationValues::ArePhysicsActive = true;
+        ConfigurationValues::CanPlayerMove = true;
+        ConfigurationValues::IsEditorOpen = false;
+        ConfigurationValues::IsUIActive = false;
     }
 
     if (!playerEntity)

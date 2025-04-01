@@ -17,6 +17,7 @@ void EntityPanel::Initialize()
 {
     Panel::Initialize();
     isActive = false;
+    type = WidgetType::Editor;
 }
 
 void EntityPanel::SetContent()
@@ -32,6 +33,7 @@ void EntityPanel::SetContent()
     entityViews.push_back(entityView.get());
     for (const auto& [name, entity] : World::GetInstance()->GetEntities())
     {
+        if (!entity->isActive)  continue;
         std::shared_ptr<MemberView> entityView = std::make_shared<MemberView>(vec2(0, -50), vec2(0, 20));
         entityView->autoSizing = AutoSizing::HORIZONTAL;
         entityView->pixelCorrection = {30, height};

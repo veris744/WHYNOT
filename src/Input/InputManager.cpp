@@ -159,15 +159,15 @@ void InputManager::ProcessInput()
 
 void InputManager::HandleKeyPress(int key, int mods)
 {
-    if (EditorMode::isInputBoxOpen)
+    if (ConfigurationValues::IsEditorOpen)
     {
         EditorMode::ProcessUserInput(key);
-        return;
+        if (EditorMode::isInputBoxOpen) return;
     }
     switch(key)
     {
         case GLFW_KEY_ESCAPE:
-            EditorMode::GetSelectedEntity() != nullptr ? EditorMode::Unselect() : ScapeInput();
+            ScapeInput();
             break;
         case GLFW_KEY_UP:
             playerController->SetInput(vec3(0,1,0));
@@ -189,7 +189,20 @@ void InputManager::HandleKeyPress(int key, int mods)
             break;
         case GLFW_KEY_1:
             Debugger::SetCollisionDebug(!Debugger::GetCollisionDebugEnabled());
-            break;
+        break;
+        case GLFW_KEY_F1:
+            EditorMode::EnterEditorMode();
+        break;
+        case GLFW_KEY_P:
+        {
+            if (World::GetInstance()->IsPaused())
+                World::GetInstance()->Resume();
+            else
+                World::GetInstance()->Pause();
+            ConfigurationValues::CanPlayerMove = !ConfigurationValues::CanPlayerMove;
+            ConfigurationValues::CanPlayerLook = !ConfigurationValues::CanPlayerLook;
+        }
+        break;
         default: 
             break;
     }
@@ -346,6 +359,15 @@ void InputManager::Clear()
 
 void InputManager::ScapeInput() const 
 {
+    if (ConfigurationValues::IsEditorOpen)
+    {
+        if (EditorMode::GetSelectedEntity())
+            EditorMode::Unselect();
+        else
+            EditorMode::ExitEditorMode();
+        return;
+    }
+
     if (World::GetCurrentScene() == "MainMenu")
         World::GetInstance()->EndApplication();
     else

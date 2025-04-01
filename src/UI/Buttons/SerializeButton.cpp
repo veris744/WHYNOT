@@ -23,6 +23,7 @@ void SerializeButton::Initialize()
     std::shared_ptr<Text> text = std::make_shared<Text>();
     text->SetText("Serialize");
     text->align = TextAlign::CENTER;
+    type = WidgetType::Editor;
 
     AddWidget(background);
     AddWidget(text);

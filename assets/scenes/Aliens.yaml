@@ -68,7 +68,3 @@ widgets:
     scale: 1
     align: "LEFT"
     alignVertical: "TOP"
-    
-managers:
-  - type: "AliensManager"
-    totalAliens: 10

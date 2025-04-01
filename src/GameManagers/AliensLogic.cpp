@@ -73,6 +73,7 @@ void AliensLogic::StartGame()
         CalculateRandomDirection(alien);
         alien->isActive = true;
     }
+    World::GetInstance()->GetPlayer()->GetComponent<PlayerController>()->SetCanShoot(true);
 }
 
 void AliensLogic::ShootProjectile()
@@ -101,13 +102,23 @@ void AliensLogic::RemoveProjectile(const std::shared_ptr<Projectile>& _projectil
 
 void AliensLogic::EndGame()
 {
+    for (const auto& alien : aliens)
+    {
+        alien->Destroy();
+    }
     aliens.clear();
+    for (const auto& usedProjectile : usedProjectiles)
+    {
+        usedProjectile->Destroy();
+    }
     usedProjectiles.clear();
     while (!availableProjectiles.empty())
     {
+        availableProjectiles.front()->Destroy();
         availableProjectiles.pop();
     }
     alienText = nullptr;
+    World::GetInstance()->GetPlayer()->GetComponent<PlayerController>()->SetCanShoot(false);
 }
 
 void AliensLogic::CalculateRandomPosition(const std::shared_ptr<Alien>& alien)

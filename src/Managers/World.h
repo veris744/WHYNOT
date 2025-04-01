@@ -26,6 +26,8 @@ class World
 
     static bool isSceneLoaded;
     static string currentScene;
+
+    bool isPaused = false;
     
     World();
     
@@ -41,6 +43,9 @@ public:
     void PrepareLoad();
     void Update(float deltaTime);
     void Clean();
+    void Pause() { isPaused = true; };
+    void Resume() { isPaused = false; };
+    bool IsPaused() const { return isPaused; };
     static string GetCurrentScene() { return currentScene; }
     static GameManager* GetGameManager() { return gameManager.get(); }
 

@@ -24,6 +24,7 @@ public:
     static bool isPanelOpen;
 
     static void EnterEditorMode();
+    static void ExitEditorMode();
     
     static void SelectEntity(Entity* entity);
     static void Unselect();

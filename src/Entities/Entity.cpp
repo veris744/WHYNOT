@@ -33,5 +33,6 @@ void Entity::Update(float deltaTime)
 
 void Entity::Destroy()
 {
+    isActive = false;
     World::GetInstance()->MarkForDestruction(shared_from_this());
 }

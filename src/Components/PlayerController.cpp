@@ -32,8 +32,6 @@ void PlayerController::Update(float deltaTime)
     {
         transform = parent->GetComponent<Transform>();
     }
-    // Logger::Log(LogLevel::Warning, Parser::Parse(transform->rotation.vector()));
-    // Logger::Log(LogLevel::Info, Parser::Parse(transform->forward));
 
     if (!ConfigurationValues::CanPlayerMove)   return;
     
@@ -68,6 +66,7 @@ void PlayerController::Update(float deltaTime)
 
 void PlayerController::Shoot()
 {
+    if (World::GetInstance()->IsPaused()) return;
     if (!bCanShoot) return;
     World::GetGameManager()->OnPlayerShootDelegate.Execute();
     bCanShoot = false;

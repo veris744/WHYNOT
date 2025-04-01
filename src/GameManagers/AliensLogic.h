@@ -29,7 +29,8 @@ public:
 
     void PrepareGame() override;
     void StartGame() override;
+    void EndGame() override;
+
     void ShootProjectile();
     void RemoveProjectile(const std::shared_ptr<Projectile>& _projectile);
-    void EndGame() override;
 };

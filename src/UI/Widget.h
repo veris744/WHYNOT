@@ -15,6 +15,16 @@ REGISTER_ENUM(AutoSizing,
     {"ALL", AutoSizing::ALL},
 );
 
+enum class WidgetType
+{
+    Game, Editor, All
+};
+REGISTER_ENUM(WidgetType,
+    {"Game", WidgetType::Game},
+    {"Editor", WidgetType::Editor},
+    {"All", WidgetType::All},
+);
+
 
 class Widget : public std::enable_shared_from_this<Widget>, public ReflectedObject
 {
@@ -43,6 +53,7 @@ public:
         Helper::OnWindowResizeDelegate.Add(&Widget::OnWindowResize, this);
     }
 
+    WidgetType type = WidgetType::Game;
     string name;
     vec2 position = vec2(0);
     vec2 size = vec2(0);

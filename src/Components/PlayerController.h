@@ -11,7 +11,7 @@ class PlayerController : public Component
     vec3 acceleration = vec3(0);
     vec3 currentInput = vec3(0);
     Transform* transform = nullptr;
-    bool bCanShoot = true;
+    bool bCanShoot = false;
 
     
 public:

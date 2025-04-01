@@ -52,6 +52,20 @@ void EditorMode::EnterEditorMode()
     ConfigurationValues::CanPlayerLook = false;
     ConfigurationValues::CanPlayerMove = true;
     ConfigurationValues::IsUIActive = true;
+    Helper::SetCursorVisible(true);
+
+    if (World::GetGameManager())
+    {
+        World::GetGameManager()->EndGame();
+    }
+    for (const auto& widget : World::GetInstance()->GetWidgets())
+    {
+        if (widget->type == WidgetType::Game)
+        {
+            widget->SetActiveWithChildren(false);
+        }
+    }
+    World::GetInstance()->Pause();
 
     if (!entityViewer)
     {
@@ -65,6 +79,28 @@ void EditorMode::EnterEditorMode()
     {
         CreateInputBox();
     }
+}
+
+void EditorMode::ExitEditorMode()
+{
+    ClearEditor();
+
+    ConfigurationValues::IsEditorOpen = false;
+
+    if (World::GetGameManager())
+    {
+        World::GetGameManager()->PrepareGame();
+        World::GetGameManager()->StartGame();
+    }
+
+    for (const auto& widget : World::GetInstance()->GetWidgets())
+    {
+        if (widget->type == WidgetType::Game)
+        {
+            widget->SetActiveWithChildren(true);
+        }
+    }
+    World::GetInstance()->Resume();
 }
 
 void EditorMode::SelectEntity(Entity* entity)
@@ -169,8 +205,21 @@ void EditorMode::ProcessUserInput(int key)
 void EditorMode::ClearEditor()
 {
     selectedEntity = nullptr;
-    inputText = nullptr;
-    entityViewer = nullptr;
-    serializeButton = nullptr;
+    if (inputText)
+    {
+        inputText->Destroy();
+        inputText = nullptr;
+    }
+    if (entityViewer)
+    {
+        entityViewer->ClearContent();
+        entityViewer->Destroy();
+        entityViewer = nullptr;
+    }
+    if (serializeButton)
+    {
+        serializeButton->Destroy();
+        serializeButton = nullptr;
+    }
 }
 

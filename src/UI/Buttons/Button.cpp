@@ -24,5 +24,5 @@ void Button::SetAutoName()
 
 void Button::OnClick(vec2 _mousePos)
 {
-    Logger::Log<Button>(LogLevel::Info, "Click");
+    // Logger::Log<Button>(LogLevel::Info, "Click");
 }

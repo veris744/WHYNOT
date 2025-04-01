@@ -8,6 +8,7 @@ void InputText::Initialize()
 {
     size = {300, 50};
     position = {0, 0};
+    type = WidgetType::Editor;
     
     Widget::Initialize();
 
