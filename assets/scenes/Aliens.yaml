@@ -48,11 +48,6 @@ entities:
             fragmentShaderPath: "shaders/fragmentSky.glsl"
             materialData:
               type: "TEXTURE"
-  - type: "PLAYER"
-    components:
-      - name: "TRANSFORM"
-        position: [0, 0, 0]
-        rotation: [0, 0, 0]
 
 widgets:
   - type: "IMAGE2D"

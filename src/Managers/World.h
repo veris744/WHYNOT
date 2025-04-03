@@ -15,7 +15,7 @@ class World
     unordered_map<string, std::shared_ptr<Entity>> entities;
     vector<Camera*> cameras;
     vector<LightSource*> lights;
-    std::shared_ptr<Player> playerEntity;
+    std::unique_ptr<Player> playerEntity;
 
     set<std::shared_ptr<Entity>> toBeDestroyed;
     set<std::shared_ptr<Widget>> toBeDestroyedWidgets;
@@ -50,8 +50,7 @@ public:
     static GameManager* GetGameManager() { return gameManager.get(); }
 
 
-    std::shared_ptr<Player> GetPlayer() const { return playerEntity; }
-    void SetPlayer(const std::shared_ptr<Player>& player) { playerEntity = player; }
+    Player* GetPlayer() const { return playerEntity.get(); }
     
     template <typename T>
     void AddEntity(const std::shared_ptr<T>& _entity)

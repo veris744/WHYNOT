@@ -40,9 +40,9 @@ void Player::Initialize()
         audioSource->AddAudioSource(AudioSource("NoShot", "assets/sounds/noshot.wav"));
         AddComponent(std::move(audioSource));
     }
-    
-    World::GetInstance()->SetPlayer(std::static_pointer_cast<Player>(shared_from_this()));
-    Entity::Initialize();
+
+    isActive = true;
+    // Entity::Initialize();
 }
 
 void Player::Update(float _deltaTime)

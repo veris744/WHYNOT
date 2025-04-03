@@ -86,7 +86,7 @@ void Projectile::ClearComponents()
 
 void Projectile::GetShot()
 {
-    std::shared_ptr<Player> player = World::GetInstance()->GetPlayer();
+    Player* player = World::GetInstance()->GetPlayer();
     if (!player)
     {
         Logger::Log(LogLevel::Error, "No Player Found");

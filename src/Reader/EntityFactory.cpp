@@ -30,17 +30,6 @@ void EntityFactory::EntityFactorySetup()
             deserialize(data, proj);
             return proj;
         });
-    
-    RegisterEntity("PLAYER", [](const YAML::Node& data) ->
-        std::shared_ptr<Entity> {
-            std::shared_ptr<Player> player = make_shared<Player>();
-            if (World::GetInstance()->GetPlayer())
-            {
-                Logger::Log<EntityFactory>(LogLevel::Error, "Player already exists");
-            }
-            deserialize(data, player);
-            return player;
-        });
 }
 
 void EntityFactory::RegisterEntity(const std::string& type, EntityCreator creator)

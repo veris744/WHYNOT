@@ -48,8 +48,6 @@ void Image2D::Initialize()
         shaderNameFrag = "shaders/fragment2DBW.glsl" ;
     else if (texture->GetNbChannels() == 2)
         shaderNameFrag = "shaders/fragment2D2Ch.glsl" ;
-    else if (texture->GetNbChannels() == 3)
-        shaderNameFrag = "shaders/fragment2D3Ch.glsl" ;
     
     string shaderNameVer = "shaders/vertex2D.glsl";
     

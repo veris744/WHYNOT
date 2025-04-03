@@ -8,6 +8,7 @@ class GameManager
 {
     vec3 playgroundDimensions = vec3(12,12,6);
     vec3 playgroundCenter = vec3(0,0,-8);
+    vec3 playerStart = vec3(0,0,0);
 
 public:
     GameManager() = default;
@@ -28,6 +29,8 @@ public:
     vec2 GetZBounds() const{
         return vec2(playgroundCenter.z - playgroundDimensions.z * 0.5f, playgroundCenter.z + playgroundDimensions.z * 0.5f);
     }
+
+    vec3 GetPlayerStart() const {  return playerStart; }
 
     SingleDelegate<> OnPlayerShootDelegate;
 };

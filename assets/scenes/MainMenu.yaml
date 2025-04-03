@@ -1,59 +1,39 @@
 ---
 widgets:
+  - type: "IMAGE2D"
+    autoSizing: "ALL"
+    path: "assets/2dImages/menu.jpg"
   - type: "BUTTON"
     subtype: "Start"
-    position: [0, -25]
-    size: [200, 50]
+    position: [-25, 0]
+    size: [200, 100]
     sceneName: "Aliens"
     widgets:
       - type: "IMAGE2D"
         autoSizing: "ALL"
-        path: "assets/box.jpg"
+        path: "assets/2dImages/boton.png"
+        hasTransparency: true
       - type: "TEXT"
         text: "ALIENS"
         scale: 0.5
-        color: [ 0.5, 0.8, 0.2 ]
+        color: [ 0.32, 0.8, 0.8 ]
         align: "CENTER"
-        alignVertical: "CENTER"
+        alignVertical: "BOTTOM"
+        padding: [0, 25]
   - type: "BUTTON"
     subtype: "Start"
-    position: [0, 0]
-    size: [200, 50]
+    position: [25, 0]
+    size: [200, 100]
     sceneName: "Editor"
     widgets:
       - type: "IMAGE2D"
         autoSizing: "ALL"
-        path: "assets/box.jpg"
+        path: "assets/2dImages/boton.png"
+        hasTransparency: true
       - type: "TEXT"
         text: "EDITOR"
         scale: 0.5
-        color: [ 0.5, 0.8, 0.2 ]
+        color: [ 0.32, 0.8, 0.8 ]
         align: "CENTER"
-entities:
-  - type: "PLAYER"
-    components:
-      - name: "TRANSFORM"
-        position: [0, 0, 0]
-  - name: "Ambient"
-    components:
-      - name: "LIGHT"
-        lightData:
-          color: [0.5, 0.5, 0.5, 1]
-          ambient: 0.2
-          type: "AMBIENT"
-  - components:
-      - name: "TRANSFORM"
-        position: [-1, 0, 5]
-        rotation:
-          yaw: 45
-        scale: [0.5,0.5,0.5]
-      - name: "MODEL"
-        path: "assets/backpack/backpack.obj"
-  - components:
-      - name: "TRANSFORM"
-        position: [-1, 0, -5]
-        rotation:
-          yaw: 45
-        scale: [0.5,0.5,0.5]
-      - name: "MODEL"
-        path: "assets/backpack/backpack.obj"
+        alignVertical: "BOTTOM"
+        padding: [0, 25]

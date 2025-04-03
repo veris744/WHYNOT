@@ -1,6 +1,7 @@
 #include "World.h"
 
 #include <thread>
+#include <Components/Transform.h>
 
 #include "ConfigurationValues.h"
 #include "Renderer.h"
@@ -36,6 +37,9 @@ World::World()
 
 void World::Initialize()
 {
+    playerEntity = std::make_unique<Player>();
+    playerEntity->Initialize();
+    cameras.push_back(playerEntity->GetComponent<Camera>());
     LoadScene("MainMenu");
 }
 
@@ -250,8 +254,6 @@ void World::DoLoad()
     if (currentScene == "Aliens")
     {
         gameManager = std::make_unique<AliensLogic>();
-        gameManager->PrepareGame();
-        gameManager->StartGame();
     }
     else if (currentScene == "MainMenu")
     {
@@ -271,6 +273,12 @@ void World::DoLoad()
         ConfigurationValues::IsEditorOpen = false;
         ConfigurationValues::IsUIActive = false;
     }
+    if (gameManager)
+    {
+        gameManager->PrepareGame();
+        gameManager->StartGame();
+    }
+    playerEntity->GetComponent<Transform>()->position = gameManager ? gameManager->GetPlayerStart() : vec3(0,0,0);
 
     if (!playerEntity)
     {
@@ -305,7 +313,6 @@ void World::UnloadScene()
     {
         widget->Destroy();
     }
-    playerEntity = nullptr;
     currentCameraIndex = 0;
     InputManager::GetInstance()->Clear();
     for (const auto& shader : Renderer::instance().shaders_loaded)
