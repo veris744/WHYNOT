@@ -115,6 +115,9 @@ void Material::InitializeShader()
 
 void Material::AddTexture(const std::shared_ptr<Texture>& _texture)
 {
+    _texture->wrapMode = wrapMode;
+    _texture->filterMode = filterMode;
+    _texture->mipmapMode = mipmapMode;
     textures.push_back(_texture);
 }
 
@@ -131,7 +134,7 @@ void Material::SetUniforms(const mat4& _model, const mat4& _view, const mat4& _p
     shader->SetUniformFloat("uShininess", materialData.shininess);  
     if (materialData.type == MaterialType::TEXTURE)
     {
-        shader->SetUniformInt("uSampler2D", 0);      
+        shader->SetUniformInt("uSampler2D", 0);
     }
     else if (materialData.type == MaterialType::COLOR)
     {

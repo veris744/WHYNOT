@@ -72,7 +72,24 @@ YAML::Node SerializeButton::GenerateObjectYAML(ReflectedObject* object)
             }
             else if (HasProperty(member.properties, MemberProperty::Serializable))
             {
-                objectNode[member.name] = Parser::ParseValue(member.getter(object), member.type_name);
+                string res = Parser::ParseValue(member.getter(object), member.type_name);
+                if (member.type_name.find("vec") != std::string::npos)
+                {
+                    std::string cleaned = res.substr(1, res.size() - 2); // Remove brackets
+                    std::stringstream ss(cleaned);
+                    std::string number;
+                    objectNode[member.name] = YAML::Node(YAML::NodeType::Sequence);
+                    objectNode[member.name].SetStyle(YAML::EmitterStyle::Flow);
+
+                    while (std::getline(ss, number, ',')) {
+                        objectNode[member.name].push_back(std::stoi(number));
+                    }
+
+                }
+                else
+                {
+                    objectNode[member.name] = res;
+                }
             }
         }
     }

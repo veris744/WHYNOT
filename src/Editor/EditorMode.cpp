@@ -180,25 +180,31 @@ void EditorMode::ProcessUserInput(int key)
     if (key == GLFW_KEY_ESCAPE)
     {
         if (isInputBoxOpen)
+        {
             CloseInputBox(false);
+            return;
+        }
     }
-    else if ((key >= GLFW_KEY_A && key <= GLFW_KEY_Z) ||
-        (key >= GLFW_KEY_0 && key <= GLFW_KEY_9) ||
-        key == GLFW_KEY_COMMA || key == GLFW_KEY_PERIOD)
+    if (isInputBoxOpen)
     {
-        inputText->UpdateText(static_cast<char>(key));
-    }
-    else if(key == GLFW_KEY_SLASH || key == GLFW_KEY_KP_SUBTRACT)
-    {
-        inputText->UpdateText('-');
-    }
-    else if (key == GLFW_KEY_BACKSPACE)
-    {
-        inputText->RemoveLastCharacter();
-    }
-    else if (key == GLFW_KEY_ENTER)
-    {
-        CloseInputBox(true);
+        if ((key >= GLFW_KEY_A && key <= GLFW_KEY_Z) ||
+            (key >= GLFW_KEY_0 && key <= GLFW_KEY_9) ||
+            key == GLFW_KEY_COMMA || key == GLFW_KEY_PERIOD)
+        {
+            inputText->UpdateText(static_cast<char>(key));
+        }
+        else if(key == GLFW_KEY_SLASH || key == GLFW_KEY_KP_SUBTRACT)
+        {
+            inputText->UpdateText('-');
+        }
+        else if (key == GLFW_KEY_BACKSPACE)
+        {
+            inputText->RemoveLastCharacter();
+        }
+        else if (key == GLFW_KEY_ENTER)
+        {
+            CloseInputBox(true);
+        }
     }
 }
 

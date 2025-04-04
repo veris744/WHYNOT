@@ -69,14 +69,14 @@ void Mesh::SetLinesVertexArray() const
 void Mesh::Render(const mat4& _modelMatrix)
 {
     material->BindShader();
+    vertexArray->Bind();
+    material->BindTexture();
     
     material->SetUniforms(_modelMatrix,
         World::GetInstance()->GetCurrentCamera()->GetViewMatrix(),
         World::GetInstance()->GetCurrentCamera()->GetProjectionMatrix(),
          World::GetInstance()->GetCurrentCamera()->GetViewPos());
-    
-    material->BindTexture();
-    vertexArray->Bind();
+
 
     if (vertexArray->isLines)
     {
@@ -98,6 +98,6 @@ void Mesh::Render(const mat4& _modelMatrix)
 void Mesh::Clear() const
 {
     vertexArray->Unbind();
-    material->UnbindShader();
     material->UnbindTexture();
+    material->UnbindShader();
 }

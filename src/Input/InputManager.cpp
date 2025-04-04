@@ -161,8 +161,9 @@ void InputManager::HandleKeyPress(int key, int mods)
 {
     if (ConfigurationValues::IsEditorOpen)
     {
+        bool inputOpen = EditorMode::isInputBoxOpen;
         EditorMode::ProcessUserInput(key);
-        if (EditorMode::isInputBoxOpen) return;
+        if (inputOpen) return;
     }
     switch(key)
     {

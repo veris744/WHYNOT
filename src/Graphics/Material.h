@@ -1,12 +1,12 @@
 #pragma once
 
+#include "Texture.h"
 #include "Reflection/Reflection.h"
 
 #define DEFAULT_VERTEX_SHADER_PATH "shaders/vertex.glsl"
 #define DEFAULT_FRAGMENT_SHADER_PATH "shaders/fragment.glsl"
 
 class Shader;
-class Texture;
 
 enum class MaterialType
 {
@@ -54,6 +54,9 @@ public:
     string vertexShaderPath = DEFAULT_VERTEX_SHADER_PATH;
     string fragmentShaderPath = DEFAULT_FRAGMENT_SHADER_PATH;
     vector<string> texturePaths;
+    WrapMode wrapMode = WrapMode::CLAMP_TO_EDGE;
+    FilterMode filterMode = FilterMode::LINEAR;
+    MipmapMode mipmapMode = MipmapMode::LINEAR_MIPMAP_LINEAR;
 
     void InitializeShader();
     void AddTexture(const std::shared_ptr<Texture>& _texture);
@@ -70,8 +73,11 @@ public:
     
 };
 REGISTER_CLASS(Material, {
-    REGISTER_MEMBER(Material, materialData, MemberProperty::NonViewable),
+    REGISTER_MEMBER(Material, texturePaths, MemberProperty::NonViewable),
     REGISTER_MEMBER(Material, vertexShaderPath, MemberProperty::Viewable),
     REGISTER_MEMBER(Material, fragmentShaderPath, MemberProperty::Viewable),
-    REGISTER_MEMBER(Material, texturePaths, MemberProperty::Hidden)
+    REGISTER_MEMBER(Material, materialData, MemberProperty::NonViewable),
+    REGISTER_MEMBER(Material, wrapMode, MemberProperty::Viewable),
+    REGISTER_MEMBER(Material, filterMode, MemberProperty::Viewable),
+    REGISTER_MEMBER(Material, mipmapMode, MemberProperty::Viewable),
 });

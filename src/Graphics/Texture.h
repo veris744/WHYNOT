@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <glm/glm.hpp>
+#include "Reflection/Reflection.h"
 
 using namespace std;
 using namespace glm;
@@ -9,16 +10,32 @@ enum class WrapMode
 {
     REPEAT, MIRRORED_REPEAT, CLAMP_TO_EDGE, CLAMP_TO_BORDER
 };
+REGISTER_ENUM(WrapMode,
+    {"REPEAT", WrapMode::REPEAT},
+    {"MIRRORED_REPEAT", WrapMode::MIRRORED_REPEAT},
+    {"CLAMP_TO_EDGE", WrapMode::CLAMP_TO_EDGE},
+    {"CLAMP_TO_BORDER", WrapMode::CLAMP_TO_BORDER}
+);
 
 enum class FilterMode
 {
     LINEAR, NEAREST
 };
+REGISTER_ENUM(FilterMode,
+    {"LINEAR", FilterMode::LINEAR},
+    {"NEAREST", FilterMode::NEAREST}
+);
 
 enum class MipmapMode
 {
     NEAREST_MIPMAP_NEAREST, LINEAR_MIPMAP_LINEAR, NEAREST_MIPMAP_LINEAR, LINEAR_MIPMAP_NEAREST
 };
+REGISTER_ENUM(MipmapMode,
+    {"NEAREST_MIPMAP_NEAREST", MipmapMode::NEAREST_MIPMAP_NEAREST},
+    {"LINEAR_MIPMAP_LINEAR", MipmapMode::LINEAR_MIPMAP_LINEAR},
+    {"NEAREST_MIPMAP_LINEAR", MipmapMode::NEAREST_MIPMAP_LINEAR},
+    {"NEAREST_MIPMAP_LINEAR", MipmapMode::NEAREST_MIPMAP_LINEAR}
+);
 
 
 class Texture

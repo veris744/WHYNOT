@@ -4,7 +4,6 @@
 #include "Components/Transform.h"
 #include "Components/Camera.h"
 #include "Components/CircleCollider.h"
-#include "Components/Collider.h"
 #include "Components/LightSource.h"
 #include "Graphics/Mesh.h"
 #include "Components/Model.h"
@@ -99,6 +98,8 @@ std::unique_ptr<Mesh> ComponentFactory::ReadMesh(const YAML::Node& asset)
     // INITIALIZE MESH VERTEX
     vector<float> vertex;
     vector<unsigned int> index = {};
+    unsigned int elementCount = 3;
+    unsigned int vertexCount = 0;
     
     switch (EnumRegistry::instance().fromString<PrimitiveType>(ReadString(asset, "primitive")))
     {
@@ -115,11 +116,35 @@ std::unique_ptr<Mesh> ComponentFactory::ReadMesh(const YAML::Node& asset)
         vertex = Renderer::GetCubeVertex();
         break;
     }
+    if (elementCount == 3)
+    {
+        vertexCount = vertex.size() / 8;
+    }
+    else if (elementCount == 2)
+    {
+        vertexCount = vertex.size() / 5;
+    }
+    else if (elementCount == 1)
+    {
+        vertexCount = vertex.size() / 3;
+    }
 
     // INITIALIZE MATERIAL
     std::shared_ptr<Material> material = std::make_shared<Material>();
     deserialize(asset["material"], material);
     material->InitializeShader();
+
+    if (material->materialData.type == MaterialType::TEXTURE)
+    {
+        if (material->wrapMode == WrapMode::REPEAT)
+        {
+            for (int i = 0; i < vertex.size(); i+=8)
+            {
+                vertex[i + 6] == 0.f ? vertex[i + 6] -= 0.5f : vertex[i + 6] += 0.5f;
+                vertex[i + 7] == 0.f ? vertex[i + 7] -= 0.5f : vertex[i + 7] += 0.5f;
+            }
+        }
+    }
 
     for (const string& texturePath : material->texturePaths)
     {
@@ -136,11 +161,11 @@ std::unique_ptr<Mesh> ComponentFactory::ReadMesh(const YAML::Node& asset)
     std::unique_ptr<Mesh> mesh = nullptr;
     if (index.empty())
     {
-        mesh = std::make_unique<Mesh>(vertex, vertex.size(), material);
+        mesh = std::make_unique<Mesh>(vertex, vertexCount, material, elementCount);
     }
     else
     {
-        mesh = std::make_unique<Mesh>(vertex, vertex.size(), index, material);
+        mesh = std::make_unique<Mesh>(vertex, vertexCount, index, material, elementCount);
     }
     return mesh;
 }
