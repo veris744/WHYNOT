@@ -1,5 +1,7 @@
 #include "ComponentFactory.h"
 
+#include <Components/BoxCollider.h>
+
 #include "Reader.h"
 #include "Components/Transform.h"
 #include "Components/Camera.h"
@@ -71,6 +73,12 @@ void ComponentFactory::ComponentFactorySetup()
             if (ReadString(data, "type") == "CIRCLE")
             {
                 std::unique_ptr<CircleCollider> collider = std::make_unique<CircleCollider>();
+                deserialize(data, collider);
+                entity->AddComponent(std::move(collider));
+            }
+            else if (ReadString(data, "type") == "BOX")
+            {
+                std::unique_ptr<BoxCollider> collider = std::make_unique<BoxCollider>();
                 deserialize(data, collider);
                 entity->AddComponent(std::move(collider));
             }

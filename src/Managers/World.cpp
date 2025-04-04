@@ -61,6 +61,7 @@ void World::Update(float deltaTime)
         return;
     }
 
+    CollisionManager::CheckCollisions();
     for (const auto& entity : entities)
     {
         if (!entity.second->isActive)
@@ -69,7 +70,6 @@ void World::Update(float deltaTime)
         }
         entity.second->UpdateTrigger(deltaTime);
     }
-    CollisionManager::CheckCollisions();
     
 }
 

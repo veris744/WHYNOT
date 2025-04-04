@@ -16,42 +16,50 @@ entities:
           type: "DIRECTIONAL"
   - components:
       - name: "TRANSFORM"
-        position: [1, -1, -5]
+        position: [0, 2, -5]
         rotation:
           yaw: 45
         scale: [0.5,0.5,0.5]
+      - name: "MOVEMENT"
+        isAffectedByGravity: true
+        usesPhysics: true
       - name: "MODEL"
         path: "assets/backpack/backpack.obj"
       - name: "COLLIDER"
         type: "CIRCLE"
         radius: 1.2
         profile:
-          type: "STATIC"
+          type: "DYNAMIC"
           mode: "ALL"
-  - components:
-      - name: "TRANSFORM"
-        position: [-1, 1, -5]
-        rotation:
-          yaw: 45
-        scale: [0.5,0.5,0.5]
-      - name: "MODEL"
-        path: "assets/backpack/backpack.obj"
-      - name: "COLLIDER"
-        type: "CIRCLE"
-        radius: 1.2
-        profile:
-          type: "STATIC"
-          mode: "ALL"
+#  - components:
+#      - name: "TRANSFORM"
+#        position: [-1, 1, -5]
+#        rotation:
+#          yaw: 45
+#        scale: [0.5,0.5,0.5]
+#      - name: "MODEL"
+#        path: "assets/backpack/backpack.obj"
+#      - name: "COLLIDER"
+#        type: "CIRCLE"
+#        radius: 1.2
+#        profile:
+#          type: "STATIC"
+#          mode: "ALL"
   - components:
       - name: "TRANSFORM"
         position: [0, -6, 0]
         scale: [20, 0.1, 20]
+      - name: "COLLIDER"
+        dimensions: [20, 0.1, 20]
+        type: "BOX"
+        profile:
+          type: "STATIC"
+          mode: "ALL"
       - name: "MODEL"
         mesh:
           primitive: "BOX"
           material:
             texturePaths: ["assets/2dImages/ground.jpg"]
-            fragmentShaderPath: "shaders/fragment.glsl"
             wrapMode: "REPEAT"
             materialData:
               type: TEXTURE

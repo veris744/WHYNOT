@@ -1,5 +1,7 @@
 #include "OctreeNode.h"
 
+#include <Utils/Parser.h>
+
 #include "Hit.h"
 #include "Components/Collider.h"
 #include "Entities/Entity.h"
@@ -93,7 +95,7 @@ void OctreeNode::InsertIntoChildrenStatic(const std::shared_ptr<Entity>& entity)
 }
 
 
-void OctreeNode::QueryCollisions(std::set<pair<std::shared_ptr<Entity>, std::shared_ptr<Entity>>>& collisions)
+void OctreeNode::QueryCollisions(std::set<Hit>& collisions)
 {
     if (isLeaf) {
         for (size_t i = 0; i < dynamicEntities.size(); i++) {
@@ -106,8 +108,9 @@ void OctreeNode::QueryCollisions(std::set<pair<std::shared_ptr<Entity>, std::sha
 
                 Collider* c1 = e1->GetComponent<Collider>();
                 Collider* c2 = e2->GetComponent<Collider>();
-                if (c1 && c2 && c1->Collides(c2)) {
-                    collisions.insert({e1, e2});
+                Hit hit;
+                if (c1 && c2 && c1->Collides(c2, hit)) {
+                    collisions.insert(hit);
                 }
             }
             
@@ -116,8 +119,9 @@ void OctreeNode::QueryCollisions(std::set<pair<std::shared_ptr<Entity>, std::sha
 
                 Collider* c1 = e1->GetComponent<Collider>();
                 Collider* c2 = e2->GetComponent<Collider>();
-                if (c1 && c2 && c1->Collides(c2)) {
-                    collisions.insert({e1, e2});
+                Hit hit;
+                if (c1 && c2 && c1->Collides(c2, hit)) {
+                    collisions.insert(hit);
                 }
             }
         }
@@ -139,7 +143,7 @@ void OctreeNode::QueryRayCollisions(std::set<Hit>& collisions, vec3 rayStart, ve
             if (!entity || !entity->isActive) continue;
             Collider* collider = entity->GetComponent<Collider>();
             Hit hit;
-            collider->Collides(rayStart, rayDir, hit);
+            collider->RayCollides(rayStart, rayDir, hit);
             if (hit.hasHit)
             {
                 collisions.insert(hit);
@@ -150,7 +154,7 @@ void OctreeNode::QueryRayCollisions(std::set<Hit>& collisions, vec3 rayStart, ve
             if (!entity || !entity->isActive) continue;
             Collider* collider = entity->GetComponent<Collider>();
             Hit hit;
-            collider->Collides(rayStart, rayDir, hit);
+            collider->RayCollides(rayStart, rayDir, hit);
             if (hit.hasHit)
             {
                 collisions.insert(hit);

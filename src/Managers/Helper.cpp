@@ -10,7 +10,7 @@ float Helper::windowHeight = 600;
 float Helper::windowWidth = 800;
 MultiDelegate<> Helper::OnWindowResizeDelegate;
 
-vec3 Helper::sceneDimensions = vec3(30, 30, 30);
+vec3 Helper::sceneDimensions = vec3(50, 30, 50);
 vec3 Helper::sceneCenter = vec3(0, 0, 0);
 vec2 Helper::XBounds = vec2(sceneCenter.x - sceneDimensions.x * 0.5f, sceneCenter.x + sceneDimensions.x * 0.5f);
 vec2 Helper::YBounds = vec2(sceneCenter.y - sceneDimensions.y * 0.5f, sceneCenter.y + sceneDimensions.y * 0.5f);

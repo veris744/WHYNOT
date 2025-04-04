@@ -28,8 +28,11 @@ int main()
     double lastTime = glfwGetTime();
     while (!glfwWindowShouldClose(Helper::GetWindow()))
     {
-        float deltaTime = static_cast<float>(glfwGetTime() - lastTime);
-        lastTime = glfwGetTime();
+        double currentTime = glfwGetTime();
+        float deltaTime = static_cast<float>(currentTime - lastTime);
+        lastTime = currentTime;
+        if (deltaTime > 0.1f)
+            deltaTime = 0.016f;
 
         Helper::Draw();
         World::GetInstance()->PrepareLoad();

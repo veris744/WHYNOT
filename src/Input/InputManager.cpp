@@ -248,11 +248,11 @@ void InputManager::HandleMouseButtonPress(int key)
 
         if (ConfigurationValues::IsEditorOpen)
         {
-            Hit hit = CollisionManager::ThrowRayFromScreen(vec2{xpos,ypos}, playerTransform->position, false);
+            Hit hit = CollisionManager::ThrowRayFromScreen(vec2{xpos,ypos}, playerTransform->position, true, 5);
             if (hit.hasHit && hit.type == HitType::World)
             {
-                hit.entity->OnClicked();
-                EditorMode::SelectEntity(hit.entity);
+                hit.otherEntity->OnClicked();
+                EditorMode::SelectEntity(hit.otherEntity);
             }
             else if (!hit.hasHit)
             {

@@ -89,7 +89,7 @@ public:
     }
 
     virtual void OnOutOfBounds(vec3 _normal) {}
-    virtual void OnCollision(const std::shared_ptr<Entity>& _otherEntity, vec3 normal) {}
+    virtual void OnCollision(Entity* _otherEntity, vec3 normal) {}
     virtual void OnClicked()
     {
         //Logger::Log<Entity>(LogLevel::Info, "Clicked on " + name);

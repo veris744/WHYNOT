@@ -3,21 +3,37 @@
 #include "BoxCollider.h"
 #include "Entities/Entity.h"
 #include "Utils/Debugger.h"
-#include "Utils/Parser.h"
 
 
-bool CircleCollider::Collides(Collider* other) 
+bool CircleCollider::Collides(Collider* other, Hit& hit)
 {
-    return other->Collides(radius, GetWorldPosition());
+    if (other->Collides(radius, GetWorldPosition(), hit))
+    {
+        hit.otherEntity = other->parent;
+        hit.selfEntity = parent;
+        hit.type = World;
+        vec3 directionToSelf = GetWorldPosition() - hit.point;
+        if (dot(directionToSelf, hit.normal) < 0.0f)
+        {
+            hit.normal = -hit.normal;
+        }
+        return true;
+    }
+    return false;
 }
 
-bool CircleCollider::Collides(float _rad1, vec3 _pos1)
+bool CircleCollider::Collides(float _rad1, vec3 _pos1, Hit& hit)
 {
-    return CheckCircleCircle(radius, GetWorldPosition(), _rad1, _pos1);
+    return CheckCircleCircle(radius, GetWorldPosition(), _rad1, _pos1, hit);
+}
+
+bool CircleCollider::Collides(vec3 _dimensions, vec3 _pos1, Hit& hit)
+{
+    return CheckCircleSquare(radius, GetWorldPosition(), _dimensions, _pos1, hit);
 }
 
 // Collision from ray staring at origin extending towards infinity
-bool CircleCollider::Collides(vec3 _rayOrigin, vec3 _rayDir, Hit& hit)
+bool CircleCollider::RayCollides(vec3 _rayOrigin, vec3 _rayDir, Hit& hit)
 {
     vec3 center = GetWorldPosition();
     vec3 D = normalize(_rayDir); // Correct direction normalization, use _rayDir directly
@@ -67,11 +83,11 @@ bool CircleCollider::Collides(vec3 _rayOrigin, vec3 _rayDir, Hit& hit)
     float distSq = dot(hitPoint - _rayOrigin, hitPoint - _rayOrigin); // Squared distance
 
     hit.hasHit = true;
-    hit.type = HitType::World;
+    hit.type = World;
     hit.distSQ = distSq;
     hit.point = hitPoint;
     hit.normal = normalize(hitPoint - center);
-    hit.entity = parent;
+    hit.otherEntity = parent;
 
     return true;
 }
@@ -143,8 +159,6 @@ void CircleCollider::RenderDebug()
     if (Debugger::GetCollisionDebugEnabled())
     {
         Debugger::DrawSphereDebug(radius, GetWorldPosition());
-        
-        //Logger::Log(LogLevel::Warning, Parser::Parse(GetWorldPosition()));
     }
 }
 

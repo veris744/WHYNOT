@@ -47,21 +47,26 @@ void CollisionManager::CheckCollisions()
         }
     }
     
-    std::set<pair<std::shared_ptr<Entity>, std::shared_ptr<Entity>>> collisions;
+    std::set<Hit> collisions;
     root->QueryCollisions(collisions);
     
-    for (const auto& collisionPair  : collisions) {
-        const auto& e1 = collisionPair.first;
-        const auto& e2 = collisionPair.second;
+    for (const auto& hit  : collisions) {
+        const auto& e1 = hit.selfEntity;
+        const auto& e2 = hit.otherEntity;
         
-        if (!e1->isActive || !e2->isActive) continue;
-        
-        auto c1 = e1->GetComponent<Collider>();
-        auto c2 = e2->GetComponent<Collider>();
-        if (c1->Collides(c2)) {
-            vec3 normal = normalize(c1->GetWorldPosition() - c2->GetWorldPosition());
-            c1->CollisionDelegate.Execute(e2, normal);
-            c2->CollisionDelegate.Execute(e1, -normal);
+        if (!e1 || !e1->isActive) continue;
+        if (!e2 || !e2->isActive) continue;
+
+        const auto c1 = e1->GetComponent<Collider>();
+        const auto c2 = e2->GetComponent<Collider>();
+        if (hit.hasHit) {
+            c1->CollisionDelegate.Execute(hit.otherEntity, hit.normal);
+            c1->UpdateMovement(hit.normal);
+            if (e2->isActive)
+            {
+                c2->CollisionDelegate.Execute(hit.selfEntity, -hit.normal);
+                c2->UpdateMovement(-hit.normal);
+            }
         }
     }
 
@@ -125,6 +130,7 @@ Hit CollisionManager::ThrowRay(vec3 rayOrigin, vec3 rayDirection, bool showDebug
             vec3(Helper::GetXBounds().y, Helper::GetYBounds().y, Helper::GetZBounds().y)};
         root = std::make_unique<OctreeNode>(worldBounds);
     }
+    root->Clear();
     
     for (auto& [id, entity] :  World::GetInstance()->GetEntities()) {
         Collider* collider = entity->GetComponent<Collider>();

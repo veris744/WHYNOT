@@ -16,7 +16,7 @@ class Projectile : public Entity
     AliensLogic* alienLogicManager = nullptr;
 public:
 
-    void OnCollision(const std::shared_ptr<Entity>& _otherEntity, vec3 normal);
+    void OnCollision(Entity* _otherEntity, vec3 normal);
     void OnOutOfBounds(vec3 _normal);
     
     Projectile(const string& _name = "")

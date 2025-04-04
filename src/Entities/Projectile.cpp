@@ -108,7 +108,7 @@ void Projectile::DisableProjectile()
 }
 
 
-void Projectile::OnCollision(const std::shared_ptr<Entity>& _otherEntity, vec3 normal)
+void Projectile::OnCollision(Entity* _otherEntity, vec3 normal)
 {
     if (alienLogicManager)
         alienLogicManager->RemoveProjectile(std::static_pointer_cast<Projectile>(shared_from_this()));

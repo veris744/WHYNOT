@@ -1,5 +1,7 @@
 #include "Alien.h"
 
+#include <Utils/Parser.h>
+
 #include "Projectile.h"
 #include "Components/CircleCollider.h"
 #include "Graphics/Mesh.h"
@@ -115,9 +117,9 @@ void Alien::OnOutOfBounds(vec3 _normal)
     }
 }
 
-void Alien::OnCollision(const std::shared_ptr<Entity>& _otherEntity, vec3 _normal)
+void Alien::OnCollision(Entity* _otherEntity, vec3 _normal)
 {
-    if (std::dynamic_pointer_cast<Projectile>(_otherEntity))
+    if (dynamic_cast<Projectile*>(_otherEntity))
     {
         std::shared_ptr<Alien> self = std::static_pointer_cast<Alien>(shared_from_this());
         isActive = false;
@@ -131,8 +133,9 @@ void Alien::OnCollision(const std::shared_ptr<Entity>& _otherEntity, vec3 _norma
     {
         return;
     }
-    if (std::dynamic_pointer_cast<Alien>(_otherEntity))
+    if (dynamic_cast<Alien*>(_otherEntity))
     {
         movement->speed = _normal * length(movement->speed);
+        movement->impactNormal = vec3(0);
     }
 }

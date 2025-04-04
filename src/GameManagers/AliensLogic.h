@@ -13,7 +13,7 @@ class AliensLogic : public GameManager
     std::vector<std::shared_ptr<Alien>> aliens;
     queue<std::shared_ptr<Projectile>> availableProjectiles;
     std::vector<std::shared_ptr<Projectile>> usedProjectiles;
-    unsigned int totalAliens = 10;
+    unsigned int totalAliens = 8;
     unsigned int totalProjectiles = 10;
 
     void CalculateRandomPosition(const std::shared_ptr<Alien>& alien);

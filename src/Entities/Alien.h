@@ -9,7 +9,7 @@ class Alien : public Entity
     static unsigned int counter;
 
     void OnOutOfBounds(vec3 _normal) override;
-    void OnCollision(const std::shared_ptr<Entity>& _otherEntity, vec3 normal) override;
+    void OnCollision(Entity* _otherEntity, vec3 normal) override;
 
     Movement* movement = nullptr;
     Transform* transform = nullptr;

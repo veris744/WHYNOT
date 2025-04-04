@@ -137,7 +137,9 @@ void AliensLogic::CalculateRandomPosition(const std::shared_ptr<Alien>& alien)
     {
         if (otherAlien == alien)    continue;
         if (!otherAlien->isActive)  continue;
-        if (alien->GetComponent<Collider>()->Collides(otherAlien->GetComponent<Collider>()))
+        Hit hit;
+        alien->GetComponent<Collider>()->Collides(otherAlien->GetComponent<Collider>(), hit);
+        if (hit.hasHit)
         {
             CalculateRandomPosition(otherAlien);
         }

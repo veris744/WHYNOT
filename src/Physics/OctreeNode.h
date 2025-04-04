@@ -45,7 +45,7 @@ public:
     void Subdivide();
     void InsertIntoChildrenDynamic(const std::shared_ptr<Entity>& entity);
     void InsertIntoChildrenStatic(const std::shared_ptr<Entity>& entity);
-    void QueryCollisions(std::set<std::pair<std::shared_ptr<Entity>, std::shared_ptr<Entity>>>& collisions);
+    void QueryCollisions(std::set<Hit>& collisions);
     void QueryRayCollisions(std::set<Hit>& collisions, vec3 rayStart, vec3 rayDir);
     void ClearDynamic();
     void ClearStatic();
