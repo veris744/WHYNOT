@@ -1,7 +1,9 @@
 #include "World.h"
 
 #include <thread>
+#include <Components/PlayerController.h>
 #include <Components/Transform.h>
+#include <GameManagers/MapManager.h>
 
 #include "ConfigurationValues.h"
 #include "Renderer.h"
@@ -55,11 +57,8 @@ void World::PrepareLoad()
 void World::Update(float deltaTime)
 {
     if (!isSceneLoaded) return;
-    if (isPaused)
-    {
-        playerEntity->Update(deltaTime);
-        return;
-    }
+
+    playerEntity->Update(deltaTime);
 
     CollisionManager::CheckCollisions();
     for (const auto& entity : entities)
@@ -266,12 +265,7 @@ void World::DoLoad()
     }
     else if (currentScene == "Editor")
     {
-        Helper::SetCursorVisible(false);
-        ConfigurationValues::CanPlayerLook = true;
-        ConfigurationValues::ArePhysicsActive = true;
-        ConfigurationValues::CanPlayerMove = true;
-        ConfigurationValues::IsEditorOpen = false;
-        ConfigurationValues::IsUIActive = false;
+        gameManager = std::make_unique<MapManager>();
     }
     if (gameManager)
     {
@@ -279,6 +273,7 @@ void World::DoLoad()
         gameManager->StartGame();
     }
     playerEntity->GetComponent<Transform>()->position = gameManager ? gameManager->GetPlayerStart() : vec3(0,0,0);
+    playerEntity->GetComponent<Transform>()->position = gameManager ? gameManager->GetPlayerStartRotation() : vec3(0,0,0);
 
     if (!playerEntity)
     {

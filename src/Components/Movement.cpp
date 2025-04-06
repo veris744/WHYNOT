@@ -17,12 +17,10 @@ void Movement::Update(float deltaTime)
     {
         acceleration = normalize(acceleration) * maxAcceleration;
     }
-
     speed = speed + acceleration * deltaTime;
     if (isAffectedByGravity)
     {
         speed.y -= 9.8f * deltaTime;
-        //Logger::Log(LogLevel::Info, "Speed: "+ Parser::Parse(speed) );
     }
     if (length(speed) > maxSpeed)
     {
@@ -38,6 +36,5 @@ void Movement::Update(float deltaTime)
         }
     }
     transform->position = transform->position + speed * deltaTime;
-    //Logger::Log(LogLevel::Warning, "Pos: "+ Parser::Parse(transform->position) );
     impactNormal = vec3(0.0f);
 }

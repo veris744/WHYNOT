@@ -1,5 +1,6 @@
 #include "EditorMode.h"
 
+#include <Components/PlayerController.h>
 #include <Managers/ConfigurationValues.h>
 
 #include "Components/Transform.h"
@@ -52,6 +53,8 @@ void EditorMode::EnterEditorMode()
     ConfigurationValues::CanPlayerLook = false;
     ConfigurationValues::CanPlayerMove = true;
     ConfigurationValues::IsUIActive = true;
+    World::GetInstance()->GetPlayer()->GetComponent<PlayerController>()->EnterFreeMode(true);
+
     Helper::SetCursorVisible(true);
 
     if (World::GetGameManager())
@@ -86,6 +89,7 @@ void EditorMode::ExitEditorMode()
     ClearEditor();
 
     ConfigurationValues::IsEditorOpen = false;
+    World::GetInstance()->GetPlayer()->GetComponent<PlayerController>()->EnterFreeMode(false);
 
     if (World::GetGameManager())
     {

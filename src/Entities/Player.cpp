@@ -4,6 +4,7 @@
 #include "Components/Camera.h"
 #include "Components/PlayerController.h"
 #include "Components/Transform.h"
+#include "Components/Movement.h"
 #include "Managers/World.h"
 
 unsigned int Player::counter = 0;
@@ -31,6 +32,13 @@ void Player::Initialize()
     {
         std::unique_ptr<PlayerController> controller = std::make_unique<PlayerController>();
         AddComponent(std::move(controller));
+    }
+
+    if (!GetComponent<Movement>())
+    {
+        std::unique_ptr<Movement> movement = std::make_unique<Movement>();
+        movement->maxSpeed = 7;
+        AddComponent(std::move(movement));
     }
 
     if (!GetComponent<Audio>())
