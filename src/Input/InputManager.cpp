@@ -6,7 +6,6 @@
 #include "Managers/World.h"
 #include "Components/Transform.h"
 #include "Editor/EditorMode.h"
-#include "GameManagers/AliensLogic.h"
 #include "Physics/CollisionManager.h"
 #include "Physics/Hit.h"
 #include "Utils/Debugger.h"
@@ -165,6 +164,7 @@ void InputManager::HandleKeyPress(int key, int mods)
         EditorMode::ProcessUserInput(key);
         if (inputOpen) return;
     }
+    Debugger::ProcessInput(key);
     switch(key)
     {
         case GLFW_KEY_ESCAPE:
@@ -188,8 +188,6 @@ void InputManager::HandleKeyPress(int key, int mods)
         case GLFW_KEY_W:
             playerController->SetInput(vec3(0,0,1));
             break;
-        case GLFW_KEY_1:
-            Debugger::SetCollisionDebug(!Debugger::GetCollisionDebugEnabled());
         break;
         case GLFW_KEY_F1:
             EditorMode::EnterEditorMode();

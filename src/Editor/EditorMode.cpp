@@ -120,10 +120,9 @@ void EditorMode::SelectEntity(Entity* entity)
     {
         entityViewer->ClearPropertiesContent();
         entityViewer->Reorganize();
-        selectedEntity->debugEnabled = false;
         if (Transform* tempTransform = selectedEntity->GetComponent<Transform>())
         {
-            tempTransform->debugEnabled = true;
+            tempTransform->debugEnabled = false;
         }
     }
     selectedEntity = entity;
@@ -139,10 +138,9 @@ void EditorMode::Unselect()
 {
     if (selectedEntity)
     {
-        selectedEntity->debugEnabled = false;
         if (Transform* tempTransform = selectedEntity->GetComponent<Transform>())
         {
-            tempTransform->debugEnabled = true;
+            tempTransform->debugEnabled = false;
         }
         selectedEntity = nullptr;
         entityViewer->ClearPropertiesContent();

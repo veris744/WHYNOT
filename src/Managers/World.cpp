@@ -273,7 +273,7 @@ void World::DoLoad()
         gameManager->StartGame();
     }
     playerEntity->GetComponent<Transform>()->position = gameManager ? gameManager->GetPlayerStart() : vec3(0,0,0);
-    playerEntity->GetComponent<Transform>()->position = gameManager ? gameManager->GetPlayerStartRotation() : vec3(0,0,0);
+    playerEntity->GetComponent<Transform>()->SetRotation(gameManager ? gameManager->GetPlayerStartRotation() : vec3(0,0,0));
 
     if (!playerEntity)
     {

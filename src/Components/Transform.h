@@ -19,6 +19,7 @@ public:
         right(vec3(1, 0, 0))
     {
         name = "TRANSFORM";
+        isSkippedWhenPause = false;
     }
 
     vec3 position;
@@ -34,6 +35,7 @@ public:
         vec3 relativeRotation = {0,0,0},
         vec3 relativeScale = {0,0,0}) const;
     void Update(float deltaTime) override;
+    void SetRotation(vec3 _rotation);
     void SetRotation(float pitch, float yaw, float roll);
     void Initialize() override;
     void RenderDebug() override;

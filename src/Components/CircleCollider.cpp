@@ -152,10 +152,7 @@ bool CircleCollider::OverlapsBounds(const vec2& xBounds, const vec2& yBounds, co
 
 void CircleCollider::RenderDebug()
 {
-    if (Debugger::GetCollisionDebugEnabled())
-    {
-        Debugger::DrawSphereDebug(radius, GetWorldPosition());
-    }
+    Debugger::DrawSphereDebug(radius, GetWorldPosition());
 }
 
 

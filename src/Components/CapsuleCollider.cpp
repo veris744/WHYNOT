@@ -121,8 +121,5 @@ float halfHeight = (height * 0.5f);
 
 void CapsuleCollider::RenderDebug()
 {
-    if (Debugger::GetCollisionDebugEnabled())
-    {
-        Debugger::DrawCapsuleDebug(radius, height, GetWorldPosition());
-    }
+    Debugger::DrawCapsuleDebug(radius, height, GetWorldPosition());
 }

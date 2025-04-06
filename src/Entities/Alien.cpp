@@ -49,7 +49,7 @@ void Alien::Initialize()
     
     if (!GetComponent<CircleCollider>())
     {
-        std::unique_ptr<CircleCollider> collider = std::make_unique<CircleCollider>(0.75f);
+        std::unique_ptr<CircleCollider> collider = std::make_unique<CircleCollider>(0.85f);
         collider->profile = {ColliderType::Dynamic, ColliderMode::All};
         AddComponent(std::move(collider));
     }

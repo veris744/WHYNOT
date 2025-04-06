@@ -62,7 +62,7 @@ void AliensLogic::PrepareGame()
     OnTextChangedDelegate.Execute("Aliens : " + std::to_string(totalAliens));
 
     OnPlayerShootDelegate.Bind(&AliensLogic::ShootProjectile, this);
-    playerStartRotation = {0, 90, 0};
+    playerStartRotation = {0, -45, 0};
     
 }
 

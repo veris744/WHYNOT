@@ -25,8 +25,13 @@ void Entity::UpdateTrigger(float deltaTime)
 
 void Entity::Update(float deltaTime)
 {
+    debugEnabled = false;
     for (const auto& component : components)
     {
+        if (component->debugEnabled)    debugEnabled = true;
+        if (World::GetInstance()->IsPaused() && component->IsSkippedWhenPause())
+            continue;
+
         component->Update(deltaTime);
     }
 }

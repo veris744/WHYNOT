@@ -8,6 +8,9 @@ class Entity;
 
 class Component : public ReflectedObject
 {
+protected:
+    bool isSkippedWhenPause = true;
+
 public:
     string name;
     Component() = default;
@@ -25,4 +28,5 @@ public:
     virtual void RenderDebug() {}
 
     bool debugEnabled = false;
+    bool IsSkippedWhenPause() const { return isSkippedWhenPause; }
 };

@@ -137,8 +137,5 @@ bool BoxCollider::OverlapsBounds(const vec2& xBounds, const vec2& yBounds, const
 
 void BoxCollider::RenderDebug()
 {
-    if (Debugger::GetCollisionDebugEnabled())
-    {
-        Debugger::DrawCubeDebug(dimensions, GetWorldPosition());
-    }
+    Debugger::DrawCubeDebug(dimensions, GetWorldPosition());
 }

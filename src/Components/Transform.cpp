@@ -40,6 +40,28 @@ void Transform::Update(float deltaTime)
     }
 }
 
+void Transform::SetRotation(vec3 _rotation)
+{
+    float pitch = _rotation.x;
+    float yaw = _rotation.y;
+    float roll = _rotation.z;
+
+    rotation.SetRotation(pitch, yaw, roll);
+
+    // Calculate forward vector
+    vec3 direction;
+    direction.z = -cos(radians(yaw)) * cos(radians(pitch));
+    direction.y = sin(radians(pitch));
+    direction.x = sin(radians(yaw)) * cos(radians(pitch));
+    forward = normalize(direction);
+
+    // Compute the right vector (ensure right-handed system)
+    right = normalize(cross(forward, worldUp));
+
+    // Compute the up vector
+    up = normalize(cross(right, forward));
+}
+
 void Transform::SetRotation(float pitch, float yaw, float roll)
 {
     rotation.SetRotation(pitch, yaw, roll);
@@ -62,7 +84,6 @@ void Transform::Initialize()
 {
     Component::Initialize();
     SetRotation(rotation.pitch, rotation.yaw, rotation.roll);
-    debugEnabled = true;
 }
 
 void Transform::RenderDebug()

@@ -13,6 +13,7 @@
 #include "Managers/World.h"
 
 bool Debugger::collisionDebugEnabled = false;
+bool Debugger::transformDebugEnabled = false;
 unordered_map<std::unique_ptr<Mesh>, mat4> Debugger::meshesToRenderInFrame;
 map<std::unique_ptr<Mesh>, mat4> Debugger::meshesToRender;
 vector<shared_ptr<Widget>> Debugger::widgetsToRenderInFrame;
@@ -26,8 +27,19 @@ void Debugger::SetCollisionDebug(bool isEnabled)
     {
         if (entity->HasCollision())
         {
-            entity->debugEnabled = isEnabled;
-            entity->GetComponent<Collider>()->debugEnabled = true;
+            entity->GetComponent<Collider>()->debugEnabled = isEnabled;
+        }
+    }
+}
+
+void Debugger::SetTransfomDebug(bool isEnabled)
+{
+    transformDebugEnabled = isEnabled;
+    for (const auto& [name, entity] : World::GetInstance()->GetEntities())
+    {
+        if (entity->HasCollision())
+        {
+            entity->GetComponent<Transform>()->debugEnabled = isEnabled;
         }
     }
 }
@@ -145,6 +157,18 @@ void Debugger::DrawTextDebug(const string& _text, vec3 _color, float timer)
     {
         Timer::StartTimer(timer, &Debugger::StopRenderingWidget, static_cast<Widget*>(text.get()));
         widgetsToRender.push_back(text);
+    }
+}
+
+void Debugger::ProcessInput(int key)
+{
+    if (key == GLFW_KEY_1)
+    {
+        SetCollisionDebug(!collisionDebugEnabled);
+    }
+    else if (key == GLFW_KEY_2)
+    {
+        SetTransfomDebug(!transformDebugEnabled);
     }
 }
 
