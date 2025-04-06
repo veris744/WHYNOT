@@ -30,6 +30,11 @@ bool BoxCollider::Collides(vec3 _dimensions, vec3 _pos1, Hit& hit)
     return CheckSquareSquare(_dimensions, GetWorldPosition(), dimensions, GetWorldPosition(), hit);
 }
 
+bool BoxCollider::Collides(float _height, float _radius, vec3 _pos1, Hit& hit)
+{
+    return CheckCapsuleSquare(_radius, _height, _pos1, dimensions, GetWorldPosition(), hit);
+}
+
 bool BoxCollider::RayCollides(vec3 _rayOrigin, vec3 _rayDir, Hit& hit)
 {
     vec3 boxCenter = GetWorldPosition();

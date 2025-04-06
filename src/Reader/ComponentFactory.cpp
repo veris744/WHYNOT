@@ -1,6 +1,7 @@
 #include "ComponentFactory.h"
 
 #include <Components/BoxCollider.h>
+#include <Components/CapsuleCollider.h>
 
 #include "Reader.h"
 #include "Components/Transform.h"
@@ -79,6 +80,12 @@ void ComponentFactory::ComponentFactorySetup()
             else if (ReadString(data, "type") == "BOX")
             {
                 std::unique_ptr<BoxCollider> collider = std::make_unique<BoxCollider>();
+                deserialize(data, collider);
+                entity->AddComponent(std::move(collider));
+            }
+            else if (ReadString(data, "type") == "CAPSULE")
+            {
+                std::unique_ptr<CapsuleCollider> collider = std::make_unique<CapsuleCollider>();
                 deserialize(data, collider);
                 entity->AddComponent(std::move(collider));
             }

@@ -1,13 +1,14 @@
 #pragma once
 #include "Collider.h"
 
-class CircleCollider : public Collider
+class CapsuleCollider : public Collider
 {
 public:
+    float height;
     float radius;
-    
-    CircleCollider(float _radius = 1)
-        : radius(_radius)
+
+    CapsuleCollider(float _height = 1, float _radius = 1)
+        : height(_height), radius(_radius)
     {
         type = ColliderShape::CIRCLE;
     }
@@ -24,9 +25,10 @@ public:
     
     
 };
-REGISTER_CLASS(CircleCollider,
-    REGISTER_MEMBER(CircleCollider, name, MemberProperty::Serializable),
-    REGISTER_MEMBER(CircleCollider, radius, MemberProperty::Viewable | MemberProperty::Editable | MemberProperty::Serializable),
-    REGISTER_MEMBER(CircleCollider, type, MemberProperty::Viewable | MemberProperty::Serializable),
-    REGISTER_MEMBER(CircleCollider, profile, MemberProperty::Viewable | MemberProperty::Serializable)
+REGISTER_CLASS(CapsuleCollider,
+    REGISTER_MEMBER(CapsuleCollider, name, MemberProperty::Serializable),
+    REGISTER_MEMBER(CapsuleCollider, radius, MemberProperty::Viewable | MemberProperty::Editable | MemberProperty::Serializable),
+    REGISTER_MEMBER(CapsuleCollider, height, MemberProperty::Viewable | MemberProperty::Editable | MemberProperty::Serializable),
+    REGISTER_MEMBER(CapsuleCollider, type, MemberProperty::Viewable | MemberProperty::Serializable),
+    REGISTER_MEMBER(CapsuleCollider, profile, MemberProperty::Viewable | MemberProperty::Serializable)
 );

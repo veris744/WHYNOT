@@ -80,6 +80,30 @@ void Debugger::DrawCubeDebug(vec3 _dimensions, vec3 _position, vec3 _color, floa
     }
 }
 
+void Debugger::DrawCapsuleDebug(float _radius, float _height, vec3 _position, vec3 _color, float timer)
+{
+    vector<float> vertices;
+    vector<unsigned int> indices;
+    Renderer::GenerateCapsuleVertex(_radius, _height, vertices, indices);
+    std::shared_ptr<Material> material = std::make_shared<Material>("", DEFAULT_VERTEX_SHADER_PATH, "shaders/debugFragment.glsl");
+    std::unique_ptr<Mesh> cubeMesh = std::make_unique<Mesh>(vertices, vertices.size() / 8, indices, material);
+
+    cubeMesh->GetMaterial()->materialData.type = MaterialType::COLOR;
+    cubeMesh->GetMaterial()->materialData.color = vec4(_color, 0.4);
+    mat4 mat = mat4(1.0f);
+    mat = translate(mat, _position);
+
+    if (timer <= 0.f)
+    {
+        meshesToRenderInFrame[std::move(cubeMesh)] = mat;
+    }
+    else
+    {
+        Timer::StartTimer(timer, &Debugger::StopRenderingMesh, cubeMesh.get());
+        meshesToRender[std::move(cubeMesh)] = mat;
+    }
+}
+
 void Debugger::DrawLineDebug(vec3 _start, vec3 _end, vec3 _color, float timer)
 {
     if (meshesToRender.size() >= 10) return;

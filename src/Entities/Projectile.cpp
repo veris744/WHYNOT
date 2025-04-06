@@ -32,7 +32,7 @@ void Projectile::Initialize()
     {
         Renderer::SetSphereVertex(0.2f, 32.f, 16.f);
         vector<float> vertex = Renderer::GetSphereVertex();
-        vector<unsigned int> index = Renderer::GetShereIndex();
+        vector<unsigned int> index = Renderer::GetSphereIndex();
 
         std::shared_ptr<Material> mat = std::make_shared<Material>(vector<string>(), DEFAULT_VERTEX_SHADER_PATH,
             "shaders/neonFragment.glsl");

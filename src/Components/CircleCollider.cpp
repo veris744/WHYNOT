@@ -32,29 +32,25 @@ bool CircleCollider::Collides(vec3 _dimensions, vec3 _pos1, Hit& hit)
     return CheckCircleSquare(radius, GetWorldPosition(), _dimensions, _pos1, hit);
 }
 
+bool CircleCollider::Collides(float _height, float _radius, vec3 _pos1, Hit& hit)
+{
+    return CheckCapsuleCircle(_radius, _height, _pos1, radius, GetWorldPosition(), hit);
+}
+
 // Collision from ray staring at origin extending towards infinity
 bool CircleCollider::RayCollides(vec3 _rayOrigin, vec3 _rayDir, Hit& hit)
 {
     vec3 center = GetWorldPosition();
-    vec3 D = normalize(_rayDir); // Correct direction normalization, use _rayDir directly
+    vec3 D = normalize(_rayDir);
     vec3 OC = center - _rayOrigin;
 
-    // Logger::Log(LogLevel::Info, "_rayOrigin " + Parser::Parse(_rayOrigin));
-    // Logger::Log(LogLevel::Info, "_rayDir " + Parser::Parse(_rayDir));
-    // Logger::Log(LogLevel::Info, "OC " + Parser::Parse(OC));
-    // Check if the center is behind the ray's origin (ray origin can't hit something behind it)
     if (dot(OC, D) < 0) { 
         return false;
     }
 
-    float b = dot(D, OC); // Corrected coefficient
+    float b = dot(D, OC);
     float c = dot(OC, OC) - radius * radius;
-    float discriminant = b * b - c; // Corrected discriminant
-
-    // Logger::Log(LogLevel::Info, "b " + Parser::Parse(b ));
-    // Logger::Log(LogLevel::Info, "c " + Parser::Parse(c ));
-    // Logger::Log(LogLevel::Info, "discriminant " + Parser::Parse(discriminant));
-    
+    float discriminant = b * b - c;
     if (discriminant < 0.0f) {
         return false; // No intersection
     }

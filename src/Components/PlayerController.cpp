@@ -78,9 +78,6 @@ void PlayerController::UpdateMovement(float deltaTime) const
     {
         movement->acceleration = vec3(0, 0, 0);
     }
-
-    Logger::Log(LogLevel::Warning, Parser::Parse(movement->acceleration));
-    Logger::Log(LogLevel::Info, Parser::Parse(movement->speed));
 }
 
 void PlayerController::EnterFreeMode(bool _freeMode)

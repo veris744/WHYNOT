@@ -26,8 +26,9 @@ entities:
       - name: "MODEL"
         path: "assets/backpack/backpack.obj"
       - name: "COLLIDER"
-        type: "CIRCLE"
-        radius: 1.2
+        type: "CAPSULE"
+        radius: 0.5
+        height: 2
         profile:
           type: "DYNAMIC"
           mode: "ALL"

@@ -15,6 +15,7 @@ public:
     bool Collides(Collider* other, Hit& hit) override;
     bool Collides(float _rad1, vec3 _pos1, Hit& hit) override;
     bool Collides(vec3 _dimensions, vec3 _pos1, Hit& hit) override;
+    bool Collides(float _height, float _radius, vec3 _pos1, Hit& hit) override;
     bool RayCollides(vec3 _rayOrigin, vec3 _rayDir, Hit& hit) override;
     bool CheckInBounds(const vec2& xBounds, const vec2& yBounds, const vec2& zBounds, bool triggerDelegate = true) override;
     bool OverlapsBounds(const vec2& xBounds, const vec2& yBounds, const vec2& zBounds, bool triggerDelegate = true) override;

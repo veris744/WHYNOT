@@ -134,6 +134,127 @@ bool Collider::CheckSquareSquare(vec3 _dimensions1, vec3 _pos1, vec3 _dimensions
     return true;
 }
 
+bool Collider::CheckCapsuleCircle(float _rad1, float _height1, vec3 _pos1, float _rad2, vec3 _pos2, Hit& hit) const
+{
+    hit.hasHit = false;
+    // Capsule segment: from bottom to top
+    float halfHeight = (_height1 * 0.5f) - _rad1;
+    vec3 p1 = _pos1 + vec3(0, -halfHeight, 0); // bottom of capsule segment
+    vec3 p2 = _pos1 + vec3(0, +halfHeight, 0); // top of capsule segment
+
+    // Closest point from sphere center (_pos2) to capsule segment
+    vec3 segDir = p2 - p1;
+    float t = dot(_pos2 - p1, segDir) / dot(segDir, segDir);
+    t =  std::clamp(t, 0.0f, 1.0f);
+    vec3 closest = p1 + t * segDir;
+
+    vec3 diff = _pos2 - closest;
+    float distSq = dot(diff, diff);
+    float radiusSum = _rad1 + _rad2;
+
+    if (distSq <= radiusSum * radiusSum) {
+        hit.hasHit = true;
+        hit.distSQ = distSq;
+        hit.point = closest;
+        hit.normal = normalize(diff);
+        return true;
+    }
+
+    return false;
+}
+
+bool Collider::CheckCapsuleSquare(float _rad1, float _height1, vec3 _pos1, vec3 _dimensions2, vec3 _pos2,
+    Hit& hit) const
+{
+    hit.hasHit = false;
+    float halfHeight = (_height1 * 0.5f) - _rad1;
+    vec3 capStart = _pos1 + vec3(0, -halfHeight, 0);
+    vec3 capEnd = _pos1 + vec3(0, +halfHeight, 0);
+
+    // Treat the box as an AABB centered at _pos2
+    vec3 boxMin = _pos2 - _dimensions2 * 0.5f;
+    vec3 boxMax = _pos2 + _dimensions2 * 0.5f;
+
+    // Sample closest point on capsule segment to the box
+    vec3 closestOnSeg;
+    float minDistSq = FLT_MAX;
+
+    const int steps = 10;
+    for (int i = 0; i <= steps; ++i) {
+        float t = float(i) / float(steps);
+        vec3 pointOnSeg = mix(capStart, capEnd, t);
+        vec3 clamped = clamp(pointOnSeg, boxMin, boxMax);
+        float dSq = dot(clamped - pointOnSeg, clamped - pointOnSeg);
+        if (dSq < minDistSq) {
+            minDistSq = dSq;
+            closestOnSeg = pointOnSeg;
+            hit.point = clamped;
+        }
+    }
+
+    if (minDistSq <= _rad1 * _rad1) {
+        hit.hasHit = true;
+        hit.distSQ = minDistSq;
+        hit.normal = normalize(hit.point - closestOnSeg);
+        return true;
+    }
+
+    return false;
+}
+
+bool Collider::CheckCapsuleCapsule(float _rad1, float _height1, vec3 _pos1, float _rad2, float _height2, vec3 _pos2,
+    Hit& hit) const
+{
+    hit.hasHit = false;
+    float h1 = (_height1 * 0.5f) - _rad1;
+    vec3 A0 = _pos1 + vec3(0, -h1, 0);
+    vec3 A1 = _pos1 + vec3(0, +h1, 0);
+
+    float h2 = (_height2 * 0.5f) - _rad2;
+    vec3 B0 = _pos2 + vec3(0, -h2, 0);
+    vec3 B1 = _pos2 + vec3(0, +h2, 0);
+
+    // Compute closest points between segments A and B
+    vec3 d1 = A1 - A0;
+    vec3 d2 = B1 - B0;
+    vec3 r = A0 - B0;
+
+    float a = dot(d1, d1);
+    float e = dot(d2, d2);
+    float f = dot(d2, r);
+
+    float s = 0.0f, t = 0.0f;
+
+    float c = dot(d1, r);
+    float b = dot(d1, d2);
+    float denom = a * e - b * b;
+
+    if (denom != 0.0f)
+        s = std::clamp((b * f - c * e) / denom, 0.0f, 1.0f);
+
+    t = (b * s + f) / e;
+    t = std::clamp(t, 0.0f, 1.0f);
+
+    s = (b * t - c) / a;
+    s = std::clamp(s, 0.0f, 1.0f);
+
+    vec3 pt1 = A0 + d1 * s;
+    vec3 pt2 = B0 + d2 * t;
+    vec3 diff = pt2 - pt1;
+    float distSq = dot(diff, diff);
+    float radiusSum = _rad1 + _rad2;
+
+    if (distSq <= radiusSum * radiusSum) {
+        hit.hasHit = true;
+        hit.distSQ = distSq;
+        hit.point = pt1 + normalize(diff) * _rad1; // Approximate collision point
+        hit.normal = normalize(diff);
+        return true;
+    }
+
+    return false;
+}
+
 void Collider::UpdateMovement(vec3 _normal)
 {
     if (profile.type == ColliderType::Dynamic)

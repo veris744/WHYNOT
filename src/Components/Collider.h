@@ -9,11 +9,12 @@ struct Hit;
 
 enum class ColliderShape
 {
-    CIRCLE, BOX
+    CIRCLE, BOX, CAPSULE
 };
 REGISTER_ENUM(ColliderShape,
     {"CIRCLE", ColliderShape::CIRCLE},
-    {"BOX", ColliderShape::BOX}
+    {"BOX", ColliderShape::BOX},
+    {"CAPSULE", ColliderShape::CAPSULE}
 );
 
 class Collider : public Component
@@ -39,9 +40,13 @@ public:
     bool CheckCircleCircle(float _rad1, vec3 _pos1, float _rad2, vec3 _pos2, Hit& hit1) const;
     bool CheckCircleSquare(float _rad1, vec3 _pos1, vec3 _dimensions1, vec3 _pos2, Hit& hit) const;
     bool CheckSquareSquare(vec3 _dimensions1, vec3 _pos1, vec3 _dimensions2, vec3 _pos2, Hit& hit) const;
+    bool CheckCapsuleCircle(float _rad1, float _height1, vec3 _pos1, float _rad2, vec3 _pos2, Hit& hit) const;
+    bool CheckCapsuleSquare(float _rad1, float _height1, vec3 _pos1, vec3 _dimensions2, vec3 _pos2, Hit& hit) const;
+    bool CheckCapsuleCapsule(float _rad1, float _height1, vec3 _pos1, float _rad2, float _height2, vec3 _pos2, Hit& hit) const;
 
     virtual bool Collides(float _rad1, vec3 _pos1, Hit& hit) = 0;
     virtual bool Collides(vec3 dimensions, vec3 _pos1, Hit& hit) = 0;
+    virtual bool Collides(float _height, float radius, vec3 _pos1, Hit& hit) = 0;
     virtual bool Collides(Collider* other, Hit& hit) = 0;
     virtual bool RayCollides(vec3 _rayOrigin, vec3 _rayDir, Hit& hit) = 0;
     virtual bool CheckInBounds(const vec2& xBounds, const vec2& yBounds, const vec2& zBounds, bool triggerDelegate = true) = 0;

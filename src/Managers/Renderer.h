@@ -43,7 +43,8 @@ public:
 
     static const vector<float> GetCubeVertex() { return cubeVertex; }
     static const vector<float> GetSphereVertex() { return sphereVertex; }
-    static const vector<unsigned int>& GetShereIndex() { return sphereIndex; }
+    static const void GenerateCapsuleVertex(float radius, float height, vector<float>& vertices, vector<unsigned int>& indices);
+    static const vector<unsigned int>& GetSphereIndex() { return sphereIndex; }
     static void SetSphereVertex(float radius, int sectors, int stacks)
     {
         sphereVertex.clear();
