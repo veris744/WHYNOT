@@ -15,7 +15,8 @@ class World
     unordered_map<string, std::shared_ptr<Entity>> entities;
     vector<Camera*> cameras;
     vector<LightSource*> lights;
-    std::unique_ptr<Player> playerEntity;
+    Player* playerEntity;
+    std::unique_ptr<Entity> editorViewerEntity;
 
     set<std::shared_ptr<Entity>> toBeDestroyed;
     set<std::shared_ptr<Widget>> toBeDestroyedWidgets;
@@ -50,7 +51,17 @@ public:
     static GameManager* GetGameManager() { return gameManager.get(); }
 
 
-    Player* GetPlayer() const { return playerEntity.get(); }
+    void SetPlayer(Player* _player)
+    {
+        if (playerEntity != nullptr)
+        {
+            Logger::Log(LogLevel::Warning, "Player already set. Replacing it.");
+            entities.erase("Player");
+        }
+        playerEntity = _player;
+    }
+    Player* GetPlayer() const { return playerEntity; }
+    Entity* GetEditorPlayer() const { return editorViewerEntity.get(); }
     
     template <typename T>
     void AddEntity(const std::shared_ptr<T>& _entity)

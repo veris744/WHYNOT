@@ -188,10 +188,11 @@ void InputManager::HandleKeyPress(int key, int mods)
         case GLFW_KEY_W:
             playerController->SetInput(vec3(0,0,1));
             break;
-        break;
         case GLFW_KEY_F1:
             EditorMode::EnterEditorMode();
-        break;
+            playerController = World::GetInstance()->GetEditorPlayer()->GetComponent<PlayerController>();
+            playerTransform = World::GetInstance()->GetEditorPlayer()->GetComponent<Transform>();
+            break;
         case GLFW_KEY_P:
         {
             if (World::GetInstance()->IsPaused())
@@ -356,14 +357,20 @@ void InputManager::Clear()
     playerTransform = nullptr;
 }
 
-void InputManager::ScapeInput() const 
+void InputManager::ScapeInput()
 {
     if (ConfigurationValues::IsEditorOpen)
     {
         if (EditorMode::GetSelectedEntity())
+        {
             EditorMode::Unselect();
+        }
         else
+        {
             EditorMode::ExitEditorMode();
+            playerController = World::GetInstance()->GetPlayer()->GetComponent<PlayerController>();
+            playerTransform = World::GetInstance()->GetPlayer()->GetComponent<Transform>();
+        }
         return;
     }
 

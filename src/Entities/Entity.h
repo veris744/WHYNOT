@@ -27,8 +27,8 @@ public:
     Entity(const string& _name)
         :name(_name)
         {}
-    Entity(const string& _name, bool _isCamera = false, bool _isLight = false)
-        : isCamera(_isCamera), isLight(_isLight), name(_name)
+    Entity(const string& _name, bool _isCamera = false, bool _isLight = false, bool _isRendered = false, bool _hasCollision = false)
+        : isCamera(_isCamera), isLight(_isLight), isRendered(_isRendered), hasCollision(_hasCollision), name(_name)
         {}
     virtual ~Entity() = default;
     

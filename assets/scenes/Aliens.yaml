@@ -1,5 +1,6 @@
 ---
 entities:
+  - type: "PLAYER"
   - name: "Light2"
     components:
       - name: "LIGHT"

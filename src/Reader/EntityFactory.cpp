@@ -30,6 +30,12 @@ void EntityFactory::EntityFactorySetup()
             deserialize(data, proj);
             return proj;
         });
+    RegisterEntity("PLAYER", [](const YAML::Node& data) ->
+        std::shared_ptr<Entity> {
+            std::shared_ptr<Player> player = std::make_shared<Player>();
+            deserialize(data, player);
+            return player;
+        });
 }
 
 void EntityFactory::RegisterEntity(const std::string& type, EntityCreator creator)

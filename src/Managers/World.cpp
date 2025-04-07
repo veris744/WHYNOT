@@ -4,6 +4,7 @@
 #include <Components/PlayerController.h>
 #include <Components/Transform.h>
 #include <GameManagers/MapManager.h>
+#include <Utils/Parser.h>
 
 #include "ConfigurationValues.h"
 #include "Renderer.h"
@@ -39,9 +40,19 @@ World::World()
 
 void World::Initialize()
 {
-    playerEntity = std::make_unique<Player>();
-    playerEntity->Initialize();
-    cameras.push_back(playerEntity->GetComponent<Camera>());
+    editorViewerEntity = std::make_unique<Entity>("EditorPlayer", true, false, false, false);
+    editorViewerEntity->AddComponent(std::make_unique<Transform>());
+    editorViewerEntity->AddComponent(std::make_unique<Camera>());
+    std::unique_ptr<Movement> move = std::make_unique<Movement>();
+    move->SkipWhenPause(false);
+    editorViewerEntity->AddComponent(std::move(move));
+    std::unique_ptr<PlayerController> pc = std::make_unique<PlayerController>();
+    pc->SkipWhenPause(false);
+    pc->EnterFreeMode(true);
+    editorViewerEntity->AddComponent(std::move(pc));
+    editorViewerEntity->isActive = false;
+    cameras.push_back(editorViewerEntity->GetComponent<Camera>());
+
     LoadScene("MainMenu");
 }
 
@@ -58,8 +69,13 @@ void World::Update(float deltaTime)
 {
     if (!isSceneLoaded) return;
 
-    playerEntity->Update(deltaTime);
+    if (editorViewerEntity->isActive)
+    {
+        editorViewerEntity->Update(deltaTime);
+    }
 
+    // Logger::Log(LogLevel::Info, Parser::Parse(playerEntity->GetComponent<Transform>()->position));
+    // Logger::Log(LogLevel::Info, Parser::Parse(playerEntity->GetComponent<Transform>()->rotation.vector()));
     CollisionManager::CheckCollisions();
     for (const auto& entity : entities)
     {
@@ -274,6 +290,7 @@ void World::DoLoad()
     }
     playerEntity->GetComponent<Transform>()->position = gameManager ? gameManager->GetPlayerStart() : vec3(0,0,0);
     playerEntity->GetComponent<Transform>()->SetRotation(gameManager ? gameManager->GetPlayerStartRotation() : vec3(0,0,0));
+    SetCurrentCamera("Player");
 
     if (!playerEntity)
     {
@@ -317,6 +334,8 @@ void World::UnloadScene()
     CollisionManager::ClearOctree();
     EditorMode::ClearEditor();
     gameManager.reset();
+    playerEntity = nullptr;
+    InputManager::GetInstance()->Clear();
 }
 
 void World::EndApplication()

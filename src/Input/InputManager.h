@@ -48,7 +48,7 @@ class InputManager
     vec3 movementInputPlaneValue = vec3(0, 0, 0);
     vec2 movementInputAxisValue = vec2(0, 0);
     
-    void ScapeInput() const;
+    void ScapeInput();
 
     //USEFUL ASSETS
     PlayerController* playerController;

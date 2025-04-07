@@ -11,10 +11,12 @@ unsigned int Player::counter = 0;
 
 void Player::Initialize()
 {
-    isCamera = true;
-    isLight = false;
-    isRendered = false;
-    hasCollision = false;
+    name = "Player";
+
+    // isCamera = true;
+    // isLight = false;
+    // isRendered = false;
+    // hasCollision = true;
 
     if (!GetComponent<Camera>())
     {
@@ -38,7 +40,6 @@ void Player::Initialize()
     {
         std::unique_ptr<Movement> movement = std::make_unique<Movement>();
         movement->maxSpeed = 7;
-        movement->SkipWhenPause(false);
         AddComponent(std::move(movement));
     }
 
@@ -51,7 +52,8 @@ void Player::Initialize()
     }
 
     isActive = true;
-    // Entity::Initialize();
+    World::GetInstance()->SetPlayer(this);
+    Entity::Initialize();
 }
 
 void Player::Update(float _deltaTime)

@@ -37,3 +37,6 @@ widgets:
         align: "CENTER"
         alignVertical: "BOTTOM"
         padding: [0, 25]
+
+entities:
+  - type: "PLAYER"

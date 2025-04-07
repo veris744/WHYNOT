@@ -53,7 +53,12 @@ void EditorMode::EnterEditorMode()
     ConfigurationValues::CanPlayerLook = false;
     ConfigurationValues::CanPlayerMove = true;
     ConfigurationValues::IsUIActive = true;
-    World::GetInstance()->GetPlayer()->GetComponent<PlayerController>()->EnterFreeMode(true);
+
+    World::GetInstance()->GetEditorPlayer()->GetComponent<Transform>()->position = World::GetInstance()->GetPlayer()->GetComponent<Transform>()->position;
+    World::GetInstance()->GetEditorPlayer()->GetComponent<Transform>()->SetRotation(World::GetInstance()->GetPlayer()->GetComponent<Transform>()->rotation.vector());
+    World::GetInstance()->GetEditorPlayer()->isActive = true;
+    World::GetInstance()->SetCurrentCamera("EditorPlayer");
+
 
     Helper::SetCursorVisible(true);
 
@@ -89,7 +94,9 @@ void EditorMode::ExitEditorMode()
     ClearEditor();
 
     ConfigurationValues::IsEditorOpen = false;
-    World::GetInstance()->GetPlayer()->GetComponent<PlayerController>()->EnterFreeMode(false);
+
+    World::GetInstance()->GetEditorPlayer()->isActive = false;
+    World::GetInstance()->SetCurrentCamera("Player");
 
     if (World::GetGameManager())
     {

@@ -16,7 +16,6 @@ class Debugger
     static unordered_map<std::unique_ptr<Mesh>, mat4> meshesToRenderInFrame;
     static map<unique_ptr<Mesh>, mat4> meshesToRender;
 
-
     static bool collisionDebugEnabled;
     static bool transformDebugEnabled;
     
