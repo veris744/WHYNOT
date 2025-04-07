@@ -29,4 +29,5 @@ public:
 
     bool debugEnabled = false;
     bool IsSkippedWhenPause() const { return isSkippedWhenPause; }
+    void SkipWhenPause(bool _skip) { isSkippedWhenPause = _skip; }
 };

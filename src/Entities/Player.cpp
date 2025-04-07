@@ -38,6 +38,7 @@ void Player::Initialize()
     {
         std::unique_ptr<Movement> movement = std::make_unique<Movement>();
         movement->maxSpeed = 7;
+        movement->SkipWhenPause(false);
         AddComponent(std::move(movement));
     }
 

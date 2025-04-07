@@ -28,7 +28,7 @@ entities:
       - name: "COLLIDER"
         type: "CAPSULE"
         radius: 0.5
-        height: 2
+        height: 3
         profile:
           type: "DYNAMIC"
           mode: "ALL"

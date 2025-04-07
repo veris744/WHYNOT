@@ -17,6 +17,7 @@ class PlayerController : public Component
 public:
     PlayerController()
     {
+        isSkippedWhenPause = false;
         name = "PLAYERCONTROLLER";
     }
 
