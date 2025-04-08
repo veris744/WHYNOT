@@ -119,6 +119,7 @@ void InputManager::Update(float _deltaTime)
         playerTransform = World::GetInstance()->GetPlayer()->GetComponent<Transform>();
     }
     ProcessInput();
+    ProcessPlayerInput();
 }
 
 
@@ -156,6 +157,18 @@ void InputManager::ProcessInput()
     }
 }
 
+void InputManager::ProcessPlayerInput() const
+{
+    if (!playerController) return;
+
+    playerController->currentInput = vec3(0);
+    if (keysStatus[GLFW_KEY_A] == KeyStatus::PRESSED) playerController->currentInput.x -= 1;
+    if (keysStatus[GLFW_KEY_D] == KeyStatus::PRESSED) playerController->currentInput.x += 1;
+
+    if (keysStatus[GLFW_KEY_W] == KeyStatus::PRESSED) playerController->currentInput.z += 1;
+    if (keysStatus[GLFW_KEY_S] == KeyStatus::PRESSED) playerController->currentInput.z -= 1;
+}
+
 void InputManager::HandleKeyPress(int key, int mods)
 {
     if (ConfigurationValues::IsEditorOpen)
@@ -170,24 +183,24 @@ void InputManager::HandleKeyPress(int key, int mods)
         case GLFW_KEY_ESCAPE:
             ScapeInput();
             break;
-        case GLFW_KEY_UP:
-            playerController->SetInput(vec3(0,1,0));
-            break;
-        case GLFW_KEY_DOWN:
-            playerController->SetInput(vec3(0,-1,0));
-            break;
-        case GLFW_KEY_A:
-            playerController->SetInput(vec3(-1,0,0));
-            break;
-        case GLFW_KEY_D:
-            playerController->SetInput(vec3(1,0,0));
-            break;
-        case GLFW_KEY_S:
-            playerController->SetInput(vec3(0,0,-1));
-            break;
-        case GLFW_KEY_W:
-            playerController->SetInput(vec3(0,0,1));
-            break;
+        // case GLFW_KEY_UP:
+        //     playerController->currentInput.y += 1;
+        //     break;
+        // case GLFW_KEY_DOWN:
+        //     playerController->currentInput.y -= 1;
+        //     break;
+        // case GLFW_KEY_A:
+        //     playerController->currentInput.x -= 1;
+        //     break;
+        // case GLFW_KEY_D:
+        //     playerController->currentInput.x += 1;
+        //     break;
+        // case GLFW_KEY_S:
+        //     playerController->currentInput.z -= 1;
+        //     break;
+        // case GLFW_KEY_W:
+        //     playerController->currentInput.z += 1;
+        //     break;
         case GLFW_KEY_F1:
             EditorMode::EnterEditorMode();
             playerController = World::GetInstance()->GetEditorPlayer()->GetComponent<PlayerController>();
@@ -210,30 +223,30 @@ void InputManager::HandleKeyPress(int key, int mods)
 
 void InputManager::HandleKeyRelease(int key, int mods)
 {
-    if (EditorMode::isInputBoxOpen) return;
-    switch(key)
-    {
-    case GLFW_KEY_UP:
-        playerController->SetInput(vec3(playerController->GetInput().x,0,playerController->GetInput().z));
-        break;
-    case GLFW_KEY_DOWN:
-        playerController->SetInput(vec3(playerController->GetInput().x,0,playerController->GetInput().z));
-        break;
-    case GLFW_KEY_A:
-        playerController->SetInput(vec3(0,playerController->GetInput().y,playerController->GetInput().z));
-        break;
-    case GLFW_KEY_D:
-        playerController->SetInput(vec3(0, playerController->GetInput().y,playerController->GetInput().z));
-        break;
-    case GLFW_KEY_S:
-        playerController->SetInput(vec3(playerController->GetInput().x,playerController->GetInput().y, 0));
-        break;
-    case GLFW_KEY_W:
-        playerController->SetInput(vec3(playerController->GetInput().x,playerController->GetInput().y, 0));
-        break;
-    default: 
-        break;
-    }
+    // if (EditorMode::isInputBoxOpen) return;
+    // switch(key)
+    // {
+    // case GLFW_KEY_UP:
+    //     playerController->currentInput.y -= 1;
+    //     break;
+    // case GLFW_KEY_DOWN:
+    //     playerController->currentInput.y += 1;
+    //     break;
+    // case GLFW_KEY_A:
+    //     playerController->currentInput.x += 1;
+    //     break;
+    // case GLFW_KEY_D:
+    //     playerController->currentInput.x -= 1;
+    //     break;
+    // case GLFW_KEY_S:
+    //     playerController->currentInput.z -= 1;
+    //     break;
+    // case GLFW_KEY_W:
+    //     playerController->currentInput.z += 1;
+    //     break;
+    // default:
+    //     break;
+    // }
 }
 
 void InputManager::HandleMouseButtonPress(int key)

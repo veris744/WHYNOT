@@ -1,5 +1,7 @@
 #include "Player.h"
 
+#include <Components/CapsuleCollider.h>
+
 #include "Components/Audio.h"
 #include "Components/Camera.h"
 #include "Components/PlayerController.h"
@@ -39,7 +41,8 @@ void Player::Initialize()
     if (!GetComponent<Movement>())
     {
         std::unique_ptr<Movement> movement = std::make_unique<Movement>();
-        movement->maxSpeed = 7;
+        movement->usesPhysics = true;
+        movement->isAffectedByGravity = true;
         AddComponent(std::move(movement));
     }
 
@@ -49,6 +52,15 @@ void Player::Initialize()
         audioSource->AddAudioSource(AudioSource("Shoot", "assets/sounds/shoot.wav"));
         audioSource->AddAudioSource(AudioSource("NoShot", "assets/sounds/noshot.wav"));
         AddComponent(std::move(audioSource));
+    }
+
+    if (!GetComponent<Collider>())
+    {
+        std::unique_ptr<CapsuleCollider> collider = std::make_unique<CapsuleCollider>();
+        collider->radius = 4;
+        collider->height = 16;
+        collider->profile = CollisionProfile(ColliderType::Dynamic, ColliderMode::All);
+        AddComponent(std::move(collider));
     }
 
     isActive = true;

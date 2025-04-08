@@ -22,6 +22,8 @@ public:
         isSkippedWhenPause = false;
     }
 
+    //vec3 collision_pos = vec3(0, 0, 0);
+
     vec3 position;
     vec3 scale;
     Rotation rotation;

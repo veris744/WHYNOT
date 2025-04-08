@@ -267,7 +267,12 @@ void Collider::UpdateMovement(vec3 _normal)
                 Logger::Log(LogLevel::Error, "Dynamic Object doesn't have movement component");
             }
         }
-        movement->impactNormal = _normal;
+        movement->impactNormal += _normal;
+        for (int i = 0; i < 3; i++)
+        {
+            movement->impactNormal[i] = std::clamp(movement->impactNormal[i], -1.0f, 1.0f);
+        }
+        //+transform->collision_pos = transform->position + movement->impactNormal;
     }
 }
 

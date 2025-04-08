@@ -15,6 +15,8 @@ void MapManager::PrepareGame()
     ConfigurationValues::CanPlayerMove = true;
     ConfigurationValues::IsEditorOpen = false;
     ConfigurationValues::IsUIActive = false;
+
+    playerStart = {0, 11, 0};
 }
 
 void MapManager::StartGame()

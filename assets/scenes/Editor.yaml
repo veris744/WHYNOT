@@ -17,19 +17,18 @@ entities:
           type: "DIRECTIONAL"
   - components:
       - name: "TRANSFORM"
-        position: [0, 2, -5]
+        position: [0, 4, -5]
         rotation:
           yaw: 45
-        scale: [0.5,0.5,0.5]
+        scale: [1,1,1]
       - name: "MOVEMENT"
         isAffectedByGravity: true
         usesPhysics: true
       - name: "MODEL"
         path: "assets/backpack/backpack.obj"
       - name: "COLLIDER"
-        type: "CAPSULE"
-        radius: 0.5
-        height: 3
+        type: "CIRCLE"
+        radius: 1.5
         profile:
           type: "DYNAMIC"
           mode: "ALL"
@@ -49,10 +48,10 @@ entities:
 #          mode: "ALL"
   - components:
       - name: "TRANSFORM"
-        position: [0, -6, 0]
-        scale: [20, 0.1, 20]
+        position: [0, 0, 0]
+        scale: [50, 0.1, 50]
       - name: "COLLIDER"
-        dimensions: [20, 0.1, 20]
+        dimensions: [50, 0.1, 50]
         type: "BOX"
         profile:
           type: "STATIC"
@@ -66,4 +65,22 @@ entities:
             materialData:
               type: TEXTURE
               shininess: 10
-              color: [ 0.8, 0.8, 0.8, 1]
+  - components:
+      - name: "TRANSFORM"
+        position: [-5, 10, 0]
+        scale: [0.1, 25, 10]
+      - name: "COLLIDER"
+        dimensions: [0.1, 25, 10]
+        type: "BOX"
+        profile:
+          type: "STATIC"
+          mode: "ALL"
+      - name: "MODEL"
+        mesh:
+          primitive: "BOX"
+          material:
+            texturePaths: ["assets/2dImages/ground.jpg"]
+            wrapMode: "REPEAT"
+            materialData:
+              type: TEXTURE
+              shininess: 10

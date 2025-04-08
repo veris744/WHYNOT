@@ -10,6 +10,13 @@
 #include "Components/Movement.h"
 
 
+float moveToward(float current, float target, float maxDelta)
+{
+    if (abs(current - target) <= maxDelta)
+        return target;
+    return current + sign(target - current) * maxDelta;
+}
+
 void PlayerController::Update(float deltaTime)
 {
     if (!transform)
@@ -32,51 +39,54 @@ void PlayerController::Update(float deltaTime)
 
 void PlayerController::UpdateMovement(float deltaTime) const
 {
-    vec3 direction = vec3(0);
+    // Handle player input movement
+    vec3 inputDirection = vec3(0);
 
     if (length(currentInput) > 0.0f)
     {
         vec3 inputDir = normalize(currentInput);
         if (freeMode)
         {
-            direction = inputDir.x * transform->right + inputDir.y * transform->up + inputDir.z * transform->forward;
+            inputDirection = inputDir.x * transform->right + inputDir.y * transform->up + inputDir.z * transform->forward;
         }
         else
         {
-            direction = inputDir.x * transform->right + inputDir.z * transform->forward;
-            direction = vec3(direction.x, 0, direction.z);
+            inputDirection = inputDir.x * transform->right + inputDir.z * transform->forward;
+            inputDirection = vec3(inputDirection.x, 0, inputDirection.z);
         }
     }
 
-    vec3 acceleration = vec3(0, 0, 0);
-    // Compute the change needed per axis
+    // Calculate desired velocity based on input
+    vec3 desiredVelocity = vec3(0);
+    if (length(inputDirection) > 0.0f)
+    {
+        desiredVelocity = normalize(inputDirection) * movement->maxSpeed;
+    }
+
+    // Apply acceleration toward desired velocity
     for (int i = 0; i < 3; ++i)
     {
-        float inputComponent = direction[i];
-        float speedComponent = movement->speed[i];
+        // Skip Y-axis acceleration if not in free mode (let gravity handle it)
+        if (i == 1 && !freeMode) continue;
 
-        if (std::abs(inputComponent) > 0.01f)
+        if (std::abs(desiredVelocity[i]) > 0.01f)
         {
-            acceleration[i] = inputComponent * deltaTime;
-        }
-        else if (std::abs(speedComponent) > 1.0f)
-        {
-            acceleration[i] = -sign(speedComponent) * deltaTime;
+            // Accelerate toward desired velocity
+            movement->speed[i] = moveToward(
+                movement->speed[i],
+                desiredVelocity[i],
+                accelerationRate * deltaTime
+            );
         }
         else
         {
-            acceleration[i] = 0.0f;
-            movement->speed[i] = 0.0f;
+            // Decelerate when no input
+            movement->speed[i] = moveToward(
+                movement->speed[i],
+                0.0f,
+                decelerationRate * deltaTime
+            );
         }
-    }
-    if (length(acceleration) > 0.0f)
-    {
-        acceleration = normalize(acceleration);
-        movement->acceleration += acceleration * accelerationRate;
-    }
-    else
-    {
-        movement->acceleration = vec3(0, 0, 0);
     }
 }
 

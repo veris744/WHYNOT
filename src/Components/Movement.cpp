@@ -29,12 +29,21 @@ void Movement::Update(float deltaTime)
 
     if (usesPhysics && length(impactNormal) > 0.0f)
     {
-        float dotProduct = dot(speed, impactNormal);
-        if (dotProduct < 0.0f)
+        for (int i = 0; i < 3; i++)
         {
-            speed = speed - dotProduct * impactNormal;
+            vec3 frag = vec3(0);
+            if (i == 0) frag = vec3(impactNormal.x,0,0);
+            if (i == 1) frag = vec3(0,impactNormal.y,0);
+            if (i == 2) frag = vec3(0,0,impactNormal.z);
+
+            float dotProduct = dot(speed, frag);
+            if (dotProduct < 0.0f)
+            {
+                speed = speed - dotProduct * frag;
+            }
         }
     }
+
     transform->position = transform->position + speed * deltaTime;
     impactNormal = vec3(0.0f);
 }
