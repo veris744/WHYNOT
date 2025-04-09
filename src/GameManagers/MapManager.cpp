@@ -4,8 +4,10 @@
 
 #include "MapManager.h"
 
+#include <Components/Movement.h>
 #include <Managers/ConfigurationValues.h>
 #include <Managers/Helper.h>
+#include <Managers/World.h>
 
 void MapManager::PrepareGame()
 {
@@ -21,6 +23,8 @@ void MapManager::PrepareGame()
 
 void MapManager::StartGame()
 {
+    World::GetInstance()->GetPlayer()->GetComponent<Movement>()->usesPhysics = true;
+    World::GetInstance()->GetPlayer()->GetComponent<Movement>()->isAffectedByGravity = true;
 }
 
 void MapManager::EndGame()

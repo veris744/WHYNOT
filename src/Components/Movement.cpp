@@ -1,49 +1,56 @@
 #include "Movement.h"
 
 #include <Utils/Debugger.h>
-#include <Utils/Parser.h>
 
 #include "Transform.h"
 #include "Entities/Entity.h"
 
 void Movement::Update(float deltaTime)
 {
-    if (!transform)
-    {
+    if (!transform) {
         transform = parent->GetComponent<Transform>();
     }
 
-    if (length(acceleration) > maxAcceleration)
-    {
+    if (isAffectedByGravity) {
+        AddForce(vec3(0.0f, -15.0f * mass, 0.0f));
+    }
+
+    acceleration = accumulatedForce / mass;
+    ResetForces();
+
+    if (length(acceleration) > maxAcceleration) {
         acceleration = normalize(acceleration) * maxAcceleration;
     }
-    speed = speed + acceleration * deltaTime;
-    if (isAffectedByGravity)
-    {
-        speed.y -= 9.8f * deltaTime;
-    }
-    if (length(speed) > maxSpeed)
-    {
+
+    speed += acceleration * deltaTime;
+    if (length(speed) > maxSpeed) {
         speed = normalize(speed) * maxSpeed;
     }
 
-    if (usesPhysics && length(impactNormal) > 0.0f)
-    {
-        for (int i = 0; i < 3; i++)
-        {
-            vec3 frag = vec3(0);
-            if (i == 0) frag = vec3(impactNormal.x,0,0);
-            if (i == 1) frag = vec3(0,impactNormal.y,0);
-            if (i == 2) frag = vec3(0,0,impactNormal.z);
-
-            float dotProduct = dot(speed, frag);
-            if (dotProduct < 0.0f)
-            {
-                speed = speed - dotProduct * frag;
+    // Handle collisions
+    if (usesPhysics && collisionNormals.size() > 0) {
+        for (const vec3& normal : collisionNormals) {
+            float dotProduct = dot(speed, normal);
+            if (dotProduct < 0.0f) {
+                speed -= dotProduct * normal;
             }
         }
+        collisionNormals.clear();
     }
+    transform->position += speed * deltaTime;
+}
 
-    transform->position = transform->position + speed * deltaTime;
-    impactNormal = vec3(0.0f);
+void Movement::AddForce(vec3 force)
+{
+    accumulatedForce += force;
+}
+
+void Movement::ResetForces()
+{
+    accumulatedForce = vec3(0.0f);
+}
+
+void Movement::AddImpulse(vec3 impulse)
+{
+    speed += impulse / mass;
 }

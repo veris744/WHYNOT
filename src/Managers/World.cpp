@@ -74,9 +74,6 @@ void World::Update(float deltaTime)
         editorViewerEntity->Update(deltaTime);
     }
 
-    // Logger::Log(LogLevel::Info, Parser::Parse(playerEntity->GetComponent<Transform>()->position));
-    // Logger::Log(LogLevel::Info, Parser::Parse(playerEntity->GetComponent<Transform>()->rotation.vector()));
-    CollisionManager::CheckCollisions();
     for (const auto& entity : entities)
     {
         if (!entity.second->isActive)
@@ -269,6 +266,7 @@ void World::DoLoad()
     if (currentScene == "Aliens")
     {
         gameManager = std::make_unique<AliensLogic>();
+        Resume();
     }
     else if (currentScene == "MainMenu")
     {
@@ -278,10 +276,12 @@ void World::DoLoad()
         ConfigurationValues::CanPlayerMove = false;
         ConfigurationValues::IsEditorOpen = false;
         ConfigurationValues::IsUIActive = true;
+        Pause();
     }
     else if (currentScene == "Editor")
     {
         gameManager = std::make_unique<MapManager>();
+        Resume();
     }
     if (gameManager)
     {

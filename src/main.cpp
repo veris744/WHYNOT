@@ -1,6 +1,8 @@
 // WHYNOT.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
 
+#include <Physics/CollisionManager.h>
+
 #include "Managers/TextRenderer.h"
 #include "Managers/Helper.h"
 #include "Input/InputManager.h"
@@ -37,10 +39,10 @@ int main()
         Helper::Draw();
         World::GetInstance()->PrepareLoad();
 
-        InputManager::GetInstance()->Update(deltaTime);
-
         if (World::IsSceneLoaded())
         {
+            CollisionManager::CheckCollisions();
+            InputManager::GetInstance()->Update(deltaTime);
             World::GetInstance()->Update(deltaTime);
 
             Renderer::instance().Render();
@@ -48,6 +50,10 @@ int main()
 
             Renderer2D::instance().Render();
             Renderer2D::instance().Clear();
+        }
+        else
+        {
+            InputManager::GetInstance()->Update(deltaTime);
         }
 
         World::GetInstance()->Clean();

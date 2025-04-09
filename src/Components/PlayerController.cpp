@@ -105,3 +105,9 @@ void PlayerController::Shoot()
     bCanShoot = false;
     Timer::StartTimer(0.3f, this, &PlayerController::SetCanShoot, true);
 }
+
+void PlayerController::Jump()
+{
+    if (ConfigurationValues::CanPlayerMove && movement->IsGrounded())
+        movement->AddImpulse(vec3(0, 7, 0));
+}

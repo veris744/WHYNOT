@@ -75,6 +75,8 @@ void AliensLogic::StartGame()
         alien->isActive = true;
     }
     World::GetInstance()->GetPlayer()->GetComponent<PlayerController>()->SetCanShoot(true);
+    World::GetInstance()->GetPlayer()->GetComponent<Movement>()->usesPhysics = false;
+    World::GetInstance()->GetPlayer()->GetComponent<Movement>()->isAffectedByGravity = false;
 }
 
 void AliensLogic::ShootProjectile()

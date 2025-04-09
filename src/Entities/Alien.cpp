@@ -66,6 +66,8 @@ void Alien::Initialize()
     {
         movement = GetComponent<Movement>();
     }
+    movement->usesPhysics = false;
+    movement->isAffectedByGravity = false;
     
     Entity::Initialize();
 }
@@ -136,6 +138,5 @@ void Alien::OnCollision(Entity* _otherEntity, vec3 _normal)
     if (dynamic_cast<Alien*>(_otherEntity))
     {
         movement->speed = _normal * length(movement->speed);
-        movement->impactNormal = vec3(0);
     }
 }

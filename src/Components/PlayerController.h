@@ -28,6 +28,7 @@ public:
     void UpdateMovement(float deltaTime) const;
     void EnterFreeMode(bool _freeMode);
     void Shoot();
+    void Jump();
     void SetCanShoot(bool _canShoot) { bCanShoot = _canShoot; }
 };
 REGISTER_CLASS(PlayerController,

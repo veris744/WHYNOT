@@ -16,9 +16,11 @@ public:
     vec3 acceleration;
     float maxSpeed;
     float maxAcceleration;
+    vec3 accumulatedForce = vec3(0);
     bool usesPhysics = false;
     bool isAffectedByGravity = false;
-    vec3 impactNormal = vec3(0, 0, 0);
+    std::vector<vec3> collisionNormals;
+    float mass = 1.0f;
 
     Movement(): speed(vec3(0)), acceleration(vec3(0)), maxSpeed(10), maxAcceleration(10)
     {
@@ -31,6 +33,19 @@ public:
     {
         speed = vec3(0, 0, 0);
         acceleration = vec3(0, 0, 0);
+    }
+    void AddForce(vec3 force);
+    void ResetForces();
+    void AddImpulse(vec3 impulse);
+
+    bool IsGrounded() const
+    {
+        float y = 0;
+        for (const auto& normal : collisionNormals)
+        {
+            y += normal.y;
+        }
+        return y > 0;
     }
 };
 

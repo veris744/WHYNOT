@@ -183,24 +183,9 @@ void InputManager::HandleKeyPress(int key, int mods)
         case GLFW_KEY_ESCAPE:
             ScapeInput();
             break;
-        // case GLFW_KEY_UP:
-        //     playerController->currentInput.y += 1;
-        //     break;
-        // case GLFW_KEY_DOWN:
-        //     playerController->currentInput.y -= 1;
-        //     break;
-        // case GLFW_KEY_A:
-        //     playerController->currentInput.x -= 1;
-        //     break;
-        // case GLFW_KEY_D:
-        //     playerController->currentInput.x += 1;
-        //     break;
-        // case GLFW_KEY_S:
-        //     playerController->currentInput.z -= 1;
-        //     break;
-        // case GLFW_KEY_W:
-        //     playerController->currentInput.z += 1;
-        //     break;
+        case GLFW_KEY_SPACE:
+            playerController->Jump();
+            break;
         case GLFW_KEY_F1:
             EditorMode::EnterEditorMode();
             playerController = World::GetInstance()->GetEditorPlayer()->GetComponent<PlayerController>();
@@ -226,24 +211,6 @@ void InputManager::HandleKeyRelease(int key, int mods)
     // if (EditorMode::isInputBoxOpen) return;
     // switch(key)
     // {
-    // case GLFW_KEY_UP:
-    //     playerController->currentInput.y -= 1;
-    //     break;
-    // case GLFW_KEY_DOWN:
-    //     playerController->currentInput.y += 1;
-    //     break;
-    // case GLFW_KEY_A:
-    //     playerController->currentInput.x += 1;
-    //     break;
-    // case GLFW_KEY_D:
-    //     playerController->currentInput.x -= 1;
-    //     break;
-    // case GLFW_KEY_S:
-    //     playerController->currentInput.z -= 1;
-    //     break;
-    // case GLFW_KEY_W:
-    //     playerController->currentInput.z += 1;
-    //     break;
     // default:
     //     break;
     // }
