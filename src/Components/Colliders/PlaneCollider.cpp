@@ -42,23 +42,36 @@ bool PlaneCollider::Collides(vec2 _dimensions, vec3 _pos1, Hit& hit)
 
 bool PlaneCollider::RayCollides(vec3 _rayOrigin, vec3 _rayDir, Hit& hit)
 {
-    // Plane equation: normal • (point - planeOrigin) = 0
     vec3 planeNormal = vec3(0,1,0);
     vec3 planeOrigin = GetWorldPosition();
+    vec3 planeRight = vec3(1,0,0);
+    vec3 planeUp = vec3(0,0,1);
 
-    float denom = glm::dot(planeNormal, _rayDir);
+    float halfWidth = dimensions.x * 0.5f;
+    float halfHeight = dimensions.y * 0.5f;
 
-    // Parallel check (no intersection)
+    float denom = dot(planeNormal, _rayDir);
     if (fabs(denom) < FLT_EPSILON) return false;
 
-    float t = glm::dot(planeOrigin - _rayOrigin, planeNormal) / denom;
-
-    // Intersection behind ray origin
+    float t = dot(planeOrigin - _rayOrigin, planeNormal) / denom;
     if (t < 0) return false;
 
+    vec3 hitPoint = _rayOrigin + _rayDir * t;
+
+    // Convert hit point to plane-local space
+    vec3 localHit = hitPoint - planeOrigin;
+    float rightDist = dot(localHit, planeRight);
+    float upDist = dot(localHit, planeUp);
+
+    // Check if hit point is within plane bounds
+    if (fabs(rightDist) > halfWidth || fabs(upDist) > halfHeight)
+    {
+        return false;
+    }
+
     hit.hasHit = true;
-    hit.distSQ = t * t;
-    hit.point = _rayOrigin + _rayDir * t;
+    hit.point = hitPoint;
+    hit.distSQ = dot(hitPoint - _rayOrigin, hitPoint - _rayOrigin);
     hit.normal = planeNormal;
     hit.otherEntity = parent;
     hit.type = World;

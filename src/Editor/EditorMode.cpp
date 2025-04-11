@@ -88,7 +88,6 @@ void EditorMode::EnterEditorMode()
     {
         CreateInputBox();
     }
-    CollisionManager::PrepareOctree();
 }
 
 void EditorMode::ExitEditorMode()

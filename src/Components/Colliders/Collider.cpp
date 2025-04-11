@@ -255,95 +255,174 @@ bool Collider::CheckCapsuleCapsule(float _radCapsule, float _heightCapsule, vec3
 
 bool Collider::CheckPlaneCircle(vec2 _dimensionsPlane, vec3 _posPlane, float _radCircle, vec3 _posCircle, Hit& hit) const
 {
-    // Plane normal is assumed to be along _pos1's Z-axis (for 2D plane)
     vec3 planeNormal(0, 1, 0);
-    float planeDistance = _posPlane.z;
+    vec3 planeRight(1, 0, 0);
+    vec3 planeForward(0, 0, 1);
 
-    // Distance from sphere center to plane
-    float dist = glm::dot(_posCircle, planeNormal) - planeDistance;
-    float absDist = abs(dist);
+    // Distance from sphere to plane
+    float dist = dot(_posCircle - _posPlane, planeNormal);
 
-    if (absDist <= _radCircle) {
-        hit.hasHit = true;
-        hit.distSQ = (absDist - _radCircle) * (absDist - _radCircle); // Penetration depth squared
-        hit.point = _posCircle - planeNormal * dist; // Closest point on sphere to plane
-        hit.normal = (dist > 0) ? planeNormal : -planeNormal; // Normal points away from plane
-        return true;
+    if (fabs(dist) > _radCircle) return false;
+
+    // Project sphere center onto plane
+    vec3 projected = _posCircle - planeNormal * dist;
+
+    // Check if within plane bounds
+    vec3 localPos = projected - _posPlane;
+    float rightDist = dot(localPos, planeRight);
+    float forwardDist = dot(localPos, planeForward);
+
+    float halfWidth = _dimensionsPlane.x * 0.5f;
+    float halfLength = _dimensionsPlane.y * 0.5f;
+
+    if (fabs(rightDist) > halfWidth || fabs(forwardDist) > halfLength) {
+        // Find closest point on plane edges
+        vec3 clampedPoint = _posPlane;
+        clampedPoint += planeRight * glm::clamp(rightDist, -halfWidth, halfWidth);
+        clampedPoint += planeForward * glm::clamp(forwardDist, -halfLength, halfLength);
+
+        float edgeDist = length(_posCircle - clampedPoint);
+        if (edgeDist > _radCircle) return false;
+
+        hit.point = clampedPoint;
+    } else {
+        hit.point = projected;
     }
-    return false;
+
+    hit.hasHit = true;
+    hit.distSQ = (fabs(dist) - _radCircle) * (fabs(dist) - _radCircle);
+    hit.normal = (dist > 0) ? planeNormal : -planeNormal;
+    return true;
 }
 
 bool Collider::CheckPlaneSquare(vec2 _dimensionsPlane, vec3 _posPlane, vec3 _dimensionsSquare, vec3 _posSquare, Hit& hit) const
 {
     vec3 planeNormal(0, 1, 0);
-    float planeDistance = _posPlane.z;
-    vec3 halfExtents = _dimensionsSquare * 0.5f;
+    vec3 planeRight(1, 0, 0);
+    vec3 planeForward(0, 0, 1);
 
-    // Find closest AABB point to plane
-    vec3 closestPoint = _posSquare;
-    closestPoint.z = (planeNormal.z > 0) ? _posSquare.z - halfExtents.z : _posSquare.z + halfExtents.z;
+    // Check if square is parallel to plane
+    if (fabs(dot(planeNormal, vec3(0,1,0)) < 0.999f)) return false;
 
-    float dist = glm::dot(closestPoint, planeNormal) - planeDistance;
+    // Square bounds
+    vec3 squareHalf = _dimensionsSquare * 0.5f;
+    vec3 squareMin = _posSquare - squareHalf;
+    vec3 squareMax = _posSquare + squareHalf;
 
-    if (dist <= 0) {
-        hit.hasHit = true;
-        hit.distSQ = dist * dist;
-        hit.point = closestPoint;
-        hit.normal = planeNormal;
-        return true;
-    }
-    return false;
+    // Plane bounds
+    float halfWidth = _dimensionsPlane.x * 0.5f;
+    float halfLength = _dimensionsPlane.y * 0.5f;
+
+    // Find overlap area
+    vec3 planeMin = _posPlane - planeRight * halfWidth - planeForward * halfLength;
+    vec3 planeMax = _posPlane + planeRight * halfWidth + planeForward * halfLength;
+
+    if (squareMax.x < planeMin.x || squareMin.x > planeMax.x ||
+        squareMax.z < planeMin.z || squareMin.z > planeMax.z)
+        return false;
+
+    // Calculate collision data
+    hit.hasHit = true;
+    hit.point = (min(squareMax, planeMax) + max(squareMin, planeMin)) * 0.5f;
+    hit.normal = planeNormal;
+    hit.distSQ = 0; // They're touching
+
+    return true;
 }
 
 bool Collider::CheckPlaneCapsule(vec2 _dimensionsPlane, vec3 _posPlane, float _radCapsule, float _heightCapsule, vec3 _posCapsule, Hit& hit) const
 {
-    vec3 planeNormal(0, 1, 0); // Plane facing up (ground plane)
-    float planeDistance = _posPlane.y;
+    hit.hasHit = false;
 
-    // Capsule line segment endpoints (Y-axis aligned)
-    vec3 capBottom = _posCapsule - vec3(0, _heightCapsule * 0.5f, 0);
-    vec3 capTop = _posCapsule + vec3(0, _heightCapsule * 0.5f, 0);
+    // Calculate capsule endpoints (Y-axis aligned)
+    float halfHeight = (_heightCapsule * 0.5f) - _radCapsule;
+    vec3 capStart = _posCapsule + vec3(0, -halfHeight, 0);
+    vec3 capEnd = _posCapsule + vec3(0, halfHeight, 0);
 
-    // Project capsule endpoints onto plane normal
-    float dBottom = glm::dot(capBottom, planeNormal) - planeDistance;
-    float dTop = glm::dot(capTop, planeNormal) - planeDistance;
+    // Plane parameters (Y-up)
+    vec3 planeNormal(0, 1, 0);
+    float planeY = _posPlane.y;
 
-    // Find closest point on capsule segment to plane
-    float t = glm::clamp(-dBottom / (dTop - dBottom), 0.0f, 1.0f);
-    vec3 closestPoint = capBottom + t * (capTop - capBottom);
-    float distance = glm::dot(closestPoint, planeNormal) - planeDistance;
+    // Sample points along capsule segment
+    const int steps = 10;
+    float minDistSq = FLT_MAX;
+    vec3 closestOnSeg;
+    vec3 closestPoint;
 
-    // Check collision with capsule radius
-    if (abs(distance) <= _radCapsule)
-    {
-        hit.hasHit = true;
-        hit.distSQ = (abs(distance) - _radCapsule) * (abs(distance) - _radCapsule);
+    for (int i = 0; i <= steps; ++i) {
+        float t = float(i) / float(steps);
+        vec3 pointOnSeg = mix(capStart, capEnd, t);
 
-        // Calculate hit point (on capsule surface)
-        hit.point = closestPoint - planeNormal * distance;
+        // Distance to plane
+        float dist = pointOnSeg.y - planeY;
 
-        // Adjust hit point to capsule surface
-        if (distance > 0) {
-            hit.point -= planeNormal * _radCapsule; // Above plane
-        } else {
-            hit.point += planeNormal * _radCapsule; // Below plane
+        // Project point onto plane
+        vec3 projected = pointOnSeg;
+        projected.y = planeY;
+
+        // Check if within plane bounds (if finite)
+        if (_dimensionsPlane.x > 0 && _dimensionsPlane.y > 0) {
+            vec3 localPos = projected - _posPlane;
+            float rightDist = localPos.x;
+            float forwardDist = localPos.z;
+            float halfWidth = _dimensionsPlane.x * 0.5f;
+            float halfLength = _dimensionsPlane.y * 0.5f;
+
+            if (fabs(rightDist) > halfWidth || fabs(forwardDist) > halfLength) {
+                // Find closest point on plane perimeter
+                vec3 edgePoint = _posPlane;
+                edgePoint.x += glm::clamp(rightDist, -halfWidth, halfWidth);
+                edgePoint.z += glm::clamp(forwardDist, -halfLength, halfLength);
+                edgePoint.y = planeY;
+
+                float edgeDistSq = dot(pointOnSeg - edgePoint, pointOnSeg - edgePoint);
+                if (edgeDistSq < minDistSq) {
+                    minDistSq = edgeDistSq;
+                    closestOnSeg = pointOnSeg;
+                    hit.point = edgePoint;
+                }
+                continue;
+            }
         }
 
-        hit.normal = (distance > 0) ? planeNormal : -planeNormal;
+        // For infinite plane or points within bounds
+        float distSq = dist * dist;
+        if (distSq < minDistSq) {
+            minDistSq = distSq;
+            closestOnSeg = pointOnSeg;
+            hit.point = projected;
+        }
+    }
+
+    // Check if within capsule radius
+    if (minDistSq <= _radCapsule * _radCapsule) {
+        hit.hasHit = true;
+        hit.distSQ = minDistSq;
+
+        // Calculate normal (from plane to capsule)
+        if (minDistSq > 0.0001f) {
+            hit.normal = normalize(hit.point - closestOnSeg);
+        } else {
+            hit.normal = planeNormal;
+        }
+
+        // Adjust hit point to be on capsule surface
+        hit.point = closestOnSeg + hit.normal * _radCapsule;
         return true;
     }
+
     return false;
 }
 
-bool Collider::CheckPlanePlane(vec2 _dimensions1, vec3 _pos1, vec2 _dimensions2, vec3 _pos2, Hit& hit) const
+bool Collider::CheckPlanePlane(vec2 _dimensionsPlane, vec3 _posPlane, vec2 _dimensionsPlane2, vec3 _posPlane2, Hit& hit) const
 {
     vec3 normal1(0, 1, 0);
     vec3 normal2(0, 1, 0);
-    float d1 = _pos1.z;
-    float d2 = _pos2.z;
+    float d1 = _posPlane.z;
+    float d2 = _posPlane2.z;
 
     // Planes are parallel
-    if (abs(glm::dot(normal1, normal2)) > 0.999f) {
+    if (abs(dot(normal1, normal2)) > 0.999f) {
         // Check if coincident
         if (abs(d1 - d2) < 0.001f) {
             hit.hasHit = true;
@@ -359,7 +438,7 @@ bool Collider::CheckPlanePlane(vec2 _dimensions1, vec3 _pos1, vec2 _dimensions2,
     hit.hasHit = true;
     hit.distSQ = 0;
     hit.point = vec3(0); // No single intersection point
-    hit.normal = glm::normalize(glm::cross(normal1, normal2));
+    hit.normal = normalize(cross(normal1, normal2));
     return true;
 }
 
