@@ -49,16 +49,16 @@ entities:
   - components:
       - name: "TRANSFORM"
         position: [0, 0, 0]
-        scale: [50, 0.1, 50]
+        scale: [50, 1, 50]
       - name: "COLLIDER"
-        dimensions: [50, 0.1, 50]
-        type: "BOX"
+        dimensions: [50, 50]
+        type: "PLANE"
         profile:
           type: "STATIC"
           mode: "ALL"
       - name: "MODEL"
         mesh:
-          primitive: "BOX"
+          primitive: "PLANE"
           material:
             texturePaths: ["assets/2dImages/ground.jpg"]
             wrapMode: "REPEAT"

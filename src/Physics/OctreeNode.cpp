@@ -3,7 +3,7 @@
 #include <Utils/Parser.h>
 
 #include "Hit.h"
-#include "Components/Collider.h"
+#include "Components/Colliders/Collider.h"
 #include "Entities/Entity.h"
 
 

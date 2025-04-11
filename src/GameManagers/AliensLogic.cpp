@@ -5,7 +5,7 @@
 #include <Managers/ConfigurationValues.h>
 
 #include "Components/Audio.h"
-#include "Components/CircleCollider.h"
+#include "Components/Colliders/CircleCollider.h"
 #include "Components/Movement.h"
 #include "Components/Transform.h"
 #include "Entities/Alien.h"

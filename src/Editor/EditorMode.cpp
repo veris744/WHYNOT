@@ -2,6 +2,7 @@
 
 #include <Components/PlayerController.h>
 #include <Managers/ConfigurationValues.h>
+#include <Physics/CollisionManager.h>
 
 #include "Components/Transform.h"
 #include "Managers/World.h"
@@ -87,6 +88,7 @@ void EditorMode::EnterEditorMode()
     {
         CreateInputBox();
     }
+    CollisionManager::PrepareOctree();
 }
 
 void EditorMode::ExitEditorMode()
@@ -111,6 +113,7 @@ void EditorMode::ExitEditorMode()
             widget->SetActiveWithChildren(true);
         }
     }
+    CollisionManager::PrepareOctree();
     World::GetInstance()->Resume();
 }
 

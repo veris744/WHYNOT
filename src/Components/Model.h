@@ -32,17 +32,14 @@ public:
     bool enableCulling = true;
     
     Model();
-    Model (const char* _path)
+    Model (const char* _path, std::shared_ptr<Material> material = nullptr)
         : path(_path)
     {
         name = "MODEL";
-        LoadModel(path);
-    }
-    Model (const char* _path, std::shared_ptr<Material> material)
-        : path(_path)
-    {
-        name = "MODEL";
-        LoadModel(path, material);
+        if (material)
+            LoadModel(path, material);
+        else
+            LoadModel(path);
     }
     ~Model() override = default;
 

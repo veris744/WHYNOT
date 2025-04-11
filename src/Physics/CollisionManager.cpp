@@ -4,7 +4,7 @@
 #include <UI/Widget.h>
 
 #include "Hit.h"
-#include "Components/Collider.h"
+#include "Components/Colliders/Collider.h"
 #include "Managers/Helper.h"
 #include "Managers/World.h"
 #include "OctreeNode.h"
@@ -22,6 +22,10 @@ void CollisionManager::PrepareOctree()
     
         root = std::make_unique<OctreeNode>(worldBounds);
     }
+    else
+    {
+        root->Clear();
+    }
     
     for (const auto& [name, entity] : World::GetInstance()->GetEntities())
     {
@@ -37,6 +41,7 @@ void CollisionManager::PrepareOctree()
 void CollisionManager::CheckCollisions()
 {
     if (!root)  return;
+    if (World::GetInstance()->IsPaused())  return;
     
     for (auto& [id, entity] :  World::GetInstance()->GetEntities()) {
         Collider* collider = entity->GetComponent<Collider>();
@@ -114,7 +119,7 @@ Hit CollisionManager::ThrowRayFromScreen(vec2 mousePos, vec3 playerPosition, boo
 
     vec3 mousePos3D = playerPosition + rayDir;
 
-    return ThrowRay(playerPosition, mousePos3D - playerPosition, showDebug, timer);
+    return ThrowRay(playerPosition, (mousePos3D - playerPosition) * 10.f, showDebug, timer);
 }
 
 Hit CollisionManager::ThrowRay(vec3 rayOrigin, vec3 rayDirection, bool showDebug, float timer)
@@ -130,8 +135,8 @@ Hit CollisionManager::ThrowRay(vec3 rayOrigin, vec3 rayDirection, bool showDebug
             vec3(Helper::GetXBounds().y, Helper::GetYBounds().y, Helper::GetZBounds().y)};
         root = std::make_unique<OctreeNode>(worldBounds);
     }
+
     root->Clear();
-    
     for (auto& [id, entity] :  World::GetInstance()->GetEntities()) {
         Collider* collider = entity->GetComponent<Collider>();
         if (entity && entity->isActive && entity->HasCollision()

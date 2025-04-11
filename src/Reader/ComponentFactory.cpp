@@ -1,12 +1,13 @@
 #include "ComponentFactory.h"
 
-#include <Components/BoxCollider.h>
-#include <Components/CapsuleCollider.h>
+#include <Components/Colliders/BoxCollider.h>
+#include <Components/Colliders/CapsuleCollider.h>
+#include <Components/Colliders/PlaneCollider.h>
 
 #include "Reader.h"
 #include "Components/Transform.h"
 #include "Components/Camera.h"
-#include "Components/CircleCollider.h"
+#include "Components/Colliders/CircleCollider.h"
 #include "Components/LightSource.h"
 #include "Graphics/Mesh.h"
 #include "Components/Model.h"
@@ -89,6 +90,12 @@ void ComponentFactory::ComponentFactorySetup()
                 deserialize(data, collider);
                 entity->AddComponent(std::move(collider));
             }
+            else if (ReadString(data, "type") == "PLANE")
+            {
+                std::unique_ptr<PlaneCollider> collider = std::make_unique<PlaneCollider>();
+                deserialize(data, collider);
+                entity->AddComponent(std::move(collider));
+            }
         });
 
 }
@@ -129,6 +136,9 @@ std::unique_ptr<Mesh> ComponentFactory::ReadMesh(const YAML::Node& asset)
         break;
     case PrimitiveType::BOX:
         vertex = Renderer::GetCubeVertex();
+        break;
+    case PrimitiveType::PLANE:
+        vertex = Renderer::GetPlaneVertex();
         break;
     }
     if (elementCount == 3)

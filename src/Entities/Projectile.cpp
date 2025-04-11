@@ -1,6 +1,6 @@
 #include "Projectile.h"
 
-#include "Components/CircleCollider.h"
+#include "Components/Colliders/CircleCollider.h"
 #include "Graphics/Mesh.h"
 #include "Components/Model.h"
 #include "Components/Movement.h"

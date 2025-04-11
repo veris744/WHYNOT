@@ -1,6 +1,6 @@
 #include "Player.h"
 
-#include <Components/CapsuleCollider.h>
+#include <Components/Colliders/CapsuleCollider.h>
 
 #include "Components/Audio.h"
 #include "Components/Camera.h"

@@ -27,6 +27,7 @@ public:
     
     static void DrawSphereDebug(float _radius, vec3 _position, vec3 _color = vec3(1, 0, 0), float timer = 0.f);
     static void DrawCubeDebug(vec3 _dimensions, vec3 _position, vec3 _color = vec3(1, 0, 0), float timer = 0.f);
+    static void DrawPlaneDebug(vec2 _dimensions, vec3 _position, vec3 _color = vec3(1, 0, 0), float timer = 0.f);
     static void DrawCapsuleDebug(float _radius, float _height, vec3 _position, vec3 _color = vec3(1, 0, 0), float timer = 0.f);
     static void DrawLineDebug(vec3 _start, vec3 _end, vec3 _color = vec3(1, 0, 0), float timer = 0.f);
     static void DrawTextDebug(const string& _text, vec3 color = vec3(1, 0, 0), float timer = 0.f);

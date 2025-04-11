@@ -2,7 +2,7 @@
 
 #include <UI/Buttons/ShowPropertiesButton.h>
 
-#include "Components/CircleCollider.h"
+#include "Components/Colliders/CircleCollider.h"
 #include "UI/Image2D.h"
 #include "UI/Buttons/EditMemberButton.h"
 #include "UI/Text/Text.h"
