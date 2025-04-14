@@ -3,6 +3,7 @@
 #include <unordered_set>
 #include <set>
 #include <glm/glm.hpp>
+#include <Utils/Logger.h>
 
 using namespace glm;
 
@@ -32,6 +33,9 @@ struct AABB {
 
 class OctreeNode
 {
+    static const int MAX_DEPTH = 8;
+    int depth = 0;
+
 public:
     AABB bounds;
     std::vector<std::shared_ptr<Entity>> staticEntities;
@@ -39,7 +43,8 @@ public:
     std::unique_ptr<OctreeNode> children[8];
     bool isLeaf = true;
 
-    OctreeNode(const AABB& bounds) : bounds(bounds) {}
+    OctreeNode(const AABB& _bounds, int _depth = 0) : bounds(_bounds), depth(_depth)
+    { }
     void InsertDynamic(const std::shared_ptr<Entity>& entity);
     void InsertStatic(const std::shared_ptr<Entity>& entity);
     void Subdivide();

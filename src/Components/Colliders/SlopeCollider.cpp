@@ -1,10 +1,10 @@
-#include "BoxCollider.h"
+#include "SlopeCollider.h"
 
 #include <Utils/Debugger.h>
 
-bool BoxCollider::Collides(Collider* other, Hit& hit)
+bool SlopeCollider::Collides(Collider* other, Hit& hit)
 {
-    other->Collides(dimensions, GetWorldPosition(), hit);
+    other->Collides(dimensions, GetWorldPosition(), hit, true);
     if (hit.hasHit)
     {
         hit.otherEntity = other->parent;
@@ -20,30 +20,31 @@ bool BoxCollider::Collides(Collider* other, Hit& hit)
     return false;
 }
 
-bool BoxCollider::Collides(float _rad1, vec3 _pos1, Hit& hit)
+bool SlopeCollider::Collides(float _rad1, vec3 _pos1, Hit& hit)
 {
-    return CheckCircleSquare(_rad1, _pos1, dimensions, GetWorldPosition(), hit);
+    return CheckSlopeCircle(dimensions, GetWorldPosition(), _rad1, _pos1, hit);
 }
 
-bool BoxCollider::Collides(vec3 _dimensions, vec3 _pos1, Hit& hit, bool isSlope)
+bool SlopeCollider::Collides(vec3 _dimensions, vec3 _pos1, Hit& hit, bool isSlope)
 {
     if (!isSlope)
-        return CheckSquareSquare(_dimensions, _pos1, dimensions, GetWorldPosition(), hit);
+        return CheckSlopeSquare(dimensions, GetWorldPosition(), _dimensions, _pos1, hit);
 
-    return CheckSlopeSquare(_dimensions, _pos1, dimensions, GetWorldPosition(), hit);
+
+    return CheckSlopeSlope(dimensions, GetWorldPosition(), _dimensions, _pos1, hit);
 }
 
-bool BoxCollider::Collides(float _height, float _radius, vec3 _pos1, Hit& hit)
+bool SlopeCollider::Collides(float _height, float _radius, vec3 _pos1, Hit& hit)
 {
-    return CheckCapsuleSquare(_radius, _height, _pos1, dimensions, GetWorldPosition(), hit);
+    return CheckSlopeCapsule(dimensions, GetWorldPosition(),_radius, _height, _pos1, hit);
 }
 
-bool BoxCollider::Collides(vec2 _dimensions, vec3 _pos1, Hit& hit)
+bool SlopeCollider::Collides(vec2 _dimensions, vec3 _pos1, Hit& hit)
 {
-    return CheckPlaneSquare(_dimensions, _pos1, dimensions, GetWorldPosition(), hit);
+    return CheckSlopePlane(dimensions, GetWorldPosition(), _dimensions, _pos1, hit);
 }
 
-bool BoxCollider::RayCollides(vec3 _rayOrigin, vec3 _rayDir, Hit& hit)
+bool SlopeCollider::RayCollides(vec3 _rayOrigin, vec3 _rayDir, Hit& hit)
 {
     vec3 boxCenter = GetWorldPosition();
     vec3 halfExtents = dimensions * 0.5f;
@@ -103,7 +104,7 @@ bool BoxCollider::RayCollides(vec3 _rayOrigin, vec3 _rayDir, Hit& hit)
     return false;
 }
 
-bool BoxCollider::CheckInBounds(const vec2& xBounds, const vec2& yBounds, const vec2& zBounds, bool triggerDelegate)
+bool SlopeCollider::CheckInBounds(const vec2& xBounds, const vec2& yBounds, const vec2& zBounds, bool triggerDelegate)
 {
     vec3 boxCenter = GetWorldPosition();
     vec3 halfExtents = dimensions * 0.5f;
@@ -125,7 +126,7 @@ bool BoxCollider::CheckInBounds(const vec2& xBounds, const vec2& yBounds, const 
     return isCompletelyInside;
 }
 
-bool BoxCollider::OverlapsBounds(const vec2& xBounds, const vec2& yBounds, const vec2& zBounds, bool triggerDelegate)
+bool SlopeCollider::OverlapsBounds(const vec2& xBounds, const vec2& yBounds, const vec2& zBounds, bool triggerDelegate)
 {
     vec3 boxCenter = GetWorldPosition();
     vec3 halfExtents = dimensions * 0.5f;
@@ -143,7 +144,7 @@ bool BoxCollider::OverlapsBounds(const vec2& xBounds, const vec2& yBounds, const
     return xOverlap && yOverlap && zOverlap;
 }
 
-void BoxCollider::RenderDebug()
+void SlopeCollider::RenderDebug()
 {
-    Debugger::DrawCubeDebug(dimensions, GetWorldPosition());
+    Debugger::DrawSlopeDebug(dimensions, GetWorldPosition());
 }

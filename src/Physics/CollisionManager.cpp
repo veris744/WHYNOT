@@ -2,6 +2,7 @@
 
 #include <Managers/ConfigurationValues.h>
 #include <UI/Widget.h>
+#include <Utils/Parser.h>
 
 #include "Hit.h"
 #include "Components/Colliders/Collider.h"
@@ -15,6 +16,7 @@ std::unique_ptr<OctreeNode> CollisionManager::root = nullptr;
 
 void CollisionManager::PrepareOctree()
 {
+    Logger::Log(LogLevel::Info, "PREPARING");
     if (!root)
     {
         AABB worldBounds = {vec3(Helper::GetXBounds().x, Helper::GetYBounds().x, Helper::GetZBounds().x), 
@@ -26,7 +28,6 @@ void CollisionManager::PrepareOctree()
     {
         root->Clear();
     }
-    
     for (const auto& [name, entity] : World::GetInstance()->GetEntities())
     {
         Collider* collider = entity->GetComponent<Collider>();
@@ -36,6 +37,7 @@ void CollisionManager::PrepareOctree()
             root->InsertStatic(entity);
         }
     }
+    Logger::Log(LogLevel::Info, Parser::Parse((int)root->staticEntities.size()));
 }
 
 void CollisionManager::CheckCollisions()

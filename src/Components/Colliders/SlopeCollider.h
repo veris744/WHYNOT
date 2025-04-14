@@ -1,12 +1,12 @@
 #pragma once
 #include "Collider.h"
 
-class PlaneCollider : public Collider
+class SlopeCollider : public Collider
 {
 public:
-    vec2 dimensions ;
+    vec3 dimensions ;
 
-    PlaneCollider(vec3 _dimensions = {0,0,0})
+    SlopeCollider(vec3 _dimensions = {0,0,0})
         : dimensions(_dimensions)
     {
         type = ColliderShape::BOX;
@@ -24,9 +24,9 @@ public:
     void Update(float deltaTime) override {};
 
 };
-REGISTER_CLASS(PlaneCollider,
-    REGISTER_MEMBER(PlaneCollider, name, MemberProperty::Serializable),
-    REGISTER_MEMBER(PlaneCollider, dimensions, MemberProperty::Viewable | MemberProperty::Editable | MemberProperty::Serializable),
-    REGISTER_MEMBER(PlaneCollider, type, MemberProperty::Viewable | MemberProperty::Serializable),
-    REGISTER_MEMBER(PlaneCollider, profile, MemberProperty::Viewable | MemberProperty::Serializable)
+REGISTER_CLASS(SlopeCollider,
+    REGISTER_MEMBER(SlopeCollider, name, MemberProperty::Serializable),
+    REGISTER_MEMBER(SlopeCollider, dimensions, MemberProperty::Viewable | MemberProperty::Editable | MemberProperty::Serializable),
+    REGISTER_MEMBER(SlopeCollider, type, MemberProperty::Viewable | MemberProperty::Serializable),
+    REGISTER_MEMBER(SlopeCollider, profile, MemberProperty::Viewable | MemberProperty::Serializable)
 );

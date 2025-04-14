@@ -115,6 +115,29 @@ void Debugger::DrawPlaneDebug(vec2 _dimensions, vec3 _position, vec3 _color, flo
     }
 }
 
+void Debugger::DrawSlopeDebug(vec3 _dimensions, vec3 _position, vec3 _color, float timer)
+{
+    vector<float> vertices = Renderer::GetSlopeVertex();
+    std::shared_ptr<Material> material = std::make_shared<Material>("", DEFAULT_VERTEX_SHADER_PATH, "shaders/debugFragment.glsl");
+    std::unique_ptr<Mesh> cubeMesh = std::make_unique<Mesh>(vertices, 36, material);
+
+    cubeMesh->GetMaterial()->materialData.type = MaterialType::COLOR;
+    cubeMesh->GetMaterial()->materialData.color = vec4(_color, 0.4);
+    mat4 mat = mat4(1.0f);
+    mat = translate(mat, _position);
+    mat = scale(mat, _dimensions);
+
+    if (timer <= 0.f)
+    {
+        meshesToRenderInFrame[std::move(cubeMesh)] = mat;
+    }
+    else
+    {
+        Timer::StartTimer(timer, &Debugger::StopRenderingMesh, cubeMesh.get());
+        meshesToRender[std::move(cubeMesh)] = mat;
+    }
+}
+
 void Debugger::DrawCapsuleDebug(float _radius, float _height, vec3 _position, vec3 _color, float timer)
 {
     vector<float> vertices;

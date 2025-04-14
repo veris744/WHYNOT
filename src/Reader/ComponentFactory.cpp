@@ -3,6 +3,7 @@
 #include <Components/Colliders/BoxCollider.h>
 #include <Components/Colliders/CapsuleCollider.h>
 #include <Components/Colliders/PlaneCollider.h>
+#include <Components/Colliders/SlopeCollider.h>
 
 #include "Reader.h"
 #include "Components/Transform.h"
@@ -96,6 +97,12 @@ void ComponentFactory::ComponentFactorySetup()
                 deserialize(data, collider);
                 entity->AddComponent(std::move(collider));
             }
+            else if (ReadString(data, "type") == "SLOPE")
+            {
+                std::unique_ptr<SlopeCollider> collider = std::make_unique<SlopeCollider>();
+                deserialize(data, collider);
+                entity->AddComponent(std::move(collider));
+            }
         });
 
 }
@@ -125,20 +132,23 @@ std::unique_ptr<Mesh> ComponentFactory::ReadMesh(const YAML::Node& asset)
     
     switch (EnumRegistry::instance().fromString<PrimitiveType>(ReadString(asset, "primitive")))
     {
-    case PrimitiveType::NONE:
-        Logger::Log(LogLevel::FatalError, "Primitive type is NONE");
-        return nullptr;
-    case PrimitiveType::SPHERE:
-        Helper::generateSphere(vertex, index,
+        case PrimitiveType::NONE:
+            Logger::Log(LogLevel::FatalError, "Primitive type is NONE");
+            return nullptr;
+        case PrimitiveType::SPHERE:
+            Helper::generateSphere(vertex, index,
             ReadFloat(asset, "radius"),
             ReadInt(asset, "sectors", 32),
             ReadInt(asset, "stack", 16));
         break;
-    case PrimitiveType::BOX:
-        vertex = Renderer::GetCubeVertex();
+        case PrimitiveType::BOX:
+            vertex = Renderer::GetCubeVertex();
         break;
-    case PrimitiveType::PLANE:
-        vertex = Renderer::GetPlaneVertex();
+        case PrimitiveType::PLANE:
+            vertex = Renderer::GetPlaneVertex();
+        break;
+        case PrimitiveType::SLOPE:
+            vertex = Renderer::GetSlopeVertex();
         break;
     }
     if (elementCount == 3)

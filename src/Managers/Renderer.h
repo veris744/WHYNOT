@@ -10,14 +10,15 @@ class VertexArray;
 
 enum class PrimitiveType
 {
-    NONE, BOX, SPHERE, PLANE, CAPSULE
+    NONE, BOX, SPHERE, PLANE, CAPSULE, SLOPE
 };
 REGISTER_ENUM(PrimitiveType,
     {"NONE", PrimitiveType::NONE},
     {"BOX", PrimitiveType::BOX},
     {"SPHERE", PrimitiveType::SPHERE},
     {"PLANE", PrimitiveType::PLANE},
-    {"CAPSULE", PrimitiveType::CAPSULE}
+    {"CAPSULE", PrimitiveType::CAPSULE},
+    {"SLOPE", PrimitiveType::SLOPE}
 );
 
 class Renderer
@@ -25,6 +26,7 @@ class Renderer
     Renderer();
     static const vector<float> cubeVertex;
     static const vector<float> planeVertex;
+    static const vector<float> slopeVertex;
     static vector<float> sphereVertex;
     static vector<unsigned int> sphereIndex;
     
@@ -46,6 +48,7 @@ public:
 
     static const vector<float> GetCubeVertex() { return cubeVertex; }
     static const vector<float> GetPlaneVertex() { return planeVertex; }
+    static const vector<float> GetSlopeVertex() { return slopeVertex; }
     static const vector<float> GetSphereVertex() { return sphereVertex; }
     static const void GenerateCapsuleVertex(float radius, float height, vector<float>& vertices, vector<unsigned int>& indices);
     static const vector<unsigned int>& GetSphereIndex() { return sphereIndex; }

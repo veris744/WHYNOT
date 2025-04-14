@@ -34,9 +34,12 @@ bool CapsuleCollider::Collides(float _rad1, vec3 _pos1, Hit& hit)
     return CheckCircleCircle(radius, GetWorldPosition(), _rad1, _pos1, hit);
 }
 
-bool CapsuleCollider::Collides(vec3 _dimensions, vec3 _pos1, Hit& hit)
+bool CapsuleCollider::Collides(vec3 _dimensions, vec3 _pos1, Hit& hit, bool isSlope)
 {
-    return CheckCapsuleSquare(radius, height, GetWorldPosition(), _dimensions, _pos1, hit);
+    if (!isSlope)
+        return CheckCapsuleSquare(radius, height, GetWorldPosition(), _dimensions, _pos1, hit);
+
+    return CheckSlopeCapsule(_dimensions, _pos1, radius, height, GetWorldPosition(), hit);
 }
 
 bool CapsuleCollider::Collides(float _height, float _radius, vec3 _pos1, Hit& hit)

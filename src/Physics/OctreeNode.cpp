@@ -6,43 +6,71 @@
 #include "Components/Colliders/Collider.h"
 #include "Entities/Entity.h"
 
-
 void OctreeNode::InsertDynamic(const std::shared_ptr<Entity>& entity)
 {
-    if (isLeaf && dynamicEntities.size() + staticEntities.size() < 4) {
-        dynamicEntities.push_back(entity);
+    if (!isLeaf || depth >= MAX_DEPTH) {
+        if (!isLeaf) {
+            InsertIntoChildrenDynamic(entity);
+        } else {
+            dynamicEntities.push_back(entity);
+        }
         return;
     }
 
-    if (isLeaf) {
-        Subdivide();
-        std::vector<std::shared_ptr<Entity>> oldEntities = std::move(dynamicEntities);
-        for (const auto& e : oldEntities) {
-            InsertIntoChildrenDynamic(e);
-        }
+    if (dynamicEntities.size() + staticEntities.size() < 4) {
+        dynamicEntities.push_back(entity);
+        return;
     }
+    Subdivide();
+
+    auto oldDynamic = std::move(dynamicEntities);
+    auto oldStatic = std::move(staticEntities);
+
+    for (const auto& e : oldDynamic) {
+        InsertIntoChildrenDynamic(e);
+    }
+    for (const auto& e : oldStatic) {
+        InsertIntoChildrenStatic(e);
+    }
+
     InsertIntoChildrenDynamic(entity);
 }
 
 void OctreeNode::InsertStatic(const std::shared_ptr<Entity>& entity)
 {
-    if (isLeaf && dynamicEntities.size() + staticEntities.size() < 4) {
+    if (!isLeaf || depth >= MAX_DEPTH) {
+        if (!isLeaf) {
+            InsertIntoChildrenStatic(entity);
+        } else {
+            staticEntities.push_back(entity);
+        }
+        return;
+    }
+
+    if (dynamicEntities.size() + staticEntities.size() < 4) {
         staticEntities.push_back(entity);
         return;
     }
 
-    if (isLeaf) {
-        Subdivide();
-        std::vector<std::shared_ptr<Entity>> oldEntities = std::move(staticEntities);
-        for (const auto& e : oldEntities) {
-            InsertIntoChildrenStatic(e);
-        }
+    Subdivide();
+
+    auto oldDynamic = std::move(dynamicEntities);
+    auto oldStatic = std::move(staticEntities);
+
+    for (const auto& e : oldDynamic) {
+        InsertIntoChildrenDynamic(e);
     }
+    for (const auto& e : oldStatic) {
+        InsertIntoChildrenStatic(e);
+    }
+
     InsertIntoChildrenStatic(entity);
 }
 
 void OctreeNode::Subdivide()
 {
+    if (!isLeaf) return;
+
     isLeaf = false;
     vec3 size = (bounds.max - bounds.min) * 0.5f;
 
@@ -56,12 +84,13 @@ void OctreeNode::Subdivide()
             bounds.min + offset,
             bounds.min + offset + size
         };
-        children[i] = std::make_unique<OctreeNode>(childBounds);
+        children[i] = std::make_unique<OctreeNode>(childBounds, depth + 1);
     }
 }
 
 void OctreeNode::InsertIntoChildrenDynamic(const std::shared_ptr<Entity>& entity)
 {
+    bool inserted = false;
     Collider* collider = entity->GetComponent<Collider>();
     if (collider) {
         for (const auto& child : children) {
@@ -70,15 +99,19 @@ void OctreeNode::InsertIntoChildrenDynamic(const std::shared_ptr<Entity>& entity
 
             if (collider->OverlapsBounds({min.x, max.x}, {min.y, max.y}, {min.z, max.z})) {
                 child->InsertDynamic(entity);
-                return;
+                inserted = true;
             }
         }
     }
-    dynamicEntities.push_back(entity);
+
+    if (!inserted) {
+        dynamicEntities.push_back(entity);
+    }
 }
 
 void OctreeNode::InsertIntoChildrenStatic(const std::shared_ptr<Entity>& entity)
 {
+    bool inserted = false;
     Collider* collider = entity->GetComponent<Collider>();
     if (collider) {
         for (const auto& child : children) {
@@ -87,13 +120,16 @@ void OctreeNode::InsertIntoChildrenStatic(const std::shared_ptr<Entity>& entity)
 
             if (collider->OverlapsBounds({min.x, max.x}, {min.y, max.y}, {min.z, max.z})) {
                 child->InsertStatic(entity);
-                return;
+                inserted = true;
+                // Don't return here - entity might belong to multiple children
             }
         }
     }
-    staticEntities.push_back(entity);
-}
 
+    if (!inserted) {
+        staticEntities.push_back(entity);
+    }
+}
 
 void OctreeNode::QueryCollisions(std::set<Hit>& collisions)
 {
@@ -172,11 +208,8 @@ void OctreeNode::QueryRayCollisions(std::set<Hit>& collisions, vec3 rayStart, ve
 
 void OctreeNode::ClearDynamic()
 {
-    if (isLeaf)
-    {
-        dynamicEntities.clear();
-    }
-    else
+    dynamicEntities.clear();
+    if (!isLeaf)
     {
         for (const auto& child : children) {
             child->ClearDynamic();

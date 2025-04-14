@@ -27,9 +27,12 @@ bool CircleCollider::Collides(float _rad1, vec3 _pos1, Hit& hit)
     return CheckCircleCircle(radius, GetWorldPosition(), _rad1, _pos1, hit);
 }
 
-bool CircleCollider::Collides(vec3 _dimensions, vec3 _pos1, Hit& hit)
+bool CircleCollider::Collides(vec3 _dimensions, vec3 _pos1, Hit& hit, bool isSlope)
 {
-    return CheckCircleSquare(radius, GetWorldPosition(), _dimensions, _pos1, hit);
+    if (!isSlope)
+        return CheckCircleSquare(radius, GetWorldPosition(), _dimensions, _pos1, hit);
+
+    return CheckSlopeCircle(_dimensions, _pos1, radius, GetWorldPosition(), hit);
 }
 
 bool CircleCollider::Collides(float _height, float _radius, vec3 _pos1, Hit& hit)

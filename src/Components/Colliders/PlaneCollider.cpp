@@ -25,9 +25,12 @@ bool PlaneCollider::Collides(float _rad1, vec3 _pos1, Hit& hit)
     return CheckPlaneCircle(dimensions, GetWorldPosition(), _rad1,_pos1, hit);
 }
 
-bool PlaneCollider::Collides(vec3 _dimensions, vec3 _pos1, Hit& hit)
+bool PlaneCollider::Collides(vec3 _dimensions, vec3 _pos1, Hit& hit, bool isSlope)
 {
-    return CheckPlaneSquare(dimensions, GetWorldPosition(), _dimensions, _pos1, hit);
+    if (!isSlope)
+        return CheckPlaneSquare(dimensions, GetWorldPosition(), _dimensions, _pos1, hit);
+
+    return CheckSlopePlane(_dimensions, _pos1, dimensions, GetWorldPosition(), hit);
 }
 
 bool PlaneCollider::Collides(float _height, float _radius, vec3 _pos1, Hit& hit)
