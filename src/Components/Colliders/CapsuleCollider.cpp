@@ -49,7 +49,7 @@ bool CapsuleCollider::Collides(float _height, float _radius, vec3 _pos1, Hit& hi
 
 bool CapsuleCollider::Collides(vec2 _dimensions, vec3 _pos1, Hit& hit)
 {
-    return CheckPlaneCapsule(_dimensions, _pos1, radius, height, GetWorldPosition(), hit);
+    return CheckPlaneCapsule(_dimensions, _pos1,{0, 1, 0}, radius, height, GetWorldPosition(), hit);
 }
 
 bool CapsuleCollider::RayCollides(vec3 _rayOrigin, vec3 _rayDir, Hit& hit)

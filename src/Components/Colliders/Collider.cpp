@@ -1,5 +1,7 @@
 #include "Collider.h"
 
+#include <Utils/Debugger.h>
+
 #include "Entities/Entity.h"
 
 vec3 Collider::GetWorldPosition()
@@ -253,13 +255,24 @@ bool Collider::CheckCapsuleCapsule(float _radCapsule, float _heightCapsule, vec3
     return false;
 }
 
-bool Collider::CheckPlaneCircle(vec2 _dimensionsPlane, vec3 _posPlane, float _radCircle, vec3 _posCircle, Hit& hit) const
+bool Collider::CheckPlaneCircle(vec2 _dimensionsPlane, vec3 _posPlane, vec3 _normalPlane, float _radCircle, vec3 _posCircle, Hit& hit) const
 {
-    vec3 planeNormal(0, 1, 0);
-    vec3 planeRight(1, 0, 0);
-    vec3 planeForward(0, 0, 1);
+    // Normalize the plane normal to ensure correct calculations
+    vec3 planeNormal = normalize(_normalPlane);
 
-    // Distance from sphere to plane
+    // Calculate right and forward vectors relative to the plane's orientation
+    vec3 planeRight;
+    if (fabs(planeNormal.y) > 0.999f) {
+        // If plane is mostly aligned with world up/down, use world right
+        planeRight = vec3(1, 0, 0);
+    } else {
+        // Otherwise, calculate right vector using cross product with world up
+        planeRight = normalize(cross(planeNormal, vec3(0, 1, 0)));
+    }
+
+    vec3 planeForward = normalize(cross(planeRight, planeNormal));
+
+    // Distance from sphere to plane (signed distance)
     float dist = dot(_posCircle - _posPlane, planeNormal);
 
     if (fabs(dist) > _radCircle) return false;
@@ -295,7 +308,7 @@ bool Collider::CheckPlaneCircle(vec2 _dimensionsPlane, vec3 _posPlane, float _ra
     return true;
 }
 
-bool Collider::CheckPlaneSquare(vec2 _dimensionsPlane, vec3 _posPlane, vec3 _dimensionsSquare, vec3 _posSquare, Hit& hit) const
+bool Collider::CheckPlaneSquare(vec2 _dimensionsPlane, vec3 _posPlane, vec3 _normalPlane, vec3 _dimensionsSquare, vec3 _posSquare, Hit& hit) const
 {
     vec3 planeNormal(0, 1, 0);
     vec3 planeRight(1, 0, 0);
@@ -330,7 +343,7 @@ bool Collider::CheckPlaneSquare(vec2 _dimensionsPlane, vec3 _posPlane, vec3 _dim
     return true;
 }
 
-bool Collider::CheckPlaneCapsule(vec2 _dimensionsPlane, vec3 _posPlane, float _radCapsule, float _heightCapsule, vec3 _posCapsule, Hit& hit) const
+bool Collider::CheckPlaneCapsule(vec2 _dimensionsPlane, vec3 _posPlane, vec3 _normalPlane, float _radCapsule, float _heightCapsule, vec3 _posCapsule, Hit& hit) const
 {
     hit.hasHit = false;
 
@@ -414,43 +427,15 @@ bool Collider::CheckPlaneCapsule(vec2 _dimensionsPlane, vec3 _posPlane, float _r
     return false;
 }
 
-bool Collider::CheckPlanePlane(vec2 _dimensionsPlane, vec3 _posPlane, vec2 _dimensionsPlane2, vec3 _posPlane2, Hit& hit) const
-{
-    vec3 normal1(0, 1, 0);
-    vec3 normal2(0, 1, 0);
-    float d1 = _posPlane.z;
-    float d2 = _posPlane2.z;
-
-    // Planes are parallel
-    if (abs(dot(normal1, normal2)) > 0.999f) {
-        // Check if coincident
-        if (abs(d1 - d2) < 0.001f) {
-            hit.hasHit = true;
-            hit.distSQ = 0;
-            hit.point = vec3(0); // No single intersection point
-            hit.normal = normal1;
-            return true;
-        }
-        return false;
-    }
-
-    // Planes intersect (infinite line)
-    hit.hasHit = true;
-    hit.distSQ = 0;
-    hit.point = vec3(0); // No single intersection point
-    hit.normal = normalize(cross(normal1, normal2));
-    return true;
-}
-
 bool Collider::CheckSlopeCircle(vec3 _dimensionsSlope, vec3 _posSlope, float _radCircle, vec3 _posCircle, Hit& hit) const
 {
     hit.hasHit = false;
     vec3 halfExtents = _dimensionsSlope * 0.5f;
 
-    // Transform circle position to slope's local space
+    // Transform to local slope space
     vec3 localCircle = _posCircle - _posSlope;
 
-    // Check against the AABB first for early out
+    // AABB check first (early out)
     vec3 aabbMin = -halfExtents;
     vec3 aabbMax = halfExtents;
     vec3 closestAABB;
@@ -461,55 +446,99 @@ bool Collider::CheckSlopeCircle(vec3 _dimensionsSlope, vec3 _posSlope, float _ra
     float distSqAABB = dot(closestAABB - localCircle, closestAABB - localCircle);
     if (distSqAABB > (_radCircle * _radCircle)) return false;
 
-    // Check against the slope plane
-    vec3 slopeNormal(0.0f, 0.707f, 0.707f); // Normalized diagonal normal
-    vec3 slopePoint(0.0f, -halfExtents.y, halfExtents.z); // Point on the slope plane
+    // Define slope plane (diagonal from bottom-front to top-back)
+    vec3 slopeNormal = normalize(vec3(0.0f, halfExtents.z, halfExtents.y));
+    vec3 slopePoint(0.0f, -halfExtents.y, halfExtents.z); // Point on slope plane
 
     float distToPlane = dot(localCircle - slopePoint, slopeNormal);
     bool aboveSlope = distToPlane > 0;
 
-    if (!aboveSlope) {
-        // Project point onto slope plane
+    // 1. Check collision with slope plane
+    if (abs(distToPlane) <= _radCircle) {
         vec3 projectedPoint = localCircle - slopeNormal * distToPlane;
 
         // Check if projected point is within slope bounds
-        bool withinSlope = projectedPoint.x >= aabbMin.x && projectedPoint.x <= aabbMax.x &&
-                          projectedPoint.y >= aabbMin.y && projectedPoint.y <= aabbMax.y &&
-                          projectedPoint.z >= aabbMin.z && projectedPoint.z <= aabbMax.z;
+        if (projectedPoint.x >= aabbMin.x && projectedPoint.x <= aabbMax.x &&
+            projectedPoint.y >= aabbMin.y && projectedPoint.y <= aabbMax.y &&
+            projectedPoint.z >= aabbMin.z && projectedPoint.z <= aabbMax.z)
+        {
+            hit.hasHit = true;
+            hit.point = _posSlope + projectedPoint;
+            hit.normal = (distToPlane < 0) ? -slopeNormal : slopeNormal;
+            hit.distSQ = distToPlane * distToPlane;
+            return true;
+        }
+    }
 
-        if (withinSlope) {
-            float distSq = distToPlane * distToPlane;
-            if (distSq <= (_radCircle * _radCircle)) {
+    // 2. Check bottom face (only if below slope)
+    if (!aboveSlope) {
+        float distToBottom = localCircle.y - aabbMin.y;
+        if (abs(distToBottom) <= _radCircle) {
+            vec3 bottomPoint = localCircle;
+            bottomPoint.y = aabbMin.y;
+
+            if (bottomPoint.x >= aabbMin.x && bottomPoint.x <= aabbMax.x &&
+                bottomPoint.z >= aabbMin.z && bottomPoint.z <= aabbMax.z)
+            {
                 hit.hasHit = true;
-                hit.point = _posSlope + projectedPoint;
-                hit.normal = -slopeNormal;
-                hit.distSQ = distSq;
+                hit.point = _posSlope + bottomPoint;
+                hit.normal = vec3(0.0f, -1.0f, 0.0f);
+                hit.distSQ = distToBottom * distToBottom;
                 return true;
             }
         }
     }
 
-    // Check against the other faces (bottom, back, left, right)
-    // Simplified version - for more accuracy you'd need full face checks
-    vec3 closestPoint = closestAABB;
+    // 3. Check back face (z = -halfExtents.z)
+    float distToBack = localCircle.z - aabbMin.z;
+    if (abs(distToBack) <= _radCircle) {
+        vec3 backPoint = localCircle;
+        backPoint.z = aabbMin.z;
 
-    // If we're above the slope, we need to clamp to the slope plane
-    if (aboveSlope) {
-        vec3 slopeIntersection = localCircle - slopeNormal * distToPlane;
-        if (slopeIntersection.x >= aabbMin.x && slopeIntersection.x <= aabbMax.x &&
-            slopeIntersection.y >= aabbMin.y && slopeIntersection.y <= aabbMax.y &&
-            slopeIntersection.z >= aabbMin.z && slopeIntersection.z <= aabbMax.z) {
-            closestPoint = slopeIntersection;
+        if (backPoint.x >= aabbMin.x && backPoint.x <= aabbMax.x &&
+            backPoint.y >= aabbMin.y && backPoint.y <= aabbMax.y)
+        {
+            hit.hasHit = true;
+            hit.point = _posSlope + backPoint;
+            hit.normal = vec3(0.0f, 0.0f, -1.0f);
+            hit.distSQ = distToBack * distToBack;
+            return true;
         }
     }
 
-    float distSq = dot(closestPoint - localCircle, closestPoint - localCircle);
-    if (distSq <= (_radCircle * _radCircle)) {
-        hit.hasHit = true;
-        hit.point = _posSlope + closestPoint;
-        hit.normal = normalize(_posSlope + closestPoint - _posCircle);
-        hit.distSQ = distSq;
-        return true;
+    // 4. Check side faces (x = ±halfExtents.x)
+    // Left face (x = -halfExtents.x)
+    float distToLeft = localCircle.x - aabbMin.x;
+    if (abs(distToLeft) <= _radCircle) {
+        vec3 leftPoint = localCircle;
+        leftPoint.x = aabbMin.x;
+
+        if (leftPoint.y >= aabbMin.y && leftPoint.y <= aabbMax.y &&
+            leftPoint.z >= aabbMin.z && leftPoint.z <= aabbMax.z)
+        {
+            hit.hasHit = true;
+            hit.point = _posSlope + leftPoint;
+            hit.normal = vec3(-1.0f, 0.0f, 0.0f);
+            hit.distSQ = distToLeft * distToLeft;
+            return true;
+        }
+    }
+
+    // Right face (x = halfExtents.x)
+    float distToRight = localCircle.x - aabbMax.x;
+    if (abs(distToRight) <= _radCircle) {
+        vec3 rightPoint = localCircle;
+        rightPoint.x = aabbMax.x;
+
+        if (rightPoint.y >= aabbMin.y && rightPoint.y <= aabbMax.y &&
+            rightPoint.z >= aabbMin.z && rightPoint.z <= aabbMax.z)
+        {
+            hit.hasHit = true;
+            hit.point = _posSlope + rightPoint;
+            hit.normal = vec3(1.0f, 0.0f, 0.0f);
+            hit.distSQ = distToRight * distToRight;
+            return true;
+        }
     }
 
     return false;
@@ -581,52 +610,101 @@ bool Collider::CheckSlopeSquare(vec3 _dimensionsSlope, vec3 _posSlope, vec3 _dim
 bool Collider::CheckSlopeCapsule(vec3 _dimensionsSlope, vec3 _posSlope, float _radCapsule, float _heightCapsule, vec3 _posCapsule, Hit& hit) const
 {
     hit.hasHit = false;
-    float halfHeight = (_heightCapsule * 0.5f) - _radCapsule;
-    vec3 capStart = _posCapsule + vec3(0, -halfHeight, 0);
-    vec3 capEnd = _posCapsule + vec3(0, +halfHeight, 0);
+    vec3 halfExtents = _dimensionsSlope * 0.5f;
 
-    // Treat the slope as an AABB first for broad phase
-    vec3 slopeHalf = _dimensionsSlope * 0.5f;
-    vec3 slopeMin = _posSlope - slopeHalf;
-    vec3 slopeMax = _posSlope + slopeHalf;
+    // Transform capsule to local slope space
+    vec3 localCapsule = _posCapsule - _posSlope;
 
-    // Sample closest point on capsule segment to the slope
-    vec3 closestOnSeg;
+    // Capsule line segment endpoints (assuming capsule is aligned with Y-axis)
+    vec3 capsuleDir(0.0f, 1.0f, 0.0f); // Direction of the capsule (adjust if needed)
+    float halfHeight = _heightCapsule * 0.5f - _radCapsule; // Subtract radius to get inner segment
+    if (halfHeight < 0.0f) halfHeight = 0.0f; // Clamp in case radius > height
+
+    vec3 pointA = localCapsule - capsuleDir * halfHeight;
+    vec3 pointB = localCapsule + capsuleDir * halfHeight;
+
+    struct SlopeFace
+    {
+        vec3 normal;
+        vec3 point;
+        vec3 minBound;
+        vec3 maxBound;
+    };
+
+    // 1. Top diagonal face
+    SlopeFace topFace;
+    topFace.normal = normalize(vec3(0.0f, halfExtents.z, halfExtents.y));
+    topFace.point = vec3(0.0f, 0.0f, 0.0f);
+    topFace.minBound = vec3(-halfExtents.x, -halfExtents.y, -halfExtents.z);
+    topFace.maxBound = vec3(halfExtents.x, halfExtents.y, halfExtents.z);
+
+    // 2. Bottom face (Y-)
+    SlopeFace bottomFace;
+    bottomFace.normal = vec3(0.0f, -1.0f, 0.0f);
+    bottomFace.point = vec3(0.0f, -halfExtents.y, 0.0f);
+    bottomFace.minBound = vec3(-halfExtents.x, -halfExtents.y, -halfExtents.z);
+    bottomFace.maxBound = vec3(halfExtents.x, -halfExtents.y, halfExtents.z);
+
+    // 3. Back face (Z-)
+    SlopeFace backFace;
+    backFace.normal = vec3(0.0f, 0.0f, -1.0f);
+    backFace.point = vec3(0.0f, 0.0f, -halfExtents.z);
+    backFace.minBound = vec3(-halfExtents.x, -halfExtents.y, -halfExtents.z);
+    backFace.maxBound = vec3(halfExtents.x, halfExtents.y, -halfExtents.z);
+
+    // 5. Side faces (X- and X+)
+    SlopeFace leftFace, rightFace;
+    leftFace.normal = vec3(-1.0f, 0.0f, 0.0f);
+    leftFace.point = vec3(-halfExtents.x, 0.0f, 0.0f);
+    leftFace.minBound = vec3(-halfExtents.x, -halfExtents.y, -halfExtents.z);
+    leftFace.maxBound = vec3(-halfExtents.x, halfExtents.y, halfExtents.z);
+
+    rightFace.normal = vec3(1.0f, 0.0f, 0.0f);
+    rightFace.point = vec3(halfExtents.x, 0.0f, 0.0f);
+    rightFace.minBound = vec3(halfExtents.x, -halfExtents.y, -halfExtents.z);
+    rightFace.maxBound = vec3(halfExtents.x, halfExtents.y, halfExtents.z);
+
+    // Check all faces
+    SlopeFace faces[] = {topFace, bottomFace, backFace, leftFace, rightFace};
+    Hit closestHit;
     float minDistSq = FLT_MAX;
 
-    const int steps = 10;
-    for (int i = 0; i <= steps; ++i) {
-        float t = float(i) / float(steps);
-        vec3 pointOnSeg = mix(capStart, capEnd, t);
-        vec3 clamped = clamp(pointOnSeg, slopeMin, slopeMax);
+    for (const SlopeFace& face : faces) {
+        // Find closest point on capsule segment to the plane
+        vec3 capsuleToFace = face.point - pointA;
+        vec3 segmentDir = pointB - pointA;
+        float segmentLength = length(segmentDir);
+        if (segmentLength > 0.0f) segmentDir /= segmentLength;
 
-        // Check against slope plane
-        vec3 slopeNormal(0.0f, 0.707f, 0.707f);
-        vec3 slopePoint = _posSlope + vec3(0.0f, -slopeHalf.y, slopeHalf.z);
-        float distToPlane = dot(pointOnSeg - slopePoint, slopeNormal);
+        float t = dot(segmentDir, capsuleToFace);
+        t = std::max(0.0f, std::min(t, segmentLength));
+        vec3 closestPoint = pointA + segmentDir * t;
 
-        if (distToPlane < 0) {
-            // Point is below slope plane - project onto plane
-            vec3 projected = pointOnSeg - slopeNormal * distToPlane;
-            if (projected.x >= slopeMin.x && projected.x <= slopeMax.x &&
-                projected.y >= slopeMin.y && projected.y <= slopeMax.y &&
-                projected.z >= slopeMin.z && projected.z <= slopeMax.z) {
-                clamped = projected;
+        // Check sphere-plane collision
+        float distToPlane = dot(closestPoint - face.point, face.normal);
+
+        if (abs(distToPlane) <= _radCapsule) {
+            vec3 projectedPoint = closestPoint - face.normal * distToPlane;
+
+            // Check bounds
+            if (projectedPoint.x >= face.minBound.x && projectedPoint.x <= face.maxBound.x &&
+                projectedPoint.y >= face.minBound.y && projectedPoint.y <= face.maxBound.y &&
+                projectedPoint.z >= face.minBound.z && projectedPoint.z <= face.maxBound.z)
+            {
+                float distSq = distToPlane * distToPlane;
+                if (distSq < minDistSq) {
+                    minDistSq = distSq;
+                    closestHit.hasHit = true;
+                    closestHit.point = _posSlope + projectedPoint;
+                    closestHit.normal = (distToPlane < 0) ? -face.normal : face.normal;
+                    closestHit.distSQ = distSq;
+                }
             }
-        }
-
-        float dSq = dot(clamped - pointOnSeg, clamped - pointOnSeg);
-        if (dSq < minDistSq) {
-            minDistSq = dSq;
-            closestOnSeg = pointOnSeg;
-            hit.point = clamped;
         }
     }
 
-    if (minDistSq <= _radCapsule * _radCapsule) {
-        hit.hasHit = true;
-        hit.distSQ = minDistSq;
-        hit.normal = normalize(hit.point - closestOnSeg);
+    if (closestHit.hasHit) {
+        hit = closestHit;
         return true;
     }
 

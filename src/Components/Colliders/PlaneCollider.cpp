@@ -22,25 +22,25 @@ bool PlaneCollider::Collides(Collider* other, Hit& hit)
 
 bool PlaneCollider::Collides(float _rad1, vec3 _pos1, Hit& hit)
 {
-    return CheckPlaneCircle(dimensions, GetWorldPosition(), _rad1,_pos1, hit);
+    return CheckPlaneCircle(dimensions, GetWorldPosition(), {0, 1, 0}, _rad1,_pos1, hit);
 }
 
 bool PlaneCollider::Collides(vec3 _dimensions, vec3 _pos1, Hit& hit, bool isSlope)
 {
     if (!isSlope)
-        return CheckPlaneSquare(dimensions, GetWorldPosition(), _dimensions, _pos1, hit);
+        return CheckPlaneSquare(dimensions, GetWorldPosition(), {0, 1, 0}, _dimensions, _pos1, hit);
 
     return CheckSlopePlane(_dimensions, _pos1, dimensions, GetWorldPosition(), hit);
 }
 
 bool PlaneCollider::Collides(float _height, float _radius, vec3 _pos1, Hit& hit)
 {
-    return CheckPlaneCapsule(dimensions, GetWorldPosition(), _radius, _height, _pos1, hit);
+    return CheckPlaneCapsule(dimensions, GetWorldPosition(),{0, 1, 0}, _radius, _height, _pos1, hit);
 }
 
 bool PlaneCollider::Collides(vec2 _dimensions, vec3 _pos1, Hit& hit)
 {
-    return CheckPlanePlane(_dimensions, _pos1, dimensions, GetWorldPosition(), hit);
+    return false;
 }
 
 bool PlaneCollider::RayCollides(vec3 _rayOrigin, vec3 _rayDir, Hit& hit)

@@ -45,10 +45,9 @@ public:
     bool CheckCapsuleCircle(float _radCapsule, float _heightCapsule, vec3 _posCapsule, float _radCircle, vec3 _posCircle, Hit& hit) const;
     bool CheckCapsuleSquare(float _radCapsule, float _heightCapsule, vec3 _posCapsule, vec3 _dimensionsSquare, vec3 _posSquare, Hit& hit) const;
     bool CheckCapsuleCapsule(float _radCapsule, float _heightCapsule, vec3 _posCapsule, float _radCapsule2, float _heightCapsule2, vec3 _posCapsule2, Hit& hit) const;
-    bool CheckPlaneCircle(vec2 _dimensionsPlane, vec3 _posPlane, float _radCircle, vec3 _posCircle, Hit& hit) const;
-    bool CheckPlaneSquare(vec2 _dimensionsPlane, vec3 _posPlane, vec3 _dimensionsSquare, vec3 _posSquare, Hit& hit) const;
-    bool CheckPlaneCapsule(vec2 _dimensionsPlane, vec3 _posPlane, float _radCapsule, float _heightCapsule, vec3 _posCapsule, Hit& hit) const;
-    bool CheckPlanePlane(vec2 _dimensionsSlope, vec3 _posSlope, vec2 _dimensionsPlane2, vec3 _posPlane2, Hit& hit) const;
+    bool CheckPlaneCircle(vec2 _dimensionsPlane, vec3 _posPlane, vec3 _normalPlane, float _radCircle, vec3 _posCircle, Hit& hit) const;
+    bool CheckPlaneSquare(vec2 _dimensionsPlane, vec3 _posPlane, vec3 _normalPlane, vec3 _dimensionsSquare, vec3 _posSquare, Hit& hit) const;
+    bool CheckPlaneCapsule(vec2 _dimensionsPlane, vec3 _posPlane, vec3 _normalPlane, float _radCapsule, float _heightCapsule, vec3 _posCapsule, Hit& hit) const;
     bool CheckSlopeCircle(vec3 _dimensionsSlope, vec3 _posSlope, float _radCircle, vec3 _posCircle, Hit& hit) const;
     bool CheckSlopeSquare(vec3 _dimensionsSlope, vec3 _posSlope, vec3 _dimensionsSquare, vec3 _posSquare, Hit& hit) const;
     bool CheckSlopeCapsule(vec3 _dimensionsSlope, vec3 _posSlope, float _radCapsule, float _heightCapsule, vec3 _posCapsule, Hit& hit) const;

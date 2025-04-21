@@ -42,7 +42,7 @@ bool CircleCollider::Collides(float _height, float _radius, vec3 _pos1, Hit& hit
 
 bool CircleCollider::Collides(vec2 _dimensions, vec3 _pos1, Hit& hit)
 {
-    return CheckPlaneCircle(_dimensions, _pos1, radius, GetWorldPosition(), hit);
+    return CheckPlaneCircle(_dimensions, _pos1, {0, 1, 0}, radius, GetWorldPosition(), hit);
 }
 
 // Collision from ray staring at origin extending towards infinity
