@@ -24,7 +24,7 @@ void MapManager::PrepareGame()
 void MapManager::StartGame()
 {
     World::GetInstance()->GetPlayer()->GetComponent<Movement>()->usesPhysics = true;
-    World::GetInstance()->GetPlayer()->GetComponent<Movement>()->isAffectedByGravity = true;
+    World::GetInstance()->GetPlayer()->GetComponent<Movement>()->physicsProperties.hasGravity = true;
 }
 
 void MapManager::EndGame()

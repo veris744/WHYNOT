@@ -42,7 +42,7 @@ void Player::Initialize()
     {
         std::unique_ptr<Movement> movement = std::make_unique<Movement>();
         movement->usesPhysics = true;
-        movement->isAffectedByGravity = true;
+        movement->physicsProperties.hasGravity = true;
         movement->maxSpeed = 20;
         AddComponent(std::move(movement));
     }

@@ -7,7 +7,8 @@ entities:
           color: [0.5, 0.5, 0.5, 1]
           ambient: 0.2
           type: "AMBIENT"
-  - components:
+  - name: "Directional"
+    components:
       - name: "LIGHT"
         lightData:
           color: [ 1, 1, 1 ]
@@ -15,25 +16,8 @@ entities:
           specular: 0.2
           diffuse: 0.8
           type: "DIRECTIONAL"
-  - components:
-      - name: "TRANSFORM"
-        position: [10, 10, -5]
-        rotation:
-          yaw: 45
-        scale: [1,1,1]
-      - name: "MOVEMENT"
-        usesPhysics: true
-        physicsProperties:
-          hasGravity: true
-      - name: "MODEL"
-        path: "assets/backpack/backpack.obj"
-      - name: "COLLIDER"
-        type: "CIRCLE"
-        radius: 1.5
-        profile:
-          type: "DYNAMIC"
-          mode: "ALL"
-  - components:
+  - name: "Ground"
+    components:
       - name: "TRANSFORM"
         position: [0, 0, 0]
         scale: [50, 1, 50]
@@ -52,41 +36,49 @@ entities:
             materialData:
               type: TEXTURE
               shininess: 10
+
+
   - components:
       - name: "TRANSFORM"
-        position: [-5, 10, 0]
-        scale: [0.1, 25, 10]
+        position: [0, 8, -5]
       - name: "COLLIDER"
-        dimensions: [0.1, 25, 10]
-        type: "BOX"
+        type: "CIRCLE"
+        radius: 1
         profile:
-          type: "STATIC"
+          type: "DYNAMIC"
           mode: "ALL"
+      - name: "MOVEMENT"
+        usesPhysics: true
+        physicsProperties:
+          hasGravity: true
       - name: "MODEL"
         mesh:
-          primitive: "BOX"
+          primitive: "SPHERE"
           material:
-            texturePaths: ["assets/2dImages/ground.jpg"]
-            wrapMode: "REPEAT"
+            fragmentShaderPath: "shaders/fragmentColor.glsl"
             materialData:
-              type: TEXTURE
+              type: COLOR
+              color: [1, 0, 0]
               shininess: 10
   - components:
       - name: "TRANSFORM"
-        position: [10, 3, -5]
-        scale: [7, 6, 15]
+        position: [0.9, 1.5, -5]
       - name: "COLLIDER"
-        dimensions: [7, 6, 15]
-        type: "SLOPE"
+        type: "CIRCLE"
+        radius: 1
         profile:
-          type: "STATIC"
+          type: "DYNAMIC"
           mode: "ALL"
+      - name: "MOVEMENT"
+        usesPhysics: true
+        physicsProperties:
+          hasGravity: true
       - name: "MODEL"
         mesh:
-          primitive: "SLOPE"
+          primitive: "SPHERE"
           material:
-            texturePaths: ["assets/2dImages/ground.jpg"]
-            wrapMode: "REPEAT"
+            fragmentShaderPath: "shaders/fragmentColor.glsl"
             materialData:
-              type: TEXTURE
+              type: COLOR
+              color: [0, 1, 0]
               shininess: 10

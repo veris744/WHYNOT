@@ -11,11 +11,11 @@ void Movement::Update(float deltaTime)
         transform = parent->GetComponent<Transform>();
     }
 
-    if (isAffectedByGravity) {
-        AddForce(vec3(0.0f, -15.0f * mass, 0.0f));
+    if (physicsProperties.hasGravity) {
+        AddForce(vec3(0.0f, -15.0f * physicsProperties.mass, 0.0f));
     }
 
-    acceleration = accumulatedForce / mass;
+    acceleration = accumulatedForce / physicsProperties.mass;
     ResetForces();
 
     if (length(acceleration) > maxAcceleration) {
@@ -23,19 +23,40 @@ void Movement::Update(float deltaTime)
     }
 
     speed += acceleration * deltaTime;
-    if (length(speed) > maxSpeed) {
-        speed = normalize(speed) * maxSpeed;
-    }
 
     // Handle collisions
     if (usesPhysics && collisionNormals.size() > 0) {
-        for (const vec3& normal : collisionNormals) {
-            float dotProduct = dot(speed, normal);
-            if (dotProduct < 0.0f) {
-                speed -= dotProduct * normal;
+    for (const vec3& normal : collisionNormals) {
+        float dotProduct = dot(speed, normal);
+
+        // Only process if moving toward the surface
+        if (dotProduct <= 0.0f) {
+            // Calculate bounce (reflect velocity and apply bounciness coefficient)
+            speed -= (1.0f + physicsProperties.bounciness) * dotProduct * normal;
+
+            // Apply friction along the surface (perpendicular to normal)
+            vec3 tangent = speed - dot(speed, normal) * normal;
+            if (length(tangent) > 0.0f) {
+                speed -= tangent * physicsProperties.friction * deltaTime;
+            }
+
+            // Optional: Minimal velocity cutoff to prevent micro-bouncing
+            if (length(speed) < 0.1f) {
+                speed = vec3(0.0f);
             }
         }
-        collisionNormals.clear();
+    }
+    collisionNormals.clear();
+}
+
+    float speedTotal = length(speed);
+    if (speedTotal > maxSpeed) {
+        speed = normalize(speed) * maxSpeed;
+    }
+
+    if (speedTotal < STOP_THRESHOLD)
+    {
+        speed = vec3(0.f);
     }
     transform->position += speed * deltaTime;
 }
@@ -52,5 +73,5 @@ void Movement::ResetForces()
 
 void Movement::AddImpulse(vec3 impulse)
 {
-    speed += impulse / mass;
+    speed += impulse / physicsProperties.mass;
 }

@@ -95,6 +95,11 @@ void PlayerController::EnterFreeMode(bool _freeMode)
     //movement->usesPhysics = !_freeMode;
     //movement->isAffectedByGravity = !_freeMode;
     freeMode = _freeMode;
+    if (freeMode && movement)
+    {
+        movement->usesPhysics = !_freeMode;
+        movement->physicsProperties.hasGravity = !_freeMode;
+    }
 }
 
 void PlayerController::Shoot()

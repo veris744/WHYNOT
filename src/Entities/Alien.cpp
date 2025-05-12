@@ -59,7 +59,7 @@ void Alien::Initialize()
     {
         std::unique_ptr<Movement> temp = std::make_unique<Movement>();
         movement = temp.get();
-        movement->maxSpeed = 0.0f;
+        movement->maxSpeed = 3.0f;
         AddComponent(std::move(temp));
     }
     else
@@ -67,7 +67,7 @@ void Alien::Initialize()
         movement = GetComponent<Movement>();
     }
     movement->usesPhysics = false;
-    movement->isAffectedByGravity = false;
+    movement->physicsProperties.hasGravity = false;
     
     Entity::Initialize();
 }

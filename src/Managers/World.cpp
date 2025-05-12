@@ -1,23 +1,29 @@
 #include "World.h"
 
 #include <thread>
-#include <Components/PlayerController.h>
-#include <Components/Transform.h>
+
+#include "GameManagers/AliensLogic.h"
 #include <GameManagers/MapManager.h>
-#include <Utils/Parser.h>
+#include <GameManagers/PhysicsSimulationManager.h>
 
 #include "ConfigurationValues.h"
 #include "Renderer.h"
-#include "Components/Camera.h"
-#include "Components/LightSource.h"
 #include "Editor/EditorMode.h"
 #include "Graphics/Shader.h"
 #include "Input/InputManager.h"
-#include "GameManagers/AliensLogic.h"
 #include "Physics/CollisionManager.h"
 #include "UI/Widget.h"
 #include "Reader/AssetReader.h"
+
 #include "Utils/Timer.h"
+#include <Utils/Parser.h>
+
+#include "Components/Camera.h"
+#include "Components/LightSource.h"
+#include <Components/PlayerController.h>
+#include <Components/Transform.h>
+
+
 
 World* World::instance = nullptr;
 bool World::isSceneLoaded = false;
@@ -281,6 +287,11 @@ void World::DoLoad()
     else if (currentScene == "Editor")
     {
         gameManager = std::make_unique<MapManager>();
+        Resume();
+    }
+    else if (currentScene == "PhysicsSimulation")
+    {
+        gameManager = std::make_unique<PhysicsSimulationManager>();
         Resume();
     }
     if (gameManager)

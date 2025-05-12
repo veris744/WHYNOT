@@ -137,7 +137,7 @@ std::unique_ptr<Mesh> ComponentFactory::ReadMesh(const YAML::Node& asset)
             return nullptr;
         case PrimitiveType::SPHERE:
             Helper::generateSphere(vertex, index,
-            ReadFloat(asset, "radius"),
+            ReadFloat(asset, "radius", 1),
             ReadInt(asset, "sectors", 32),
             ReadInt(asset, "stack", 16));
         break;
