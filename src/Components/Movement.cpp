@@ -5,17 +5,22 @@
 #include "Transform.h"
 #include "Entities/Entity.h"
 
+
 void Movement::Update(float deltaTime)
 {
     if (!transform) {
         transform = parent->GetComponent<Transform>();
     }
-
-    if (physicsProperties.hasGravity) {
-        AddForce(vec3(0.0f, -15.0f * physicsProperties.mass, 0.0f));
+    if (!physics_material)
+    {
+        physics_material = parent->GetPhysicsMaterial();
     }
 
-    acceleration = accumulatedForce / physicsProperties.mass;
+    if (physics_material->hasGravity) {
+        AddForce(vec3(0.0f, -15.0f * physics_material->mass, 0.0f));
+    }
+
+    acceleration = accumulatedForce / physics_material->mass;
     ResetForces();
 
     if (length(acceleration) > maxAcceleration) {
@@ -25,29 +30,30 @@ void Movement::Update(float deltaTime)
     speed += acceleration * deltaTime;
 
     // Handle collisions
-    if (usesPhysics && collisionNormals.size() > 0) {
-    for (const vec3& normal : collisionNormals) {
-        float dotProduct = dot(speed, normal);
-
-        // Only process if moving toward the surface
-        if (dotProduct <= 0.0f) {
-            // Calculate bounce (reflect velocity and apply bounciness coefficient)
-            speed -= (1.0f + physicsProperties.bounciness) * dotProduct * normal;
-
-            // Apply friction along the surface (perpendicular to normal)
-            vec3 tangent = speed - dot(speed, normal) * normal;
-            if (length(tangent) > 0.0f) {
-                speed -= tangent * physicsProperties.friction * deltaTime;
-            }
-
-            // Optional: Minimal velocity cutoff to prevent micro-bouncing
-            if (length(speed) < 0.1f) {
-                speed = vec3(0.0f);
-            }
-        }
-    }
-    collisionNormals.clear();
-}
+    HandleCollisions(deltaTime);
+    // if (usesPhysics && collisions.size() > 0) {
+    //     for (const Hit& hit : collisions) {
+    //         float dotProduct = dot(speed, hit.normal);
+    //
+    //         // Only process if moving toward the surface
+    //         if (dotProduct <= 0.0f) {
+    //             // Calculate bounce (reflect velocity and apply bounciness coefficient)
+    //             speed -= (1.0f + physics_material->bounciness) * dotProduct * hit.normal;
+    //
+    //             // Apply friction along the surface (perpendicular to normal)
+    //             vec3 tangent = speed - dot(speed, hit.normal) * hit.normal;
+    //             if (length(tangent) > 0.0f) {
+    //                 speed -= tangent * physics_material->friction * deltaTime;
+    //             }
+    //
+    //             // Optional: Minimal velocity cutoff to prevent micro-bouncing
+    //             if (length(speed) < STOP_THRESHOLD) {
+    //             speed = vec3(0.0f);
+    //             }
+    //         }
+    //     }
+    //     collisions.clear();
+    // }
 
     float speedTotal = length(speed);
     if (speedTotal > maxSpeed) {
@@ -59,6 +65,71 @@ void Movement::Update(float deltaTime)
         speed = vec3(0.f);
     }
     transform->position += speed * deltaTime;
+}
+
+void Movement::HandleCollisions(float deltaTime) {
+    if (usesPhysics && collisions.size() > 0) {
+        for (const Hit& hit : collisions) {
+            if (!hit.otherEntity) continue;
+
+            Movement* otherMovement = hit.otherEntity->GetComponent<Movement>();
+            PhysicsMaterial* otherMat = hit.otherEntity->GetPhysicsMaterial();
+            if (!otherMat) continue;
+
+            // Calculate inverse masses (more stable for static objects)
+            float invMassA = 1.0f / physics_material->mass;
+            float invMassB = otherMat->mass > 0 ? 1.0f / otherMat->mass : 0.0f;
+            float totalInvMass = invMassA + invMassB;
+
+            // Calculate relative velocity
+            vec3 otherVel = otherMovement ? otherMovement->speed : vec3(0);
+            vec3 relativeVel = speed - otherVel;
+            float velAlongNormal = dot(relativeVel, hit.normal);
+
+            if (velAlongNormal <= 0.0f) {
+                // Calculate restitution (properly handle zero bounciness)
+                float restitution = (physics_material->bounciness + otherMat->bounciness) * 0.5f;
+                restitution = std::clamp(restitution, 0.0f, 1.0f);  // Ensure 0-1 range
+
+                // Calculate impulse
+                float impulse = -(1.0f + restitution) * velAlongNormal / totalInvMass;
+
+                // Apply impulses
+                speed += hit.normal * (impulse * invMassA);
+                if (otherMovement && otherMovement->usesPhysics) {
+                    otherMovement->speed -= hit.normal * (impulse * invMassB);
+                }
+
+                // Position correction with energy conservation
+                const float penetration = std::max(-velAlongNormal * deltaTime - 0.001f, 0.0f);
+                const float correctionFactor = 0.4f * penetration;  // More stable factor
+                vec3 correction = correctionFactor * hit.normal / totalInvMass;
+
+                transform->position += correction * invMassA;
+                if (otherMovement) {
+                    otherMovement->transform->position -= correction * invMassB;
+                }
+
+                // Velocity threshold to stop bouncing
+                if (length(speed) < 0.05f && dot(speed, hit.normal) > -0.1f) {
+                    speed = vec3(0.0f);
+                }
+
+                // Improved friction with energy loss
+                vec3 tangentVel = relativeVel - hit.normal * velAlongNormal;
+                if (length(tangentVel) > 0.01f) {
+                    float frictionCoeff = (physics_material->friction + otherMat->friction) * 0.5f;
+                    vec3 frictionImpulse = -normalize(tangentVel) * frictionCoeff * deltaTime * 9.8f;
+
+                    speed += frictionImpulse * invMassA;
+                    if (otherMovement && otherMovement->usesPhysics) {
+                        otherMovement->speed -= frictionImpulse * invMassB;
+                    }
+                }
+            }
+        }
+        collisions.clear();
+    }
 }
 
 void Movement::AddForce(vec3 force)
@@ -73,5 +144,5 @@ void Movement::ResetForces()
 
 void Movement::AddImpulse(vec3 impulse)
 {
-    speed += impulse / physicsProperties.mass;
+    speed += impulse / physics_material->mass;
 }

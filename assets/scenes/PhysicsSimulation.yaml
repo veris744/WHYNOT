@@ -38,9 +38,10 @@ entities:
               shininess: 10
 
 
+### RED BALLS
   - components:
       - name: "TRANSFORM"
-        position: [0, 8, -5]
+        position: [0, 10, -5]
       - name: "COLLIDER"
         type: "CIRCLE"
         radius: 1
@@ -49,8 +50,6 @@ entities:
           mode: "ALL"
       - name: "MOVEMENT"
         usesPhysics: true
-        physicsProperties:
-          hasGravity: true
       - name: "MODEL"
         mesh:
           primitive: "SPHERE"
@@ -60,9 +59,11 @@ entities:
               type: COLOR
               color: [1, 0, 0]
               shininess: 10
+      - name: "PHYSICS_MATERIAL"
+        bounciness: 0.9
   - components:
       - name: "TRANSFORM"
-        position: [0.9, 1.5, -5]
+        position: [-6, 10, -8]
       - name: "COLLIDER"
         type: "CIRCLE"
         radius: 1
@@ -71,8 +72,75 @@ entities:
           mode: "ALL"
       - name: "MOVEMENT"
         usesPhysics: true
-        physicsProperties:
-          hasGravity: true
+      - name: "MODEL"
+        mesh:
+          primitive: "SPHERE"
+          material:
+            fragmentShaderPath: "shaders/fragmentColor.glsl"
+            materialData:
+              type: COLOR
+              color: [1, 0, 0]
+              shininess: 10
+      - name: "PHYSICS_MATERIAL"
+        bounciness: 0.9
+  - components:
+      - name: "TRANSFORM"
+        position: [-3, 10, -7.2]
+      - name: "COLLIDER"
+        type: "CIRCLE"
+        radius: 1
+        profile:
+          type: "DYNAMIC"
+          mode: "ALL"
+      - name: "MOVEMENT"
+        usesPhysics: true
+      - name: "MODEL"
+        mesh:
+          primitive: "SPHERE"
+          material:
+            fragmentShaderPath: "shaders/fragmentColor.glsl"
+            materialData:
+              type: COLOR
+              color: [1, 0, 0]
+              shininess: 10
+      - name: "PHYSICS_MATERIAL"
+        bounciness: 0.9
+  - components:
+      - name: "TRANSFORM"
+        position: [4, 10, -3]
+      - name: "COLLIDER"
+        type: "CIRCLE"
+        radius: 1
+        profile:
+          type: "DYNAMIC"
+          mode: "ALL"
+      - name: "MOVEMENT"
+        usesPhysics: true
+      - name: "MODEL"
+        mesh:
+          primitive: "SPHERE"
+          material:
+            fragmentShaderPath: "shaders/fragmentColor.glsl"
+            materialData:
+              type: COLOR
+              color: [1, 0, 0]
+              shininess: 10
+      - name: "PHYSICS_MATERIAL"
+        bounciness: 0.9
+
+
+  ### GREEN BALLS
+  - components:
+      - name: "TRANSFORM"
+        position: [0.9, 3, -5]
+      - name: "COLLIDER"
+        type: "CIRCLE"
+        radius: 1
+        profile:
+          type: "DYNAMIC"
+          mode: "ALL"
+      - name: "MOVEMENT"
+        usesPhysics: true
       - name: "MODEL"
         mesh:
           primitive: "SPHERE"
@@ -82,3 +150,205 @@ entities:
               type: COLOR
               color: [0, 1, 0]
               shininess: 10
+      - name: "PHYSICS_MATERIAL"
+        bounciness: 0.9
+  - components:
+      - name: "TRANSFORM"
+        position: [5, 1, 2]
+      - name: "COLLIDER"
+        type: "CIRCLE"
+        radius: 1
+        profile:
+          type: "DYNAMIC"
+          mode: "ALL"
+      - name: "MOVEMENT"
+        usesPhysics: true
+      - name: "MODEL"
+        mesh:
+          primitive: "SPHERE"
+          material:
+            fragmentShaderPath: "shaders/fragmentColor.glsl"
+            materialData:
+              type: COLOR
+              color: [0, 1, 0]
+              shininess: 10
+      - name: "PHYSICS_MATERIAL"
+        bounciness: 0.9
+  - components:
+      - name: "TRANSFORM"
+        position: [-6, 2, -4]
+      - name: "COLLIDER"
+        type: "CIRCLE"
+        radius: 1
+        profile:
+          type: "DYNAMIC"
+          mode: "ALL"
+      - name: "MOVEMENT"
+        usesPhysics: true
+      - name: "MODEL"
+        mesh:
+          primitive: "SPHERE"
+          material:
+            fragmentShaderPath: "shaders/fragmentColor.glsl"
+            materialData:
+              type: COLOR
+              color: [0, 1, 0]
+              shininess: 10
+      - name: "PHYSICS_MATERIAL"
+        bounciness: 0.9
+  - components:
+      - name: "TRANSFORM"
+        position: [2, 2, 3]
+      - name: "COLLIDER"
+        type: "CIRCLE"
+        radius: 1
+        profile:
+          type: "DYNAMIC"
+          mode: "ALL"
+      - name: "MOVEMENT"
+        usesPhysics: true
+      - name: "MODEL"
+        mesh:
+          primitive: "SPHERE"
+          material:
+            fragmentShaderPath: "shaders/fragmentColor.glsl"
+            materialData:
+              type: COLOR
+              color: [0, 1, 0]
+              shininess: 10
+      - name: "PHYSICS_MATERIAL"
+        bounciness: 0.9
+  - components:
+      - name: "TRANSFORM"
+        position: [-3, 2, -7]
+      - name: "COLLIDER"
+        type: "CIRCLE"
+        radius: 1
+        profile:
+          type: "DYNAMIC"
+          mode: "ALL"
+      - name: "MOVEMENT"
+        usesPhysics: true
+      - name: "MODEL"
+        mesh:
+          primitive: "SPHERE"
+          material:
+            fragmentShaderPath: "shaders/fragmentColor.glsl"
+            materialData:
+              type: COLOR
+              color: [0, 1, 0]
+              shininess: 10
+      - name: "PHYSICS_MATERIAL"
+        bounciness: 0.9
+  - components:
+      - name: "TRANSFORM"
+        position: [8, 3, -8]
+      - name: "COLLIDER"
+        type: "CIRCLE"
+        radius: 1
+        profile:
+          type: "DYNAMIC"
+          mode: "ALL"
+      - name: "MOVEMENT"
+        usesPhysics: true
+      - name: "MODEL"
+        mesh:
+          primitive: "SPHERE"
+          material:
+            fragmentShaderPath: "shaders/fragmentColor.glsl"
+            materialData:
+              type: COLOR
+              color: [0, 1, 0]
+              shininess: 10
+      - name: "PHYSICS_MATERIAL"
+        bounciness: 0.9
+
+  ### BLUE BALLS
+  - components:
+      - name: "TRANSFORM"
+        position: [3, 1, 5]
+      - name: "COLLIDER"
+        type: "CIRCLE"
+        radius: 1
+        profile:
+          type: "DYNAMIC"
+          mode: "ALL"
+      - name: "MOVEMENT"
+        usesPhysics: true
+      - name: "MODEL"
+        mesh:
+          primitive: "SPHERE"
+          material:
+            fragmentShaderPath: "shaders/fragmentColor.glsl"
+            materialData:
+              type: COLOR
+              color: [0, 0, 1]
+              shininess: 10
+      - name: "PHYSICS_MATERIAL"
+        bounciness: 0.9
+  - components:
+      - name: "TRANSFORM"
+        position: [2, 1, -7]
+      - name: "COLLIDER"
+        type: "CIRCLE"
+        radius: 1
+        profile:
+          type: "DYNAMIC"
+          mode: "ALL"
+      - name: "MOVEMENT"
+        usesPhysics: true
+      - name: "MODEL"
+        mesh:
+          primitive: "SPHERE"
+          material:
+            fragmentShaderPath: "shaders/fragmentColor.glsl"
+            materialData:
+              type: COLOR
+              color: [0, 0, 1]
+              shininess: 10
+      - name: "PHYSICS_MATERIAL"
+        bounciness: 0.9
+  - components:
+      - name: "TRANSFORM"
+        position: [0, 1, 2]
+      - name: "COLLIDER"
+        type: "CIRCLE"
+        radius: 1
+        profile:
+          type: "DYNAMIC"
+          mode: "ALL"
+      - name: "MOVEMENT"
+        usesPhysics: true
+      - name: "MODEL"
+        mesh:
+          primitive: "SPHERE"
+          material:
+            fragmentShaderPath: "shaders/fragmentColor.glsl"
+            materialData:
+              type: COLOR
+              color: [0, 0, 1]
+              shininess: 10
+      - name: "PHYSICS_MATERIAL"
+        bounciness: 0.9
+  - components:
+      - name: "TRANSFORM"
+        position: [10, 1, -10]
+      - name: "COLLIDER"
+        type: "CIRCLE"
+        radius: 1
+        profile:
+          type: "DYNAMIC"
+          mode: "ALL"
+      - name: "MOVEMENT"
+        usesPhysics: true
+      - name: "MODEL"
+        mesh:
+          primitive: "SPHERE"
+          material:
+            fragmentShaderPath: "shaders/fragmentColor.glsl"
+            materialData:
+              type: COLOR
+              color: [0, 0, 1]
+              shininess: 10
+      - name: "PHYSICS_MATERIAL"
+        bounciness: 0.9

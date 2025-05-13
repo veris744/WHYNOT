@@ -3,6 +3,7 @@
 #include "Components/Component.h"
 #include "Reflection/Reflection.h"
 
+class PhysicsMaterial;
 class Model;
 class Collider;
 class LightSource;
@@ -37,6 +38,7 @@ public:
     string name;
     bool isActive = true;
     bool debugEnabled = false;
+
     
     template <typename T>
     void AddComponent(std::unique_ptr<T> _component)
@@ -70,13 +72,16 @@ public:
         return nullptr;
     }
 
+    PhysicsMaterial* GetPhysicsMaterial() const;
+
     const vector<std::unique_ptr<Component>>& GetComponents() const { return components; }
     
     bool IsCamera() const { return isCamera; }
     bool IsLight() const { return isLight; }
     bool IsRendered() const { return isRendered; }
     bool HasCollision() const { return hasCollision; }
-    
+    void EnableCollisions(bool _enable) { hasCollision = _enable; };
+
     string GetName() { return name; }
     virtual void SetAutoName();
 

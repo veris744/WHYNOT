@@ -7,7 +7,7 @@ class Entity;
 
 enum HitType
 {
-    UI, World
+    UI, WorldHit
 };
 
 struct Hit
@@ -22,5 +22,13 @@ struct Hit
     
     bool operator<(const Hit& other) const {
         return distSQ < other.distSQ;
+    }
+
+    static void InvertHit(Hit& invertedHit, const Hit& originalHit)
+    {
+        invertedHit = originalHit;
+        invertedHit.selfEntity = originalHit.otherEntity;
+        invertedHit.otherEntity = originalHit.selfEntity;
+        invertedHit.normal = -originalHit.normal;
     }
 };

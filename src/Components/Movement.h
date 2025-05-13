@@ -1,32 +1,25 @@
 #pragma once
 
+#include <Physics/Hit.h>
+
 #include "Component.h"
+#include "PhysicsMaterial.h"
 #include "Reflection/Reflection.h"
 
 class Transform;
 
-constexpr float STOP_THRESHOLD = 0.00f;
+constexpr float STOP_THRESHOLD = 0.01f;
 
-struct PhysicsProperties : ReflectedObject
-{
-    float mass = 1.0f;
-    float friction = 0.8f;
-    float staticFriction = 0.4f;
-    float bounciness = 0.2f;
-    bool hasGravity = false;
-};
-
-REGISTER_CLASS(PhysicsProperties,
-    REGISTER_MEMBER(PhysicsProperties, mass, MemberProperty::Viewable | MemberProperty::Editable | MemberProperty::Serializable),
-    REGISTER_MEMBER(PhysicsProperties, friction, MemberProperty::Viewable | MemberProperty::Editable | MemberProperty::Serializable),
-    REGISTER_MEMBER(PhysicsProperties, staticFriction, MemberProperty::Viewable | MemberProperty::Editable | MemberProperty::Serializable),
-    REGISTER_MEMBER(PhysicsProperties, bounciness, MemberProperty::Viewable | MemberProperty::Editable | MemberProperty::Serializable),
-    REGISTER_MEMBER(PhysicsProperties, hasGravity, MemberProperty::Viewable | MemberProperty::Editable | MemberProperty::Serializable)
-);
 
 class Movement : public Component
 {
     Transform* transform = nullptr;
+
+    std::vector<Hit> collisions;
+
+    PhysicsMaterial* physics_material = nullptr;
+
+    void HandleCollisions(float deltaTime);
     
 public:
     vec3 speed;
@@ -35,9 +28,6 @@ public:
     float maxAcceleration;
     vec3 accumulatedForce = vec3(0);
     bool usesPhysics = false;
-    std::vector<vec3> collisionNormals;
-
-    PhysicsProperties physicsProperties;
 
     Movement(): speed(vec3(0)), acceleration(vec3(0)), maxSpeed(10), maxAcceleration(10)
     {
@@ -54,13 +44,17 @@ public:
     void AddForce(vec3 force);
     void ResetForces();
     void AddImpulse(vec3 impulse);
+    void AddCollision(const Hit& hit)
+    {
+        collisions.push_back(hit);
+    }
 
     bool IsGrounded() const
     {
         float y = 0;
-        for (const auto& normal : collisionNormals)
+        for (const auto& hit : collisions)
         {
-            y += normal.y;
+            y += hit.normal.y;
         }
         return y > 0;
     }
@@ -72,6 +66,5 @@ REGISTER_CLASS(Movement,
     REGISTER_MEMBER(Movement, maxAcceleration, MemberProperty::Viewable | MemberProperty::Editable | MemberProperty::Serializable),
     REGISTER_MEMBER(Movement, speed, MemberProperty::Viewable | MemberProperty::Editable | MemberProperty::Serializable),
     REGISTER_MEMBER(Movement, acceleration, MemberProperty::Viewable | MemberProperty::Editable | MemberProperty::Serializable),
-    REGISTER_MEMBER(Movement, usesPhysics, MemberProperty::Viewable | MemberProperty::Editable | MemberProperty::Serializable),
-    REGISTER_MEMBER(Movement, physicsProperties, MemberProperty::Viewable | MemberProperty::Editable | MemberProperty::Serializable)
+    REGISTER_MEMBER(Movement, usesPhysics, MemberProperty::Viewable | MemberProperty::Editable | MemberProperty::Serializable)
 );

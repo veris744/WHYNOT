@@ -1,5 +1,7 @@
 #include "Entity.h"
 
+#include <Components/PhysicsMaterial.h>
+
 #include "Components/Component.h"
 #include "Managers/World.h"
 
@@ -9,6 +11,20 @@ void Entity::Initialize()
 {
     isActive = true;
     World::GetInstance()->AddEntity(shared_from_this());
+}
+
+PhysicsMaterial* Entity::GetPhysicsMaterial() const
+{
+    for (const auto& component : components)
+    {
+        PhysicsMaterial* derived = dynamic_cast<PhysicsMaterial*>(component.get());
+        if (derived)
+        {
+            return derived;
+        }
+    }
+    //Logger::Log<Entity>(LogLevel::Warning, "Returning Default Physics Material for " + name);
+    return PhysicsMaterial::GetDefaultMaterial();
 }
 
 

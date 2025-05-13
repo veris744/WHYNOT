@@ -10,6 +10,7 @@ class PlayerController : public Component
 {
     Transform* transform = nullptr;
     Movement* movement = nullptr;
+    PhysicsMaterial* physicsMat = nullptr;
     bool bCanShoot = false;
     bool freeMode = false;
     

@@ -15,14 +15,15 @@ void PhysicsSimulationManager::PrepareGame()
     ConfigurationValues::IsEditorOpen = false;
     ConfigurationValues::IsUIActive = false;
 
-    playerStart = {0, 2, 0};
+    playerStart = {0, 15, 5};
+    playerStartRotation = {-45, 0, 0};
 }
 
 void PhysicsSimulationManager::StartGame()
 {
     World::GetInstance()->GetPlayer()->GetComponent<Movement>()->usesPhysics = false;
-    World::GetInstance()->GetPlayer()->GetComponent<Movement>()->physicsProperties.hasGravity = false;
-    World::GetInstance()->GetPlayer()->GetComponent<PlayerController>()->EnterFreeMode(true);
+    World::GetInstance()->GetPlayer()->GetPhysicsMaterial()->hasGravity = false;
+    World::GetInstance()->GetPlayer()->EnableCollisions(false);
 }
 
 void PhysicsSimulationManager::EndGame()

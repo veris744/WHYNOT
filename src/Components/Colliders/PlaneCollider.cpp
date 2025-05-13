@@ -9,7 +9,7 @@ bool PlaneCollider::Collides(Collider* other, Hit& hit)
     {
         hit.otherEntity = other->parent;
         hit.selfEntity = parent;
-        hit.type = World;
+        hit.type = WorldHit;
         vec3 directionToSelf = GetWorldPosition() - hit.point;
         if (dot(directionToSelf, hit.normal) < 0.0f)
         {
@@ -77,7 +77,7 @@ bool PlaneCollider::RayCollides(vec3 _rayOrigin, vec3 _rayDir, Hit& hit)
     hit.distSQ = dot(hitPoint - _rayOrigin, hitPoint - _rayOrigin);
     hit.normal = planeNormal;
     hit.otherEntity = parent;
-    hit.type = World;
+    hit.type = WorldHit;
 
     return true;
 }

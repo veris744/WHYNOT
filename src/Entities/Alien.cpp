@@ -66,8 +66,13 @@ void Alien::Initialize()
     {
         movement = GetComponent<Movement>();
     }
+    if (!GetComponent<PhysicsMaterial>())
+    {
+        std::unique_ptr<PhysicsMaterial> temp = std::make_unique<PhysicsMaterial>();
+        temp->hasGravity = false;
+        AddComponent(std::move(temp));
+    }
     movement->usesPhysics = false;
-    movement->physicsProperties.hasGravity = false;
     
     Entity::Initialize();
 }

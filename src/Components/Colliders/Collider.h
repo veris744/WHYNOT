@@ -70,5 +70,5 @@ public:
     CollisionProfile profile;
 
     Movement* movement = nullptr;
-    void UpdateMovement(vec3 _normal);
+    void UpdateMovement(const Hit& hit);
 };

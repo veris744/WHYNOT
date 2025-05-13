@@ -6,6 +6,8 @@
 #include <yaml-cpp/yaml.h>
 #endif
 
+#include <Utils/Debugger.h>
+
 #include "EnumRegistry.h"
 #include "Utils/Logger.h"
 
@@ -38,29 +40,36 @@ namespace Reader
 
     inline YAML::Node ConvertMemberToYaml(string _memberName, string _value)
     {
-        string res;
-        bool isVector = _value.find(',') != std::string::npos;
-        YAML::Node node;
-        if (isVector)
+        try
         {
-            std::vector<std::string> values;
-            std::stringstream ss(_value);
-            std::string item;
-        
-            while (std::getline(ss, item, ','))
+            string res;
+            bool isVector = _value.find(',') != std::string::npos;
+            YAML::Node node;
+            if (isVector)
             {
-                values.push_back(item);
+                std::vector<std::string> values;
+                std::stringstream ss(_value);
+                std::string item;
+
+                while (std::getline(ss, item, ','))
+                {
+                    values.push_back(item);
+                }
+                for (const auto& v : values)
+                {
+                    node[_memberName].push_back(v);
+                }
             }
-            for (const auto& v : values)
+            else
             {
-                node[_memberName].push_back(v);
+                node[_memberName] = _value;
             }
+            return node;
         }
-        else
+        catch (...)
         {
-            node[_memberName] = _value;
+            Logger::Log(LogLevel::Error, "Incorrect format for conversion");
         }
-        return node;
     }
     
     template<typename T>
@@ -72,28 +81,28 @@ namespace Reader
         }
         else if constexpr (is_same_v<T, decltype(vec3{})>) {
             return ReadVec3(node, name);
-        } 
+        }
         if constexpr (is_same_v<T, decltype(vec4{})>) {
             return ReadVec4(node, name);
-        } 
+        }
         else if constexpr (is_same_v<T, decltype(vec2{})>) {
             return ReadVec2(node, name);
-        } 
+        }
         else if constexpr (is_same_v<T, vector<string>>) {
             return ReadStringVector(node, name);
-        } 
+        }
         else if constexpr (is_same_v<T, string>) {
             return ReadString(node, name);
-        } 
+        }
         else if constexpr (is_same_v<T, int>) {
             return ReadInt(node, name);
-        } 
+        }
         else if constexpr (is_same_v<T, unsigned int>) {
             return ReadUInt(node, name);
-        } 
+        }
         else if constexpr (is_same_v<T, float>) {
             return ReadFloat(node, name);
-        } 
+        }
         else if constexpr (is_same_v<T, bool>) {
             return ReadBool(node, name);
         }

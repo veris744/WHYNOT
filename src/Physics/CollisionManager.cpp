@@ -68,11 +68,13 @@ void CollisionManager::CheckCollisions()
         const auto c2 = e2->GetComponent<Collider>();
         if (hit.hasHit) {
             c1->CollisionDelegate.Execute(hit.otherEntity, hit.normal);
-            c1->UpdateMovement(hit.normal);
+            c1->UpdateMovement(hit);
             if (e2->isActive)
             {
-                c2->CollisionDelegate.Execute(hit.selfEntity, -hit.normal);
-                c2->UpdateMovement(-hit.normal);
+                Hit hit2;
+                Hit::InvertHit(hit2, hit);
+                c2->CollisionDelegate.Execute(hit2.selfEntity, hit2.normal);
+                c2->UpdateMovement(hit2);
             }
         }
     }

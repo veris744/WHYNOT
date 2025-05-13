@@ -776,7 +776,7 @@ bool Collider::CheckSlopeSlope(vec3 _dimensionsSlope, vec3 _posSlope, vec3 _dime
     return false;
 }
 
-void Collider::UpdateMovement(vec3 _normal)
+void Collider::UpdateMovement(const Hit& hit)
 {
     if (profile.type == ColliderType::Dynamic)
     {
@@ -788,7 +788,7 @@ void Collider::UpdateMovement(vec3 _normal)
                 Logger::Log(LogLevel::Error, "Dynamic Object doesn't have movement component");
             }
         }
-        movement->collisionNormals.push_back(_normal);
+        movement->AddCollision(hit);
     }
 }
 

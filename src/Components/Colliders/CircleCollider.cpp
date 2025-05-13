@@ -11,7 +11,7 @@ bool CircleCollider::Collides(Collider* other, Hit& hit)
     {
         hit.otherEntity = other->parent;
         hit.selfEntity = parent;
-        hit.type = World;
+        hit.type = WorldHit;
         vec3 directionToSelf = GetWorldPosition() - hit.point;
         if (dot(directionToSelf, hit.normal) < 0.0f)
         {
@@ -87,7 +87,7 @@ bool CircleCollider::RayCollides(vec3 _rayOrigin, vec3 _rayDir, Hit& hit)
     float distSq = dot(hitPoint - _rayOrigin, hitPoint - _rayOrigin); // Squared distance
 
     hit.hasHit = true;
-    hit.type = World;
+    hit.type = WorldHit;
     hit.distSQ = distSq;
     hit.point = hitPoint;
     hit.normal = normalize(hitPoint - center);

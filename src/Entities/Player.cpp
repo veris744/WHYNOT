@@ -42,9 +42,17 @@ void Player::Initialize()
     {
         std::unique_ptr<Movement> movement = std::make_unique<Movement>();
         movement->usesPhysics = true;
-        movement->physicsProperties.hasGravity = true;
         movement->maxSpeed = 20;
         AddComponent(std::move(movement));
+    }
+
+    if (!GetComponent<PhysicsMaterial>())
+    {
+        std::unique_ptr<PhysicsMaterial> physMat = std::make_unique<PhysicsMaterial>();
+        physMat->hasGravity = true;
+        physMat->bounciness = 0.f;
+        physMat->friction = 0.f;
+        AddComponent(std::move(physMat));
     }
 
     if (!GetComponent<Audio>())

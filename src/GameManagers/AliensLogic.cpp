@@ -76,7 +76,7 @@ void AliensLogic::StartGame()
     }
     World::GetInstance()->GetPlayer()->GetComponent<PlayerController>()->SetCanShoot(true);
     World::GetInstance()->GetPlayer()->GetComponent<Movement>()->usesPhysics = false;
-    World::GetInstance()->GetPlayer()->GetComponent<Movement>()->physicsProperties.hasGravity = false;
+    World::GetInstance()->GetPlayer()->GetPhysicsMaterial()->hasGravity = false;
 }
 
 void AliensLogic::ShootProjectile()

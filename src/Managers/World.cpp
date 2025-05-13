@@ -54,8 +54,8 @@ void World::Initialize()
     editorViewerEntity->AddComponent(std::move(move));
     std::unique_ptr<PlayerController> pc = std::make_unique<PlayerController>();
     pc->SkipWhenPause(false);
-    pc->EnterFreeMode(true);
     editorViewerEntity->AddComponent(std::move(pc));
+    editorViewerEntity->GetComponent<PlayerController>()->EnterFreeMode(true);
     editorViewerEntity->isActive = false;
     cameras.push_back(editorViewerEntity->GetComponent<Camera>());
 

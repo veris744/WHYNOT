@@ -23,8 +23,6 @@ entities:
         scale: [1,1,1]
       - name: "MOVEMENT"
         usesPhysics: true
-        physicsProperties:
-          hasGravity: true
       - name: "MODEL"
         path: "assets/backpack/backpack.obj"
       - name: "COLLIDER"
@@ -33,6 +31,8 @@ entities:
         profile:
           type: "DYNAMIC"
           mode: "ALL"
+      - name: "PHYSICS_MATERIAL"
+        bounciness: 0.1
   - components:
       - name: "TRANSFORM"
         position: [0, 0, 0]

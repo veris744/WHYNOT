@@ -160,6 +160,7 @@ void InputManager::ProcessInput()
 void InputManager::ProcessPlayerInput() const
 {
     if (!playerController) return;
+    if (ConfigurationValues::IsEditorOpen && EditorMode::isInputBoxOpen)    return;
 
     playerController->currentInput = vec3(0);
     if (keysStatus[GLFW_KEY_A] == KeyStatus::PRESSED) playerController->currentInput.x -= 1;
@@ -228,7 +229,7 @@ void InputManager::HandleMouseButtonPress(int key)
         if (ConfigurationValues::IsEditorOpen)
         {
             Hit hit = CollisionManager::ThrowRayFromScreen(vec2{xpos,ypos}, playerTransform->position, true, 5);
-            if (hit.hasHit && hit.type == HitType::World)
+            if (hit.hasHit && hit.type == WorldHit)
             {
                 hit.otherEntity->OnClicked();
                 EditorMode::SelectEntity(hit.otherEntity);

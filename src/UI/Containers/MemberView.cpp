@@ -72,9 +72,16 @@ void MemberView::SetMemberInfo(const string& value) const
 
 void MemberView::UpdateMember(const string& value)
 {
-    YAML::Node node = YAML::Node(Reader::ConvertMemberToYaml(memberInfo->name, value));
-    memberInfo->setter(object, node);
-    SetMemberInfo(*memberInfo, object);
+    try
+    {
+        YAML::Node node = YAML::Node(Reader::ConvertMemberToYaml(memberInfo->name, value));
+        memberInfo->setter(object, node);
+        SetMemberInfo(*memberInfo, object);
+    }
+    catch (...)
+    {
+        Debugger::DrawTextDebug("Exception caught when updating property, check the input format", vec3(1,0,0), 5.f);
+    }
 }
 
 void MemberView::SetUpdateButton()

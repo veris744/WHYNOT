@@ -4,8 +4,6 @@
 #include <Components/Colliders/CapsuleCollider.h>
 #include <Components/Colliders/PlaneCollider.h>
 #include <Components/Colliders/SlopeCollider.h>
-
-#include "Reader.h"
 #include "Components/Transform.h"
 #include "Components/Camera.h"
 #include "Components/Colliders/CircleCollider.h"
@@ -13,10 +11,13 @@
 #include "Graphics/Mesh.h"
 #include "Components/Model.h"
 #include "Components/Movement.h"
+#include "Components/PhysicsMaterial.h"
+
 #include "Entities/Entity.h"
 #include "Graphics/Material.h"
 #include "Graphics/Texture.h"
 #include "Managers/Renderer.h"
+#include "Reader.h"
 
 using namespace Reader;
 using namespace Reflection;
@@ -68,6 +69,14 @@ void ComponentFactory::ComponentFactorySetup()
             std::unique_ptr<Movement> move = std::make_unique<Movement>();
             deserialize(data, move);
             entity->AddComponent(std::move(move));
+        });
+
+
+    RegisterComponent("PHYSICS_MATERIAL", [](const std::shared_ptr<Entity>& entity, const YAML::Node& data) ->
+        void {
+            std::unique_ptr<PhysicsMaterial> physics_material = std::make_unique<PhysicsMaterial>();
+            deserialize(data, physics_material);
+            entity->AddComponent(std::move(physics_material));
         });
 
     

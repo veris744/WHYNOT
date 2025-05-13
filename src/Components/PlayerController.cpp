@@ -27,6 +27,10 @@ void PlayerController::Update(float deltaTime)
     {
         movement = parent->GetComponent<Movement>();
     }
+    if (!physicsMat)
+    {
+        physicsMat = parent->GetComponent<PhysicsMaterial>();
+    }
     if (ConfigurationValues::CanPlayerMove)
     {
         if (!freeMode)
@@ -95,10 +99,12 @@ void PlayerController::EnterFreeMode(bool _freeMode)
     //movement->usesPhysics = !_freeMode;
     //movement->isAffectedByGravity = !_freeMode;
     freeMode = _freeMode;
-    if (freeMode && movement)
+    parent->EnableCollisions(!_freeMode);
+
+    if (freeMode && movement && physicsMat)
     {
         movement->usesPhysics = !_freeMode;
-        movement->physicsProperties.hasGravity = !_freeMode;
+        physicsMat->hasGravity = !_freeMode;
     }
 }
 
