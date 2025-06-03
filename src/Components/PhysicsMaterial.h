@@ -19,6 +19,7 @@ public:
 
     void Update(float deltaTime) override {}
 
+    // Usable for static entities such as floors and walls (probably temporary)
     static PhysicsMaterial* GetDefaultMaterial() { return &defaultMaterial; }
 };
 REGISTER_CLASS(PhysicsMaterial,

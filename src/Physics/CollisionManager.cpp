@@ -66,18 +66,19 @@ void CollisionManager::CheckCollisions()
         const auto c1 = e1->GetComponent<Collider>();
         const auto c2 = e2->GetComponent<Collider>();
         if (hit.hasHit) {
-            c1->CollisionDelegate.Execute(hit.otherEntity, hit.normal);
-            c1->UpdateMovement(hit);
-            if (e2->isActive)
+            Hit hit2;
+            Hit::InvertHit(hit2, hit);
+
+            if (!c1->profile.isTrigger && !c2->profile.isTrigger)
             {
-                Hit hit2;
-                Hit::InvertHit(hit2, hit);
-                c2->CollisionDelegate.Execute(hit2.selfEntity, hit2.normal);
+                c1->UpdateMovement(hit);
                 c2->UpdateMovement(hit2);
             }
+
+            c1->CollisionDelegate.Execute(hit.otherEntity, hit.normal);
+            c2->CollisionDelegate.Execute(hit2.selfEntity, hit2.normal);
         }
     }
-
     root->ClearDynamic();
 }
 
