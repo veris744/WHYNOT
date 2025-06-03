@@ -1,0 +1,128 @@
+entities:
+
+# LIGHTS
+  - name: "Ambient"
+    components:
+      - name: "LIGHT"
+        lightData:
+          color: [0.5, 0.5, 0.5, 1]
+          ambient: 0.2
+          type: "AMBIENT"
+  - components:
+      - name: "LIGHT"
+        lightData:
+          color: [ 1, 1, 1 ]
+          direction: [ 1, 0.5, 1 ]
+          specular: 0.2
+          diffuse: 0.8
+          type: "DIRECTIONAL"
+  - components:
+      - name: "LIGHT"
+        lightData:
+          color: [ 1, 1, 1 ]
+          direction: [ -1, -0.5, -1 ]
+          specular: 0.2
+          diffuse: 0.8
+          type: "DIRECTIONAL"
+
+# SCENE
+  - name: "Ground"
+    components:
+      - name: "TRANSFORM"
+        position: [0, 0, 0]
+        scale: [50, 1, 50]
+      - name: "COLLIDER"
+        dimensions: [50, 50]
+        type: "PLANE"
+        profile:
+          type: "STATIC"
+          mode: "ALL"
+      - name: "MODEL"
+        mesh:
+          primitive: "PLANE"
+          material:
+            texturePaths: ["assets/2dImages/ground.jpg"]
+            wrapMode: "REPEAT"
+            materialData:
+              type: TEXTURE
+              shininess: 10
+  - name: "Wall1"
+    components:
+      - name: "TRANSFORM"
+        position: [-25, 10, 0]
+        scale: [0.1, 20, 50]
+      - name: "COLLIDER"
+        dimensions: [0.1, 20, 50]
+        type: "BOX"
+        profile:
+          type: "STATIC"
+          mode: "ALL"
+      - name: "MODEL"
+        mesh:
+          primitive: "BOX"
+          material:
+            texturePaths: ["assets/2dImages/ground.jpg"]
+            wrapMode: "REPEAT"
+            materialData:
+              type: TEXTURE
+              shininess: 10
+  - name: "Wall2"
+    components:
+      - name: "TRANSFORM"
+        position: [25, 10, 0]
+        scale: [0.1, 20, 50]
+      - name: "COLLIDER"
+        dimensions: [0.1, 20, 50]
+        type: "BOX"
+        profile:
+          type: "STATIC"
+          mode: "ALL"
+      - name: "MODEL"
+        mesh:
+          primitive: "BOX"
+          material:
+            texturePaths: ["assets/2dImages/ground.jpg"]
+            wrapMode: "REPEAT"
+            materialData:
+              type: TEXTURE
+              shininess: 10
+  - name: "Wall3"
+    components:
+      - name: "TRANSFORM"
+        position: [0, 10, -25]
+        scale: [50, 20, 0.1]
+      - name: "COLLIDER"
+        dimensions: [50, 20, 0.1]
+        type: "BOX"
+        profile:
+          type: "STATIC"
+          mode: "ALL"
+      - name: "MODEL"
+        mesh:
+          primitive: "BOX"
+          material:
+            texturePaths: ["assets/2dImages/ground.jpg"]
+            wrapMode: "REPEAT"
+            materialData:
+              type: TEXTURE
+              shininess: 10
+  - name: "Wall4"
+    components:
+      - name: "TRANSFORM"
+        position: [0, 10, 25]
+        scale: [50, 20, 0.1]
+      - name: "COLLIDER"
+        dimensions: [50, 20, 0.1]
+        type: "BOX"
+        profile:
+          type: "STATIC"
+          mode: "ALL"
+      - name: "MODEL"
+        mesh:
+          primitive: "BOX"
+          material:
+            texturePaths: ["assets/2dImages/ground.jpg"]
+            wrapMode: "REPEAT"
+            materialData:
+              type: TEXTURE
+              shininess: 10

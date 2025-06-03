@@ -1,7 +1,7 @@
 #include "PhysicsSimulationManager.h"
 
 #include <Components/Movement.h>
-#include <Components/PlayerController.h>
+#include <Components/Transform.h>
 #include <Managers/ConfigurationValues.h>
 #include <Managers/Helper.h>
 #include <Managers/World.h>
@@ -15,17 +15,35 @@ void PhysicsSimulationManager::PrepareGame()
     ConfigurationValues::IsEditorOpen = false;
     ConfigurationValues::IsUIActive = false;
 
-    playerStart = {0, 15, 5};
-    playerStartRotation = {-45, 0, 0};
+    playerStart = {0, 10, 5};
 }
 
 void PhysicsSimulationManager::StartGame()
 {
-    World::GetInstance()->GetPlayer()->GetComponent<Movement>()->usesPhysics = false;
-    World::GetInstance()->GetPlayer()->GetPhysicsMaterial()->hasGravity = false;
-    World::GetInstance()->GetPlayer()->EnableCollisions(false);
+    World::Resume();
 }
 
 void PhysicsSimulationManager::EndGame()
 {
+    player = nullptr;
+}
+
+void PhysicsSimulationManager::SetPlayer()
+{
+    if (!player)
+    {
+        std::shared_ptr<Player> temp = std::make_shared<Player>("Player");
+        player = temp.get();
+        player->Initialize();
+    }
+
+    player->GetComponent<Movement>()->usesPhysics = true;
+    player->GetPhysicsMaterial()->hasGravity = true;
+
+    player->GetComponent<Transform>()->position = GetPlayerStart();
+    player->GetComponent<Transform>()->SetRotation(GetPlayerStartRotation());
+
+    World::GetInstance()->SetCurrentCamera("Player");
+
+    player->isActive = true;
 }

@@ -74,23 +74,23 @@ void AliensLogic::StartGame()
         CalculateRandomDirection(alien);
         alien->isActive = true;
     }
-    World::GetInstance()->GetPlayer()->GetComponent<PlayerController>()->SetCanShoot(true);
-    World::GetInstance()->GetPlayer()->GetComponent<Movement>()->usesPhysics = false;
-    World::GetInstance()->GetPlayer()->GetPhysicsMaterial()->hasGravity = false;
+    // World::GetInstance()->GetPlayer()->GetComponent<PlayerController>()->SetCanShoot(true);
+    // World::GetInstance()->GetPlayer()->GetComponent<Movement>()->usesPhysics = false;
+    // World::GetInstance()->GetPlayer()->GetPhysicsMaterial()->hasGravity = false;
 }
 
 void AliensLogic::ShootProjectile()
 {
-    if (availableProjectiles.empty())
-    {
-        World::GetInstance()->GetPlayer()->GetComponent<Audio>()->Play("NoShot");
-        return;
-    }
-    usedProjectiles.push_back(availableProjectiles.front());
-    availableProjectiles.pop();
-
-    usedProjectiles.back()->GetShot();
-    World::GetInstance()->GetPlayer()->GetComponent<Audio>()->Play("Shoot");
+    // if (availableProjectiles.empty())
+    // {
+    //     World::GetInstance()->GetPlayer()->GetComponent<Audio>()->Play("NoShot");
+    //     return;
+    // }
+    // usedProjectiles.push_back(availableProjectiles.front());
+    // availableProjectiles.pop();
+    //
+    // usedProjectiles.back()->GetShot();
+    // World::GetInstance()->GetPlayer()->GetComponent<Audio>()->Play("Shoot");
 }
 
 void AliensLogic::RemoveProjectile(const std::shared_ptr<Projectile>& _projectile)
@@ -121,7 +121,7 @@ void AliensLogic::EndGame()
         availableProjectiles.pop();
     }
     alienText = nullptr;
-    World::GetInstance()->GetPlayer()->GetComponent<PlayerController>()->SetCanShoot(false);
+    // World::GetInstance()->GetPlayer()->GetComponent<PlayerController>()->SetCanShoot(false);
 }
 
 void AliensLogic::CalculateRandomPosition(const std::shared_ptr<Alien>& alien)

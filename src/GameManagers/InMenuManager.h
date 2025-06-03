@@ -1,10 +1,10 @@
 #pragma once
 #include "GameManager.h"
 
-class MapManager : public GameManager
+class InMenuManager : public GameManager
 {
 public:
-    MapManager() = default;
+    InMenuManager() = default;
 
     void PrepareGame() override;
     void StartGame() override;

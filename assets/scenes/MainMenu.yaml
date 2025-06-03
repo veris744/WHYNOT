@@ -7,14 +7,14 @@ widgets:
     subtype: "Start"
     position: [-25, 0]
     size: [200, 100]
-    sceneName: "Aliens"
+    sceneName: "Thrower"
     widgets:
       - type: "IMAGE2D"
         autoSizing: "ALL"
         path: "assets/2dImages/boton.png"
         hasTransparency: true
       - type: "TEXT"
-        text: "ALIENS"
+        text: "GAME"
         scale: 0.5
         color: [ 0.32, 0.8, 0.8 ]
         align: "CENTER"
@@ -54,6 +54,3 @@ widgets:
         align: "CENTER"
         alignVertical: "BOTTOM"
         padding: [0, 25]
-
-entities:
-  - type: "PLAYER"

@@ -37,7 +37,6 @@ void CollisionManager::PrepareOctree()
             root->InsertStatic(entity);
         }
     }
-    Logger::Log(LogLevel::Info, Parser::Parse((int)root->staticEntities.size()));
 }
 
 void CollisionManager::CheckCollisions()

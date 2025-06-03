@@ -109,14 +109,19 @@ void InputManager::ScrollCallback(GLFWwindow* window, double xoffset, double yof
 ////////////////////////////////////////////////////////
 
 void InputManager::Update(float _deltaTime)
-{    
+{
+    if ((!playerController || !playerTransform) && !World::GetInstance()->GetGameManager()->GetPlayer())
+    {
+        return;
+    }
+
     if (!playerController)
     {
-        playerController = World::GetInstance()->GetPlayer()->GetComponent<PlayerController>();
+        playerController = World::GetInstance()->GetGameManager()->GetPlayer()->GetComponent<PlayerController>();
     }
     if (!playerTransform)
     {
-        playerTransform = World::GetInstance()->GetPlayer()->GetComponent<Transform>();
+        playerTransform = World::GetInstance()->GetGameManager()->GetPlayer()->GetComponent<Transform>();
     }
     ProcessInput();
     ProcessPlayerInput();
@@ -349,8 +354,8 @@ void InputManager::ScapeInput()
         else
         {
             EditorMode::ExitEditorMode();
-            playerController = World::GetInstance()->GetPlayer()->GetComponent<PlayerController>();
-            playerTransform = World::GetInstance()->GetPlayer()->GetComponent<Transform>();
+            playerController = World::GetInstance()->GetGameManager()->GetPlayer()->GetComponent<PlayerController>();
+            playerTransform = World::GetInstance()->GetGameManager()->GetPlayer()->GetComponent<Transform>();
         }
         return;
     }

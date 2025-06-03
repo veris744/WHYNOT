@@ -1,8 +1,4 @@
-//
-// Created by Isa on 06/04/2025.
-//
-
-#include "MapManager.h"
+#include "InMenuManager.h"
 
 #include <Components/Movement.h>
 #include <Components/Transform.h>
@@ -10,29 +6,29 @@
 #include <Managers/Helper.h>
 #include <Managers/World.h>
 
-void MapManager::PrepareGame()
+void InMenuManager::PrepareGame()
 {
-    Helper::SetCursorVisible(false);
-    ConfigurationValues::CanPlayerLook = true;
-    ConfigurationValues::ArePhysicsActive = true;
-    ConfigurationValues::CanPlayerMove = true;
+    Helper::SetCursorVisible(true);
+    ConfigurationValues::CanPlayerLook = false;
+    ConfigurationValues::ArePhysicsActive = false;
+    ConfigurationValues::CanPlayerMove = false;
     ConfigurationValues::IsEditorOpen = false;
-    ConfigurationValues::IsUIActive = false;
+    ConfigurationValues::IsUIActive = true;
 
-    playerStart = {0, 11, 0};
+    SetPlayer();
 }
 
-void MapManager::StartGame()
+void InMenuManager::StartGame()
 {
-    World::Resume();
+    World::Pause();
 }
 
-void MapManager::EndGame()
+void InMenuManager::EndGame()
 {
     player = nullptr;
 }
 
-void MapManager::SetPlayer()
+void InMenuManager::SetPlayer()
 {
     if (!player)
     {
@@ -41,8 +37,8 @@ void MapManager::SetPlayer()
         player->Initialize();
     }
 
-    player->GetComponent<Movement>()->usesPhysics = true;
-    player->GetPhysicsMaterial()->hasGravity = true;
+    player->GetComponent<Movement>()->usesPhysics = false;
+    player->GetPhysicsMaterial()->hasGravity = false;
 
     player->GetComponent<Transform>()->position = GetPlayerStart();
     player->GetComponent<Transform>()->SetRotation(GetPlayerStartRotation());

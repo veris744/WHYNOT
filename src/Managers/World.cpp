@@ -22,13 +22,15 @@
 #include "Components/LightSource.h"
 #include <Components/PlayerController.h>
 #include <Components/Transform.h>
-
+#include <GameManagers/InMenuManager.h>
+#include <GameManagers/ThrowerManager.h>
 
 
 World* World::instance = nullptr;
 bool World::isSceneLoaded = false;
 string World::currentScene = "";
 std::unique_ptr<GameManager> World::gameManager = nullptr;
+bool World::isPaused = false;
 
 World* World::GetInstance()
 {
@@ -269,46 +271,28 @@ void World::DoLoad()
     AssetReader::ReadAssets(file.c_str());
     ConfigurationValues::ActiveGame = currentScene;
 
-    if (currentScene == "Aliens")
+    if (currentScene == "MainMenu")
     {
-        gameManager = std::make_unique<AliensLogic>();
-        Resume();
-    }
-    else if (currentScene == "MainMenu")
-    {
-        Helper::SetCursorVisible(true);
-        ConfigurationValues::CanPlayerLook = false;
-        ConfigurationValues::ArePhysicsActive = false;
-        ConfigurationValues::CanPlayerMove = false;
-        ConfigurationValues::IsEditorOpen = false;
-        ConfigurationValues::IsUIActive = true;
-        Pause();
+        gameManager = std::make_unique<InMenuManager>();
     }
     else if (currentScene == "Editor")
     {
         gameManager = std::make_unique<MapManager>();
-        Resume();
     }
     else if (currentScene == "PhysicsSimulation")
     {
         gameManager = std::make_unique<PhysicsSimulationManager>();
-        Resume();
+    }
+    else if (currentScene == "Thrower")
+    {
+        gameManager = std::make_unique<ThrowerManager>();
     }
     if (gameManager)
     {
         gameManager->PrepareGame();
+        gameManager->SetPlayer();
         gameManager->StartGame();
     }
-    playerEntity->GetComponent<Transform>()->position = gameManager ? gameManager->GetPlayerStart() : vec3(0,0,0);
-    playerEntity->GetComponent<Transform>()->SetRotation(gameManager ? gameManager->GetPlayerStartRotation() : vec3(0,0,0));
-    SetCurrentCamera("Player");
-
-    if (!playerEntity)
-    {
-        Logger::Log(LogLevel::FatalError,"Failed to load playerEntity");
-    }
-    playerEntity->isActive = true;
-
     if (ConfigurationValues::ArePhysicsActive)
     {
         CollisionManager::PrepareOctree();
@@ -320,7 +304,7 @@ void World::DoLoad()
 
 void World::UnloadScene()
 {
-    if (currentScene == "Aliens")
+    if (gameManager)
     {
         gameManager->EndGame();
     }
@@ -345,7 +329,6 @@ void World::UnloadScene()
     CollisionManager::ClearOctree();
     EditorMode::ClearEditor();
     gameManager.reset();
-    playerEntity = nullptr;
     InputManager::GetInstance()->Clear();
 }
 

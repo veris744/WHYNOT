@@ -1,8 +1,4 @@
-//
-// Created by Isa on 06/04/2025.
-//
-
-#include "MapManager.h"
+#include "ThrowerManager.h"
 
 #include <Components/Movement.h>
 #include <Components/Transform.h>
@@ -10,7 +6,7 @@
 #include <Managers/Helper.h>
 #include <Managers/World.h>
 
-void MapManager::PrepareGame()
+void ThrowerManager::PrepareGame()
 {
     Helper::SetCursorVisible(false);
     ConfigurationValues::CanPlayerLook = true;
@@ -22,17 +18,17 @@ void MapManager::PrepareGame()
     playerStart = {0, 11, 0};
 }
 
-void MapManager::StartGame()
+void ThrowerManager::StartGame()
 {
     World::Resume();
 }
 
-void MapManager::EndGame()
+void ThrowerManager::EndGame()
 {
     player = nullptr;
 }
 
-void MapManager::SetPlayer()
+void ThrowerManager::SetPlayer()
 {
     if (!player)
     {

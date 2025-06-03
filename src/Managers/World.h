@@ -15,7 +15,7 @@ class World
     unordered_map<string, std::shared_ptr<Entity>> entities;
     vector<Camera*> cameras;
     vector<LightSource*> lights;
-    Player* playerEntity;
+    // Player* playerEntity;
     std::unique_ptr<Entity> editorViewerEntity;
 
     set<std::shared_ptr<Entity>> toBeDestroyed;
@@ -28,7 +28,7 @@ class World
     static bool isSceneLoaded;
     static string currentScene;
 
-    bool isPaused = false;
+    static bool isPaused;
     
     World();
     
@@ -44,23 +44,23 @@ public:
     void PrepareLoad();
     void Update(float deltaTime);
     void Clean();
-    void Pause() { isPaused = true; };
-    void Resume() { isPaused = false; };
-    bool IsPaused() const { return isPaused; };
+    static void Pause() { isPaused = true; };
+    static void Resume() { isPaused = false; };
+    static bool IsPaused() { return isPaused; };
     static string GetCurrentScene() { return currentScene; }
     static GameManager* GetGameManager() { return gameManager.get(); }
 
-
-    void SetPlayer(Player* _player)
-    {
-        if (playerEntity != nullptr)
-        {
-            Logger::Log(LogLevel::Warning, "Player already set. Replacing it.");
-            entities.erase("Player");
-        }
-        playerEntity = _player;
-    }
-    Player* GetPlayer() const { return playerEntity; }
+    //
+    // void SetPlayer(Player* _player)
+    // {
+    //     if (playerEntity != nullptr)
+    //     {
+    //         Logger::Log(LogLevel::Warning, "Player already set. Replacing it.");
+    //         entities.erase("Player");
+    //     }
+    //     playerEntity = _player;
+    // }
+    // Player* GetPlayer() const { return playerEntity; }
     Entity* GetEditorPlayer() const { return editorViewerEntity.get(); }
     
     template <typename T>

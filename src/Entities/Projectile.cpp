@@ -86,7 +86,7 @@ void Projectile::ClearComponents()
 
 void Projectile::GetShot()
 {
-    Player* player = World::GetInstance()->GetPlayer();
+    Player* player = static_cast<Player*>(World::GetInstance()->GetGameManager()->GetPlayer());
     if (!player)
     {
         Logger::Log(LogLevel::Error, "No Player Found");

@@ -55,18 +55,20 @@ void EditorMode::EnterEditorMode()
     ConfigurationValues::CanPlayerMove = true;
     ConfigurationValues::IsUIActive = true;
 
-    World::GetInstance()->GetEditorPlayer()->GetComponent<Transform>()->position = World::GetInstance()->GetPlayer()->GetComponent<Transform>()->position;
-    World::GetInstance()->GetEditorPlayer()->GetComponent<Transform>()->SetRotation(World::GetInstance()->GetPlayer()->GetComponent<Transform>()->rotation.vector());
+    World::GetInstance()->GetEditorPlayer()->GetComponent<Transform>()->position =
+        World::GetInstance()->GetGameManager()->GetPlayer()->GetComponent<Transform>()->position;
+    World::GetInstance()->GetEditorPlayer()->GetComponent<Transform>()->SetRotation(
+        World::GetInstance()->GetGameManager()->GetPlayer()->GetComponent<Transform>()->rotation.vector());
     World::GetInstance()->GetEditorPlayer()->isActive = true;
     World::GetInstance()->SetCurrentCamera("EditorPlayer");
 
 
     Helper::SetCursorVisible(true);
 
-    if (World::GetGameManager())
-    {
-        World::GetGameManager()->EndGame();
-    }
+    // if (World::GetGameManager())
+    // {
+    //     World::GetGameManager()->EndGame();
+    // }
     for (const auto& widget : World::GetInstance()->GetWidgets())
     {
         if (widget->type == WidgetType::Game)
@@ -102,6 +104,7 @@ void EditorMode::ExitEditorMode()
     if (World::GetGameManager())
     {
         World::GetGameManager()->PrepareGame();
+        World::GetGameManager()->SetPlayer();
         World::GetGameManager()->StartGame();
     }
 

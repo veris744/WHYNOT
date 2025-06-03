@@ -88,7 +88,7 @@ void Alien::Update(float _deltaTime)
 
     if (!playerTransform)
     {
-        playerTransform = World::GetInstance()->GetPlayer()->GetComponent<Transform>();
+        //playerTransform = World::GetInstance()->GetPlayer()->GetComponent<Transform>();
     }
     transform->LookAt(playerTransform->position);
 }

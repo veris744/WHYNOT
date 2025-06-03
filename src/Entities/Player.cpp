@@ -15,11 +15,6 @@ void Player::Initialize()
 {
     name = "Player";
 
-    // isCamera = true;
-    // isLight = false;
-    // isRendered = false;
-    // hasCollision = true;
-
     if (!GetComponent<Camera>())
     {
         std::unique_ptr<Camera> camera = std::make_unique<Camera>();
@@ -73,7 +68,6 @@ void Player::Initialize()
     }
 
     isActive = true;
-    World::GetInstance()->SetPlayer(this);
     Entity::Initialize();
 }
 

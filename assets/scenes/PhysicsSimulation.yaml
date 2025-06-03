@@ -1,5 +1,4 @@
 entities:
-  - type: "PLAYER"
   - name: "Ambient"
     components:
       - name: "LIGHT"

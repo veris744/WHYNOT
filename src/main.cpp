@@ -51,10 +51,6 @@ int main()
             Renderer2D::instance().Render();
             Renderer2D::instance().Clear();
         }
-        else
-        {
-            InputManager::GetInstance()->Update(deltaTime);
-        }
 
         World::GetInstance()->Clean();
         Helper::EndUpdate(deltaTime);

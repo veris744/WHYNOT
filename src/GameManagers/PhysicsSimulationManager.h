@@ -9,5 +9,6 @@ public:
     void PrepareGame() override;
     void StartGame() override;
     void EndGame() override;
+    void SetPlayer() override;
 };
 
