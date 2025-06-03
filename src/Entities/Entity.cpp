@@ -28,11 +28,6 @@ PhysicsMaterial* Entity::GetPhysicsMaterial() const
 }
 
 
-void Entity::SetAutoName()
-{
-    name = "Entity" + std::to_string(++counter);
-}
-
 void Entity::UpdateTrigger(float deltaTime)
 {
     if (!isActive)  return;

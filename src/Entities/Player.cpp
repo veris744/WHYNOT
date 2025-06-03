@@ -1,6 +1,7 @@
 #include "Player.h"
 
 #include <Components/Colliders/CapsuleCollider.h>
+#include <Utils/Parser.h>
 
 #include "Components/Audio.h"
 #include "Components/Camera.h"
@@ -13,8 +14,6 @@ unsigned int Player::counter = 0;
 
 void Player::Initialize()
 {
-    name = "Player";
-
     if (!GetComponent<Camera>())
     {
         std::unique_ptr<Camera> camera = std::make_unique<Camera>();
@@ -63,7 +62,7 @@ void Player::Initialize()
         std::unique_ptr<CapsuleCollider> collider = std::make_unique<CapsuleCollider>();
         collider->radius = 4;
         collider->height = 16;
-        collider->profile = CollisionProfile(ColliderType::Dynamic, ColliderMode::All);
+        collider->profile = CollisionProfile(ColliderType::Dynamic, ColliderMode::All, false);
         AddComponent(std::move(collider));
     }
 
@@ -74,4 +73,5 @@ void Player::Initialize()
 void Player::Update(float _deltaTime)
 {
     Entity::Update(_deltaTime);
+    //Logger::Log(LogLevel::Info, "Player::Update: " + Parser::Parse(GetComponent<Transform>()->position));
 }

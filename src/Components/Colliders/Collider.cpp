@@ -16,12 +16,8 @@ vec3 Collider::GetWorldPosition()
 void Collider::Initialize()
 {
     Component::Initialize();
-    
-    if (profile.mode == ColliderMode::All || profile.mode == ColliderMode::Query)
-    {
-        OnClickedDelegate.Bind(&Entity::OnClicked, parent);
-    }
-    if (profile.mode == ColliderMode::All)
+
+    if (profile.mode == ColliderMode::Physics || profile.mode == ColliderMode::All)
     {
         OnOutOfBoundsDelegate.Bind(&Entity::OnOutOfBounds, parent);
         CollisionDelegate.Bind(&Entity::OnCollision, parent);

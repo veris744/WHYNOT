@@ -66,14 +66,10 @@ public:
     template <typename T>
     void AddEntity(const std::shared_ptr<T>& _entity)
     {
-        if (_entity->GetName().empty())
-        {
-            _entity->SetAutoName();
-        }
         if (entities.count(_entity->GetName()) != 0)
         {
             Logger::Log<World>(LogLevel::Warning, _entity->GetName() + " entity already exists");
-            _entity->SetAutoName();
+            return;
         }
         entities[_entity->GetName()] = _entity;
     

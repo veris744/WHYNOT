@@ -16,6 +16,8 @@ class Entity : public std::enable_shared_from_this<Entity>, public ReflectedObje
     static unsigned int counter;
     
 protected:
+    const string defaultName = "Entity";
+
     vector<std::unique_ptr<Component>> components = vector<std::unique_ptr<Component>>();
     bool isCamera = false;
     bool isLight = false;
@@ -24,13 +26,16 @@ protected:
 
     
 public:
-    Entity() = default;
+    Entity()
+    {
+        name = "Entity" + std::to_string(++counter);
+    }
     Entity(const string& _name)
         :name(_name)
         {}
-    Entity(const string& _name, bool _isCamera = false, bool _isLight = false, bool _isRendered = false, bool _hasCollision = false)
-        : isCamera(_isCamera), isLight(_isLight), isRendered(_isRendered), hasCollision(_hasCollision), name(_name)
-        {}
+    // Entity(const string& _name, bool _isCamera = false, bool _isLight = false, bool _isRendered = false, bool _hasCollision = false)
+    //     : isCamera(_isCamera), isLight(_isLight), isRendered(_isRendered), hasCollision(_hasCollision), name(_name)
+    //     {}
     virtual ~Entity() = default;
     
     virtual void Initialize();
@@ -83,7 +88,6 @@ public:
     void EnableCollisions(bool _enable) { hasCollision = _enable; };
 
     string GetName() { return name; }
-    virtual void SetAutoName();
 
     void UpdateTrigger(float deltaTime);
     virtual void Update(float deltaTime);
@@ -95,6 +99,7 @@ public:
 
     virtual void OnOutOfBounds(vec3 _normal) {}
     virtual void OnCollision(Entity* _otherEntity, vec3 normal) {}
+    virtual void OnHit(Entity* _otherEntity, vec3 normal) {}
     virtual void OnClicked()
     {
         //Logger::Log<Entity>(LogLevel::Info, "Clicked on " + name);

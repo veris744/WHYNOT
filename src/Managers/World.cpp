@@ -48,7 +48,7 @@ World::World()
 
 void World::Initialize()
 {
-    editorViewerEntity = std::make_unique<Entity>("EditorPlayer", true, false, false, false);
+    editorViewerEntity = std::make_unique<Entity>("EditorPlayer");
     editorViewerEntity->AddComponent(std::make_unique<Transform>());
     editorViewerEntity->AddComponent(std::make_unique<Camera>());
     std::unique_ptr<Movement> move = std::make_unique<Movement>();

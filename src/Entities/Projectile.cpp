@@ -52,9 +52,7 @@ void Projectile::Initialize()
         std::unique_ptr<CircleCollider> collider = std::make_unique<CircleCollider>(0.2);
         AddComponent(std::move(collider));
     }
-    GetComponent<CircleCollider>()->profile = {ColliderType::Dynamic, ColliderMode::All};
-    GetComponent<CircleCollider>()->OnOutOfBoundsDelegate.Bind(&Projectile::OnOutOfBounds, this);
-    GetComponent<CircleCollider>()->CollisionDelegate.Bind(&Projectile::OnCollision, this);
+    GetComponent<CircleCollider>()->profile = {ColliderType::Dynamic, ColliderMode::All, false};
 
     if (!GetComponent<Movement>())
     {

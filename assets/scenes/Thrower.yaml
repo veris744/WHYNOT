@@ -126,3 +126,29 @@ entities:
             materialData:
               type: TEXTURE
               shininess: 10
+
+# GOAL AREAS
+  - type: "GOAL"
+    components:
+      - name: "TRANSFORM"
+        position: [0, 0, -5]
+        scale: [5, 5, 5]
+      - name: "COLLIDER"
+        radius: 1
+        type: "CIRCLE"
+        profile:
+          type: "STATIC"
+          mode: "ALL"
+          isTrigger: true
+  - type: "GOAL"
+    components:
+      - name: "TRANSFORM"
+        position: [5, 0, -2]
+        scale: [2, 2, 2]
+      - name: "COLLIDER"
+        radius: 1
+        type: "CIRCLE"
+        profile:
+          type: "STATIC"
+          mode: "ALL"
+          isTrigger: true

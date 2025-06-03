@@ -1,6 +1,7 @@
 #include "EntityFactory.h"
 
 #include <utility>
+#include <Entities/Thrower/Goal.h>
 
 #include "Reader.h"
 #include "Entities/Alien.h"
@@ -29,6 +30,13 @@ void EntityFactory::EntityFactorySetup()
             std::shared_ptr<Projectile> proj = std::make_shared<Projectile>();
             deserialize(data, proj);
             return proj;
+        });
+
+    RegisterEntity("GOAL", [](const YAML::Node& data) ->
+        std::shared_ptr<Entity> {
+            std::shared_ptr<Goal> goal = std::make_shared<Goal>();
+            deserialize(data, goal);
+            return goal;
         });
 }
 

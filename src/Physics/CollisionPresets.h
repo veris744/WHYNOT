@@ -26,8 +26,8 @@ REGISTER_ENUM(ColliderMode,
 struct CollisionProfile : ReflectedObject
 {
     CollisionProfile() = default;
-    CollisionProfile(ColliderType type, ColliderMode mode)
-        : type(type), mode(mode) {}
+    CollisionProfile(ColliderType type, ColliderMode mode, bool _isTrigger)
+        : type(type), mode(mode), isTrigger(_isTrigger) {}
     ColliderType type = ColliderType::Static;
     ColliderMode mode = ColliderMode::Query;
 

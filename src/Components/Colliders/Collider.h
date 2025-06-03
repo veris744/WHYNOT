@@ -65,7 +65,6 @@ public:
     
     SingleDelegate<Entity*, vec3> CollisionDelegate;
     SingleDelegate<vec3> OnOutOfBoundsDelegate;
-    SingleDelegate<> OnClickedDelegate;
 
     CollisionProfile profile;
 
