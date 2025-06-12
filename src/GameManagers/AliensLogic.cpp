@@ -14,12 +14,12 @@
 #include "Managers/World.h"
 #include "Utils/Parser.h"
 
-float getRandomFloat(float min, float max) {
-    static std::random_device rd;
-    static std::mt19937 gen(rd());
-    std::uniform_real_distribution<float> dist(min, max);
-    return dist(gen);
-}
+// float getRandomFloat(float min, float max) {
+//     static std::random_device rd;
+//     static std::mt19937 gen(rd());
+//     std::uniform_real_distribution<float> dist(min, max);
+//     return dist(gen);
+// }
 
 void AliensLogic::AlienDestroyed(const std::shared_ptr<Alien>& _alien)
 {
@@ -139,10 +139,10 @@ void AliensLogic::CalculateRandomPosition(const std::shared_ptr<Alien>& alien)
     vec2 zBounds = GetZBounds();
 
     float radius = alien->GetComponent<CircleCollider>()->radius;
-    
-    alien->GetComponent<Transform>()->position = vec3(getRandomFloat(xBounds.x+radius, xBounds.y-radius),
-        getRandomFloat(yBounds.x+radius, yBounds.y-radius),
-        getRandomFloat(zBounds.x+radius, zBounds.y-radius));
+    //
+    // alien->GetComponent<Transform>()->position = vec3(getRandomFloat(xBounds.x+radius, xBounds.y-radius),
+    //     getRandomFloat(yBounds.x+radius, yBounds.y-radius),
+    //     getRandomFloat(zBounds.x+radius, zBounds.y-radius));
 
     for (const auto& otherAlien : aliens)
     {
@@ -159,6 +159,6 @@ void AliensLogic::CalculateRandomPosition(const std::shared_ptr<Alien>& alien)
 
 void AliensLogic::CalculateRandomDirection(const std::shared_ptr<Alien>& alien)
 {
-    vec3 dir = vec3(getRandomFloat(-1, 1), getRandomFloat(-1, 1), getRandomFloat(-1, 1));
-    alien->GetComponent<Movement>()->speed = alien->GetComponent<Movement>()->maxSpeed * dir;
+    //vec3 dir = vec3(getRandomFloat(-1, 1), getRandomFloat(-1, 1), getRandomFloat(-1, 1));
+    //alien->GetComponent<Movement>()->speed = alien->GetComponent<Movement>()->maxSpeed * dir;
 }

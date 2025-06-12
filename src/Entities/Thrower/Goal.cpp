@@ -58,7 +58,7 @@ void Goal::Update(float _deltaTime)
     for (Entity* entity : entitiesEntering) {
         if (entitiesInside.count(entity) == 0) {
             int points;
-            if (entity->GetProperty<int>("points", points));
+            if (entity->GetProperty<int>("points", points))
                 static_cast<ThrowerManager*>(World::GetGameManager())->AddPoints(points);
         }
     }
@@ -67,7 +67,7 @@ void Goal::Update(float _deltaTime)
     for (Entity* entity : entitiesInside) {
         if (entitiesEntering.count(entity) == 0) {
             int points;
-            if (entity->GetProperty<int>("points", points));
+            if (entity->GetProperty<int>("points", points))
                 static_cast<ThrowerManager*>(World::GetGameManager())->AddPoints(-points);
         }
     }
@@ -76,11 +76,11 @@ void Goal::Update(float _deltaTime)
 
     if (entitiesInside.size() > 0)
     {
-        material->materialData.color = vec4(0.0f, 1.0f, 0.0f, 0.3f);
+        material->materialData.color = vec4(0.0f, 1.0f, 0.0f, 0.2f);
     }
     else
     {
-        material->materialData.color = vec4(1.0f, 1.0f, 0.0f, 0.3f);
+        material->materialData.color = vec4(1.0f, 1.0f, 0.0f, 0.2f);
     }
 }
 
