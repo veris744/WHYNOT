@@ -11,6 +11,9 @@ class ThrowerManager : public GameManager
     float maxPotency = 60;
     float minPotency = 1;
     bool isCharging = false;
+    Entity* ballsReserve [TOTAL_BALLS];
+
+    unsigned int score = 0;
 
 public:
     ThrowerManager() = default;
@@ -22,7 +25,8 @@ public:
     void ProcessInput(int key, bool press) override;
     void Update(float deltaTime) override;
 
-    Entity* ballsReserve [TOTAL_BALLS];
+    void AddPoints(unsigned int amount);
+
 
 private:
     void PrepareUI();
@@ -37,6 +41,7 @@ private:
     Entity* GrabbedBall = nullptr;
     Transform* playerTransform = nullptr;
     Text* ballsCounter = nullptr;
+    Text* pointsCounter = nullptr;
     ProgressBar* chargeBar = nullptr;
 
     unsigned int currentBall = 0;

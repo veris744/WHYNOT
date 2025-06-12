@@ -1,5 +1,7 @@
 #pragma once
 
+#include <variant>
+
 #include "Components/Component.h"
 #include "Reflection/Reflection.h"
 
@@ -23,6 +25,9 @@ protected:
     bool isLight = false;
     bool isRendered = false;
     bool hasCollision = false;
+
+    using Property = variant<int, std::string, float, bool>;
+    std::unordered_map<std::string, Property> properties;
 
     
 public:
@@ -75,6 +80,23 @@ public:
             }
         }
         return nullptr;
+    }
+
+    void AddProperty(const std::string& name, Property value) {
+        properties[name] = value;
+    }
+
+    template<typename T>
+    bool GetProperty(const std::string& key, T& out)
+    {
+        auto it = properties.find(key);
+        if (it != properties.end()) {
+            if (auto ptr = std::get_if<T>(&it->second)) {
+                out = *ptr;
+                return true;
+            }
+        }
+        return false;
     }
 
     PhysicsMaterial* GetPhysicsMaterial() const;

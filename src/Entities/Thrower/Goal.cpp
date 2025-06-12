@@ -2,9 +2,11 @@
 
 #include <Components/Model.h>
 #include <Components/Colliders/CircleCollider.h>
+#include <GameManagers/ThrowerManager.h>
 #include <Graphics/Material.h>
 #include <Graphics/Mesh.h>
 #include <Managers/Renderer.h>
+#include <Managers/World.h>
 
 unsigned int Goal::counter = 0;
 
@@ -19,14 +21,14 @@ void Goal::Initialize()
     if (!GetComponent<Collider>())
     {
         std::unique_ptr<CircleCollider> collider = std::make_unique<CircleCollider>();
-        collider->radius = 4;
+        collider->radius = 1;
         collider->profile = CollisionProfile(ColliderType::Static, ColliderMode::All, true);
         AddComponent(std::move(collider));
     }
 
     if (!GetComponent<Model>())
     {
-        Renderer::SetSphereVertex(0.2f, 32.f, 16.f);
+        Renderer::SetSphereVertex(0.5f, 32.f, 16.f);
         vector<float> vertex = Renderer::GetSphereVertex();
         vector<unsigned int> index = Renderer::GetSphereIndex();
 
@@ -53,15 +55,18 @@ void Goal::Update(float _deltaTime)
     // Detect new entries
     for (Entity* entity : entitiesEntering) {
         if (entitiesInside.count(entity) == 0) {
-            //onEntityEnter(entity);
-            Logger::Log(LogLevel::Info, entity->name + " has entered " + name);
+            int points;
+            if (entity->GetProperty<int>("points", points));
+                static_cast<ThrowerManager*>(World::GetGameManager())->AddPoints(points);
         }
     }
 
     // Detect exits
     for (Entity* entity : entitiesInside) {
         if (entitiesEntering.count(entity) == 0) {
-            Logger::Log(LogLevel::Info, entity->name + " has exited " + name);
+            int points;
+            if (entity->GetProperty<int>("points", points));
+                static_cast<ThrowerManager*>(World::GetGameManager())->AddPoints(-points);
         }
     }
     

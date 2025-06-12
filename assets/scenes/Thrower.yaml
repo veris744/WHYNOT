@@ -131,10 +131,10 @@ entities:
   - type: "GOAL"
     components:
       - name: "TRANSFORM"
-        position: [0, 0, -5]
+        position: [-5, 0, -5]
         scale: [5, 5, 5]
       - name: "COLLIDER"
-        radius: 1
+        radius: 2.51
         type: "CIRCLE"
         profile:
           type: "STATIC"
@@ -143,10 +143,10 @@ entities:
   - type: "GOAL"
     components:
       - name: "TRANSFORM"
-        position: [5, 0, -2]
+        position: [5, 0, -5]
         scale: [2, 2, 2]
       - name: "COLLIDER"
-        radius: 1
+        radius: 1.01
         type: "CIRCLE"
         profile:
           type: "STATIC"

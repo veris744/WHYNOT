@@ -99,24 +99,37 @@ void ThrowerManager::Update(float deltaTime)
     }
 }
 
+void ThrowerManager::AddPoints(unsigned int amount)
+{
+    score += amount;
+    pointsCounter->SetText("Score: " + std::to_string(score));
+}
+
 
 void ThrowerManager::PrepareUI()
 {
     std::string ballsTxt = "Balls: " + to_string(TOTAL_BALLS);
     std::shared_ptr<Text> ballsCounterTemp = std::make_shared<Text>(
         ballsTxt, vec3(1, 1, 1), 0.5f,
-        vec2(5, 3), "BallsCounterText");
-
+        vec2(5, 5), "BallsCounterText");
     ballsCounterTemp->align = TextAlign::LEFT;
     ballsCounterTemp->alignVertical = TextAlignVertical::TOP;
-
     World::GetInstance()->AddWidget(ballsCounterTemp);
-
     ballsCounter = ballsCounterTemp.get();
+
+
+    std::string pointsTxt = "Points: " + to_string(score);
+    std::shared_ptr<Text> pointsCounterTemp = std::make_shared<Text>(
+        pointsTxt, vec3(1, 1, 1), 0.5f,
+        vec2(-5, 5), "PointsCounterText");
+    pointsCounterTemp->align = TextAlign::RIGHT;
+    pointsCounterTemp->alignVertical = TextAlignVertical::TOP;
+    World::GetInstance()->AddWidget(pointsCounterTemp);
+    pointsCounter = pointsCounterTemp.get();
+
 
     std::shared_ptr<ProgressBar> charger = std::make_shared<ProgressBar>(vec2{35, 0}, vec2{20, 100});
     World::GetInstance()->AddWidget(charger);
-
     chargeBar = charger.get();
 }
 
@@ -203,6 +216,8 @@ Entity* ThrowerManager::GenerateBall()
     std::unique_ptr model = std::make_unique<Model>();
     model->AddMesh(std::move(sphereMesh));
     temp->AddComponent(std::move(model));
+
+    temp->AddProperty("points", 10);
 
     temp->Initialize();
 
