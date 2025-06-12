@@ -30,6 +30,8 @@ public:
     void PrepareGame() override;
     void StartGame() override;
     void EndGame() override;
+    void ProcessInput(int key, bool press) override;
+    void Update(float deltaTime) override;
 
     void ShootProjectile();
     void RemoveProjectile(const std::shared_ptr<Projectile>& _projectile);

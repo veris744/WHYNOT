@@ -47,3 +47,11 @@ void PhysicsSimulationManager::SetPlayer()
 
     player->isActive = true;
 }
+
+void PhysicsSimulationManager::ProcessInput(int key, bool press)
+{
+}
+
+void PhysicsSimulationManager::Update(float deltaTime)
+{
+}

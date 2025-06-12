@@ -77,7 +77,7 @@ void CollisionManager::CheckCollisions()
 
             c1->CollisionDelegate.Execute(hit.otherEntity, hit.normal);
             c2->CollisionDelegate.Execute(hit2.otherEntity, hit2.normal);
-
+            //Logger::Log(LogLevel::Info, "Collision: " + e1->name + " : " + e2->name);
         }
     }
     root->ClearDynamic();

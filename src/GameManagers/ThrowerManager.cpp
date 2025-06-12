@@ -1,10 +1,18 @@
 #include "ThrowerManager.h"
 
+#include <Components/Model.h>
 #include <Components/Movement.h>
 #include <Components/Transform.h>
+#include <Components/Colliders/CircleCollider.h>
+#include <Graphics/Material.h>
+#include <Graphics/Mesh.h>
 #include <Managers/ConfigurationValues.h>
 #include <Managers/Helper.h>
+#include <Managers/Renderer.h>
 #include <Managers/World.h>
+#include <UI/Containers/ProgressBar.h>
+#include <UI/Text/Text.h>
+
 
 void ThrowerManager::PrepareGame()
 {
@@ -16,6 +24,15 @@ void ThrowerManager::PrepareGame()
     ConfigurationValues::IsUIActive = false;
 
     playerStart = {0, 11, 0};
+
+    for (int i = 0; i < TOTAL_BALLS; i++)
+    {
+        Entity* tempBall = GenerateBall();
+        tempBall->isActive = false;
+        ballsReserve[i] = tempBall;
+    }
+
+    PrepareUI();
 }
 
 void ThrowerManager::StartGame()
@@ -35,6 +52,8 @@ void ThrowerManager::SetPlayer()
         std::shared_ptr<Player> temp = std::make_shared<Player>("Player");
         player = temp.get();
         player->Initialize();
+
+        playerTransform = player->GetComponent<Transform>();
     }
 
     player->GetComponent<Movement>()->usesPhysics = true;
@@ -46,4 +65,146 @@ void ThrowerManager::SetPlayer()
     World::GetInstance()->SetCurrentCamera("Player");
 
     player->isActive = true;
+}
+
+void ThrowerManager::ProcessInput(int key, bool press)
+{
+    switch (key)
+    {
+    case GLFW_MOUSE_BUTTON_1:
+        if (press)
+            ChargeBall();
+        else
+            ThrowBall();
+        break;
+    case GLFW_MOUSE_BUTTON_2:
+        if (press)
+            GrabBall();
+        else
+            ReleaseBall();
+        break;
+    }
+}
+
+void ThrowerManager::Update(float deltaTime)
+{
+    if (GrabbedBall)
+    {
+        GrabbedBall->GetComponent<Transform>()->position = playerTransform->position + playerTransform->forward * 5.f;
+
+        if (isCharging)
+        {
+            chargeBar->UpdateValue(chargeBar->GetValue() + 1);
+        }
+    }
+}
+
+
+void ThrowerManager::PrepareUI()
+{
+    std::string ballsTxt = "Balls: " + to_string(TOTAL_BALLS);
+    std::shared_ptr<Text> ballsCounterTemp = std::make_shared<Text>(
+        ballsTxt, vec3(1, 1, 1), 0.5f,
+        vec2(5, 3), "BallsCounterText");
+
+    ballsCounterTemp->align = TextAlign::LEFT;
+    ballsCounterTemp->alignVertical = TextAlignVertical::TOP;
+
+    World::GetInstance()->AddWidget(ballsCounterTemp);
+
+    ballsCounter = ballsCounterTemp.get();
+
+    std::shared_ptr<ProgressBar> charger = std::make_shared<ProgressBar>(vec2{35, 0}, vec2{20, 100});
+    World::GetInstance()->AddWidget(charger);
+
+    chargeBar = charger.get();
+}
+
+void ThrowerManager::GrabBall()
+{
+    if (currentBall >= TOTAL_BALLS) return;
+
+    GrabbedBall = ballsReserve[currentBall];
+    GrabbedBall->GetComponent<Transform>()->position = playerTransform->position + playerTransform->forward * 7.f;
+    GrabbedBall->isActive = true;
+
+}
+
+void ThrowerManager::ReleaseBall()
+{
+    if (GrabbedBall)
+    {
+        GrabbedBall->isActive = false;
+        GrabbedBall = nullptr;
+    }
+    chargeBar->UpdateValue(0);
+}
+
+void ThrowerManager::ChargeBall()
+{
+    if (!GrabbedBall) return;
+
+    isCharging = true;
+}
+
+void ThrowerManager::ThrowBall()
+{
+    if (!GrabbedBall) return;
+
+    isCharging = false;
+
+    float potency = chargeBar->GetValue() * maxPotency * 0.01f;
+    potency = std::clamp(potency, minPotency, maxPotency);
+
+    GrabbedBall->GetComponent<PhysicsMaterial>()->hasGravity = true;
+    GrabbedBall->GetComponent<Movement>()->AddImpulse(playerTransform->forward * potency);
+    GrabbedBall = nullptr;
+    currentBall++;
+    ballsCounter->SetText("Balls: " + to_string(TOTAL_BALLS - currentBall));
+    chargeBar->UpdateValue(0);
+}
+
+Entity* ThrowerManager::GenerateBall()
+{
+    std::shared_ptr<Entity> temp = std::make_shared<Entity>();
+
+    std::unique_ptr<Transform> transform = std::make_unique<Transform>(vec3(0));
+    temp->AddComponent(std::move(transform));
+
+    std::unique_ptr<PhysicsMaterial> physMat = std::make_unique<PhysicsMaterial>();
+    physMat->hasGravity = false;
+    physMat->bounciness = 1.f;
+    physMat->friction = 0.1f;
+    temp->AddComponent(std::move(physMat));
+
+    std::unique_ptr<Movement> movement = std::make_unique<Movement>();
+    movement->usesPhysics = true;
+    movement->maxSpeed = 100;
+    temp->AddComponent(std::move(movement));
+
+    std::unique_ptr<CircleCollider> collider = std::make_unique<CircleCollider>();
+    collider->radius = 0.8;
+    collider->profile = CollisionProfile(ColliderType::Dynamic, ColliderMode::All, false);
+    temp->AddComponent(std::move(collider));
+
+
+    Renderer::SetSphereVertex(0.8f, 32.f, 16.f);
+    vector<float> vertex = Renderer::GetSphereVertex();
+    vector<unsigned int> index = Renderer::GetSphereIndex();
+
+    std::shared_ptr<Material> mat = std::make_shared<Material>(vector<string>(), DEFAULT_VERTEX_SHADER_PATH,
+        "shaders/fragmentColor.glsl");
+    mat->materialData.color = vec4(0.0f, 0.0f, 1.0f, 1.0f);
+    mat->materialData.type = MaterialType::COLOR;
+    mat->materialData.shininess = 32;
+
+    std::unique_ptr<Mesh> sphereMesh = std::make_unique<Mesh>(vertex, vertex.size(), index, mat);
+
+    std::unique_ptr model = std::make_unique<Model>();
+    model->AddMesh(std::move(sphereMesh));
+    temp->AddComponent(std::move(model));
+
+    temp->Initialize();
+
+    return temp.get();
 }

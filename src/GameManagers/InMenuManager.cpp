@@ -47,3 +47,11 @@ void InMenuManager::SetPlayer()
 
     player->isActive = true;
 }
+
+void InMenuManager::ProcessInput(int key, bool press)
+{
+}
+
+void InMenuManager::Update(float deltaTime)
+{
+}

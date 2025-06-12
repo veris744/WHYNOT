@@ -77,6 +77,11 @@ void World::Update(float deltaTime)
 {
     if (!isSceneLoaded) return;
 
+    if (!isPaused && gameManager)
+    {
+        gameManager->Update(deltaTime);
+    }
+
     if (editorViewerEntity->isActive)
     {
         editorViewerEntity->Update(deltaTime);

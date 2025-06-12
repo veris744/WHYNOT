@@ -52,7 +52,7 @@ entities:
         position: [-25, 10, 0]
         scale: [0.1, 20, 50]
       - name: "COLLIDER"
-        dimensions: [0.1, 20, 50]
+        dimensions: [0.5, 20, 50]
         type: "BOX"
         profile:
           type: "STATIC"
@@ -72,7 +72,7 @@ entities:
         position: [25, 10, 0]
         scale: [0.1, 20, 50]
       - name: "COLLIDER"
-        dimensions: [0.1, 20, 50]
+        dimensions: [0.5, 20, 50]
         type: "BOX"
         profile:
           type: "STATIC"
@@ -92,7 +92,7 @@ entities:
         position: [0, 10, -25]
         scale: [50, 20, 0.1]
       - name: "COLLIDER"
-        dimensions: [50, 20, 0.1]
+        dimensions: [50, 20, 0.5]
         type: "BOX"
         profile:
           type: "STATIC"
@@ -112,7 +112,7 @@ entities:
         position: [0, 10, 25]
         scale: [50, 20, 0.1]
       - name: "COLLIDER"
-        dimensions: [50, 20, 0.1]
+        dimensions: [50, 20, 0.5]
         type: "BOX"
         profile:
           type: "STATIC"

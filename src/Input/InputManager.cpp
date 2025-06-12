@@ -177,20 +177,21 @@ void InputManager::ProcessPlayerInput() const
 
 void InputManager::HandleKeyPress(int key, int mods)
 {
+    Debugger::ProcessInput(key);
+
     if (ConfigurationValues::IsEditorOpen)
     {
         bool inputOpen = EditorMode::isInputBoxOpen;
         EditorMode::ProcessUserInput(key);
         if (inputOpen) return;
     }
-    Debugger::ProcessInput(key);
+
+    World::GetGameManager()->ProcessInput(key, true);
+
     switch(key)
     {
         case GLFW_KEY_ESCAPE:
             ScapeInput();
-            break;
-        case GLFW_KEY_SPACE:
-            playerController->Jump();
             break;
         case GLFW_KEY_F1:
             EditorMode::EnterEditorMode();
@@ -220,17 +221,24 @@ void InputManager::HandleKeyRelease(int key, int mods)
     // default:
     //     break;
     // }
+    World::GetGameManager()->ProcessInput(key, false);
 }
 
 void InputManager::HandleMouseButtonPress(int key)
 {
+    // If user is inputting text no need to handle mouse button press
     if (EditorMode::isInputBoxOpen) return;
-    
+
+    // Game Manager processes input
+    World::GetGameManager()->ProcessInput(key, true);
+
+    // If UI is active
     if (ConfigurationValues::IsUIActive && key == GLFW_MOUSE_BUTTON_1)
     {
         double xpos, ypos;
         glfwGetCursorPos(Helper::GetWindow(), &xpos, &ypos);
 
+        // If in editor open select/unselect entities
         if (ConfigurationValues::IsEditorOpen)
         {
             Hit hit = CollisionManager::ThrowRayFromScreen(vec2{xpos,ypos}, playerTransform->position, true, 5);
@@ -244,25 +252,29 @@ void InputManager::HandleMouseButtonPress(int key)
                 EditorMode::Unselect();
             }
         }
+        // Process button clicked
         else
         {
             CollisionManager::CheckUIClicked(vec2{xpos,ypos});
         }
+
+        return;
     }
-    else if (ConfigurationValues::ActiveGame == "Aliens" && key == GLFW_MOUSE_BUTTON_1)
-    {
-        if (!playerController) return;
-        playerController->Shoot();
-    }
-    else if (ConfigurationValues::IsEditorOpen && key == GLFW_MOUSE_BUTTON_2)
+    // Move camera if in editor and clicking Right button
+    if (ConfigurationValues::IsEditorOpen && key == GLFW_MOUSE_BUTTON_2)
     {
         ConfigurationValues::CanPlayerLook = true;
         firstMouse = true;
+        return;
     }
 }
 
 void InputManager::HandleMouseButtonRelease(int key)
 {
+    // Game Manager processes input
+    World::GetGameManager()->ProcessInput(key, false);
+
+    // Disable camera movement when in editor and not clicking Right Button
     if (ConfigurationValues::IsEditorOpen && key == GLFW_MOUSE_BUTTON_2)
     {
         ConfigurationValues::CanPlayerLook = false;

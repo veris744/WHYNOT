@@ -26,6 +26,8 @@ public:
     virtual void StartGame() = 0;
     virtual void EndGame() = 0;
     virtual void SetPlayer() = 0;
+    virtual void Update(float deltaTime) = 0;
+    virtual void ProcessInput(int key, bool press) = 0;
 
     vec2 GetXBounds() const{
         return vec2(playgroundCenter.z - playgroundDimensions.z * 0.5f, playgroundCenter.z + playgroundDimensions.z * 0.5f);

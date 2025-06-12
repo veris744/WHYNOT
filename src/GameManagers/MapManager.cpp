@@ -51,3 +51,11 @@ void MapManager::SetPlayer()
 
     player->isActive = true;
 }
+
+void MapManager::ProcessInput(int key, bool press)
+{
+}
+
+void MapManager::Update(float deltaTime)
+{
+}

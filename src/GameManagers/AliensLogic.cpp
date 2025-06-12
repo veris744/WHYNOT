@@ -124,6 +124,14 @@ void AliensLogic::EndGame()
     // World::GetInstance()->GetPlayer()->GetComponent<PlayerController>()->SetCanShoot(false);
 }
 
+void AliensLogic::ProcessInput(int key, bool press)
+{
+}
+
+void AliensLogic::Update(float deltaTime)
+{
+}
+
 void AliensLogic::CalculateRandomPosition(const std::shared_ptr<Alien>& alien)
 {
     vec2 xBounds = GetXBounds();
