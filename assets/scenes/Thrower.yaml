@@ -126,6 +126,86 @@ entities:
             materialData:
               type: TEXTURE
               shininess: 10
+  - name: "InsideWall1"
+    components:
+      - name: "TRANSFORM"
+        position: [-15, 2.5, 0]
+        scale: [0.1, 5, 30]
+      - name: "COLLIDER"
+        dimensions: [0.5, 5, 30]
+        type: "BOX"
+        profile:
+          type: "STATIC"
+          mode: "ALL"
+      - name: "MODEL"
+        mesh:
+          primitive: "BOX"
+          material:
+            texturePaths: ["assets/2dImages/ground.jpg"]
+            wrapMode: "REPEAT"
+            materialData:
+              type: TEXTURE
+              shininess: 10
+  - name: "InsideWall2"
+    components:
+      - name: "TRANSFORM"
+        position: [15, 2.5, 0]
+        scale: [0.1, 5, 30]
+      - name: "COLLIDER"
+        dimensions: [0.5, 5, 30]
+        type: "BOX"
+        profile:
+          type: "STATIC"
+          mode: "ALL"
+      - name: "MODEL"
+        mesh:
+          primitive: "BOX"
+          material:
+            texturePaths: ["assets/2dImages/ground.jpg"]
+            wrapMode: "REPEAT"
+            materialData:
+              type: TEXTURE
+              shininess: 10
+  - name: "InsideWall3"
+    components:
+      - name: "TRANSFORM"
+        position: [0, 2.5, -15]
+        scale: [30, 5, 0.1]
+      - name: "COLLIDER"
+        dimensions: [30, 5, 0.5]
+        type: "BOX"
+        profile:
+          type: "STATIC"
+          mode: "ALL"
+      - name: "MODEL"
+        mesh:
+          primitive: "BOX"
+          material:
+            texturePaths: ["assets/2dImages/ground.jpg"]
+            wrapMode: "REPEAT"
+            materialData:
+              type: TEXTURE
+              shininess: 10
+  - name: "InsideWall4"
+    components:
+      - name: "TRANSFORM"
+        position: [0, 2.5, 15]
+        scale: [30, 5, 0.1]
+      - name: "COLLIDER"
+        dimensions: [30, 5, 0.5]
+        type: "BOX"
+        profile:
+          type: "STATIC"
+          mode: "ALL"
+      - name: "MODEL"
+        mesh:
+          primitive: "BOX"
+          material:
+            texturePaths: ["assets/2dImages/ground.jpg"]
+            wrapMode: "REPEAT"
+            materialData:
+              type: TEXTURE
+              shininess: 10
 
 # GOAL AREAS
   - type: "GOAL"

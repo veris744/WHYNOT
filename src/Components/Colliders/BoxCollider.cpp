@@ -103,7 +103,7 @@ bool BoxCollider::RayCollides(vec3 _rayOrigin, vec3 _rayDir, Hit& hit)
     return false;
 }
 
-bool BoxCollider::CheckInBounds(const vec2& xBounds, const vec2& yBounds, const vec2& zBounds, bool triggerDelegate)
+bool BoxCollider::CheckInBounds(const vec2& xBounds, const vec2& yBounds, const vec2& zBounds)
 {
     vec3 boxCenter = GetWorldPosition();
     vec3 halfExtents = dimensions * 0.5f;
@@ -117,15 +117,10 @@ bool BoxCollider::CheckInBounds(const vec2& xBounds, const vec2& yBounds, const 
 
     bool isCompletelyInside = isInsideX && isInsideY && isInsideZ;
 
-    if (triggerDelegate && !isCompletelyInside)
-    {
-        OnOutOfBoundsDelegate.Execute(vec3(0));
-    }
-
     return isCompletelyInside;
 }
 
-bool BoxCollider::OverlapsBounds(const vec2& xBounds, const vec2& yBounds, const vec2& zBounds, bool triggerDelegate)
+bool BoxCollider::OverlapsBounds(const vec2& xBounds, const vec2& yBounds, const vec2& zBounds)
 {
     vec3 boxCenter = GetWorldPosition();
     vec3 halfExtents = dimensions * 0.5f;

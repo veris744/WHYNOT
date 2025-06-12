@@ -1,5 +1,7 @@
 #include "Renderer.h"
 
+#include <stack>
+
 #include "Renderer2D.h"
 #include "Graphics/Shader.h"
 #include "World.h"
@@ -122,7 +124,11 @@ void Renderer::Render()
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
     glDisable(GL_BLEND);
+    glDepthMask(GL_TRUE);
+
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
+    std::stack<Model*> transparentObjects;
     
     for (const auto& entity : World::GetInstance()->GetEntities())
     {
@@ -137,14 +143,20 @@ void Renderer::Render()
             {
                 Logger::Log<Renderer>(LogLevel::Warning,  "Renderable entity does not have a model");
             }
+            // Don't render yet with transparency
+            if (model->hasTransparency)
+            {
+                transparentObjects.push(model);
+                continue;
+            }
+
             if (!model->enableCulling)  glDisable(GL_CULL_FACE);
             model->Render();
             if (!model->enableCulling)  glEnable(GL_CULL_FACE);
         }
 
 #ifdef _DEBUG
-        glEnable(GL_BLEND);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        //Prepare debug rendering
         if (entity.second->debugEnabled)
         {
             for (const auto& comp : entity.second->GetComponents())
@@ -155,11 +167,34 @@ void Renderer::Render()
                 }
             }
         }
-    }
-    Debugger::Render();
-    glDisable(GL_BLEND);
 #endif
+    }
+
+
+    // Render objects with transparency (and debug if on)
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glDepthMask(GL_FALSE);
+
+    int nTransparent = transparentObjects.size();
+    for (int i = 0; i < nTransparent; ++i)
+    {
+        Model* model = transparentObjects.top();
+        if (!model->enableCulling)  glDisable(GL_CULL_FACE);
+        model->Render();
+        if (!model->enableCulling)  glEnable(GL_CULL_FACE);
+        transparentObjects.pop();
+    }
+
+#ifdef _DEBUG
+    Debugger::Render();
+#endif
+
+    glDepthMask(GL_TRUE);
+    glDisable(GL_BLEND);
 }
+
+
 void Renderer::Clear()
 {
     for (const auto& entity : World::GetInstance()->GetEntities())

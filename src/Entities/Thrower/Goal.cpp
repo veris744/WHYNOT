@@ -41,10 +41,12 @@ void Goal::Initialize()
 
         std::unique_ptr model = std::make_unique<Model>();
         model->AddMesh(std::move(sphereMesh));
+        model->hasTransparency = true;
         AddComponent(std::move(model));
     }
 
     isActive = true;
+    material = GetComponent<Model>()->GetMeshes().front()->GetMaterial();
     Entity::Initialize();
 }
 
@@ -71,16 +73,20 @@ void Goal::Update(float _deltaTime)
     }
     
     entitiesInside = std::move(entitiesEntering);
+
+    if (entitiesInside.size() > 0)
+    {
+        material->materialData.color = vec4(0.0f, 1.0f, 0.0f, 0.3f);
+    }
+    else
+    {
+        material->materialData.color = vec4(1.0f, 1.0f, 0.0f, 0.3f);
+    }
 }
 
 void Goal::ClearComponents()
 {
     Entity::ClearComponents();
-}
-
-void Goal::OnOutOfBounds(vec3 _normal)
-{
-
 }
 
 void Goal::OnCollision(Entity* _otherEntity, vec3 normal)

@@ -19,7 +19,6 @@ void Collider::Initialize()
 
     if (profile.mode == ColliderMode::Physics || profile.mode == ColliderMode::All)
     {
-        OnOutOfBoundsDelegate.Bind(&Entity::OnOutOfBounds, parent);
         CollisionDelegate.Bind(&Entity::OnCollision, parent);
     }
 }

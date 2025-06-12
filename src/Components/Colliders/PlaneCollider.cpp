@@ -82,7 +82,7 @@ bool PlaneCollider::RayCollides(vec3 _rayOrigin, vec3 _rayDir, Hit& hit)
     return true;
 }
 
-bool PlaneCollider::CheckInBounds(const vec2& xBounds, const vec2& yBounds, const vec2& zBounds, bool triggerDelegate)
+bool PlaneCollider::CheckInBounds(const vec2& xBounds, const vec2& yBounds, const vec2& zBounds)
 {
 
     // For finite planes (e.g., quad colliders)
@@ -101,13 +101,10 @@ bool PlaneCollider::CheckInBounds(const vec2& xBounds, const vec2& yBounds, cons
             }
     }
 
-    if (triggerDelegate) {
-        // OnBoundsFullyEnteredEvent.Invoke(this);
-    }
     return true;
 }
 
-bool PlaneCollider::OverlapsBounds(const vec2& xBounds, const vec2& yBounds, const vec2& zBounds, bool triggerDelegate)
+bool PlaneCollider::OverlapsBounds(const vec2& xBounds, const vec2& yBounds, const vec2& zBounds)
 {
     // For finite planes - SAT (Separating Axis Theorem) test
     vec3 boundsCenter = {
@@ -135,9 +132,6 @@ bool PlaneCollider::OverlapsBounds(const vec2& xBounds, const vec2& yBounds, con
 
     if (fabs(s) > r) return false;
 
-    if (triggerDelegate) {
-        // OnBoundsOverlapEvent.Invoke(this);
-    }
     return true;
 }
 

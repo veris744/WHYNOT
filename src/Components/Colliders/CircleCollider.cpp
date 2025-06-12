@@ -96,7 +96,7 @@ bool CircleCollider::RayCollides(vec3 _rayOrigin, vec3 _rayDir, Hit& hit)
     return true;
 }
 
-bool CircleCollider::CheckInBounds(const vec2& xBounds, const vec2& yBounds, const vec2& zBounds, bool triggerElement)
+bool CircleCollider::CheckInBounds(const vec2& xBounds, const vec2& yBounds, const vec2& zBounds)
 {
     bool isInside = true;
     vec3 outNormal = vec3(0.0f, 0.0f, 0.0f);
@@ -131,16 +131,11 @@ bool CircleCollider::CheckInBounds(const vec2& xBounds, const vec2& yBounds, con
         outNormal = vec3(0.0f, 0.0f, -1.0f);
         isInside = false;
     }
-    if (triggerElement && !isInside)
-    {
-        OnOutOfBoundsDelegate.Execute(outNormal);
-    }
 
     return isInside;
 }
 
-bool CircleCollider::OverlapsBounds(const vec2& xBounds, const vec2& yBounds, const vec2& zBounds,
-    bool triggerDelegate)
+bool CircleCollider::OverlapsBounds(const vec2& xBounds, const vec2& yBounds, const vec2& zBounds)
 {
     // Get the collider's center and radius
     vec3 center = GetWorldPosition();

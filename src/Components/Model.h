@@ -30,6 +30,7 @@ public:
     vec3 scale = vec3(1,1,1);
     bool invertTexture = false;
     bool enableCulling = true;
+    bool hasTransparency = false;
     
     Model();
     Model (const char* _path, std::shared_ptr<Material> material = nullptr)

@@ -8,7 +8,7 @@ class Alien : public Entity
 {
     static unsigned int counter;
 
-    void OnOutOfBounds(vec3 _normal) override;
+    //void OnOutOfBounds(vec3 _normal) override;
     void OnCollision(Entity* _otherEntity, vec3 normal) override;
 
     Movement* movement = nullptr;

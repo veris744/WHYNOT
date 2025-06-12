@@ -20,8 +20,8 @@ public:
     bool Collides(vec2 _dimensions, vec3 _pos1, Hit& hit) override;
     bool RayCollides(vec3 _rayOrigin, vec3 _rayDir, Hit& hit) override;
     bool RaySphereIntersection(vec3 rayOrigin, vec3 rayDir, vec3 sphereCenter, float sphereRadius, float& t);
-    bool CheckInBounds(const vec2& xBounds, const vec2& yBounds, const vec2& zBounds, bool triggerDelegate = true) override;
-    bool OverlapsBounds(const vec2& xBounds, const vec2& yBounds, const vec2& zBounds, bool triggerDelegate = true) override;
+    bool CheckInBounds(const vec2& xBounds, const vec2& yBounds, const vec2& zBounds) override;
+    bool OverlapsBounds(const vec2& xBounds, const vec2& yBounds, const vec2& zBounds) override;
     void RenderDebug() override;
     void Update(float deltaTime) override {};
     

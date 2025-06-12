@@ -104,7 +104,7 @@ bool SlopeCollider::RayCollides(vec3 _rayOrigin, vec3 _rayDir, Hit& hit)
     return false;
 }
 
-bool SlopeCollider::CheckInBounds(const vec2& xBounds, const vec2& yBounds, const vec2& zBounds, bool triggerDelegate)
+bool SlopeCollider::CheckInBounds(const vec2& xBounds, const vec2& yBounds, const vec2& zBounds)
 {
     vec3 boxCenter = GetWorldPosition();
     vec3 halfExtents = dimensions * 0.5f;
@@ -118,15 +118,10 @@ bool SlopeCollider::CheckInBounds(const vec2& xBounds, const vec2& yBounds, cons
 
     bool isCompletelyInside = isInsideX && isInsideY && isInsideZ;
 
-    if (triggerDelegate && !isCompletelyInside)
-    {
-        OnOutOfBoundsDelegate.Execute(vec3(0));
-    }
-
     return isCompletelyInside;
 }
 
-bool SlopeCollider::OverlapsBounds(const vec2& xBounds, const vec2& yBounds, const vec2& zBounds, bool triggerDelegate)
+bool SlopeCollider::OverlapsBounds(const vec2& xBounds, const vec2& yBounds, const vec2& zBounds)
 {
     vec3 boxCenter = GetWorldPosition();
     vec3 halfExtents = dimensions * 0.5f;

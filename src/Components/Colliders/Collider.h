@@ -60,11 +60,10 @@ public:
     virtual bool Collides(vec2 dimensions, vec3 _pos1, Hit& hit) = 0;
     virtual bool Collides(Collider* other, Hit& hit) = 0;
     virtual bool RayCollides(vec3 _rayOrigin, vec3 _rayDir, Hit& hit) = 0;
-    virtual bool CheckInBounds(const vec2& xBounds, const vec2& yBounds, const vec2& zBounds, bool triggerDelegate = true) = 0;
-    virtual bool OverlapsBounds(const vec2& xBounds, const vec2& yBounds, const vec2& zBounds, bool triggerDelegate = true) = 0;
+    virtual bool CheckInBounds(const vec2& xBounds, const vec2& yBounds, const vec2& zBounds) = 0;
+    virtual bool OverlapsBounds(const vec2& xBounds, const vec2& yBounds, const vec2& zBounds) = 0;
     
     SingleDelegate<Entity*, vec3> CollisionDelegate;
-    SingleDelegate<vec3> OnOutOfBoundsDelegate;
 
     CollisionProfile profile;
 

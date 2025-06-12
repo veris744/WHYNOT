@@ -106,14 +106,14 @@ void Projectile::DisableProjectile()
 }
 
 
-void Projectile::OnCollision(Entity* _otherEntity, vec3 normal)
-{
-    if (alienLogicManager)
-        alienLogicManager->RemoveProjectile(std::static_pointer_cast<Projectile>(shared_from_this()));
-}
+// void Projectile::OnCollision(Entity* _otherEntity, vec3 normal)
+// {
+//     if (alienLogicManager)
+//         alienLogicManager->RemoveProjectile(std::static_pointer_cast<Projectile>(shared_from_this()));
+// }
 
-void Projectile::OnOutOfBounds(vec3 _normal)
-{
-    if (alienLogicManager)
-        alienLogicManager->RemoveProjectile(std::static_pointer_cast<Projectile>(shared_from_this()));
-}
+// void Projectile::OnOutOfBounds(vec3 _normal)
+// {
+//     if (alienLogicManager)
+//         alienLogicManager->RemoveProjectile(std::static_pointer_cast<Projectile>(shared_from_this()));
+// }

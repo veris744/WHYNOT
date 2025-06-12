@@ -185,7 +185,7 @@ bool CapsuleCollider::RaySphereIntersection(vec3 rayOrigin, vec3 rayDir, vec3 sp
     return true;
 }
 
-bool CapsuleCollider::CheckInBounds(const vec2& xBounds, const vec2& yBounds, const vec2& zBounds, bool triggerElement)
+bool CapsuleCollider::CheckInBounds(const vec2& xBounds, const vec2& yBounds, const vec2& zBounds)
 {
     float halfHeight = (height * 0.5f);
     vec3 minPoint = position + vec3(-radius, -halfHeight, -radius);
@@ -196,16 +196,10 @@ bool CapsuleCollider::CheckInBounds(const vec2& xBounds, const vec2& yBounds, co
         minPoint.y >= yBounds.x && maxPoint.y <= yBounds.y &&
         minPoint.z >= zBounds.x && maxPoint.z <= zBounds.y;
 
-    if (inside && triggerElement)
-    {
-        // OnOutOfBoundsDelegate.Execute(normal);
-    }
-
     return inside;
 }
 
-bool CapsuleCollider::OverlapsBounds(const vec2& xBounds, const vec2& yBounds, const vec2& zBounds,
-    bool triggerDelegate)
+bool CapsuleCollider::OverlapsBounds(const vec2& xBounds, const vec2& yBounds, const vec2& zBounds)
 {
 float halfHeight = (height * 0.5f);
     vec3 minPoint = position + vec3(-radius, -halfHeight, -radius);

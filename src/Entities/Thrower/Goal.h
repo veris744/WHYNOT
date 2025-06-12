@@ -3,6 +3,8 @@
 #include <Entities/Entity.h>
 
 
+class Material;
+
 class Goal : public Entity
 {
     static unsigned int counter;
@@ -10,6 +12,8 @@ class Goal : public Entity
 
     set<Entity*> entitiesEntering;
     set<Entity*> entitiesInside;
+
+    Material* material;
 
 public:
     Goal(const string& _name = "")
@@ -22,7 +26,6 @@ public:
     void Update(float _deltaTime) override;
     void ClearComponents() override;
 
-    void OnOutOfBounds(vec3 _normal) override;
     void OnCollision(Entity* _otherEntity, vec3 normal) override;
 };
 REGISTER_CLASS(Goal, {
