@@ -335,6 +335,7 @@ void World::UnloadScene()
     EditorMode::ClearEditor();
     gameManager.reset();
     InputManager::GetInstance()->Clear();
+    Entity::ResetCounter();
 }
 
 void World::EndApplication()

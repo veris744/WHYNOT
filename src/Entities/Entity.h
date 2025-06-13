@@ -42,6 +42,7 @@ public:
     //     : isCamera(_isCamera), isLight(_isLight), isRendered(_isRendered), hasCollision(_hasCollision), name(_name)
     //     {}
     virtual ~Entity() = default;
+    static void ResetCounter() { counter = 0; }
     
     virtual void Initialize();
     

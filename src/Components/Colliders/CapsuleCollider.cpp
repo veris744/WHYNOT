@@ -188,8 +188,8 @@ bool CapsuleCollider::RaySphereIntersection(vec3 rayOrigin, vec3 rayDir, vec3 sp
 bool CapsuleCollider::CheckInBounds(const vec2& xBounds, const vec2& yBounds, const vec2& zBounds)
 {
     float halfHeight = (height * 0.5f);
-    vec3 minPoint = position + vec3(-radius, -halfHeight, -radius);
-    vec3 maxPoint = position + vec3(+radius, +halfHeight, +radius);
+    vec3 minPoint = GetWorldPosition() + vec3(-radius, -halfHeight, -radius);
+    vec3 maxPoint = GetWorldPosition() + vec3(+radius, +halfHeight, +radius);
 
     bool inside =
         minPoint.x >= xBounds.x && maxPoint.x <= xBounds.y &&
@@ -202,8 +202,8 @@ bool CapsuleCollider::CheckInBounds(const vec2& xBounds, const vec2& yBounds, co
 bool CapsuleCollider::OverlapsBounds(const vec2& xBounds, const vec2& yBounds, const vec2& zBounds)
 {
 float halfHeight = (height * 0.5f);
-    vec3 minPoint = position + vec3(-radius, -halfHeight, -radius);
-    vec3 maxPoint = position + vec3(+radius, +halfHeight, +radius);
+    vec3 minPoint = GetWorldPosition() + vec3(-radius, -halfHeight, -radius);
+    vec3 maxPoint = GetWorldPosition() + vec3(+radius, +halfHeight, +radius);
 
     bool overlaps =
         maxPoint.x >= xBounds.x && minPoint.x <= xBounds.y &&

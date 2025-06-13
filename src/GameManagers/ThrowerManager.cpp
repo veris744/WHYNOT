@@ -30,11 +30,13 @@ void ThrowerManager::PrepareGame()
     ConfigurationValues::IsEditorOpen = false;
     ConfigurationValues::IsUIActive = false;
 
-    playerStart = {0, 11, 0};
+    playerStart = {0, 8, 21};
+    playgroundDimensions = {52, 12, 52};
+    playgroundCenter = {0, 5, 0};
 
     for (int i = 0; i < TOTAL_BALLS_HAND; i++)
     {
-    Entity* tempBall = GenerateBall(BallType::HAND);
+    Entity* tempBall = GenerateBall(BallType::HAND, "HandBall" + to_string(i+1));
         tempBall->isActive = false;
         ballsReserve[i] = tempBall;
     }
@@ -162,7 +164,7 @@ void ThrowerManager::PrepareScene()
         if (isValid)
         {
             i++;
-            Entity* ball = GenerateBall(BallType::SMALL);
+            Entity* ball = GenerateBall(BallType::SMALL, "SmallBall" + to_string(i+1));
             ball->GetComponent<Transform>()->position = pos;
             ballsPositions.push_back(pos);
             ball->GetComponent<PhysicsMaterial>()->hasGravity = true;
@@ -187,7 +189,7 @@ void ThrowerManager::PrepareScene()
         if (isValid)
         {
             i++;
-            Entity* ball = GenerateBall(BallType::MEDIUM);
+            Entity* ball = GenerateBall(BallType::MEDIUM, "MediumBall" + to_string(i+1));
             ball->GetComponent<Transform>()->position = pos;
             ballsPositions.push_back(pos);
             ball->GetComponent<PhysicsMaterial>()->hasGravity = true;
@@ -212,7 +214,7 @@ void ThrowerManager::PrepareScene()
         if (isValid)
         {
             i++;
-            Entity* ball = GenerateBall(BallType::LARGE);
+            Entity* ball = GenerateBall(BallType::LARGE, "LargeBall" + to_string(i+1));
             ball->GetComponent<Transform>()->position = pos;
             ballsPositions.push_back(pos);
             ball->GetComponent<PhysicsMaterial>()->hasGravity = true;
@@ -265,7 +267,7 @@ void ThrowerManager::ThrowBall()
     chargeBar->UpdateValue(0);
 }
 
-Entity* ThrowerManager::GenerateBall(BallType type)
+Entity* ThrowerManager::GenerateBall(BallType type, const string& name)
 {
     float mass;
     float radius;
@@ -299,7 +301,7 @@ Entity* ThrowerManager::GenerateBall(BallType type)
         break;
     }
 
-    std::shared_ptr<Entity> temp = std::make_shared<Entity>();
+    std::shared_ptr<Entity> temp = std::make_shared<Entity>(name);
 
     std::unique_ptr<Transform> transform = std::make_unique<Transform>(vec3(0));
     temp->AddComponent(std::move(transform));

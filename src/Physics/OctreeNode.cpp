@@ -6,6 +6,8 @@
 #include "Components/Colliders/Collider.h"
 #include "Entities/Entity.h"
 
+AABB playerbounds;
+
 void OctreeNode::InsertDynamic(const std::shared_ptr<Entity>& entity)
 {
     if (!isLeaf || depth >= MAX_DEPTH) {

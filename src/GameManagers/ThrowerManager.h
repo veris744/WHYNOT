@@ -46,7 +46,7 @@ private:
     void ChargeBall();
     void ThrowBall();
 
-    Entity* GenerateBall(BallType type);
+    Entity* GenerateBall(BallType type, const string& name);
 
     Entity* GrabbedBall = nullptr;
     Transform* playerTransform = nullptr;

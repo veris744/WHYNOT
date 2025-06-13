@@ -16,7 +16,7 @@ std::unique_ptr<OctreeNode> CollisionManager::root = nullptr;
 
 void CollisionManager::PrepareOctree()
 {
-    Logger::Log(LogLevel::Info, "PREPARING");
+    Logger::Log(LogLevel::Info, "PREPARING OCTREE");
     if (!root)
     {
         AABB worldBounds = {vec3(Helper::GetXBounds().x, Helper::GetYBounds().x, Helper::GetZBounds().x), 
@@ -62,6 +62,7 @@ void CollisionManager::CheckCollisions()
         
         if (!e1 || !e1->isActive) continue;
         if (!e2 || !e2->isActive) continue;
+
 
         const auto c1 = e1->GetComponent<Collider>();
         const auto c2 = e2->GetComponent<Collider>();
