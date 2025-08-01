@@ -178,17 +178,17 @@ std::unique_ptr<Mesh> ComponentFactory::ReadMesh(const YAML::Node& asset)
     deserialize(asset["material"], material);
     material->InitializeShader();
 
-    if (material->materialData.type == MaterialType::TEXTURE)
-    {
-        if (material->wrapMode == WrapMode::REPEAT)
-        {
-            for (int i = 0; i < vertex.size(); i+=8)
-            {
-                vertex[i + 6] == 0.f ? vertex[i + 6] -= 0.5f : vertex[i + 6] += 0.5f;
-                vertex[i + 7] == 0.f ? vertex[i + 7] -= 0.5f : vertex[i + 7] += 0.5f;
-            }
-        }
-    }
+    // if (material->materialData.type == MaterialType::TEXTURE)
+    // {
+    //     if (material->wrapMode == WrapMode::REPEAT)
+    //     {
+    //         for (int i = 0; i < vertex.size(); i+=8)
+    //         {
+    //             vertex[i + 6] == 0.f ? vertex[i + 6] -= 0.5f : vertex[i + 6] += 0.5f;
+    //             vertex[i + 7] == 0.f ? vertex[i + 7] -= 0.5f : vertex[i + 7] += 0.5f;
+    //         }
+    //     }
+    // }
 
     for (const string& texturePath : material->texturePaths)
     {

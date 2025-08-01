@@ -130,9 +130,9 @@ entities:
     components:
       - name: "TRANSFORM"
         position: [-15, 2.5, 0]
-        scale: [0.1, 5, 30]
+        scale: [0.1, 3, 30]
       - name: "COLLIDER"
-        dimensions: [0.5, 5, 30]
+        dimensions: [0.5, 3, 30]
         type: "BOX"
         profile:
           type: "STATIC"
@@ -150,9 +150,9 @@ entities:
     components:
       - name: "TRANSFORM"
         position: [15, 2.5, 0]
-        scale: [0.1, 5, 30]
+        scale: [0.1, 3, 30]
       - name: "COLLIDER"
-        dimensions: [0.5, 5, 30]
+        dimensions: [0.5, 3, 30]
         type: "BOX"
         profile:
           type: "STATIC"
@@ -170,9 +170,9 @@ entities:
     components:
       - name: "TRANSFORM"
         position: [0, 2.5, -15]
-        scale: [30, 5, 0.1]
+        scale: [30, 3, 0.1]
       - name: "COLLIDER"
-        dimensions: [30, 5, 0.5]
+        dimensions: [30, 3, 0.5]
         type: "BOX"
         profile:
           type: "STATIC"
@@ -190,9 +190,9 @@ entities:
     components:
       - name: "TRANSFORM"
         position: [0, 2.5, 15]
-        scale: [30, 5, 0.1]
+        scale: [30, 3, 0.1]
       - name: "COLLIDER"
-        dimensions: [30, 5, 0.5]
+        dimensions: [30, 3, 0.5]
         type: "BOX"
         profile:
           type: "STATIC"
@@ -211,7 +211,7 @@ entities:
   - type: "GOAL"
     components:
       - name: "TRANSFORM"
-        position: [-7, 0, -5]
+        position: [-7, 0, -7]
         scale: [7, 7, 7]
       - name: "COLLIDER"
         radius: 3.5
@@ -223,7 +223,7 @@ entities:
   - type: "GOAL"
     components:
       - name: "TRANSFORM"
-        position: [7, 0, -5]
+        position: [7, 0, 7]
         scale: [7, 7, 7]
       - name: "COLLIDER"
         radius: 3.5

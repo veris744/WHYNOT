@@ -4,6 +4,7 @@
 #include <Components/Model.h>
 #include <Components/Movement.h>
 #include <Components/Transform.h>
+#include <Components/Colliders/CapsuleCollider.h>
 #include <Components/Colliders/CircleCollider.h>
 #include <Graphics/Material.h>
 #include <Graphics/Mesh.h>
@@ -31,7 +32,7 @@ void ThrowerManager::PrepareGame()
     ConfigurationValues::IsUIActive = false;
 
     playerStart = {0, 8, 21};
-    playgroundDimensions = {52, 12, 52};
+    playgroundDimensions = {51, 11, 51};
     playgroundCenter = {0, 5, 0};
 
     for (int i = 0; i < TOTAL_BALLS_HAND; i++)
@@ -71,6 +72,8 @@ void ThrowerManager::SetPlayer()
 
     player->GetComponent<Transform>()->position = GetPlayerStart();
     player->GetComponent<Transform>()->SetRotation(GetPlayerStartRotation());
+
+    (player->GetComponent<CapsuleCollider>())->radius = 3;
 
     World::GetInstance()->SetCurrentCamera("Player");
 
