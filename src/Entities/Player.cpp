@@ -22,7 +22,7 @@ void Player::Initialize()
 
     if (!GetComponent<Transform>())
     {
-        std::unique_ptr<Transform> transform = std::make_unique<Transform>(vec3(0));
+        std::unique_ptr<Transform> transform = std::make_unique<Transform>(glm::vec3(0));
         AddComponent(std::move(transform));
     }
 

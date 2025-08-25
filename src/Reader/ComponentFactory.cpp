@@ -134,8 +134,8 @@ void ComponentFactory::CreateComponent(const std::string& type, const std::share
 std::unique_ptr<Mesh> ComponentFactory::ReadMesh(const YAML::Node& asset)
 {
     // INITIALIZE MESH VERTEX
-    vector<float> vertex;
-    vector<unsigned int> index = {};
+    std::vector<float> vertex;
+    std::vector<unsigned int> index = {};
     unsigned int elementCount = 3;
     unsigned int vertexCount = 0;
     
@@ -190,7 +190,7 @@ std::unique_ptr<Mesh> ComponentFactory::ReadMesh(const YAML::Node& asset)
     //     }
     // }
 
-    for (const string& texturePath : material->texturePaths)
+    for (const std::string& texturePath : material->texturePaths)
     {
         std::shared_ptr<Texture> texturePtr = Renderer::instance().GetLoadedTexture(texturePath);
         if (texturePtr.use_count() == 0)

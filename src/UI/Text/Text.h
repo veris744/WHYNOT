@@ -27,12 +27,12 @@ class Text : public Widget
     static unsigned int counter;
     
 public:
-    Text(): color(vec3(0, 0, 0)), scale(0.5f), align(TextAlign::LEFT), alignVertical(TextAlignVertical::CENTER), padding()
+    Text(): color(glm::vec3(0, 0, 0)), scale(0.5f), align(TextAlign::LEFT), alignVertical(TextAlignVertical::CENTER), padding()
     {
         hasTransparency = true;
     }
 
-    Text(const string& _text, vec3 _color, float _scale, vec2 _position, const string& _name = "")
+    Text(const std::string& _text, glm::vec3 _color, float _scale, glm::vec2 _position, const std::string& _name = "")
     {
         name = _name.empty() ? "Text" + std::to_string(++counter) : _name;
         text = _text;
@@ -42,24 +42,24 @@ public:
         align = TextAlign::LEFT;
         alignVertical = TextAlignVertical::CENTER;
         size = {0,0};
-        padding = vec2(0);
+        padding = glm::vec2(0);
         hasTransparency = true;
     }
 
-    string text;
-    vec3 color;
+    std::string text;
+    glm::vec3 color;
     float scale;
     TextAlign align;
     TextAlignVertical alignVertical;
-    vec2 padding;
+    glm::vec2 padding;
 
     void Initialize() override;
-    vec2 CalculateSize();
+    glm::vec2 CalculateSize();
     void Render() override;
     void Clear() override;
     void SetAutoName() override;
 
-    void SetText(const string& _text);
+    void SetText(const std::string& _text);
 };
 REGISTER_CLASS(Text, {
     REGISTER_MEMBER(Text, name, MemberProperty::Viewable),

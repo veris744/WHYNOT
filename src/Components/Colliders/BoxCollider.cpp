@@ -10,7 +10,7 @@ bool BoxCollider::Collides(Collider* other, Hit& hit)
         hit.otherEntity = other->parent;
         hit.selfEntity = parent;
         hit.type = WorldHit;
-        vec3 directionToSelf = GetWorldPosition() - hit.point;
+        glm::vec3 directionToSelf = GetWorldPosition() - hit.point;
         if (dot(directionToSelf, hit.normal) < 0.0f)
         {
             hit.normal = -hit.normal;
@@ -20,12 +20,12 @@ bool BoxCollider::Collides(Collider* other, Hit& hit)
     return false;
 }
 
-bool BoxCollider::Collides(float _rad1, vec3 _pos1, Hit& hit)
+bool BoxCollider::Collides(float _rad1, glm::vec3 _pos1, Hit& hit)
 {
     return CheckCircleSquare(_rad1, _pos1, dimensions, GetWorldPosition(), hit);
 }
 
-bool BoxCollider::Collides(vec3 _dimensions, vec3 _pos1, Hit& hit, bool isSlope)
+bool BoxCollider::Collides(glm::vec3 _dimensions, glm::vec3 _pos1, Hit& hit, bool isSlope)
 {
     if (!isSlope)
         return CheckSquareSquare(_dimensions, _pos1, dimensions, GetWorldPosition(), hit);
@@ -33,32 +33,32 @@ bool BoxCollider::Collides(vec3 _dimensions, vec3 _pos1, Hit& hit, bool isSlope)
     return CheckSlopeSquare(_dimensions, _pos1, dimensions, GetWorldPosition(), hit);
 }
 
-bool BoxCollider::Collides(float _height, float _radius, vec3 _pos1, Hit& hit)
+bool BoxCollider::Collides(float _height, float _radius, glm::vec3 _pos1, Hit& hit)
 {
     return CheckCapsuleSquare(_radius, _height, _pos1, dimensions, GetWorldPosition(), hit);
 }
 
-bool BoxCollider::Collides(vec2 _dimensions, vec3 _pos1, Hit& hit)
+bool BoxCollider::Collides(glm::vec2 _dimensions, glm::vec3 _pos1, Hit& hit)
 {
     return CheckPlaneSquare(_dimensions, _pos1, dimensions,{0, 1, 0}, GetWorldPosition(), hit);
 }
 
-bool BoxCollider::RayCollides(vec3 _rayOrigin, vec3 _rayDir, Hit& hit)
+bool BoxCollider::RayCollides(glm::vec3 _rayOrigin, glm::vec3 _rayDir, Hit& hit)
 {
-    vec3 boxCenter = GetWorldPosition();
-    vec3 halfExtents = dimensions * 0.5f;
-    vec3 boxMin = boxCenter - halfExtents;
-    vec3 boxMax = boxCenter + halfExtents;
+    glm::vec3 boxCenter = GetWorldPosition();
+    glm::vec3 halfExtents = dimensions * 0.5f;
+    glm::vec3 boxMin = boxCenter - halfExtents;
+    glm::vec3 boxMax = boxCenter + halfExtents;
 
     // Check if the box is behind the ray origin
-    vec3 toBox = boxCenter - _rayOrigin;
+    glm::vec3 toBox = boxCenter - _rayOrigin;
     float dotDir = dot(_rayDir, toBox);
     if (dotDir < 0)
         return false;
 
     float tMin = 0.0f;
     float tMax = FLT_MAX;
-    vec3 normal;
+    glm::vec3 normal;
 
     for (int i = 0; i < 3; ++i)
     {
@@ -79,7 +79,7 @@ bool BoxCollider::RayCollides(vec3 _rayOrigin, vec3 _rayDir, Hit& hit)
         if (t1 > tMin)
         {
             tMin = t1;
-            normal = vec3(0.0f);
+            normal = glm::vec3(0.0f);
             normal[i] = (_rayDir[i] > 0) ? -1.0f : 1.0f;
         }
 
@@ -103,13 +103,13 @@ bool BoxCollider::RayCollides(vec3 _rayOrigin, vec3 _rayDir, Hit& hit)
     return false;
 }
 
-bool BoxCollider::CheckInBounds(const vec2& xBounds, const vec2& yBounds, const vec2& zBounds)
+bool BoxCollider::CheckInBounds(const glm::vec2& xBounds, const glm::vec2& yBounds, const glm::vec2& zBounds)
 {
-    vec3 boxCenter = GetWorldPosition();
-    vec3 halfExtents = dimensions * 0.5f;
+    glm::vec3 boxCenter = GetWorldPosition();
+    glm::vec3 halfExtents = dimensions * 0.5f;
 
-    vec3 boxMin = boxCenter - halfExtents;
-    vec3 boxMax = boxCenter + halfExtents;
+    glm::vec3 boxMin = boxCenter - halfExtents;
+    glm::vec3 boxMax = boxCenter + halfExtents;
 
     bool isInsideX = (boxMin.x >= xBounds.x) && (boxMax.x <= xBounds.y);
     bool isInsideY = (boxMin.y >= yBounds.x) && (boxMax.y <= yBounds.y);
@@ -120,14 +120,14 @@ bool BoxCollider::CheckInBounds(const vec2& xBounds, const vec2& yBounds, const 
     return isCompletelyInside;
 }
 
-bool BoxCollider::OverlapsBounds(const vec2& xBounds, const vec2& yBounds, const vec2& zBounds)
+bool BoxCollider::OverlapsBounds(const glm::vec2& xBounds, const glm::vec2& yBounds, const glm::vec2& zBounds)
 {
-    vec3 boxCenter = GetWorldPosition();
-    vec3 halfExtents = dimensions * 0.5f;
+    glm::vec3 boxCenter = GetWorldPosition();
+    glm::vec3 halfExtents = dimensions * 0.5f;
 
     // Calculate min and max extents of the box
-    vec3 boxMin = boxCenter - halfExtents;
-    vec3 boxMax = boxCenter + halfExtents;
+    glm::vec3 boxMin = boxCenter - halfExtents;
+    glm::vec3 boxMax = boxCenter + halfExtents;
 
     // Check for overlap on each axis
     bool xOverlap = (boxMax.x >= xBounds.x) && (boxMin.x <= xBounds.y);

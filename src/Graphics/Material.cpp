@@ -10,9 +10,9 @@
 
 struct gpuLightData
 {
-    vec4  position = vec4(0.f, 0.f,0.f,1);
-    vec4  color = vec4(0, 0,0,1);
-    vec3  direction = vec3(0);
+    glm::vec4  position = glm::vec4(0.f, 0.f,0.f,1);
+    glm::vec4  color = glm::vec4(0, 0,0,1);
+    glm::vec3  direction = glm::vec3(0);
 
     float specular    = 0.f;
     float diffuse     = 0.f;
@@ -42,7 +42,7 @@ struct gpuLightData
           type(other.type) {} 
 };
 
-Material::Material(const char* _texturePath, const string& _vertexShaderPath, const string& _fragmentShaderPath, MaterialData _materialData)
+Material::Material(const char* _texturePath, const std::string& _vertexShaderPath, const std::string& _fragmentShaderPath, MaterialData _materialData)
         : materialData(_materialData), vertexShaderPath(_vertexShaderPath), fragmentShaderPath(_fragmentShaderPath)
 {
     InitializeShader();
@@ -58,13 +58,13 @@ Material::Material(const char* _texturePath, const string& _vertexShaderPath, co
     }
 }
 
-Material::Material(const vector<string>& _texturePaths, const string& _vertexShaderPath,
-    const string& _fragmentShaderPath, MaterialData _materialData)
+Material::Material(const std::vector<std::string>& _texturePaths, const std::string& _vertexShaderPath,
+    const std::string& _fragmentShaderPath, MaterialData _materialData)
         : materialData(_materialData), vertexShaderPath(_vertexShaderPath), fragmentShaderPath(_fragmentShaderPath)
 {
     InitializeShader();
 
-    for (string texturePath : _texturePaths)
+    for (std::string texturePath : _texturePaths)
     {
         std::shared_ptr<Texture> texture = Renderer::instance().GetLoadedTexture(texturePath);
         if (!texture)
@@ -81,8 +81,8 @@ Material::Material(const vector<string>& _texturePaths, const string& _vertexSha
     
 }
 
-Material::Material(const vector<std::shared_ptr<Texture>>& _textures, const string& _vertexShaderPath,
-    const string& _fragmentShaderPath, MaterialData _materialData)
+Material::Material(const std::vector<std::shared_ptr<Texture>>& _textures, const std::string& _vertexShaderPath,
+    const std::string& _fragmentShaderPath, MaterialData _materialData)
         : textures(_textures)
         , materialData(_materialData)
         , vertexShaderPath(_vertexShaderPath)
@@ -121,7 +121,7 @@ void Material::AddTexture(const std::shared_ptr<Texture>& _texture)
     textures.push_back(_texture);
 }
 
-void Material::SetUniforms(const mat4& _model, const mat4& _view, const mat4& _projection, const vec3& _viewPosition)
+void Material::SetUniforms(const glm::mat4& _model, const glm::mat4& _view, const glm::mat4& _projection, const glm::vec3& _viewPosition)
 {
     shader->SetUniformMat4("uModel", _model);
     shader->SetUniformMat4("uView", _view);

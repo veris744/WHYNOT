@@ -4,7 +4,7 @@
 
 #include "Utils/Logger.h"
 
-unordered_map<string, ALuint> AudioManager::loadedSounds;
+std::unordered_map<std::string, ALuint> AudioManager::loadedSounds;
 ALCdevice* AudioManager::device = nullptr;
 ALCcontext* AudioManager::context = nullptr;
 
@@ -35,13 +35,13 @@ void AudioManager::ShutDown()
     }
 }
 
-ALuint AudioManager::LoadWav(const string& _filename)
+ALuint AudioManager::LoadWav(const std::string& _filename)
 {
     if (loadedSounds.find(_filename) != loadedSounds.end()) {
         return loadedSounds[_filename];
     }
 
-    ifstream file(_filename, std::ios::binary);
+    std::ifstream file(_filename, std::ios::binary);
     if (!file) {
         Logger::Log(LogLevel::Error, "Failed to load wav file");
         return 0;
@@ -67,7 +67,7 @@ ALuint AudioManager::LoadWav(const string& _filename)
     }
 
     // Read audio data
-    vector<char> data(dataSize);
+    std::vector<char> data(dataSize);
     file.read(data.data(), dataSize);
 
     ALuint buffer;

@@ -17,7 +17,7 @@
 ////////////////////////////////////////////////////////
 
 std::shared_ptr<InputManager> InputManager::instance = nullptr;
-unordered_map<unsigned int, KeyStatus> InputManager::keysStatus;
+std::unordered_map<unsigned int, KeyStatus> InputManager::keysStatus;
 std::unique_ptr<EventsBuffer> InputManager::eventsBuffer = std::make_unique<EventsBuffer>();
 bool InputManager::isInputEnabled = false;
 
@@ -167,7 +167,7 @@ void InputManager::ProcessPlayerInput() const
     if (!playerController) return;
     if (ConfigurationValues::IsEditorOpen && EditorMode::isInputBoxOpen)    return;
 
-    playerController->currentInput = vec3(0);
+    playerController->currentInput = glm::vec3(0);
     if (keysStatus[GLFW_KEY_A] == KeyStatus::PRESSED) playerController->currentInput.x -= 1;
     if (keysStatus[GLFW_KEY_D] == KeyStatus::PRESSED) playerController->currentInput.x += 1;
 
@@ -241,7 +241,7 @@ void InputManager::HandleMouseButtonPress(int key)
         // If in editor open select/unselect entities
         if (ConfigurationValues::IsEditorOpen)
         {
-            Hit hit = CollisionManager::ThrowRayFromScreen(vec2{xpos,ypos}, playerTransform->position, true, 5);
+            Hit hit = CollisionManager::ThrowRayFromScreen(glm::vec2{xpos,ypos}, playerTransform->position, true, 5);
             if (hit.hasHit && hit.type == WorldHit)
             {
                 hit.otherEntity->OnClicked();
@@ -255,7 +255,7 @@ void InputManager::HandleMouseButtonPress(int key)
         // Process button clicked
         else
         {
-            CollisionManager::CheckUIClicked(vec2{xpos,ypos});
+            CollisionManager::CheckUIClicked(glm::vec2{xpos,ypos});
         }
 
         return;
@@ -288,7 +288,7 @@ void InputManager::HandleMouseMove(double x, double y)
     if (!playerTransform)   return;
     if (ConfigurationValues::CanPlayerLook)
     {
-        vec2 pos = {x, y};
+        glm::vec2 pos = {x, y};
         if (firstMouse)
         {
             rotation = playerTransform->rotation;

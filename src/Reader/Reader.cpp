@@ -4,46 +4,46 @@
 
 namespace Reader
 {
-    vec3 ReadVec3(const YAML::Node& node, const string& name, const vec3& defaultValue)
+    glm::vec3 ReadVec3(const YAML::Node& node, const std::string& name, const glm::vec3& defaultValue)
     {
         return node[name] ?
-            vec3(node[name][0].as<float>(),
+            glm::vec3(node[name][0].as<float>(),
              node[name][1].as<float>(),
              node[name][2].as<float>()) : defaultValue;
     }
 
-    vec4 ReadVec4(const YAML::Node& node, const string& name, const vec4& defaultValue)
+    glm::vec4 ReadVec4(const YAML::Node& node, const std::string& name, const glm::vec4& defaultValue)
     {
         return node[name] ?
-            vec4(node[name][0].as<float>(),
+            glm::vec4(node[name][0].as<float>(),
              node[name][1].as<float>(),
              node[name][2].as<float>(),
              node[name][3] ? node[name][3].as<float>() : 1) : defaultValue;
     }
 
-    vec2 ReadVec2(const YAML::Node& node, const string& name, const vec2& defaultValue)
+    glm::vec2 ReadVec2(const YAML::Node& node, const std::string& name, const glm::vec2& defaultValue)
     {
         return node[name] ?
-            vec2(node[name][0].as<float>(),
+            glm::vec2(node[name][0].as<float>(),
              node[name][1].as<float>()) : defaultValue;
     }
 
-    string ReadString(const YAML::Node& node, const string& name, const string& defaultValue)
+    std::string ReadString(const YAML::Node& node, const std::string& name, const std::string& defaultValue)
     {
-        return node[name] ? node[name].as<string>() : defaultValue;
+        return node[name] ? node[name].as<std::string>() : defaultValue;
     }
 
-    int ReadInt(const YAML::Node& node, const string& name, int defaultValue)
+    int ReadInt(const YAML::Node& node, const std::string& name, int defaultValue)
     {
         return node[name] ? node[name].as<int>() : defaultValue;
     }
 
-    unsigned int ReadUInt(const YAML::Node& node, const string& name, unsigned int defaultValue)
+    unsigned int ReadUInt(const YAML::Node& node, const std::string& name, unsigned int defaultValue)
     {
         return node[name] ? node[name].as<unsigned int>() : defaultValue;
     }
 
-    float ReadFloat(const YAML::Node& node, const string& name, float defaultValue)
+    float ReadFloat(const YAML::Node& node, const std::string& name, float defaultValue)
     {
         if (node[name] && node[name].IsDefined()) {
             try {
@@ -56,12 +56,12 @@ namespace Reader
         return defaultValue;
     }
 
-    bool ReadBool(const YAML::Node& node, const string& name, bool defaultValue)
+    bool ReadBool(const YAML::Node& node, const std::string& name, bool defaultValue)
     {
         return node[name] ? node[name].as<bool>() : defaultValue;
     }
 
-    vector<string> ReadStringVector(const YAML::Node& node, const std::string& name)
+    std::vector<std::string> ReadStringVector(const YAML::Node& node, const std::string& name)
     {
         std::vector<std::string> result;
         if (node[name] && node[name].IsSequence()) {

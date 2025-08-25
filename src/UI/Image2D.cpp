@@ -13,7 +13,7 @@
 
 unsigned int Image2D::counter = 0;
 
-Image2D::Image2D(const string& _path, vec2 _pos, vec2 _size, const string& _name)
+Image2D::Image2D(const std::string& _path, glm::vec2 _pos, glm::vec2 _size, const std::string& _name)
     : Widget(_pos, _size)
 {
     name = _name.empty() ? "Image2D" + std::to_string(++counter) : _name;
@@ -24,7 +24,7 @@ void Image2D::Initialize()
 {
     Widget::Initialize();
     
-    vector<float> vertex = Renderer2D::quadVertices;
+    std::vector<float> vertex = Renderer2D::quadVertices;
     vertexArray = std::make_unique<VertexArray>();
     vertexArray->Bind();
     vertexArray->AddVertexBuffer(vertex.data(), 0.5f * vertex.size(), vertex.size() * sizeof(float));
@@ -43,13 +43,13 @@ void Image2D::Initialize()
         Renderer::instance().textures_loaded.push_back(texture);
     }
     
-    string shaderNameFrag = "shaders/fragment2D.glsl";
+    std::string shaderNameFrag = "shaders/fragment2D.glsl";
     if (texture->GetNbChannels() == 1)
         shaderNameFrag = "shaders/fragment2DBW.glsl" ;
     else if (texture->GetNbChannels() == 2)
         shaderNameFrag = "shaders/fragment2D2Ch.glsl" ;
     
-    string shaderNameVer = "shaders/vertex2D.glsl";
+    std::string shaderNameVer = "shaders/vertex2D.glsl";
     
     material = std::make_unique<Material>(path.c_str(), shaderNameVer, shaderNameFrag);
 }
@@ -71,8 +71,8 @@ void Image2D::Render()
     material->GetShader()->SetUniformVec3("uColor", color);
     material->GetShader()->SetUniformFloat("uLayer", 0.1f * layer);
     material->GetShader()->SetUniformFloat("uRotation", rotation);
-    
-    mat4 projection = glm::ortho(0.0f, Helper::windowWidth, Helper::windowHeight, 0.0f);
+
+    glm::mat4 projection = glm::ortho(0.0f, Helper::windowWidth, Helper::windowHeight, 0.0f);
     material->GetShader()->SetUniformMat4("uProjection", projection);
     
     if (vertexArray->GetIndexBuffer())

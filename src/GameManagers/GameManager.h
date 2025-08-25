@@ -4,15 +4,14 @@
 #include <Utils/SingleDelegate.h>
 
 class Entity;
-using namespace glm;
 
 class GameManager
 {
 protected:
-    vec3 playgroundDimensions = vec3(12,12,6);
-    vec3 playgroundCenter = vec3(0,0,-8);
-    vec3 playerStart = vec3(0,0,0);
-    vec3 playerStartRotation = vec3(0,0,0);
+    glm::vec3 playgroundDimensions = glm::vec3(12,12,6);
+    glm::vec3 playgroundCenter = glm::vec3(0,0,-8);
+    glm::vec3 playerStart = glm::vec3(0,0,0);
+    glm::vec3 playerStartRotation = glm::vec3(0,0,0);
 
     Entity* player = nullptr;
 
@@ -29,18 +28,18 @@ public:
     virtual void Update(float deltaTime) = 0;
     virtual void ProcessInput(int key, bool press) = 0;
 
-    vec2 GetXBounds() const{
-        return vec2(playgroundCenter.z - playgroundDimensions.z * 0.5f, playgroundCenter.z + playgroundDimensions.z * 0.5f);
+    glm::vec2 GetXBounds() const{
+        return glm::vec2(playgroundCenter.z - playgroundDimensions.z * 0.5f, playgroundCenter.z + playgroundDimensions.z * 0.5f);
     }
-    vec2 GetYBounds() const{
-        return vec2(playgroundCenter.y - playgroundDimensions.y * 0.5f, playgroundCenter.y + playgroundDimensions.y * 0.5f);
+    glm::vec2 GetYBounds() const{
+        return glm::vec2(playgroundCenter.y - playgroundDimensions.y * 0.5f, playgroundCenter.y + playgroundDimensions.y * 0.5f);
     }
-    vec2 GetZBounds() const{
-        return vec2(playgroundCenter.z - playgroundDimensions.z * 0.5f, playgroundCenter.z + playgroundDimensions.z * 0.5f);
+    glm::vec2 GetZBounds() const{
+        return glm::vec2(playgroundCenter.z - playgroundDimensions.z * 0.5f, playgroundCenter.z + playgroundDimensions.z * 0.5f);
     }
 
-    vec3 GetPlayerStart() const {  return playerStart; }
-    vec3 GetPlayerStartRotation() const {  return playerStartRotation; }
+    glm::vec3 GetPlayerStart() const {  return playerStart; }
+    glm::vec3 GetPlayerStartRotation() const {  return playerStartRotation; }
     Entity* GetPlayer() const { return player; }
 
     SingleDelegate<> OnPlayerShootDelegate;

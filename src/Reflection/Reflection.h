@@ -6,7 +6,6 @@
 #include <Reader/Reader.h>
 #include "ReflectedObject.h"
 
-using namespace std;
 using FactoryFunction = std::function<void*()>;
 
 enum class MemberProperty : uint32_t
@@ -46,10 +45,10 @@ inline bool HasProperty(MemberProperty properties, MemberProperty flag) {
 
 struct MemberInfo
 {
-    string name;
-    string type_name;
+    std::string name;
+    std::string type_name;
     MemberProperty properties; 
-    function<void(void*, const YAML::Node&)> setter;
+    std::function<void(void*, const YAML::Node&)> setter;
     std::function<std::any(ReflectedObject*)> getter;
 };
 
@@ -57,7 +56,7 @@ struct TypeInfo {
     std::string type_name;
     std::vector<MemberInfo> members;
 
-    const MemberInfo& GetMemberInfo(const string& memberName) const
+    const MemberInfo& GetMemberInfo(const std::string& memberName) const
     {
         for (const auto& member : members)
         {
@@ -74,8 +73,8 @@ struct TypeInfo {
 
 class TypeRegistry
 {
-    unordered_map<std::string, TypeInfo> types;
-    unordered_map<std::string, std::function<void*()>> factories;
+    std::unordered_map<std::string, TypeInfo> types;
+    std::unordered_map<std::string, std::function<void*()>> factories;
     
 public:
     TypeRegistry() = default;
@@ -92,16 +91,16 @@ public:
         types[typeName] = {typeName, members};
     }
     
-    const TypeInfo* getTypeInfo(const string& typeName) const {
+    const TypeInfo* getTypeInfo(const std::string& typeName) const {
         auto it = types.find(typeName);
         return it != types.end() ? &it->second : nullptr;
     }
     
-    void registerFactory(const string& typeName, FactoryFunction factory) {
+    void registerFactory(const std::string& typeName, FactoryFunction factory) {
         factories[typeName] = factory;
     }
 
-    void* createInstance(const string& typeName) const {
+    void* createInstance(const std::string& typeName) const {
         auto it = factories.find(typeName);
         return it != factories.end() ? it->second() : nullptr;
     }

@@ -24,7 +24,7 @@ enum class Action
     OpenEditorMode, DebugCollision, DebugTransforms
 };
 
-static unordered_map<unsigned int, Action> actions =
+static std::unordered_map<unsigned int, Action> actions =
 {
     {GLFW_KEY_W, Action::MoveForward},
     {GLFW_KEY_S, Action::MoveBackwards},
@@ -47,11 +47,11 @@ class InputManager
     InputManager() = default;
 
     static void InitKeys();
-    static unordered_map<unsigned int, KeyStatus> keysStatus;
+    static std::unordered_map<unsigned int, KeyStatus> keysStatus;
     static std::unique_ptr<EventsBuffer> eventsBuffer;
     
-    vec3 movementInputPlaneValue = vec3(0, 0, 0);
-    vec2 movementInputAxisValue = vec2(0, 0);
+    glm::vec3 movementInputPlaneValue = glm::vec3(0, 0, 0);
+    glm::vec2 movementInputAxisValue = glm::vec2(0, 0);
     
     void ScapeInput();
 
@@ -70,7 +70,7 @@ public:
 
     static void MouseCallback(GLFWwindow* window, double xpos, double ypos);
     bool firstMouse = true;
-    vec2 lastMousePos = vec2(0, 0);
+    glm::vec2 lastMousePos = glm::vec2(0, 0);
     Rotation rotation;
 
     static void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);

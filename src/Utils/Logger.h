@@ -3,8 +3,6 @@
 #include <ostream>
 #include <string>
 
-using std::cout;
-
 enum class LogLevel
 {
     FatalError, Error, Warning, Info
@@ -33,7 +31,7 @@ public:
             break;
         }
 
-        cout << typeid(T).name() << "::" << message << "\033[0m" << std::endl; 
+        std::cout << typeid(T).name() << "::" << message << "\033[0m" << std::endl;
 
         if (level == LogLevel::FatalError)
         {

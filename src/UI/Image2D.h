@@ -12,14 +12,14 @@ class Image2D : public Widget
     void Initialize() override;
     
 public:
-    Image2D(const string& _path, vec2 _pos, vec2 _size, const string& _name = "");
+    Image2D(const std::string& _path, glm::vec2 _pos, glm::vec2 _size, const std::string& _name = "");
     Image2D() = default;
     void Render() override;
     void Clear() override;
     void SetAutoName() override;
 
-    string path = "";
-    vec3 color = vec3(0, 0, 0);
+    std::string path = "";
+    glm::vec3 color = glm::vec3(0, 0, 0);
     float rotation = 0.0f;
 };
 REGISTER_CLASS(Image2D, {

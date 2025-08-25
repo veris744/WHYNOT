@@ -14,14 +14,14 @@ public:
     }
 
     bool Collides(Collider* other, Hit& hit) override;
-    bool Collides(float _rad1, vec3 _pos1, Hit& hit) override;
-    bool Collides(vec3 _dimensions, vec3 _pos1, Hit& hit, bool isSlope) override;
-    bool Collides(float _height, float _radius, vec3 _pos1, Hit& hit) override;
-    bool Collides(vec2 _dimensions, vec3 _pos1, Hit& hit) override;
-    bool RayCollides(vec3 _rayOrigin, vec3 _rayDir, Hit& hit) override;
-    bool RaySphereIntersection(vec3 rayOrigin, vec3 rayDir, vec3 sphereCenter, float sphereRadius, float& t);
-    bool CheckInBounds(const vec2& xBounds, const vec2& yBounds, const vec2& zBounds) override;
-    bool OverlapsBounds(const vec2& xBounds, const vec2& yBounds, const vec2& zBounds) override;
+    bool Collides(float _rad1, glm::vec3 _pos1, Hit& hit) override;
+    bool Collides(glm::vec3 _dimensions, glm::vec3 _pos1, Hit& hit, bool isSlope) override;
+    bool Collides(float _height, float _radius, glm::vec3 _pos1, Hit& hit) override;
+    bool Collides(glm::vec2 _dimensions, glm::vec3 _pos1, Hit& hit) override;
+    bool RayCollides(glm::vec3 _rayOrigin, glm::vec3 _rayDir, Hit& hit) override;
+    bool RaySphereIntersection(glm::vec3 rayOrigin, glm::vec3 rayDir, glm::vec3 sphereCenter, float sphereRadius, float& t);
+    bool CheckInBounds(const glm::vec2& xBounds, const glm::vec2& yBounds, const glm::vec2& zBounds) override;
+    bool OverlapsBounds(const glm::vec2& xBounds, const glm::vec2& yBounds, const glm::vec2& zBounds) override;
     void RenderDebug() override;
     void Update(float deltaTime) override {};
     

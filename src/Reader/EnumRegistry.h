@@ -5,27 +5,26 @@
 #include <string>
 #include <unordered_map>
 
-using namespace std;
 
 struct EnumInfo {
-    unordered_map<string, int> nameToValue;
-    unordered_map<int, string> valueToName;
+    std::unordered_map<std::string, int> nameToValue;
+    std::unordered_map<int, std::string> valueToName;
 };
 
 class EnumRegistry
 {
 public:
-    using EnumCaster = function<int(const std::any&)>;
+    using EnumCaster = std::function<int(const std::any&)>;
 
     static EnumRegistry& instance() {
         static EnumRegistry instance;
         return instance;
     }
 
-    static string demangleEnumType(const string& mangledName)
+    static std::string demangleEnumType(const std::string& mangledName)
     {
-        string result = mangledName;
-        const string enumPrefix = "enum ";
+        std::string result = mangledName;
+        const std::string enumPrefix = "enum ";
         if (result.find(enumPrefix) == 0) {
             result = result.substr(enumPrefix.size());
         }
@@ -33,7 +32,7 @@ public:
     }
 
 private:
-    unordered_map<string, EnumInfo> enums;
+    std::unordered_map<std::string, EnumInfo> enums;
     std::unordered_map<std::string, EnumCaster> enumCasters;
 
 public:
@@ -51,8 +50,8 @@ public:
     }
 
     template<typename EnumType>
-    void registerEnum(const initializer_list<pair<string, EnumType>>& entries) {
-        const string enumName = typeid(EnumType).name();
+    void registerEnum(const std::initializer_list<std::pair<std::string, EnumType>>& entries) {
+        const std::string enumName = typeid(EnumType).name();
         EnumInfo& info = enums.emplace(enumName, EnumInfo()).first->second;
         
         for (const auto& entry : entries) {
@@ -66,8 +65,8 @@ public:
     }
 
     template<typename EnumType>
-    EnumType fromString(const string& name) const {
-        const string enumName = typeid(EnumType).name();
+    EnumType fromString(const std::string& name) const {
+        const std::string enumName = typeid(EnumType).name();
         auto it = enums.find(enumName);
         if (it != enums.end()) {
             const auto& info = it->second;
@@ -76,12 +75,12 @@ public:
                 return static_cast<EnumType>(valIt->second);
             }
         }
-        throw invalid_argument("Invalid enum string: " + name);
+        throw std::invalid_argument("Invalid enum std::string: " + name);
     }
 
     template<typename EnumType>
-    string toString(EnumType value) const {
-        const string enumName = typeid(EnumType).name();
+    std::string toString(EnumType value) const {
+        const std::string enumName = typeid(EnumType).name();
         auto it = enums.find(enumName);
         if (it != enums.end()) {
             const auto& info = it->second;
@@ -93,19 +92,19 @@ public:
         return "UnknownEnumValue";
     }
 
-    string getEnumStringFromValue(const string& enumType, int enumValue) const {
+    std::string getEnumStringFromValue(const std::string& enumType, int enumValue) const {
         auto it = enums.find(enumType);
         if (it != enums.end()) {
             const auto& info = it->second;
             auto valIt = info.valueToName.find(enumValue);
             if (valIt != info.valueToName.end()) {
-                return valIt->second;  // Return the enum string name
+                return valIt->second;  // Return the enum std::string name
             }
         }
         return "UnknownEnumValue";  // Return a default value if not found
     }
 
-    string getEnumFromAny(const string& enumType, const std::any& value) const
+    std::string getEnumFromAny(const std::string& enumType, const std::any& value) const
     {
         int intValue = castEnumToInt(enumType, value);
         return getEnumStringFromValue(enumType, intValue);

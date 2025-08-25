@@ -6,7 +6,7 @@
 
 #include "Managers/Renderer.h"
 
-Shader::Shader(const string& _vertexShaderPath, const string& _fragmentShaderPath)
+Shader::Shader(const std::string& _vertexShaderPath, const std::string& _fragmentShaderPath)
 {
     vertexShaderPath = _vertexShaderPath;
     fragmentShaderPath = _fragmentShaderPath;
@@ -14,12 +14,12 @@ Shader::Shader(const string& _vertexShaderPath, const string& _fragmentShaderPat
     fragmentShaderSource = ReadShader(fragmentShaderPath);
 }
 
-string Shader::ReadShader(const string& vertexShaderPath)
+std::string Shader::ReadShader(const std::string& vertexShaderPath)
 {
     std::ifstream istream(vertexShaderPath.c_str(), std::ios_base::binary);
     std::stringstream sstream;
     sstream << istream.rdbuf();
-    string temp = sstream.str();
+    std::string temp = sstream.str();
     return temp;
 }
 
@@ -35,7 +35,7 @@ void Shader::Compile()
     if (retCode == GL_FALSE) {
         char errorLog[512];
         glGetShaderInfoLog(vertexShader, sizeof(errorLog), nullptr, errorLog);
-        Logger::Log<Shader>(LogLevel::FatalError, "Error compiling vertex shader " + vertexShaderPath + ": " + string(errorLog));
+        Logger::Log<Shader>(LogLevel::FatalError, "Error compiling vertex shader " + vertexShaderPath + ": " + std::string(errorLog));
         glDeleteShader(vertexShader);
     }
 
@@ -48,7 +48,7 @@ void Shader::Compile()
     if (retCode == GL_FALSE) {
         char errorLog[1024];
         glGetShaderInfoLog(fragmentShader, sizeof(errorLog), nullptr, errorLog);
-        Logger::Log<Shader>(LogLevel::FatalError, "Error compiling fragment shader " + fragmentShaderPath + ": " + string(errorLog));
+        Logger::Log<Shader>(LogLevel::FatalError, "Error compiling fragment shader " + fragmentShaderPath + ": " + std::string(errorLog));
         glDeleteShader(fragmentShader);
     }
 
@@ -104,22 +104,22 @@ void Shader::SetUniformFloat(const char* name, float value) const
     glUniform1f(glGetUniformLocation(id, name), value);
 }
 
-void Shader::SetUniformVec2(const char* name, const vec2& value) const
+void Shader::SetUniformVec2(const char* name, const glm::vec2& value) const
 {
     glUniform2fv(glGetUniformLocation(id, name), 1, value_ptr(value));
 }
 
-void Shader::SetUniformVec3(const char* name, const vec3& value) const
+void Shader::SetUniformVec3(const char* name, const glm::vec3& value) const
 {
     glUniform3fv(glGetUniformLocation(id, name), 1, value_ptr(value));
 }
 
-void Shader::SetUniformVec4(const char* name, const vec4& value) const
+void Shader::SetUniformVec4(const char* name, const glm::vec4& value) const
 {
     glUniform4fv(glGetUniformLocation(id, name), 1, value_ptr(value));
 }
 
-void Shader::SetUniformMat4(const char* name, const mat4& value) const
+void Shader::SetUniformMat4(const char* name, const glm::mat4& value) const
 {
     glUniformMatrix4fv(glGetUniformLocation(id, name), 1, GL_FALSE, value_ptr(value));
 }
@@ -142,7 +142,7 @@ void Shader::SetUniformObject(const char* name, int bindingPoint, int maxObjects
         
         // Validate the UBO
         if (glIsBuffer(uboObjects) == GL_FALSE) {
-            Logger::Log(LogLevel::Warning,  "Warning: UBO " + to_string(uboObjects) + " is invalid. Recreating.\n");
+            Logger::Log(LogLevel::Warning,  "Warning: UBO " + std::to_string(uboObjects) + " is invalid. Recreating.\n");
             glGenBuffers(1, &uboObjects);
             uboMap[bindingPoint] = uboObjects;
             glBindBuffer(GL_UNIFORM_BUFFER, uboObjects);

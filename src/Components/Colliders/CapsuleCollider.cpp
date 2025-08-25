@@ -4,9 +4,9 @@
 #include "Entities/Entity.h"
 #include "Utils/Debugger.h"
 
-vec3 closestPointOnSegment(const vec3& A, const vec3& B, const vec3& point)
+glm::vec3 closestPointOnSegment(const glm::vec3& A, const glm::vec3& B, const glm::vec3& point)
 {
-    vec3 AB = B - A;
+    glm::vec3 AB = B - A;
     float t = dot(point - A, AB) / dot(AB, AB);
     t = std::clamp(t, 0.0f, 1.0f);
     return A + t * AB;
@@ -19,7 +19,7 @@ bool CapsuleCollider::Collides(Collider* other, Hit& hit)
         hit.otherEntity = other->parent;
         hit.selfEntity = parent;
         hit.type = WorldHit;
-        vec3 directionToSelf = GetWorldPosition() - hit.point;
+        glm::vec3 directionToSelf = GetWorldPosition() - hit.point;
         if (dot(directionToSelf, hit.normal) < 0.0f)
         {
             hit.normal = -hit.normal;
@@ -29,12 +29,12 @@ bool CapsuleCollider::Collides(Collider* other, Hit& hit)
     return false;
 }
 
-bool CapsuleCollider::Collides(float _rad1, vec3 _pos1, Hit& hit)
+bool CapsuleCollider::Collides(float _rad1, glm::vec3 _pos1, Hit& hit)
 {
     return CheckCircleCircle(radius, GetWorldPosition(), _rad1, _pos1, hit);
 }
 
-bool CapsuleCollider::Collides(vec3 _dimensions, vec3 _pos1, Hit& hit, bool isSlope)
+bool CapsuleCollider::Collides(glm::vec3 _dimensions, glm::vec3 _pos1, Hit& hit, bool isSlope)
 {
     if (!isSlope)
         return CheckCapsuleSquare(radius, height, GetWorldPosition(), _dimensions, _pos1, hit);
@@ -42,31 +42,31 @@ bool CapsuleCollider::Collides(vec3 _dimensions, vec3 _pos1, Hit& hit, bool isSl
     return CheckSlopeCapsule(_dimensions, _pos1, radius, height, GetWorldPosition(), hit);
 }
 
-bool CapsuleCollider::Collides(float _height, float _radius, vec3 _pos1, Hit& hit)
+bool CapsuleCollider::Collides(float _height, float _radius, glm::vec3 _pos1, Hit& hit)
 {
     return CheckCapsuleCapsule(_radius, _height, _pos1, radius, height, GetWorldPosition(), hit);
 }
 
-bool CapsuleCollider::Collides(vec2 _dimensions, vec3 _pos1, Hit& hit)
+bool CapsuleCollider::Collides(glm::vec2 _dimensions, glm::vec3 _pos1, Hit& hit)
 {
     return CheckPlaneCapsule(_dimensions, _pos1,{0, 1, 0}, radius, height, GetWorldPosition(), hit);
 }
 
-bool CapsuleCollider::RayCollides(vec3 _rayOrigin, vec3 _rayDir, Hit& hit)
+bool CapsuleCollider::RayCollides(glm::vec3 _rayOrigin, glm::vec3 _rayDir, Hit& hit)
 {
     _rayDir = normalize(_rayDir);
 
-    vec3 toCapsule = GetWorldPosition() - _rayOrigin;
+    glm::vec3 toCapsule = GetWorldPosition() - _rayOrigin;
     float dotDir = dot(_rayDir, toCapsule);
     if (dotDir < 0)
         return false;
 
     float halfHeight = (height * 0.5f) - radius;
-    vec3 A = GetWorldPosition() + vec3(0, -halfHeight, 0); // bottom of capsule
-    vec3 B = GetWorldPosition() + vec3(0, halfHeight, 0);  // top of capsule
+    glm::vec3 A = GetWorldPosition() + glm::vec3(0, -halfHeight, 0); // bottom of capsule
+    glm::vec3 B = GetWorldPosition() + glm::vec3(0, halfHeight, 0);  // top of capsule
 
     // First check if we're inside the capsule
-    vec3 closestOnSeg = closestPointOnSegment(A, B, _rayOrigin);
+    glm::vec3 closestOnSeg = closestPointOnSegment(A, B, _rayOrigin);
     float distToCenter = distance(_rayOrigin, closestOnSeg);
     if (distToCenter <= radius) {
         hit.hasHit = true;
@@ -79,8 +79,8 @@ bool CapsuleCollider::RayCollides(vec3 _rayOrigin, vec3 _rayDir, Hit& hit)
     }
 
     // Check for intersection with infinite cylinder
-    vec3 AB = B - A;
-    vec3 AO = _rayOrigin - A;
+    glm::vec3 AB = B - A;
+    glm::vec3 AO = _rayOrigin - A;
 
     float ABdotAB = dot(AB, AB);
     float ABdotRay = dot(AB, _rayDir);
@@ -105,7 +105,7 @@ bool CapsuleCollider::RayCollides(vec3 _rayOrigin, vec3 _rayDir, Hit& hit)
         // Find the first valid intersection in front of the ray
         float t = (t1 > 0) ? ((t2 > 0) ? std::min(t1, t2) : t1) : ((t2 > 0) ? t2 : -1.0f);
         if (t > 0) {
-            vec3 point = _rayOrigin + _rayDir * t;
+            glm::vec3 point = _rayOrigin + _rayDir * t;
             closestOnSeg = closestPointOnSegment(A, B, point);
             if (distance(point, closestOnSeg) <= radius + 1e-5f) {
                 t_cylinder = t;
@@ -125,8 +125,8 @@ bool CapsuleCollider::RayCollides(vec3 _rayOrigin, vec3 _rayDir, Hit& hit)
     // Find the closest valid intersection
     float t_min = FLT_MAX;
     bool has_hit = false;
-    vec3 hit_point;
-    vec3 hit_normal;
+    glm::vec3 hit_point;
+    glm::vec3 hit_normal;
 
     if (cylinder_hit && t_cylinder < t_min) {
         t_min = t_cylinder;
@@ -161,10 +161,10 @@ bool CapsuleCollider::RayCollides(vec3 _rayOrigin, vec3 _rayDir, Hit& hit)
     return true;
 }
 
-bool CapsuleCollider::RaySphereIntersection(vec3 rayOrigin, vec3 rayDir, vec3 sphereCenter, float sphereRadius,
+bool CapsuleCollider::RaySphereIntersection(glm::vec3 rayOrigin, glm::vec3 rayDir, glm::vec3 sphereCenter, float sphereRadius,
     float& t)
 {
-    vec3 oc = rayOrigin - sphereCenter;
+    glm::vec3 oc = rayOrigin - sphereCenter;
     float a = dot(rayDir, rayDir);
     float b = 2.0f * dot(oc, rayDir);
     float c = dot(oc, oc) - sphereRadius * sphereRadius;
@@ -185,11 +185,11 @@ bool CapsuleCollider::RaySphereIntersection(vec3 rayOrigin, vec3 rayDir, vec3 sp
     return true;
 }
 
-bool CapsuleCollider::CheckInBounds(const vec2& xBounds, const vec2& yBounds, const vec2& zBounds)
+bool CapsuleCollider::CheckInBounds(const glm::vec2& xBounds, const glm::vec2& yBounds, const glm::vec2& zBounds)
 {
     float halfHeight = (height * 0.5f);
-    vec3 minPoint = GetWorldPosition() + vec3(-radius, -halfHeight, -radius);
-    vec3 maxPoint = GetWorldPosition() + vec3(+radius, +halfHeight, +radius);
+    glm::vec3 minPoint = GetWorldPosition() + glm::vec3(-radius, -halfHeight, -radius);
+    glm::vec3 maxPoint = GetWorldPosition() + glm::vec3(+radius, +halfHeight, +radius);
 
     bool inside =
         minPoint.x >= xBounds.x && maxPoint.x <= xBounds.y &&
@@ -199,11 +199,11 @@ bool CapsuleCollider::CheckInBounds(const vec2& xBounds, const vec2& yBounds, co
     return inside;
 }
 
-bool CapsuleCollider::OverlapsBounds(const vec2& xBounds, const vec2& yBounds, const vec2& zBounds)
+bool CapsuleCollider::OverlapsBounds(const glm::vec2& xBounds, const glm::vec2& yBounds, const glm::vec2& zBounds)
 {
 float halfHeight = (height * 0.5f);
-    vec3 minPoint = GetWorldPosition() + vec3(-radius, -halfHeight, -radius);
-    vec3 maxPoint = GetWorldPosition() + vec3(+radius, +halfHeight, +radius);
+    glm::vec3 minPoint = GetWorldPosition() + glm::vec3(-radius, -halfHeight, -radius);
+    glm::vec3 maxPoint = GetWorldPosition() + glm::vec3(+radius, +halfHeight, +radius);
 
     bool overlaps =
         maxPoint.x >= xBounds.x && minPoint.x <= xBounds.y &&

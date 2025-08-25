@@ -11,25 +11,22 @@
 
 class VertexArray;
 
-using namespace std;
-using namespace glm;
-
 struct Character {
-    unsigned int TextureID; 
-    ivec2   Size;
-    ivec2   Bearing;
+    unsigned int TextureID;
+    glm::ivec2   Size;
+    glm::ivec2   Bearing;
     unsigned int Advance;
 };
 
 class TextRenderer
 {
-    string fontPathDefault = "assets/fonts/default.ttf";
-    static unique_ptr<FT_Library> ftLibrary;
-    map<GLchar, Character> Characters;
+    std::string fontPathDefault = "assets/fonts/default.ttf";
+    static std::unique_ptr<FT_Library> ftLibrary;
+    std::map<GLchar, Character> Characters;
 
     unsigned int VAO, VBO;
-    string defaultVertexShaderPath = "shaders/textVertexShader.glsl";
-    string defaultFragmentShaderPath = "shaders/textFragmentShader.glsl";
+    std::string defaultVertexShaderPath = "shaders/textVertexShader.glsl";
+    std::string defaultFragmentShaderPath = "shaders/textFragmentShader.glsl";
     std::unique_ptr<Shader> defaultShader;
     
 public:
@@ -40,9 +37,9 @@ public:
     }
 
     static void InitFreeType();
-    void LoadFont(const string& _fontPath = "");
+    void LoadFont(const std::string& _fontPath = "");
     
-    void RenderText(string text, float x, float y, float scale, vec3 color, unsigned int layer);
+    void RenderText(std::string text, float x, float y, float scale, glm::vec3 color, unsigned int layer);
     void Clear();
 
     const std::map<GLchar, Character>& GetCharacters() const { return Characters; };

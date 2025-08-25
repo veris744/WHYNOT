@@ -23,7 +23,7 @@
 
 void AliensLogic::AlienDestroyed(const std::shared_ptr<Alien>& _alien)
 {
-    aliens.erase(ranges::find(aliens, _alien));
+    aliens.erase(std::ranges::find(aliens, _alien));
     OnTextChangedDelegate.Execute("Aliens : " + std::to_string(aliens.size()));
     _alien->Destroy();
     if (aliens.empty())
@@ -134,9 +134,9 @@ void AliensLogic::Update(float deltaTime)
 
 void AliensLogic::CalculateRandomPosition(const std::shared_ptr<Alien>& alien)
 {
-    vec2 xBounds = GetXBounds();
-    vec2 yBounds = GetYBounds();
-    vec2 zBounds = GetZBounds();
+    glm::vec2 xBounds = GetXBounds();
+    glm::vec2 yBounds = GetYBounds();
+    glm::vec2 zBounds = GetZBounds();
 
     float radius = alien->GetComponent<CircleCollider>()->radius;
     //

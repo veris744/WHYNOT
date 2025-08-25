@@ -5,7 +5,7 @@
 #include "UI/Widget.h"
 
 
-const vector<float> Renderer2D::quadVertices = {
+const std::vector<float> Renderer2D::quadVertices = {
     // Positions    // Texture Coords
     -0.5f,  0.5f,   0.0f, 1.0f,  // Top-left
     -0.5f, -0.5f,   0.0f, 0.0f,  // Bottom-left
@@ -50,8 +50,8 @@ void Renderer2D::Render()
 
     PrepareOpaqueRendering();
     
-    vector<std::shared_ptr<Widget>> widgets = World::GetInstance()->GetWidgets();
-    vector<std::shared_ptr<Widget>> allWidgets;
+    std::vector<std::shared_ptr<Widget>> widgets = World::GetInstance()->GetWidgets();
+    std::vector<std::shared_ptr<Widget>> allWidgets;
     if (widgets.size() > 0)
         allWidgets.insert(allWidgets.end(), widgets.begin(), widgets.end());
     if (Debugger::widgetsToRender.size() > 0)
@@ -94,7 +94,7 @@ void Renderer2D::RenderOpaqueWidget(const std::shared_ptr<Widget>& _widget)
 
 void Renderer2D::Clear()
 {
-    vector<std::shared_ptr<Widget>> widgets = World::GetInstance()->GetWidgets();
+    std::vector<std::shared_ptr<Widget>> widgets = World::GetInstance()->GetWidgets();
     for (const auto& widget : widgets)
     {
         if (!widget->isActive)  continue;

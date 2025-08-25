@@ -2,8 +2,6 @@
 #include <string>
 #include "Reflection/ReflectedObject.h"
 
-using namespace std;
-
 class Entity;
 
 class Component : public ReflectedObject
@@ -12,11 +10,11 @@ protected:
     bool isSkippedWhenPause = true;
 
 public:
-    string name;
+    std::string name;
     Component() = default;
     virtual ~Component() = default;
 
-    string GetName()
+    std::string GetName()
     {
         return name;
     }

@@ -70,7 +70,7 @@ std::shared_ptr<Widget> WidgetFactory::CreateWidget(const std::string& type, con
 {
     auto it = creators.find(type);
     if (it != creators.end()) {
-        shared_ptr<Widget> a = it->second(data, parent);
+        std::shared_ptr<Widget> a = it->second(data, parent);
         return temp;
     }
     throw std::runtime_error("Unknown entity type: " + type);
@@ -107,7 +107,7 @@ void WidgetFactory::SaveWidget(const std::shared_ptr<Widget>& widget, Widget* pa
 
 std::shared_ptr<Button> WidgetFactory::ReadButton(const YAML::Node& asset)
 {
-    string subtype = ReadString(asset, "subtype");
+    std::string subtype = ReadString(asset, "subtype");
     if (subtype == "Start")
     {
         std::shared_ptr<LoadSceneButton> button = std::make_shared<LoadSceneButton>();

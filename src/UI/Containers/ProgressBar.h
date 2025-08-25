@@ -15,7 +15,7 @@ protected:
     void Initialize() override;
 
 public:
-    ProgressBar(vec2 _pos, vec2 _size, const string& _name = "");
+    ProgressBar(glm::vec2 _pos, glm::vec2 _size, const std::string& _name = "");
     ProgressBar() = default;
     void Render() override;
     void Clear() override;

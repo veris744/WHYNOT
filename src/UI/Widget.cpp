@@ -34,7 +34,7 @@ bool Widget::AreParentsActive()
     return isActive;
 }
 
-bool Widget::IsClicking(const vec2& _mousePos) const
+bool Widget::IsClicking(const glm::vec2& _mousePos) const
 {
     if (_mousePos.x >= pixelPosition.x - size.x * 0.5 && _mousePos.x <= pixelPosition.x + size.x * 0.5 &&
         _mousePos.y >= pixelPosition.y - size.y * 0.5 && _mousePos.y <= pixelPosition.y + size.y * 0.5)
@@ -68,7 +68,7 @@ void Widget::RemoveChild(const std::shared_ptr<Widget>& _widget)
     std::erase(children, _widget);
 }
 
-vec2 Widget::GetPixelPosition() const
+glm::vec2 Widget::GetPixelPosition() const
 {
     return pixelPosition;
 }
@@ -87,7 +87,7 @@ void Widget::SetPixelPosition()
         return;
     }
 
-    vec2 parentPos = parent->GetPixelPosition();
+    glm::vec2 parentPos = parent->GetPixelPosition();
     float parentWidth = parent->size.x;
     float parentHeight = parent->size.y;
 
@@ -105,7 +105,7 @@ void Widget::SetPixelPosition()
     }
 }
 
-// vec2 Widget::GetPixelPosition() const
+// glm::vec2 Widget::GetPixelPosition() const
 // {
 //     if (!parent)
 //     {
@@ -118,7 +118,7 @@ void Widget::SetPixelPosition()
 //         return {x, y};
 //     }
 //
-//     vec2 parentPos = parent->GetPixelPosition();
+//     glm::vec2 parentPos = parent->GetPixelPosition();
 //     float parentWidth = parent->size.x;
 //     float parentHeight = parent->size.y;
 //
@@ -131,9 +131,9 @@ void Widget::SetPixelPosition()
 //     return {x, y};
 // }
 
-vec2 Widget::GetAutoSize() const
+glm::vec2 Widget::GetAutoSize() const
 {
-    vec2 autoSize = size;
+    glm::vec2 autoSize = size;
     if (autoSizing == AutoSizing::HORIZONTAL || autoSizing == AutoSizing::ALL)
     {
         if (parent)

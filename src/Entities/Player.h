@@ -7,7 +7,7 @@ class Player : public Entity
     static unsigned int counter;
     
 public:
-    Player(const string& _name = "")
+    Player(const std::string& _name = "")
     {
         name = _name.empty() ? "Player" + std::to_string(++counter) : _name;
     }

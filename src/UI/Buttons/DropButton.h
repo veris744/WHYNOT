@@ -10,10 +10,10 @@ class DropButton : public Button
     Image2D* image = nullptr;
 
 public:
-    DropButton(const vec2& _pos, const vec2& _size, const string& _name = "");
+    DropButton(const glm::vec2& _pos, const glm::vec2& _size, const std::string& _name = "");
     DropButton() = default;
     void Initialize() override;
-    void OnClick(vec2 _mousePos) override;
+    void OnClick(glm::vec2 _mousePos) override;
 };
 
 

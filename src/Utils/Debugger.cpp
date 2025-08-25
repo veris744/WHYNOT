@@ -14,10 +14,10 @@
 
 bool Debugger::collisionDebugEnabled = false;
 bool Debugger::transformDebugEnabled = false;
-unordered_map<std::unique_ptr<Mesh>, mat4> Debugger::meshesToRenderInFrame;
-map<std::unique_ptr<Mesh>, mat4> Debugger::meshesToRender;
-vector<shared_ptr<Widget>> Debugger::widgetsToRenderInFrame;
-vector<shared_ptr<Widget>> Debugger::widgetsToRender;
+std::unordered_map<std::unique_ptr<Mesh>, glm::mat4> Debugger::meshesToRenderInFrame;
+std::map<std::unique_ptr<Mesh>, glm::mat4> Debugger::meshesToRender;
+std::vector<std::shared_ptr<Widget>> Debugger::widgetsToRenderInFrame;
+std::vector<std::shared_ptr<Widget>> Debugger::widgetsToRender;
 
 
 void Debugger::SetCollisionDebug(bool isEnabled)
@@ -44,19 +44,19 @@ void Debugger::SetTransfomDebug(bool isEnabled)
     }
 }
 
-void Debugger::DrawSphereDebug(float _radius, vec3 _position, vec3 _color, float timer)
+void Debugger::DrawSphereDebug(float _radius, glm::vec3 _position, glm::vec3 _color, float timer)
 {
-    vector<float> vertices;
-    vector<unsigned int> indices;
+    std::vector<float> vertices;
+    std::vector<unsigned int> indices;
     Helper::generateSphere(vertices, indices, 1, 16, 8);
     std::shared_ptr<Material> material = std::make_shared<Material>("", DEFAULT_VERTEX_SHADER_PATH, "shaders/debugFragment.glsl");
     std::unique_ptr<Mesh> sphereMesh = std::make_unique<Mesh>(vertices, vertices.size(), indices, material);
     
     sphereMesh->GetMaterial()->materialData.type = MaterialType::COLOR;
-    sphereMesh->GetMaterial()->materialData.color = vec4(_color, 0.4);
-    mat4 mat = mat4(1.0f);
+    sphereMesh->GetMaterial()->materialData.color = glm::vec4(_color, 0.4);
+    glm::mat4 mat = glm::mat4(1.0f);
     mat = translate(mat, _position);
-    mat = scale(mat, vec3(_radius));
+    mat = scale(mat, glm::vec3(_radius));
 
     if (timer <= 0.f)
     {
@@ -69,15 +69,15 @@ void Debugger::DrawSphereDebug(float _radius, vec3 _position, vec3 _color, float
     }
 }
 
-void Debugger::DrawCubeDebug(vec3 _dimensions, vec3 _position, vec3 _color, float timer)
+void Debugger::DrawCubeDebug(glm::vec3 _dimensions, glm::vec3 _position, glm::vec3 _color, float timer)
 {
-    vector<float> vertices = Renderer::GetCubeVertex();
+    std::vector<float> vertices = Renderer::GetCubeVertex();
     std::shared_ptr<Material> material = std::make_shared<Material>("", DEFAULT_VERTEX_SHADER_PATH, "shaders/debugFragment.glsl");
     std::unique_ptr<Mesh> cubeMesh = std::make_unique<Mesh>(vertices, 36, material);
 
     cubeMesh->GetMaterial()->materialData.type = MaterialType::COLOR;
-    cubeMesh->GetMaterial()->materialData.color = vec4(_color, 0.4);
-    mat4 mat = mat4(1.0f);
+    cubeMesh->GetMaterial()->materialData.color = glm::vec4(_color, 0.4);
+    glm::mat4 mat = glm::mat4(1.0f);
     mat = translate(mat, _position);
     mat = scale(mat, _dimensions);
 
@@ -92,17 +92,17 @@ void Debugger::DrawCubeDebug(vec3 _dimensions, vec3 _position, vec3 _color, floa
     }
 }
 
-void Debugger::DrawPlaneDebug(vec2 _dimensions, vec3 _position, vec3 _color, float timer)
+void Debugger::DrawPlaneDebug(glm::vec2 _dimensions, glm::vec3 _position, glm::vec3 _color, float timer)
 {
-    vector<float> vertices = Renderer::GetPlaneVertex();
+    std::vector<float> vertices = Renderer::GetPlaneVertex();
     std::shared_ptr<Material> material = std::make_shared<Material>("", DEFAULT_VERTEX_SHADER_PATH, "shaders/debugFragment.glsl");
     std::unique_ptr<Mesh> cubeMesh = std::make_unique<Mesh>(vertices, 36, material);
 
     cubeMesh->GetMaterial()->materialData.type = MaterialType::COLOR;
-    cubeMesh->GetMaterial()->materialData.color = vec4(_color, 0.4);
-    mat4 mat = mat4(1.0f);
+    cubeMesh->GetMaterial()->materialData.color = glm::vec4(_color, 0.4);
+    glm::mat4 mat = glm::mat4(1.0f);
     mat = translate(mat, _position);
-    mat = scale(mat, vec3(_dimensions.x, 0 , _dimensions.y));
+    mat = scale(mat, glm::vec3(_dimensions.x, 0 , _dimensions.y));
 
     if (timer <= 0.f)
     {
@@ -115,15 +115,15 @@ void Debugger::DrawPlaneDebug(vec2 _dimensions, vec3 _position, vec3 _color, flo
     }
 }
 
-void Debugger::DrawSlopeDebug(vec3 _dimensions, vec3 _position, vec3 _color, float timer)
+void Debugger::DrawSlopeDebug(glm::vec3 _dimensions, glm::vec3 _position, glm::vec3 _color, float timer)
 {
-    vector<float> vertices = Renderer::GetSlopeVertex();
+    std::vector<float> vertices = Renderer::GetSlopeVertex();
     std::shared_ptr<Material> material = std::make_shared<Material>("", DEFAULT_VERTEX_SHADER_PATH, "shaders/debugFragment.glsl");
     std::unique_ptr<Mesh> cubeMesh = std::make_unique<Mesh>(vertices, 36, material);
 
     cubeMesh->GetMaterial()->materialData.type = MaterialType::COLOR;
-    cubeMesh->GetMaterial()->materialData.color = vec4(_color, 0.4);
-    mat4 mat = mat4(1.0f);
+    cubeMesh->GetMaterial()->materialData.color = glm::vec4(_color, 0.4);
+    glm::mat4 mat = glm::mat4(1.0f);
     mat = translate(mat, _position);
     mat = scale(mat, _dimensions);
 
@@ -138,17 +138,17 @@ void Debugger::DrawSlopeDebug(vec3 _dimensions, vec3 _position, vec3 _color, flo
     }
 }
 
-void Debugger::DrawCapsuleDebug(float _radius, float _height, vec3 _position, vec3 _color, float timer)
+void Debugger::DrawCapsuleDebug(float _radius, float _height, glm::vec3 _position, glm::vec3 _color, float timer)
 {
-    vector<float> vertices;
-    vector<unsigned int> indices;
+    std::vector<float> vertices;
+    std::vector<unsigned int> indices;
     Renderer::GenerateCapsuleVertex(_radius, _height, vertices, indices);
     std::shared_ptr<Material> material = std::make_shared<Material>("", DEFAULT_VERTEX_SHADER_PATH, "shaders/debugFragment.glsl");
     std::unique_ptr<Mesh> cubeMesh = std::make_unique<Mesh>(vertices, vertices.size() / 8, indices, material);
 
     cubeMesh->GetMaterial()->materialData.type = MaterialType::COLOR;
-    cubeMesh->GetMaterial()->materialData.color = vec4(_color, 0.4);
-    mat4 mat = mat4(1.0f);
+    cubeMesh->GetMaterial()->materialData.color = glm::vec4(_color, 0.4);
+    glm::mat4 mat = glm::mat4(1.0f);
     mat = translate(mat, _position);
 
     if (timer <= 0.f)
@@ -162,19 +162,19 @@ void Debugger::DrawCapsuleDebug(float _radius, float _height, vec3 _position, ve
     }
 }
 
-void Debugger::DrawLineDebug(vec3 _start, vec3 _end, vec3 _color, float timer)
+void Debugger::DrawLineDebug(glm::vec3 _start, glm::vec3 _end, glm::vec3 _color, float timer)
 {
     if (meshesToRender.size() >= 10) return;
-    vector<float> vertices =
+    std::vector<float> vertices =
         {_start.x, _start.y, _start.z, 
         _end.x, _end.y, _end.z};
     std::shared_ptr<Material> material = std::make_shared<Material>("", DEFAULT_VERTEX_SHADER_PATH, "shaders/debugFragment.glsl");
     material->materialData.type = MaterialType::COLOR;
-    material->materialData.color = vec4(_color, 1);
+    material->materialData.color = glm::vec4(_color, 1);
     std::unique_ptr<Mesh> mesh = std::make_unique<Mesh>(vertices, 2, material, 1);
     mesh->SetLinesVertexArray();
     
-    mat4 mat = mat4(1.0f);
+    glm::mat4 mat = glm::mat4(1.0f);
     mesh->Render(mat);
 
     if (timer <= 0.f)
@@ -188,9 +188,9 @@ void Debugger::DrawLineDebug(vec3 _start, vec3 _end, vec3 _color, float timer)
     }
 }
 
-void Debugger::DrawTextDebug(const string& _text, vec3 _color, float timer)
+void Debugger::DrawTextDebug(const std::string& _text, glm::vec3 _color, float timer)
 {
-    std::shared_ptr<Text> text = std::make_shared<Text>(_text, _color, 0.3, vec2{0, 0});
+    std::shared_ptr<Text> text = std::make_shared<Text>(_text, _color, 0.3, glm::vec2{0, 0});
     text->align = TextAlign::RIGHT;
     text->alignVertical = TextAlignVertical::BOTTOM;
     text->padding = {5, 5};

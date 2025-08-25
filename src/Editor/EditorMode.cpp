@@ -16,11 +16,11 @@ InputText* EditorMode::inputText = nullptr;
 SerializeButton* EditorMode::serializeButton = nullptr;
 bool EditorMode::isInputBoxOpen = false;
 bool EditorMode::isPanelOpen = false;
-SingleDelegate<const string&> EditorMode::OnEnterInput;
+SingleDelegate<const std::string&> EditorMode::OnEnterInput;
 
 void EditorMode::CreateEntityPanel()
 {
-    std::shared_ptr<EntityPanel> tempPanel = std::make_shared<EntityPanel>(vec2(-50, 0), vec2(350, 0), "EntityPanel");
+    std::shared_ptr<EntityPanel> tempPanel = std::make_shared<EntityPanel>(glm::vec2(-50, 0), glm::vec2(350, 0), "EntityPanel");
     tempPanel->background = {0.3f, 0.3f, 0.3f, 1.f};
     tempPanel->pixelCorrection = {175, 0};
     tempPanel->autoSizing = AutoSizing::VERTICAL;
@@ -42,7 +42,7 @@ void EditorMode::CreateInputBox()
 
 void EditorMode::CreateSerializeButton()
 {
-    std::shared_ptr<SerializeButton> tempButton = std::make_shared<SerializeButton>(vec2{40,-40}, vec2{150, 50}, "SerializeButton");
+    std::shared_ptr<SerializeButton> tempButton = std::make_shared<SerializeButton>(glm::vec2{40,-40}, glm::vec2{150, 50}, "SerializeButton");
     serializeButton = tempButton.get();
     World::GetInstance()->AddWidget(tempButton);
 }

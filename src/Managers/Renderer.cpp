@@ -11,16 +11,16 @@
 #include "Utils/Debugger.h"
 
 
-auto AddTriangle = [&](int a, int b, int c, vector<unsigned int>& indices) {
+auto AddTriangle = [&](int a, int b, int c, std::vector<unsigned int>& indices) {
     indices.push_back(static_cast<unsigned int>(a));
     indices.push_back(static_cast<unsigned int>(b));
     indices.push_back(static_cast<unsigned int>(c));
 };
 
-vector<float> Renderer::sphereVertex = {};
-vector<unsigned int> Renderer::sphereIndex = {};
+std::vector<float> Renderer::sphereVertex = {};
+std::vector<unsigned int> Renderer::sphereIndex = {};
 
-const vector<float> Renderer::planeVertex = {
+const std::vector<float> Renderer::planeVertex = {
     -0.5f,  0.f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f,
      0.5f,  0.f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f, 0.0f,
      0.5f,  0.f, -0.5f,  0.0f,  1.0f,  0.0f,  1.0f, 1.0f,
@@ -28,7 +28,7 @@ const vector<float> Renderer::planeVertex = {
     -0.5f,  0.f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f,
     -0.5f,  0.f,  0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 0.0f,
     };
-const vector<float> Renderer::cubeVertex = {
+const std::vector<float> Renderer::cubeVertex = {
     // positions          // normals           // texture coords
         -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 0.0f,
          0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f, 1.0f,
@@ -73,7 +73,7 @@ const vector<float> Renderer::cubeVertex = {
         -0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 0.0f,
     };
 
-const vector<float> Renderer::slopeVertex = {
+const std::vector<float> Renderer::slopeVertex = {
     // positions          // normals           // texture coords
     -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f, 0.0f,
      0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  1.0f, 0.0f,
@@ -228,7 +228,7 @@ void Renderer::CleanUp()
     shaders_loaded.clear();
 }
 
-const std::shared_ptr<Texture>& Renderer::GetLoadedTexture(const string& path) const
+const std::shared_ptr<Texture>& Renderer::GetLoadedTexture(const std::string& path) const
 {
     for (const auto& texture : textures_loaded)
     {
@@ -237,7 +237,7 @@ const std::shared_ptr<Texture>& Renderer::GetLoadedTexture(const string& path) c
     return nullptr;
 }
 
-const std::shared_ptr<Shader>& Renderer::GetLoadedShader(const string& pathVertex, const string& pathFragment) const
+const std::shared_ptr<Shader>& Renderer::GetLoadedShader(const std::string& pathVertex, const std::string& pathFragment) const
 {
     for (const auto& shader : shaders_loaded)
     {
@@ -246,14 +246,14 @@ const std::shared_ptr<Shader>& Renderer::GetLoadedShader(const string& pathVerte
     return nullptr;
 }
 
-const void Renderer::GenerateCapsuleVertex(float radius, float height, vector<float>& vertices, vector<unsigned int>& indices)
+const void Renderer::GenerateCapsuleVertex(float radius, float height, std::vector<float>& vertices, std::vector<unsigned int>& indices)
 {
     const int slices = 16;
     const int stacks = 8;
     float bodyHalfHeight = (height * 0.5f) - radius;
 
     // Helper: add vertex
-    auto addVertex = [&](vec3 pos, vec3 normal, vec2 uv) {
+    auto addVertex = [&](glm::vec3 pos, glm::vec3 normal, glm::vec2 uv) {
         vertices.insert(vertices.end(), {
             pos.x, pos.y, pos.z,
             normal.x, normal.y, normal.z,
@@ -267,11 +267,11 @@ const void Renderer::GenerateCapsuleVertex(float radius, float height, vector<fl
         float theta = i * 2.0f * M_PI / slices;
         float x = cos(theta);
         float z = sin(theta);
-        vec3 normal = normalize(vec3(x, 0, z));
-        vec2 uv(i / float(slices), 0.5f);
+        glm::vec3 normal = normalize(glm::vec3(x, 0, z));
+        glm::vec2 uv(i / float(slices), 0.5f);
 
-        vec3 bottom = vec3(x * radius, -bodyHalfHeight, z * radius);
-        vec3 top = vec3(x * radius, +bodyHalfHeight, z * radius);
+        glm::vec3 bottom = glm::vec3(x * radius, -bodyHalfHeight, z * radius);
+        glm::vec3 top = glm::vec3(x * radius, +bodyHalfHeight, z * radius);
 
         addVertex(bottom, normal, uv);
         addVertex(top, normal, uv);
@@ -304,9 +304,9 @@ const void Renderer::GenerateCapsuleVertex(float radius, float height, vector<fl
                 float x = sin(phi) * cos(theta);
                 float y = cos(phi);
                 float z = sin(phi) * sin(theta);
-                vec3 normal = normalize(vec3(x, y * hemisphere, z));
-                vec3 pos = vec3(x * radius, y * radius * hemisphere + hemisphere * bodyHalfHeight, z * radius);
-                vec2 uv(j / float(slices), i / float(stacks));
+                glm::vec3 normal = normalize(glm::vec3(x, y * hemisphere, z));
+                glm::vec3 pos = glm::vec3(x * radius, y * radius * hemisphere + hemisphere * bodyHalfHeight, z * radius);
+                glm::vec2 uv(j / float(slices), i / float(stacks));
                 addVertex(pos, normal, uv);
             }
         }

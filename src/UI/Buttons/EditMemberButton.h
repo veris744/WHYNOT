@@ -8,7 +8,7 @@ class EditMemberButton : public Button
     std::shared_ptr<MemberView> memberView;
 
 public:
-    EditMemberButton(const vec2& _pos, const vec2& _size, const string& _name = "");
+    EditMemberButton(const glm::vec2& _pos, const glm::vec2& _size, const std::string& _name = "");
     EditMemberButton() = default;
-    void OnClick(vec2 _mousePos) override;
+    void OnClick(glm::vec2 _mousePos) override;
 };

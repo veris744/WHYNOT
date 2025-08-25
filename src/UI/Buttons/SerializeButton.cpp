@@ -8,7 +8,7 @@
 #include <Utils/Parser.h>
 
 
-SerializeButton::SerializeButton(const vec2& _pos, const vec2& _size, const string& _name)
+SerializeButton::SerializeButton(const glm::vec2& _pos, const glm::vec2& _size, const std::string& _name)
     : Button(_pos, _size, _name)
 {
 
@@ -72,7 +72,7 @@ YAML::Node SerializeButton::GenerateObjectYAML(ReflectedObject* object)
             }
             else if (HasProperty(member.properties, MemberProperty::Serializable))
             {
-                string res = Parser::ParseValue(member.getter(object), member.type_name);
+                std::string res = Parser::ParseValue(member.getter(object), member.type_name);
                 if (member.type_name.find("vec") != std::string::npos)
                 {
                     std::string cleaned = res.substr(1, res.size() - 2); // Remove brackets
@@ -96,29 +96,29 @@ YAML::Node SerializeButton::GenerateObjectYAML(ReflectedObject* object)
     return objectNode;
 }
 
-string SerializeButton::GenerateFile(const YAML::Node& node)
+std::string SerializeButton::GenerateFile(const YAML::Node& node)
 {
     YAML::Emitter out;
     out << node;
 
-    string filename = "serialize.yaml";
+    std::string filename = "serialize.yaml";
 
     std::ofstream file(filename);
     if (file.is_open()) {
         file << out.c_str();
         file.close();
         Logger::Log<SerializeButton>(LogLevel::Info, "File serialized successfully in " + filename);
-        Debugger::DrawTextDebug("File serialized successfully in " + filename, vec3{0,1,0}, 3);
+        Debugger::DrawTextDebug("File serialized successfully in " + filename, glm::vec3{0,1,0}, 3);
         return filename;
     }
     Logger::Log<SerializeButton>(LogLevel::Info, "Failed write YAML in file");
     return "";
 }
 
-void SerializeButton::OnClick(vec2 _mousePos)
+void SerializeButton::OnClick(glm::vec2 _mousePos)
 {
     Button::OnClick(_mousePos);
 
     YAML::Node node = GenerateYamlContent();
-    string nameFile = GenerateFile(node);
+    std::string nameFile = GenerateFile(node);
 }

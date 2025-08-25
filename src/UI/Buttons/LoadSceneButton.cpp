@@ -3,12 +3,12 @@
 #include "Managers/World.h"
 
 
-LoadSceneButton::LoadSceneButton(const vec2& _pos, const vec2& _size, const string& _name)
+LoadSceneButton::LoadSceneButton(const glm::vec2& _pos, const glm::vec2& _size, const std::string& _name)
     : Button(_pos, _size, _name)
 {
 }
 
-void LoadSceneButton::OnClick(vec2 _mousePos)
+void LoadSceneButton::OnClick(glm::vec2 _mousePos)
 {
     Button::OnClick(_mousePos);
     

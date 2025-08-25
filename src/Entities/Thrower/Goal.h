@@ -8,15 +8,15 @@ class Material;
 class Goal : public Entity
 {
     static unsigned int counter;
-    string defaultName = "Goal";
+    std::string defaultName = "Goal";
 
-    set<Entity*> entitiesEntering;
-    set<Entity*> entitiesInside;
+    std::set<Entity*> entitiesEntering;
+    std::set<Entity*> entitiesInside;
 
     Material* material;
 
 public:
-    Goal(const string& _name = "")
+    Goal(const std::string& _name = "")
     {
         name = _name.empty() ? defaultName + std::to_string(++counter) : _name;
     }
@@ -26,7 +26,7 @@ public:
     void Update(float _deltaTime) override;
     void ClearComponents() override;
 
-    void OnCollision(Entity* _otherEntity, vec3 normal) override;
+    void OnCollision(Entity* _otherEntity, glm::vec3 normal) override;
 };
 REGISTER_CLASS(Goal, {
     REGISTER_MEMBER(Goal, name, MemberProperty::Viewable | MemberProperty::Serializable)

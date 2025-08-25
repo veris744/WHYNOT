@@ -31,7 +31,7 @@ void AssetReader::SaveEntity(const YAML::Node& asset)
     std::shared_ptr<Entity> entity;
     if (asset["type"])
     {
-        string type = asset["type"].as<std::string>();
+        std::string type = asset["type"].as<std::string>();
         std::transform(type.begin(), type.end(), type.begin(), toupper);
         entity = EntityFactory::GetInstance()->CreateEntity(type, asset);
     }
@@ -52,13 +52,13 @@ void AssetReader::SaveEntity(const YAML::Node& asset)
 
 void AssetReader::SaveComponent(const std::shared_ptr<Entity>& entity, const YAML::Node& asset)
 {
-    string type = asset["name"].as<std::string>();
+    std::string type = asset["name"].as<std::string>();
     ComponentFactory::GetInstance()->CreateComponent(type, entity, asset);
 }
 
 void AssetReader::SaveWidget(const YAML::Node& asset, Widget* parent)
 {
-    string type = asset["type"].as<std::string>();
+    std::string type = asset["type"].as<std::string>();
     std::shared_ptr<Widget> widget;
     widget = WidgetFactory::GetInstance()->CreateWidget(type, asset, parent);
     if (asset["widgets"])

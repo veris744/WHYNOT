@@ -19,12 +19,12 @@ void Dropbox::Initialize()
     Widget::Initialize();
 
     std::shared_ptr<DropButton> dropButton = std::make_shared<DropButton>();
-    dropButton->size = vec2{15, 15};
-    dropButton->position = vec2{-50, 0};
+    dropButton->size = glm::vec2{15, 15};
+    dropButton->position = glm::vec2{-50, 0};
     AddWidget(dropButton);
 }
 
-void Dropbox::AddDroppingWidget(const shared_ptr<Widget>& _widget)
+void Dropbox::AddDroppingWidget(const std::shared_ptr<Widget>& _widget)
 {
     AddWidget(_widget);
     DroppingWidgets.push_back(_widget.get());
@@ -32,7 +32,7 @@ void Dropbox::AddDroppingWidget(const shared_ptr<Widget>& _widget)
         _widget->isActive = false;
 }
 
-void Dropbox::SetTitleWidget(const shared_ptr<Widget>& _widget)
+void Dropbox::SetTitleWidget(const std::shared_ptr<Widget>& _widget)
 {
     AddWidget(_widget);
     titleWidget = _widget.get();

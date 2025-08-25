@@ -11,15 +11,14 @@
 #include "EnumRegistry.h"
 #include "Utils/Logger.h"
 
-using namespace glm;
 
 namespace Reader
 {
-    inline string demangleTypeName(const string& mangledName)
+    inline std::string demangleTypeName(const std::string& mangledName)
     {
-        string result = mangledName;
-        const string classPrefix = "class ";
-        const string structPrefix = "struct ";
+        std::string result = mangledName;
+        const std::string classPrefix = "class ";
+        const std::string structPrefix = "struct ";
         if (result.find(classPrefix) == 0) {
             result = result.substr(classPrefix.size());
         } else if (result.find(structPrefix) == 0) {
@@ -28,21 +27,21 @@ namespace Reader
         return result;
     }
     
-    vec3 ReadVec3(const YAML::Node& node, const string& name, const vec3& defaultValue = vec3(0));
-    vec4 ReadVec4(const YAML::Node& node, const string& name, const vec4& defaultValue = vec4(0));
-    vec2 ReadVec2(const YAML::Node& node, const string& name, const vec2& defaultValue = vec2(0));
-    string ReadString(const YAML::Node& node, const string& name, const string& defaultValue = string(""));
-    int ReadInt(const YAML::Node& node, const string& name, int defaultValue = 0);
-    unsigned int ReadUInt(const YAML::Node& node, const string& name, unsigned int defaultValue = 0);
-    float ReadFloat(const YAML::Node& node, const string& name, float defaultValue = 0.0f);
-    bool ReadBool(const YAML::Node& node, const string& name, bool defaultValue = false);
-    vector<string> ReadStringVector(const YAML::Node& node, const std::string& name);
+    glm::vec3 ReadVec3(const YAML::Node& node, const std::string& name, const glm::vec3& defaultValue = glm::vec3(0));
+    glm::vec4 ReadVec4(const YAML::Node& node, const std::string& name, const glm::vec4& defaultValue = glm::vec4(0));
+    glm::vec2 ReadVec2(const YAML::Node& node, const std::string& name, const glm::vec2& defaultValue = glm::vec2(0));
+    std::string ReadString(const YAML::Node& node, const std::string& name, const std::string& defaultValue = std::string(""));
+    int ReadInt(const YAML::Node& node, const std::string& name, int defaultValue = 0);
+    unsigned int ReadUInt(const YAML::Node& node, const std::string& name, unsigned int defaultValue = 0);
+    float ReadFloat(const YAML::Node& node, const std::string& name, float defaultValue = 0.0f);
+    bool ReadBool(const YAML::Node& node, const std::string& name, bool defaultValue = false);
+    std::vector<std::string> ReadStringVector(const YAML::Node& node, const std::string& name);
 
-    inline YAML::Node ConvertMemberToYaml(string _memberName, string _value)
+    inline YAML::Node ConvertMemberToYaml(std::string _memberName, std::string _value)
     {
         try
         {
-            string res;
+            std::string res;
             bool isVector = _value.find(',') != std::string::npos;
             YAML::Node node;
             if (isVector)
@@ -73,37 +72,37 @@ namespace Reader
     }
     
     template<typename T>
-    T ReadValue(const YAML::Node& node, const string& name)
+    T ReadValue(const YAML::Node& node, const std::string& name)
     {
-        if constexpr (is_enum_v<T>) {
-            string valueStr = node[name].as<string>();
+        if constexpr (std::is_enum_v<T>) {
+            std::string valueStr = node[name].as<std::string>();
             return EnumRegistry::instance().fromString<T>(valueStr);
         }
-        else if constexpr (is_same_v<T, decltype(vec3{})>) {
+        else if constexpr (std::is_same_v<T, decltype(glm::vec3{})>) {
             return ReadVec3(node, name);
         }
-        if constexpr (is_same_v<T, decltype(vec4{})>) {
+        if constexpr (std::is_same_v<T, decltype(glm::vec4{})>) {
             return ReadVec4(node, name);
         }
-        else if constexpr (is_same_v<T, decltype(vec2{})>) {
+        else if constexpr (std::is_same_v<T, decltype(glm::vec2{})>) {
             return ReadVec2(node, name);
         }
-        else if constexpr (is_same_v<T, vector<string>>) {
+        else if constexpr (std::is_same_v<T, std::vector<std::string>>) {
             return ReadStringVector(node, name);
         }
-        else if constexpr (is_same_v<T, string>) {
+        else if constexpr (std::is_same_v<T, std::string>) {
             return ReadString(node, name);
         }
-        else if constexpr (is_same_v<T, int>) {
+        else if constexpr (std::is_same_v<T, int>) {
             return ReadInt(node, name);
         }
-        else if constexpr (is_same_v<T, unsigned int>) {
+        else if constexpr (std::is_same_v<T, unsigned int>) {
             return ReadUInt(node, name);
         }
-        else if constexpr (is_same_v<T, float>) {
+        else if constexpr (std::is_same_v<T, float>) {
             return ReadFloat(node, name);
         }
-        else if constexpr (is_same_v<T, bool>) {
+        else if constexpr (std::is_same_v<T, bool>) {
             return ReadBool(node, name);
         }
         Logger::Log(LogLevel::Error, "Unsupported type");
@@ -111,7 +110,7 @@ namespace Reader
 
     template<typename T>
     constexpr bool IsGLMType() {
-        return is_same_v<T, decltype(vec2{})> || is_same_v<T, decltype(vec3{})> ||
-               is_same_v<T, decltype(vec4{})> || is_same_v<T, decltype(mat4{})>;
+        return std::is_same_v<T, decltype(glm::vec2{})> || std::is_same_v<T, decltype(glm::vec3{})> ||
+               std::is_same_v<T, decltype(glm::vec4{})> || std::is_same_v<T, decltype(glm::mat4{})>;
     }
 }

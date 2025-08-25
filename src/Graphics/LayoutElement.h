@@ -2,7 +2,6 @@
 #include <glad/include/glad/glad.h>
 #include <string>
 
-using namespace std;
 
 enum class ShaderDataType
 {
@@ -13,7 +12,7 @@ enum class ShaderDataType
 struct LayoutElement
 {
     unsigned int index;
-    const string name;
+    const std::string name;
     unsigned int size;
     unsigned int offset;
     unsigned int stride;

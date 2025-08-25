@@ -4,11 +4,11 @@
 class LoadSceneButton : public Button
 {
 public:
-    LoadSceneButton(const vec2& _pos, const vec2& _size, const string& _name = "");
+    LoadSceneButton(const glm::vec2& _pos, const glm::vec2& _size, const std::string& _name = "");
     LoadSceneButton() = default;
-    void OnClick(vec2 _mousePos) override;
+    void OnClick(glm::vec2 _mousePos) override;
 
-    string sceneName = "";
+    std::string sceneName = "";
 };
 REGISTER_CLASS(LoadSceneButton, {
     REGISTER_MEMBER(LoadSceneButton, name, MemberProperty::Viewable),

@@ -18,15 +18,15 @@ class Entity : public std::enable_shared_from_this<Entity>, public ReflectedObje
     static unsigned int counter;
     
 protected:
-    const string defaultName = "Entity";
+    const std::string defaultName = "Entity";
 
-    vector<std::unique_ptr<Component>> components = vector<std::unique_ptr<Component>>();
+    std::vector<std::unique_ptr<Component>> components = std::vector<std::unique_ptr<Component>>();
     bool isCamera = false;
     bool isLight = false;
     bool isRendered = false;
     bool hasCollision = false;
 
-    using Property = variant<int, std::string, float, bool>;
+    using Property = std::variant<int, std::string, float, bool>;
     std::unordered_map<std::string, Property> properties;
 
     
@@ -35,7 +35,7 @@ public:
     {
         name = "Entity" + std::to_string(++counter);
     }
-    Entity(const string& _name)
+    Entity(const std::string& _name)
         :name(_name)
         {}
     // Entity(const string& _name, bool _isCamera = false, bool _isLight = false, bool _isRendered = false, bool _hasCollision = false)
@@ -46,7 +46,7 @@ public:
     
     virtual void Initialize();
     
-    string name;
+    std::string name;
     bool isActive = true;
     bool debugEnabled = false;
 
@@ -59,10 +59,10 @@ public:
             Logger::Log<Entity>(LogLevel::Warning, "Entity " + name + " already has component " + _component->GetName());
             return;
         }
-        if (is_base_of_v<Camera, T>)   isCamera = true;
-        else if (is_base_of_v<LightSource, T>)   isLight = true;
-        else if (is_base_of_v<Collider, T>)   hasCollision = true;
-        else if (is_base_of_v<Model, T>)   isRendered = true;
+        if (std::is_base_of_v<Camera, T>)   isCamera = true;
+        else if (std::is_base_of_v<LightSource, T>)   isLight = true;
+        else if (std::is_base_of_v<Collider, T>)   hasCollision = true;
+        else if (std::is_base_of_v<Model, T>)   isRendered = true;
         
         _component->parent = this;
         _component->Initialize();
@@ -102,7 +102,7 @@ public:
 
     PhysicsMaterial* GetPhysicsMaterial() const;
 
-    const vector<std::unique_ptr<Component>>& GetComponents() const { return components; }
+    const std::vector<std::unique_ptr<Component>>& GetComponents() const { return components; }
     
     bool IsCamera() const { return isCamera; }
     bool IsLight() const { return isLight; }
@@ -110,7 +110,7 @@ public:
     bool HasCollision() const { return hasCollision; }
     void EnableCollisions(bool _enable) { hasCollision = _enable; };
 
-    string GetName() { return name; }
+    std::string GetName() { return name; }
 
     void UpdateTrigger(float deltaTime);
     virtual void Update(float deltaTime);
@@ -120,9 +120,9 @@ public:
         components.clear();
     }
 
-    virtual void OnOutOfBounds(vec3 _normal) {}
-    virtual void OnCollision(Entity* _otherEntity, vec3 normal) {}
-    virtual void OnHit(Entity* _otherEntity, vec3 normal) {}
+    virtual void OnOutOfBounds(glm::vec3 _normal) {}
+    virtual void OnCollision(Entity* _otherEntity, glm::vec3 normal) {}
+    virtual void OnHit(Entity* _otherEntity, glm::vec3 normal) {}
     virtual void OnClicked()
     {
         //Logger::Log<Entity>(LogLevel::Info, "Clicked on " + name);

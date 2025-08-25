@@ -15,12 +15,12 @@ void MemberView::Initialize()
 {
     Widget::Initialize();
 
-    std::shared_ptr<Text> memberInfoText = std::make_shared<Text>("", color, scale, vec2(0));
+    std::shared_ptr<Text> memberInfoText = std::make_shared<Text>("", color, scale, glm::vec2(0));
     textWidget = memberInfoText.get();
     AddWidget(memberInfoText);
 }
 
-MemberView::MemberView(vec2 _pos, vec2 _size, const string& _name)
+MemberView::MemberView(glm::vec2 _pos, glm::vec2 _size, const std::string& _name)
     : Widget(_pos, _size)
 {
     name = _name.empty() ? "MemberView" + std::to_string(++counter) : _name;
@@ -34,8 +34,8 @@ void MemberView::SetAutoName()
 
 void MemberView::SetMemberInfo(const MemberInfo& _info, ReflectedObject* _object)
 {
-    textWidget->padding = vec2(20, 0);
-    string res;
+    textWidget->padding = glm::vec2(20, 0);
+    std::string res;
     memberInfo = &_info;
     object =  _object;
 
@@ -65,12 +65,12 @@ void MemberView::SetMemberInfo(const MemberInfo& _info, ReflectedObject* _object
     textWidget->SetText(res);
 }
 
-void MemberView::SetMemberInfo(const string& value) const
+void MemberView::SetMemberInfo(const std::string& value) const
 {
     textWidget->SetText(value);
 }
 
-void MemberView::UpdateMember(const string& value)
+void MemberView::UpdateMember(const std::string& value)
 {
     try
     {
@@ -80,14 +80,14 @@ void MemberView::UpdateMember(const string& value)
     }
     catch (...)
     {
-        Debugger::DrawTextDebug("Exception caught when updating property, check the input format", vec3(1,0,0), 5.f);
+        Debugger::DrawTextDebug("Exception caught when updating property, check the input format", glm::vec3(1,0,0), 5.f);
     }
 }
 
 void MemberView::SetUpdateButton()
 {
-    std::shared_ptr<EditMemberButton> buttonTemp = std::make_shared<EditMemberButton>(vec2(-50, 0), vec2(12,12));
-    std::shared_ptr<Image2D> image2D = std::make_shared<Image2D>("assets/2dImages/edit.png", vec2(0,0), vec2(0,0));
+    std::shared_ptr<EditMemberButton> buttonTemp = std::make_shared<EditMemberButton>(glm::vec2(-50, 0), glm::vec2(12,12));
+    std::shared_ptr<Image2D> image2D = std::make_shared<Image2D>("assets/2dImages/edit.png", glm::vec2(0,0), glm::vec2(0,0));
     image2D->autoSizing = AutoSizing::ALL;
     buttonTemp->AddWidget(image2D);
     button = buttonTemp.get();
@@ -96,8 +96,8 @@ void MemberView::SetUpdateButton()
 
 void MemberView::SetRedirectButton(Entity * _entity)
 {
-    std::shared_ptr<ShowPropertiesButton> buttonTemp = std::make_shared<ShowPropertiesButton>(vec2(-50, 0), vec2(12,12), _entity);
-    std::shared_ptr<Image2D> image2D = std::make_shared<Image2D>("assets/2dImages/extend.png", vec2(0,0), vec2(0,0));
+    std::shared_ptr<ShowPropertiesButton> buttonTemp = std::make_shared<ShowPropertiesButton>(glm::vec2(-50, 0), glm::vec2(12,12), _entity);
+    std::shared_ptr<Image2D> image2D = std::make_shared<Image2D>("assets/2dImages/extend.png", glm::vec2(0,0), glm::vec2(0,0));
     buttonTemp->pixelCorrection = {-12, 0};
     image2D->hasTransparency = true;
     image2D->autoSizing = AutoSizing::ALL;

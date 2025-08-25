@@ -25,7 +25,7 @@ void Audio::AddAudioSource(const AudioSource& audio)
     audioSources[audio.name] = audio;
 }
 
-void Audio::Play(const string& audioName)
+void Audio::Play(const std::string& audioName)
 {
     if (!audioSources.contains(audioName))
     {

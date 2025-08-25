@@ -6,13 +6,13 @@ class SerializeButton : public Button
 {
     YAML::Node GenerateYamlContent();
     YAML::Node GenerateObjectYAML(ReflectedObject* object);
-    string GenerateFile(const YAML::Node& node);
+    std::string GenerateFile(const YAML::Node& node);
 
 public:
-    SerializeButton(const vec2& _pos, const vec2& _size, const string& _name = "");
+    SerializeButton(const glm::vec2& _pos, const glm::vec2& _size, const std::string& _name = "");
     SerializeButton() = default;
     void Initialize() override;
-    void OnClick(vec2 _mousePos) override;
+    void OnClick(glm::vec2 _mousePos) override;
 };
 
 

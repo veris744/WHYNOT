@@ -22,14 +22,14 @@ class Movement : public Component
     void HandleCollisions(float deltaTime);
     
 public:
-    vec3 speed;
-    vec3 acceleration;
+    glm::vec3 speed;
+    glm::vec3 acceleration;
     float maxSpeed;
     float maxAcceleration;
-    vec3 accumulatedForce = vec3(0);
+    glm::vec3 accumulatedForce = glm::vec3(0);
     bool usesPhysics = false;
 
-    Movement(): speed(vec3(0)), acceleration(vec3(0)), maxSpeed(10), maxAcceleration(10)
+    Movement(): speed(glm::vec3(0)), acceleration(glm::vec3(0)), maxSpeed(10), maxAcceleration(10)
     {
         name = "MOVEMENT";
     }
@@ -38,12 +38,12 @@ public:
     void Update(float deltaTime) override;
     void QuickStop()
     {
-        speed = vec3(0, 0, 0);
-        acceleration = vec3(0, 0, 0);
+        speed = glm::vec3(0, 0, 0);
+        acceleration = glm::vec3(0, 0, 0);
     }
-    void AddForce(vec3 force);
+    void AddForce(glm::vec3 force);
     void ResetForces();
-    void AddImpulse(vec3 impulse);
+    void AddImpulse(glm::vec3 impulse);
     void AddCollision(const Hit& hit)
     {
         collisions.push_back(hit);

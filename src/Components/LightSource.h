@@ -16,9 +16,9 @@ REGISTER_ENUM(LightSourceType,
 
 struct LightData : ReflectedObject
 {
-    vec4  position = vec4(0.f, 0.f,0.f,1);
-    vec4  color = vec4(0, 0,0,1);
-    vec3  direction = vec3(0);
+    glm::vec4 position = glm::vec4(0.f, 0.f,0.f,1);
+    glm::vec4 color = glm::vec4(0, 0,0,1);
+    glm::vec3 direction = glm::vec3(0);
 
     float specular    = 0.f;
     float diffuse     = 0.f;

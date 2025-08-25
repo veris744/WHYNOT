@@ -23,7 +23,7 @@ public:
     float accelerationRate = 20;
     float decelerationRate = 30;
 
-    vec3 currentInput = vec3(0);
+    glm::vec3 currentInput = glm::vec3(0);
 
     void Update(float deltaTime) override;
     void UpdateMovement(float deltaTime) const;

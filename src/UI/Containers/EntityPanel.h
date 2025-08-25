@@ -12,7 +12,7 @@ class EntityPanel : public Panel
     std::vector<Widget*> entityViews;
     
 public:
-    EntityPanel(vec2 _pos, vec2 _size, const string& _name = "");
+    EntityPanel(glm::vec2 _pos, glm::vec2 _size, const std::string& _name = "");
     EntityPanel() = default;
 
     void SetContent(Entity* _entity);

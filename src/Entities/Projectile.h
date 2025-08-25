@@ -18,7 +18,7 @@ public:
 
     //void OnCollision(Entity* _otherEntity, vec3 normal);
     
-    Projectile(const string& _name = "")
+    Projectile(const std::string& _name = "")
     {
         name = _name.empty() ? "Projectile" + std::to_string(++counter) : _name;
         //Logger::Log(LogLevel::Warning, "Projectile constructor: "   + name);

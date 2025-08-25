@@ -13,7 +13,7 @@ void Panel::Initialize()
 
     isBlocking = true;
     
-    vector<float> vertex = Renderer2D::quadVertices;
+    std::vector<float> vertex = Renderer2D::quadVertices;
     vertexArray = std::make_unique<VertexArray>();
     vertexArray->Bind();
     vertexArray->AddVertexBuffer(vertex.data(), 0.5f * vertex.size(), vertex.size() * sizeof(float));
@@ -25,13 +25,13 @@ void Panel::Initialize()
         }
     );
     
-    string shaderNameVer = "shaders/vertex2D.glsl";
-    string shaderNameFrag = "shaders/fragment2DColor.glsl";
+    std::string shaderNameVer = "shaders/vertex2D.glsl";
+    std::string shaderNameFrag = "shaders/fragment2DColor.glsl";
     
     material = std::make_unique<Material>("", shaderNameVer, shaderNameFrag);
 }
 
-Panel::Panel(vec2 _pos, vec2 _size, const string& _name)
+Panel::Panel(glm::vec2 _pos, glm::vec2 _size, const std::string& _name)
     : Widget(_pos, _size)
 {
     name = _name.empty() ? "Panel" + std::to_string(++counter) : _name;
@@ -52,8 +52,8 @@ void Panel::Render()
     material->GetShader()->SetUniformVec2("uSize", size);
     material->GetShader()->SetUniformVec4("uColor", background);
     material->GetShader()->SetUniformFloat("uLayer", 0.1f * layer);
-    
-    mat4 projection = glm::ortho(0.0f, Helper::windowWidth, Helper::windowHeight, 0.0f);
+
+    glm::mat4 projection = glm::ortho(0.0f, Helper::windowWidth, Helper::windowHeight, 0.0f);
     material->GetShader()->SetUniformMat4("uProjection", projection);
     
     if (vertexArray->GetIndexBuffer())

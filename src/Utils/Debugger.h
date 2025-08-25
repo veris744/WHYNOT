@@ -8,13 +8,10 @@
 class Widget;
 class Mesh;
 
-using namespace std;
-using namespace glm;
-
 class Debugger
 {
-    static unordered_map<std::unique_ptr<Mesh>, mat4> meshesToRenderInFrame;
-    static map<unique_ptr<Mesh>, mat4> meshesToRender;
+    static std::unordered_map<std::unique_ptr<Mesh>, glm::mat4> meshesToRenderInFrame;
+    static std::map<std::unique_ptr<Mesh>, glm::mat4> meshesToRender;
 
     static bool collisionDebugEnabled;
     static bool transformDebugEnabled;
@@ -25,13 +22,13 @@ public:
     static bool GetCollisionDebugEnabled() { return collisionDebugEnabled; }
     static bool GetTransformDebugEnabled() { return collisionDebugEnabled; }
     
-    static void DrawSphereDebug(float _radius, vec3 _position, vec3 _color = vec3(1, 0, 0), float timer = 0.f);
-    static void DrawCubeDebug(vec3 _dimensions, vec3 _position, vec3 _color = vec3(1, 0, 0), float timer = 0.f);
-    static void DrawPlaneDebug(vec2 _dimensions, vec3 _position, vec3 _color = vec3(1, 0, 0), float timer = 0.f);
-    static void DrawSlopeDebug(vec3 _dimensions, vec3 _position, vec3 _color = vec3(1, 0, 0), float timer = 0.f);
-    static void DrawCapsuleDebug(float _radius, float _height, vec3 _position, vec3 _color = vec3(1, 0, 0), float timer = 0.f);
-    static void DrawLineDebug(vec3 _start, vec3 _end, vec3 _color = vec3(1, 0, 0), float timer = 0.f);
-    static void DrawTextDebug(const string& _text, vec3 color = vec3(1, 0, 0), float timer = 0.f);
+    static void DrawSphereDebug(float _radius, glm::vec3 _position, glm::vec3 _color = glm::vec3(1, 0, 0), float timer = 0.f);
+    static void DrawCubeDebug(glm::vec3 _dimensions, glm::vec3 _position, glm::vec3 _color = glm::vec3(1, 0, 0), float timer = 0.f);
+    static void DrawPlaneDebug(glm::vec2 _dimensions, glm::vec3 _position, glm::vec3 _color = glm::vec3(1, 0, 0), float timer = 0.f);
+    static void DrawSlopeDebug(glm::vec3 _dimensions, glm::vec3 _position, glm::vec3 _color = glm::vec3(1, 0, 0), float timer = 0.f);
+    static void DrawCapsuleDebug(float _radius, float _height, glm::vec3 _position, glm::vec3 _color = glm::vec3(1, 0, 0), float timer = 0.f);
+    static void DrawLineDebug(glm::vec3 _start, glm::vec3 _end, glm::vec3 _color = glm::vec3(1, 0, 0), float timer = 0.f);
+    static void DrawTextDebug(const std::string& _text, glm::vec3 color = glm::vec3(1, 0, 0), float timer = 0.f);
     static void ProcessInput(int key);
 
     static void Render();
@@ -40,6 +37,6 @@ public:
     static void StopRenderingMesh(Mesh* mesh);
     static void StopRenderingWidget(Widget* _widget);
 
-    static vector<shared_ptr<Widget>> widgetsToRenderInFrame;
-    static vector<shared_ptr<Widget>> widgetsToRender;
+    static std::vector<std::shared_ptr<Widget>> widgetsToRenderInFrame;
+    static std::vector<std::shared_ptr<Widget>> widgetsToRender;
 };

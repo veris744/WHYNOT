@@ -28,7 +28,7 @@
 
 World* World::instance = nullptr;
 bool World::isSceneLoaded = false;
-string World::currentScene = "";
+std::string World::currentScene = "";
 std::unique_ptr<GameManager> World::gameManager = nullptr;
 bool World::isPaused = false;
 
@@ -127,11 +127,11 @@ void World::DestroyAsset(const std::shared_ptr<Entity>& _entity)
 {
     if (_entity->IsCamera())
     {
-        cameras.erase(ranges::find(cameras, _entity->GetComponent<Camera>()));
+        cameras.erase(std::ranges::find(cameras, _entity->GetComponent<Camera>()));
     }
     if (_entity->IsLight())
     {
-        lights.erase(ranges::find(lights, _entity->GetComponent<LightSource>()));
+        lights.erase(std::ranges::find(lights, _entity->GetComponent<LightSource>()));
     }
     entities.erase(_entity->GetName());
     _entity->ClearComponents();
@@ -145,7 +145,7 @@ void World::DestroyAsset(const std::shared_ptr<Widget>& _widget)
     }
     else
     {
-        if (const auto& it = ranges::find(widgets, _widget); it != widgets.end())
+        if (const auto& it = std::ranges::find(widgets, _widget); it != widgets.end())
             widgets.erase(it);
     }
     _widget->ClearChildren();
@@ -166,7 +166,7 @@ Camera* World::GetCurrentCamera() const
     return cameras.at(currentCameraIndex);
 }
 
-void World::SetCurrentCamera(const string& _entityName)
+void World::SetCurrentCamera(const std::string& _entityName)
 {
     int i = 0;
     for (const auto& camera : cameras)
@@ -191,9 +191,9 @@ LightSource* World::GetLightSource(unsigned int _index) const
     return lights[_index];
 }
 
-vector<LightData> World::GetLightDataList() const
+std::vector<LightData> World::GetLightDataList() const
 {
-    vector<LightData> list;
+    std::vector<LightData> list;
     list.reserve(lights.size());
     for (const auto& light : lights)
     {
@@ -202,24 +202,24 @@ vector<LightData> World::GetLightDataList() const
     return list;
 }
 
-vector<std::shared_ptr<Widget>> World::GetWidgetsChildOf(const Widget* _widget) const
+std::vector<std::shared_ptr<Widget>> World::GetWidgetsChildOf(const Widget* _widget) const
 {
-    vector<std::shared_ptr<Widget>> result;
+    std::vector<std::shared_ptr<Widget>> result;
 
-    vector<std::shared_ptr<Widget>> directChildren = _widget ? _widget->GetChildren() : GetWidgets();
+    std::vector<std::shared_ptr<Widget>> directChildren = _widget ? _widget->GetChildren() : GetWidgets();
     result.reserve(directChildren.size());
     result.insert(result.end(), directChildren.begin(), directChildren.end());
 
     for (const auto& child : directChildren)
     {
-        vector<std::shared_ptr<Widget>> grandchildren = GetWidgetsChildOf(child.get());
+        std::vector<std::shared_ptr<Widget>> grandchildren = GetWidgetsChildOf(child.get());
         result.insert(result.end(), grandchildren.begin(), grandchildren.end());
     }
 
     return result;
 }
 
-Widget* World::GetWidget(const string& _name) const
+Widget* World::GetWidget(const std::string& _name) const
 {
     std::shared_ptr<Widget> widget = FindWidget(_name, widgets);
     if (!widget)
@@ -229,7 +229,7 @@ Widget* World::GetWidget(const string& _name) const
     return widget.get();
 }
 
-std::shared_ptr<Widget> World::FindWidget(const string& _name, const vector<std::shared_ptr<Widget>>& _widgets) const
+std::shared_ptr<Widget> World::FindWidget(const std::string& _name, const std::vector<std::shared_ptr<Widget>>& _widgets) const
 {
     for (const auto& widget : _widgets)
     {
@@ -237,7 +237,7 @@ std::shared_ptr<Widget> World::FindWidget(const string& _name, const vector<std:
         {
             return widget;
         }
-        shared_ptr<Widget> foundWidget = FindWidget(_name, widget->GetChildren());
+        std::shared_ptr<Widget> foundWidget = FindWidget(_name, widget->GetChildren());
         if (foundWidget)
         {
             return foundWidget;
@@ -262,7 +262,7 @@ void World::AddWidget(const std::shared_ptr<Widget>& _widget)
 }
 
 
-void World::LoadScene(const string& _sceneName)
+void World::LoadScene(const std::string& _sceneName)
 {
     UnloadScene();
     currentScene = _sceneName;    
@@ -272,7 +272,7 @@ void World::DoLoad()
 {
     CollisionManager::ClearRoot();
     
-    string file = "assets/scenes/" + currentScene + ".yaml";
+    std::string file = "assets/scenes/" + currentScene + ".yaml";
     AssetReader::ReadAssets(file.c_str());
     ConfigurationValues::ActiveGame = currentScene;
 

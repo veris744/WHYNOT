@@ -60,7 +60,7 @@ void VertexArray::DrawLinesVertexBuffer()
     glDrawArrays(GL_LINES, 0, vertexBuffers.front()->GetCount());
 }
 
-void VertexArray::SetLayout(const vector<LayoutElement>& _elements)
+void VertexArray::SetLayout(const std::vector<LayoutElement>& _elements)
 {
     int i = 0;
     unsigned int stride = 0;

@@ -7,7 +7,7 @@
 #include "Entities/Entity.h"
 
 
-EntityPanel::EntityPanel(vec2 _pos, vec2 _size, const string& _name)
+EntityPanel::EntityPanel(glm::vec2 _pos, glm::vec2 _size, const std::string& _name)
     : Panel(_pos, _size, _name)
 {
     
@@ -23,7 +23,7 @@ void EntityPanel::Initialize()
 void EntityPanel::SetContent()
 {
     float height = 20;
-    std::shared_ptr<MemberView> entityView = std::make_shared<MemberView>(vec2(0, -50), vec2(0, 20));
+    std::shared_ptr<MemberView> entityView = std::make_shared<MemberView>(glm::vec2(0, -50), glm::vec2(0, 20));
     entityView->autoSizing = AutoSizing::HORIZONTAL;
     entityView->pixelCorrection = {15, height};
     entityView->SetIsMember(false);
@@ -34,7 +34,7 @@ void EntityPanel::SetContent()
     for (const auto& [name, entity] : World::GetInstance()->GetEntities())
     {
         if (!entity->isActive)  continue;
-        std::shared_ptr<MemberView> entityView = std::make_shared<MemberView>(vec2(0, -50), vec2(0, 20));
+        std::shared_ptr<MemberView> entityView = std::make_shared<MemberView>(glm::vec2(0, -50), glm::vec2(0, 20));
         entityView->autoSizing = AutoSizing::HORIZONTAL;
         entityView->pixelCorrection = {30, height};
         entityView->SetIsMember(false);
@@ -58,7 +58,7 @@ void EntityPanel::SetContent(Entity* _entity)
     entity = _entity;
     isActive = true;
     
-    std::shared_ptr<MemberView> entityView = std::make_shared<MemberView>(vec2(0, -50), vec2(0, 20), "EntityNameText");
+    std::shared_ptr<MemberView> entityView = std::make_shared<MemberView>(glm::vec2(0, -50), glm::vec2(0, 20), "EntityNameText");
     entityView->autoSizing = AutoSizing::HORIZONTAL;
     entityView->pixelCorrection = {15, 0};
     entityView->SetIsMember(true);
@@ -71,13 +71,13 @@ void EntityPanel::SetContent(Entity* _entity)
         if (!typeInfo)  continue;
 
         std::shared_ptr<Dropbox> drop = std::make_shared<Dropbox>();
-        drop->position = vec2(0, -50);
+        drop->position = glm::vec2(0, -50);
         drop->autoSizing = AutoSizing::HORIZONTAL;
         drop->pixelCorrection = {15, 0};
         AddWidget(drop);
         drop->OnDroppedDelegate.Bind(&EntityPanel::Reorganize, this);
         
-        std::shared_ptr<MemberView> compView = std::make_shared<MemberView>(vec2(0, 0), vec2(0, 20));
+        std::shared_ptr<MemberView> compView = std::make_shared<MemberView>(glm::vec2(0, 0), glm::vec2(0, 20));
         compView->autoSizing = AutoSizing::HORIZONTAL;
         compView->pixelCorrection = {15, 0};
         compView->SetIsMember(true);
@@ -99,7 +99,7 @@ void EntityPanel::CreateMemberView(ReflectedObject* _object, const TypeInfo& _ty
         const auto* memberTypeInfo = TypeRegistry::instance().getTypeInfo(Reader::demangleTypeName(member.type_name));
         if (!memberTypeInfo || !HasProperty(member.properties, MemberProperty::Viewable))
         {
-            std::shared_ptr<MemberView> memberView = std::make_shared<MemberView>(vec2(0, 0), vec2(0, 20));
+            std::shared_ptr<MemberView> memberView = std::make_shared<MemberView>(glm::vec2(0, 0), glm::vec2(0, 20));
             memberView->autoSizing = AutoSizing::HORIZONTAL;
             memberView->SetIsMember(true);
             _dropbox ? _dropbox->AddDroppingWidget(memberView) : AddWidget(memberView);
@@ -108,11 +108,11 @@ void EntityPanel::CreateMemberView(ReflectedObject* _object, const TypeInfo& _ty
         else
         {
             std::shared_ptr<Dropbox> drop = std::make_shared<Dropbox>();
-            drop->position = vec2(0, 0);
+            drop->position = glm::vec2(0, 0);
             drop->autoSizing = AutoSizing::HORIZONTAL;
             drop->pixelCorrection = {_margin, 0};
 
-            std::shared_ptr<MemberView> compView = std::make_shared<MemberView>(vec2(0, 0), vec2(0, 20));
+            std::shared_ptr<MemberView> compView = std::make_shared<MemberView>(glm::vec2(0, 0), glm::vec2(0, 20));
             compView->autoSizing = AutoSizing::HORIZONTAL;
             compView->pixelCorrection = {_margin, 0};
             compView->SetIsMember(true);

@@ -29,12 +29,12 @@ void Goal::Initialize()
     if (!GetComponent<Model>())
     {
         Renderer::SetSphereVertex(0.5f, 32.f, 16.f);
-        vector<float> vertex = Renderer::GetSphereVertex();
-        vector<unsigned int> index = Renderer::GetSphereIndex();
+        std::vector<float> vertex = Renderer::GetSphereVertex();
+        std::vector<unsigned int> index = Renderer::GetSphereIndex();
 
-        std::shared_ptr<Material> mat = std::make_shared<Material>(vector<string>(), DEFAULT_VERTEX_SHADER_PATH,
+        std::shared_ptr<Material> mat = std::make_shared<Material>(std::vector<std::string>(), DEFAULT_VERTEX_SHADER_PATH,
             "shaders/debugFragment.glsl");
-        mat->materialData.color = vec4(0.0f, 0.0f, 1.0f, 0.3f);
+        mat->materialData.color = glm::vec4(0.0f, 0.0f, 1.0f, 0.3f);
         mat->materialData.type = MaterialType::COLOR;
 
         std::unique_ptr<Mesh> sphereMesh = std::make_unique<Mesh>(vertex, vertex.size(), index, mat);
@@ -76,11 +76,11 @@ void Goal::Update(float _deltaTime)
 
     if (entitiesInside.size() > 0)
     {
-        material->materialData.color = vec4(0.0f, 1.0f, 0.0f, 0.2f);
+        material->materialData.color = glm::vec4(0.0f, 1.0f, 0.0f, 0.2f);
     }
     else
     {
-        material->materialData.color = vec4(1.0f, 1.0f, 0.0f, 0.2f);
+        material->materialData.color = glm::vec4(1.0f, 1.0f, 0.0f, 0.2f);
     }
 }
 
@@ -89,7 +89,7 @@ void Goal::ClearComponents()
     Entity::ClearComponents();
 }
 
-void Goal::OnCollision(Entity* _otherEntity, vec3 normal)
+void Goal::OnCollision(Entity* _otherEntity, glm::vec3 normal)
 {
     entitiesEntering.insert(_otherEntity);
 }

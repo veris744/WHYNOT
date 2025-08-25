@@ -37,7 +37,7 @@ void ThrowerManager::PrepareGame()
 
     for (int i = 0; i < TOTAL_BALLS_HAND; i++)
     {
-    Entity* tempBall = GenerateBall(BallType::HAND, "HandBall" + to_string(i+1));
+    Entity* tempBall = GenerateBall(BallType::HAND, "HandBall" + std::to_string(i+1));
         tempBall->isActive = false;
         ballsReserve[i] = tempBall;
     }
@@ -121,42 +121,42 @@ void ThrowerManager::AddPoints(unsigned int amount)
 
 void ThrowerManager::PrepareUI()
 {
-    std::string ballsTxt = "Balls: " + to_string(TOTAL_BALLS_HAND);
+    std::string ballsTxt = "Balls: " + std::to_string(TOTAL_BALLS_HAND);
     std::shared_ptr<Text> ballsCounterTemp = std::make_shared<Text>(
-        ballsTxt, vec3(1, 1, 1), 0.5f,
-        vec2(5, 5), "BallsCounterText");
+        ballsTxt, glm::vec3(1, 1, 1), 0.5f,
+        glm::vec2(5, 5), "BallsCounterText");
     ballsCounterTemp->align = TextAlign::LEFT;
     ballsCounterTemp->alignVertical = TextAlignVertical::TOP;
     World::GetInstance()->AddWidget(ballsCounterTemp);
     ballsCounter = ballsCounterTemp.get();
 
 
-    std::string pointsTxt = "Points: " + to_string(score);
+    std::string pointsTxt = "Points: " + std::to_string(score);
     std::shared_ptr<Text> pointsCounterTemp = std::make_shared<Text>(
-        pointsTxt, vec3(1, 1, 1), 0.5f,
-        vec2(-5, 5), "PointsCounterText");
+        pointsTxt, glm::vec3(1, 1, 1), 0.5f,
+        glm::vec2(-5, 5), "PointsCounterText");
     pointsCounterTemp->align = TextAlign::RIGHT;
     pointsCounterTemp->alignVertical = TextAlignVertical::TOP;
     World::GetInstance()->AddWidget(pointsCounterTemp);
     pointsCounter = pointsCounterTemp.get();
 
 
-    std::shared_ptr<ProgressBar> charger = std::make_shared<ProgressBar>(vec2{35, 0}, vec2{20, 100});
+    std::shared_ptr<ProgressBar> charger = std::make_shared<ProgressBar>(glm::vec2{35, 0}, glm::vec2{20, 100});
     World::GetInstance()->AddWidget(charger);
     chargeBar = charger.get();
 }
 
 void ThrowerManager::PrepareScene()
 {
-    std::vector<vec3> ballsPositions;
+    std::vector<glm::vec3> ballsPositions;
     int i = 0;
     while (i < TOTAL_BALLS_SMALL)
     {
-        vec3 pos = vec3(getRandomFloat(-BALLS_PLAYGROUND.x, BALLS_PLAYGROUND.x),
+        glm::vec3 pos = glm::vec3(getRandomFloat(-BALLS_PLAYGROUND.x, BALLS_PLAYGROUND.x),
             getRandomFloat(0, BALLS_PLAYGROUND.y),
             getRandomFloat(-BALLS_PLAYGROUND.z, BALLS_PLAYGROUND.z));
         bool isValid = true;
-        for (const vec3& otherPos : ballsPositions)
+        for (const glm::vec3& otherPos : ballsPositions)
         {
             if (distance(pos, otherPos) < 2.5f)
             {
@@ -167,7 +167,7 @@ void ThrowerManager::PrepareScene()
         if (isValid)
         {
             i++;
-            Entity* ball = GenerateBall(BallType::SMALL, "SmallBall" + to_string(i+1));
+            Entity* ball = GenerateBall(BallType::SMALL, "SmallBall" + std::to_string(i+1));
             ball->GetComponent<Transform>()->position = pos;
             ballsPositions.push_back(pos);
             ball->GetComponent<PhysicsMaterial>()->hasGravity = true;
@@ -177,11 +177,11 @@ void ThrowerManager::PrepareScene()
     i = 0;
     while (i < TOTAL_BALLS_MEDIUM)
     {
-        vec3 pos = vec3(getRandomFloat(-BALLS_PLAYGROUND.x, BALLS_PLAYGROUND.x),
+        glm::vec3 pos = glm::vec3(getRandomFloat(-BALLS_PLAYGROUND.x, BALLS_PLAYGROUND.x),
             1.5f,
             getRandomFloat(-BALLS_PLAYGROUND.z, BALLS_PLAYGROUND.z));
         bool isValid = true;
-        for (const vec3& otherPos : ballsPositions)
+        for (const glm::vec3& otherPos : ballsPositions)
         {
             if (distance(pos, otherPos) < 2.5f)
             {
@@ -192,7 +192,7 @@ void ThrowerManager::PrepareScene()
         if (isValid)
         {
             i++;
-            Entity* ball = GenerateBall(BallType::MEDIUM, "MediumBall" + to_string(i+1));
+            Entity* ball = GenerateBall(BallType::MEDIUM, "MediumBall" + std::to_string(i+1));
             ball->GetComponent<Transform>()->position = pos;
             ballsPositions.push_back(pos);
             ball->GetComponent<PhysicsMaterial>()->hasGravity = true;
@@ -202,11 +202,11 @@ void ThrowerManager::PrepareScene()
     i = 0;
     while (i < TOTAL_BALLS_LARGE)
     {
-        vec3 pos = vec3(getRandomFloat(-BALLS_PLAYGROUND.x, BALLS_PLAYGROUND.x),
+        glm::vec3 pos = glm::vec3(getRandomFloat(-BALLS_PLAYGROUND.x, BALLS_PLAYGROUND.x),
             getRandomFloat(0, BALLS_PLAYGROUND.y),
             getRandomFloat(-BALLS_PLAYGROUND.z, BALLS_PLAYGROUND.z));
         bool isValid = true;
-        for (const vec3& otherPos : ballsPositions)
+        for (const glm::vec3& otherPos : ballsPositions)
         {
             if (distance(pos, otherPos) < 2.5f)
             {
@@ -217,7 +217,7 @@ void ThrowerManager::PrepareScene()
         if (isValid)
         {
             i++;
-            Entity* ball = GenerateBall(BallType::LARGE, "LargeBall" + to_string(i+1));
+            Entity* ball = GenerateBall(BallType::LARGE, "LargeBall" + std::to_string(i+1));
             ball->GetComponent<Transform>()->position = pos;
             ballsPositions.push_back(pos);
             ball->GetComponent<PhysicsMaterial>()->hasGravity = true;
@@ -266,47 +266,47 @@ void ThrowerManager::ThrowBall()
     GrabbedBall->GetComponent<Movement>()->AddImpulse(playerTransform->forward * potency);
     GrabbedBall = nullptr;
     currentBall++;
-    ballsCounter->SetText("Balls: " + to_string(TOTAL_BALLS_HAND - currentBall));
+    ballsCounter->SetText("Balls: " + std::to_string(TOTAL_BALLS_HAND - currentBall));
     chargeBar->UpdateValue(0);
 }
 
-Entity* ThrowerManager::GenerateBall(BallType type, const string& name)
+Entity* ThrowerManager::GenerateBall(BallType type, const std::string& name)
 {
     float mass;
     float radius;
-    vec3 color;
+    glm::vec3 color;
     int points;
     switch (type)
     {
     case BallType::SMALL:
         mass = 1;
         radius = 0.7f;
-        color = vec3(0.8, 0.5, 0.6);
+        color = glm::vec3(0.8, 0.5, 0.6);
         points = 5;
         break;
     case BallType::MEDIUM:
         mass = 3;
         radius = 0.9f;
-        color = vec3(0.8, 0.3, 0.6);
+        color = glm::vec3(0.8, 0.3, 0.6);
         points = 8;
         break;
     case BallType::LARGE:
         mass = 5;
         radius = 1.2f;
-        color = vec3(0.9, 0.0, 0.7);
+        color = glm::vec3(0.9, 0.0, 0.7);
         points = 10;
         break;
     case BallType::HAND:
         mass = 3;
         radius = 0.9f;
-        color = vec3(0.2, 0.0, 0.6);
+        color = glm::vec3(0.2, 0.0, 0.6);
         points = 2;
         break;
     }
 
     std::shared_ptr<Entity> temp = std::make_shared<Entity>(name);
 
-    std::unique_ptr<Transform> transform = std::make_unique<Transform>(vec3(0));
+    std::unique_ptr<Transform> transform = std::make_unique<Transform>(glm::vec3(0));
     temp->AddComponent(std::move(transform));
 
     std::unique_ptr<PhysicsMaterial> physMat = std::make_unique<PhysicsMaterial>();
@@ -327,12 +327,12 @@ Entity* ThrowerManager::GenerateBall(BallType type, const string& name)
     temp->AddComponent(std::move(collider));
 
     Renderer::SetSphereVertex(radius, 32.f, 16.f);
-    vector<float> vertex = Renderer::GetSphereVertex();
-    vector<unsigned int> index = Renderer::GetSphereIndex();
+    std::vector<float> vertex = Renderer::GetSphereVertex();
+    std::vector<unsigned int> index = Renderer::GetSphereIndex();
 
-    std::shared_ptr<Material> mat = std::make_shared<Material>(vector<string>(), DEFAULT_VERTEX_SHADER_PATH,
+    std::shared_ptr<Material> mat = std::make_shared<Material>(std::vector<std::string>(), DEFAULT_VERTEX_SHADER_PATH,
         "shaders/fragmentColor.glsl");
-    mat->materialData.color = vec4(color, 1.0f);
+    mat->materialData.color = glm::vec4(color, 1.0f);
     mat->materialData.type = MaterialType::COLOR;
     mat->materialData.shininess = 32;
 

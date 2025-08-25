@@ -11,7 +11,7 @@ class MemberView : public Widget
 {
     static unsigned int counter;
     void Initialize() override;
-    vec3 color = vec3(1);
+    glm::vec3 color = glm::vec3(1);
     float scale = 0.3f;
 
     ReflectedObject * object = nullptr;
@@ -22,12 +22,12 @@ class MemberView : public Widget
     bool isMember = true;
     
 public:
-    MemberView(vec2 _pos, vec2 _size, const string& _name = "");
+    MemberView(glm::vec2 _pos, glm::vec2 _size, const std::string& _name = "");
     MemberView() = default;
     void SetAutoName() override;
     void SetMemberInfo(const MemberInfo& _info, ReflectedObject* _object);
-    void SetMemberInfo(const string& value) const;
-    void UpdateMember(const string& value);
+    void SetMemberInfo(const std::string& value) const;
+    void UpdateMember(const std::string& value);
     void SetUpdateButton();
     void SetRedirectButton(Entity * _entity);
 

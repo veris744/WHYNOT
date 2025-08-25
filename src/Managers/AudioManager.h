@@ -4,11 +4,10 @@
 #include <AL/al.h>
 #include <AL/alc.h>
 
-using namespace std;
 
 class AudioManager
 {
-    static unordered_map<std::string, ALuint> loadedSounds;
+    static std::unordered_map<std::string, ALuint> loadedSounds;
 
     static ALCdevice* device;
     static ALCcontext* context;
@@ -16,6 +15,6 @@ class AudioManager
 public:
     static void Initialize();
     static void ShutDown();
-    static ALuint LoadWav(const string& _filename);
+    static ALuint LoadWav(const std::string& _filename);
 
 };

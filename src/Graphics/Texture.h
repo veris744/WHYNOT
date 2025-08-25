@@ -3,9 +3,6 @@
 #include <glm/glm.hpp>
 #include "Reflection/Reflection.h"
 
-using namespace std;
-using namespace glm;
-
 enum class WrapMode
 {
     REPEAT, MIRRORED_REPEAT, CLAMP_TO_EDGE, CLAMP_TO_BORDER
@@ -40,13 +37,13 @@ REGISTER_ENUM(MipmapMode,
 
 class Texture
 {
-    string path;
+    std::string path;
     unsigned char *data;
-    vec2 size;
+    glm::vec2 size;
     int nbChannels;
         
     public:
-        Texture(const string& filePath);
+        Texture(const std::string& filePath);
         Texture(unsigned char *_data, unsigned int _bufferSize, int _width, int _height, int _channels);
         ~Texture();
         Texture(const Texture& _texture)
@@ -58,7 +55,7 @@ class Texture
             data = nullptr;
         }
     
-        void LoadTexture(const string& filePath);
+        void LoadTexture(const std::string& filePath);
         void ProcessTexture();
         
         void SetParameters() const;
@@ -72,7 +69,7 @@ class Texture
         MipmapMode mipmapMode = MipmapMode::LINEAR_MIPMAP_LINEAR;
         unsigned int id;
 
-        const string& GetPath() const { return path; }
+        const std::string& GetPath() const { return path; }
         int GetNbChannels() const { return nbChannels; }
 
         void CleanUp();

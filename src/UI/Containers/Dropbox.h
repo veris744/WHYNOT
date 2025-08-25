@@ -12,10 +12,10 @@ class Dropbox : public Widget
     void Initialize() override;
 
 public:
-    Dropbox(vec2 _pos, vec2 _size, const string& _name = "");
+    Dropbox(glm::vec2 _pos, glm::vec2 _size, const std::string& _name = "");
     Dropbox() = default;
-    void AddDroppingWidget(const shared_ptr<Widget>& _widget);
-    void SetTitleWidget(const shared_ptr<Widget>& _widget);
+    void AddDroppingWidget(const std::shared_ptr<Widget>& _widget);
+    void SetTitleWidget(const std::shared_ptr<Widget>& _widget);
     void SetAutoName() override;
 
     void CalculateHeight();

@@ -5,7 +5,7 @@
 #include <Utils/Parser.h>
 
 
-DropButton::DropButton(const vec2& _pos, const vec2& _size, const string& _name)
+DropButton::DropButton(const glm::vec2& _pos, const glm::vec2& _size, const std::string& _name)
     : Button(_pos, _size, _name)
 {
 
@@ -15,7 +15,7 @@ void DropButton::Initialize()
 {
     Button::Initialize();
 
-    std::shared_ptr<Image2D> imagePtr = std::make_shared<Image2D>("assets/2dImages/drop.png", vec2(0), vec2(0));
+    std::shared_ptr<Image2D> imagePtr = std::make_shared<Image2D>("assets/2dImages/drop.png", glm::vec2(0), glm::vec2(0));
     imagePtr->autoSizing = AutoSizing::ALL;
     imagePtr->hasTransparency = true;
     imagePtr->rotation = 90;
@@ -27,7 +27,7 @@ void DropButton::Initialize()
 }
 
 
-void DropButton::OnClick(vec2 _mousePos)
+void DropButton::OnClick(glm::vec2 _mousePos)
 {
     Button::OnClick(_mousePos);
 

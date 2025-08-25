@@ -31,13 +31,13 @@ class Widget : public std::enable_shared_from_this<Widget>, public ReflectedObje
 protected:
 
     Widget* parent = nullptr;
-    vector<std::shared_ptr<Widget>> children;
-    vec2 pixelPosition = {0, 0};
+    std::vector<std::shared_ptr<Widget>> children;
+    glm::vec2 pixelPosition = {0, 0};
     
 public:
-    Widget(): position(vec2(0,0)), size(vec2(0,0)){}
+    Widget(): position(glm::vec2(0,0)), size(glm::vec2(0,0)){}
 
-    Widget(vec2 _pos, vec2 _size, const string& _name = "") : name(_name), position(_pos), size(_size)
+    Widget(glm::vec2 _pos, glm::vec2 _size, const std::string& _name = "") : name(_name), position(_pos), size(_size)
     { }
 
     virtual ~Widget()
@@ -54,13 +54,13 @@ public:
     }
 
     WidgetType type = WidgetType::Game;
-    string name;
-    vec2 position = vec2(0);
-    vec2 size = vec2(0);
+    std::string name;
+    glm::vec2 position = glm::vec2(0);
+    glm::vec2 size = glm::vec2(0);
     AutoSizing autoSizing = AutoSizing::NONE;
     
     // top, right, bottom, left (TEMP IMPLEMENTATION, ONLY WITHOUT AUTOSIZING)
-    vec2 pixelCorrection = {0,0};
+    glm::vec2 pixelCorrection = {0,0};
 
     // NOTE: Currently, layers only work with opaque widgets
     unsigned int layer = 0;
@@ -70,17 +70,17 @@ public:
     bool isBlocking = false;
 
     void AddWidget(const std::shared_ptr<Widget>& _widget);
-    const vector<std::shared_ptr<Widget>>& GetChildren() const { return children; }
+    const std::vector<std::shared_ptr<Widget>>& GetChildren() const { return children; }
     void ClearChildren() {  children.clear(); }
     
-    const string& GetName() const { return name; }
+    const std::string& GetName() const { return name; }
     virtual void SetAutoName() = 0;
     void SetActiveWithChildren(bool _active);
     bool AreParentsActive();
     Widget* GetParent() const { return parent; }
 
-    bool IsClicking(const vec2& _mousePos) const;
-    virtual void OnClick(vec2 _mousePos) {}
+    bool IsClicking(const glm::vec2& _mousePos) const;
+    virtual void OnClick(glm::vec2 _mousePos) {}
     
     virtual void Render();
     virtual void Clear();
@@ -88,9 +88,9 @@ public:
     void Destroy();
     void RemoveChild(const std::shared_ptr<Widget>& _widget);
 
-    vec2 GetPixelPosition() const;
+    glm::vec2 GetPixelPosition() const;
     void SetPixelPosition();
-    vec2 GetAutoSize() const;
+    glm::vec2 GetAutoSize() const;
 
     void OnWindowResize();
 

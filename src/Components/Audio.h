@@ -6,11 +6,11 @@
 struct AudioSource
 {
     AudioSource() = default;
-    AudioSource(const string& _name, const string& _filename, bool loops = false)
+    AudioSource(const std::string& _name, const std::string& _filename, bool loops = false)
         : name(_name), filename(_filename), loops(loops) {};
     
-    string name;
-    string filename;
+    std::string name;
+    std::string filename;
     bool loops;
     mutable ALuint source = 0;
 
@@ -24,7 +24,7 @@ REGISTER_CLASS(AudioSource, {
 
 class Audio : public Component
 {
-    unordered_map<string, AudioSource> audioSources;
+    std::unordered_map<std::string, AudioSource> audioSources;
     
 public:
     Audio()
@@ -32,12 +32,12 @@ public:
         name = "AUDIO";
     }
     
-    vector<AudioSource> audios;
+    std::vector<AudioSource> audios;
 
     void Initialize() override;
     void Update(float deltaTime) override {};
     void AddAudioSource(const AudioSource& audio);
-    void Play(const string& audioName);
+    void Play(const std::string& audioName);
 };
 REGISTER_CLASS(Audio,
     REGISTER_MEMBER(Audio, name, MemberProperty::Serializable)

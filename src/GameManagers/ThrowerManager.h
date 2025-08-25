@@ -8,7 +8,7 @@ constexpr unsigned int TOTAL_BALLS_HAND = 10;
 constexpr unsigned int TOTAL_BALLS_SMALL = 4;
 constexpr unsigned int TOTAL_BALLS_MEDIUM = 3;
 constexpr unsigned int TOTAL_BALLS_LARGE = 2;
-constexpr vec3 BALLS_PLAYGROUND = vec3(13,5,13);
+constexpr glm::vec3 BALLS_PLAYGROUND = glm::vec3(13,5,13);
 
 enum class BallType
 {
@@ -46,7 +46,7 @@ private:
     void ChargeBall();
     void ThrowBall();
 
-    Entity* GenerateBall(BallType type, const string& name);
+    Entity* GenerateBall(BallType type, const std::string& name);
 
     Entity* GrabbedBall = nullptr;
     Transform* playerTransform = nullptr;

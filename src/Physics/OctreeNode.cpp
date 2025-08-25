@@ -74,10 +74,10 @@ void OctreeNode::Subdivide()
     if (!isLeaf) return;
 
     isLeaf = false;
-    vec3 size = (bounds.max - bounds.min) * 0.5f;
+    glm::vec3 size = (bounds.max - bounds.min) * 0.5f;
 
     for (int i = 0; i < 8; i++) {
-        vec3 offset = {
+        glm::vec3 offset = {
             (i & 1) ? size.x : 0,
             (i & 2) ? size.y : 0,
             (i & 4) ? size.z : 0
@@ -96,8 +96,8 @@ void OctreeNode::InsertIntoChildrenDynamic(const std::shared_ptr<Entity>& entity
     Collider* collider = entity->GetComponent<Collider>();
     if (collider) {
         for (const auto& child : children) {
-            vec3 min = child->bounds.min;
-            vec3 max = child->bounds.max;
+            glm::vec3 min = child->bounds.min;
+            glm::vec3 max = child->bounds.max;
 
             if (collider->OverlapsBounds({min.x, max.x}, {min.y, max.y}, {min.z, max.z})) {
                 child->InsertDynamic(entity);
@@ -117,8 +117,8 @@ void OctreeNode::InsertIntoChildrenStatic(const std::shared_ptr<Entity>& entity)
     Collider* collider = entity->GetComponent<Collider>();
     if (collider) {
         for (const auto& child : children) {
-            vec3 min = child->bounds.min;
-            vec3 max = child->bounds.max;
+            glm::vec3 min = child->bounds.min;
+            glm::vec3 max = child->bounds.max;
 
             if (collider->OverlapsBounds({min.x, max.x}, {min.y, max.y}, {min.z, max.z})) {
                 child->InsertStatic(entity);
@@ -170,7 +170,7 @@ void OctreeNode::QueryCollisions(std::set<Hit>& collisions)
     }
 }
 
-void OctreeNode::QueryRayCollisions(std::set<Hit>& collisions, vec3 rayStart, vec3 rayDir)
+void OctreeNode::QueryRayCollisions(std::set<Hit>& collisions, glm::vec3 rayStart, glm::vec3 rayDir)
 {
     if (!bounds.IntersectsRay(rayStart, rayDir)) {
         return;

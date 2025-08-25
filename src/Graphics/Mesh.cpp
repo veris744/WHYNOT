@@ -6,7 +6,7 @@
 #include "VertexArray.h"
 #include "Managers/World.h"
 
-Mesh::Mesh(const vector<float>& _vertex, unsigned int _vertexCount, const std::shared_ptr<Material>& _material, unsigned int _elementCount)
+Mesh::Mesh(const std::vector<float>& _vertex, unsigned int _vertexCount, const std::shared_ptr<Material>& _material, unsigned int _elementCount)
     : material(_material)
 {
     vertexArray = std::make_unique<VertexArray>();
@@ -42,7 +42,7 @@ Mesh::Mesh(const vector<float>& _vertex, unsigned int _vertexCount, const std::s
     }
 }
 
-Mesh::Mesh(const vector<float>& _vertex, unsigned int _vertexCount, const vector<unsigned int>& _index, const std::shared_ptr<Material>& _material, unsigned int _elementCount)
+Mesh::Mesh(const std::vector<float>& _vertex, unsigned int _vertexCount, const std::vector<unsigned int>& _index, const std::shared_ptr<Material>& _material, unsigned int _elementCount)
     : material(_material)
 {
     
@@ -66,7 +66,7 @@ void Mesh::SetLinesVertexArray() const
     vertexArray->isLines = true;
 }
 
-void Mesh::Render(const mat4& _modelMatrix)
+void Mesh::Render(const glm::mat4& _modelMatrix)
 {
     material->BindShader();
     vertexArray->Bind();

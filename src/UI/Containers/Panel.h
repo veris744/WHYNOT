@@ -15,13 +15,13 @@ protected:
     void Initialize() override;
     
 public:
-    Panel(vec2 _pos, vec2 _size, const string& _name = "");
+    Panel(glm::vec2 _pos, glm::vec2 _size, const std::string& _name = "");
     Panel() = default;
     void Render() override;
     void Clear() override;
     void SetAutoName() override;
 
-    vec4 background = vec4(1, 1, 1, 0);
+    glm::vec4 background = glm::vec4(1, 1, 1, 0);
 };
 REGISTER_CLASS(Panel, {
     REGISTER_MEMBER(Panel, name, MemberProperty::Viewable),

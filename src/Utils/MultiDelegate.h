@@ -2,8 +2,6 @@
 #include <functional>
 #include <vector>
 
-using std::vector;
-
 template<typename ... Args>
 class MultiDelegate
 {

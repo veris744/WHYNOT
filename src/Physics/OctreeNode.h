@@ -5,24 +5,21 @@
 #include <glm/glm.hpp>
 #include <Utils/Logger.h>
 
-using namespace glm;
-
-
 struct Hit;
 class Entity;
 
 struct AABB {
-    vec3 min;
-    vec3 max;
-    bool IntersectsRay(const vec3& rayOrigin, const vec3& rayDir) const
+    glm::vec3 min;
+    glm::vec3 max;
+    bool IntersectsRay(const glm::vec3& rayOrigin, const glm::vec3& rayDir) const
     {
-        vec3 invDir = 1.0f / rayDir;
+        glm::vec3 invDir = 1.0f / rayDir;
 
-        vec3 t1 = (min - rayOrigin) * invDir;
-        vec3 t2 = (max - rayOrigin) * invDir;
+        glm::vec3 t1 = (min - rayOrigin) * invDir;
+        glm::vec3 t2 = (max - rayOrigin) * invDir;
 
-        vec3 tMin = glm::min(t1, t2);
-        vec3 tMax = glm::max(t1, t2);
+        glm::vec3 tMin = glm::min(t1, t2);
+        glm::vec3 tMax = glm::max(t1, t2);
 
         float tNear = glm::max(glm::max(tMin.x, tMin.y), tMin.z);
         float tFar = glm::min(glm::min(tMax.x, tMax.y), tMax.z);
@@ -51,7 +48,7 @@ public:
     void InsertIntoChildrenDynamic(const std::shared_ptr<Entity>& entity);
     void InsertIntoChildrenStatic(const std::shared_ptr<Entity>& entity);
     void QueryCollisions(std::set<Hit>& collisions);
-    void QueryRayCollisions(std::set<Hit>& collisions, vec3 rayStart, vec3 rayDir);
+    void QueryRayCollisions(std::set<Hit>& collisions, glm::vec3 rayStart, glm::vec3 rayDir);
     void ClearDynamic();
     void ClearStatic();
     void Clear();

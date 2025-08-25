@@ -6,7 +6,7 @@
 #include "Managers/Renderer.h"
 
 
-Texture::Texture(const string& filePath)
+Texture::Texture(const std::string& filePath)
 {
     data = nullptr;
     path = filePath;
@@ -37,12 +37,12 @@ Texture::~Texture()
     }
 }
 
-void Texture::LoadTexture(const string& filePath)
+void Texture::LoadTexture(const std::string& filePath)
 {
     int width;
     int height;
     data = stbi_load(filePath.c_str(), &width, &height, &nbChannels, 0);
-    size = vec2(width, height);
+    size = glm::vec2(width, height);
     if (!data)
     {
         Logger::Log<Texture>(LogLevel::Error, "Failed to load texture at path: " + filePath);

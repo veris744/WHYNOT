@@ -20,7 +20,7 @@ void EntityFactory::EntityFactorySetup()
 {
     RegisterEntity("ALIEN", [](const YAML::Node& data) ->
         std::shared_ptr<Entity> {
-            std::shared_ptr<Alien> alien = make_shared<Alien>();
+            std::shared_ptr<Alien> alien = std::make_shared<Alien>();
             deserialize(data, alien);
             return alien;
         });

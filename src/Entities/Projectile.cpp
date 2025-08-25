@@ -31,12 +31,12 @@ void Projectile::Initialize()
     if (!GetComponent<Model>())
     {
         Renderer::SetSphereVertex(0.2f, 32.f, 16.f);
-        vector<float> vertex = Renderer::GetSphereVertex();
-        vector<unsigned int> index = Renderer::GetSphereIndex();
+        std::vector<float> vertex = Renderer::GetSphereVertex();
+        std::vector<unsigned int> index = Renderer::GetSphereIndex();
 
-        std::shared_ptr<Material> mat = std::make_shared<Material>(vector<string>(), DEFAULT_VERTEX_SHADER_PATH,
+        std::shared_ptr<Material> mat = std::make_shared<Material>(std::vector<std::string>(), DEFAULT_VERTEX_SHADER_PATH,
             "shaders/neonFragment.glsl");
-        mat->materialData.color = vec4(0.0f, 0.0f, 1.0f, 1.0f);
+        mat->materialData.color = glm::vec4(0.0f, 0.0f, 1.0f, 1.0f);
         mat->materialData.type = MaterialType::NEON;
         mat->materialData.shininess = 32;
     

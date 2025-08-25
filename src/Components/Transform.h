@@ -6,43 +6,43 @@
 
 class Transform : public Component
 {
-    static vec3 worldUp;
+    static glm::vec3 worldUp;
 
-    vec3 old_rot = vec3(0, 0, 0);
+    glm::vec3 old_rot = glm::vec3(0, 0, 0);
     
 public:
-    Transform(vec3 _pos = vec3(0))
+    Transform(glm::vec3 _pos = glm::vec3(0))
         : position(_pos),
-        scale(vec3(1, 1, 1)),
-        forward(vec3(0, 0, 1)),
-        up(vec3(0, 1, 0)),
-        right(vec3(1, 0, 0))
+        scale(glm::vec3(1, 1, 1)),
+        forward(glm::vec3(0, 0, 1)),
+        up(glm::vec3(0, 1, 0)),
+        right(glm::vec3(1, 0, 0))
     {
         name = "TRANSFORM";
         isSkippedWhenPause = false;
     }
 
-    //vec3 collision_pos = vec3(0, 0, 0);
+    //glm::vec3 collision_pos = glm::vec3(0, 0, 0);
 
-    vec3 position;
-    vec3 scale;
+    glm::vec3 position;
+    glm::vec3 scale;
     Rotation rotation;
 
-    vec3 forward;
-    vec3 up;
-    vec3 right;
+    glm::vec3 forward;
+    glm::vec3 up;
+    glm::vec3 right;
 
 
-    mat4 GetModelMatrix(vec3 _relativePosition = vec3(0,0,0),
-        vec3 relativeRotation = {0,0,0},
-        vec3 relativeScale = {0,0,0}) const;
+    glm::mat4 GetModelMatrix(glm::vec3 _relativePosition = glm::vec3(0,0,0),
+        glm::vec3 relativeRotation = {0,0,0},
+        glm::vec3 relativeScale = {0,0,0}) const;
     void Update(float deltaTime) override;
-    void SetRotation(vec3 _rotation);
+    void SetRotation(glm::vec3 _rotation);
     void SetRotation(float pitch, float yaw, float roll);
     void Initialize() override;
     void RenderDebug() override;
 
-    void LookAt(vec3 target);
+    void LookAt(glm::vec3 target);
 };
 REGISTER_CLASS(Transform,
     REGISTER_MEMBER(Transform, name, MemberProperty::Serializable),

@@ -11,7 +11,7 @@ class Alien;
 class AliensLogic : public GameManager
 {
     std::vector<std::shared_ptr<Alien>> aliens;
-    queue<std::shared_ptr<Projectile>> availableProjectiles;
+    std::queue<std::shared_ptr<Projectile>> availableProjectiles;
     std::vector<std::shared_ptr<Projectile>> usedProjectiles;
     unsigned int totalAliens = 8;
     unsigned int totalProjectiles = 10;
@@ -21,7 +21,7 @@ class AliensLogic : public GameManager
 
     Text* alienText = nullptr;
     
-    SingleDelegate<const string&> OnTextChangedDelegate;
+    SingleDelegate<const std::string&> OnTextChangedDelegate;
     
 public:
     AliensLogic() = default;

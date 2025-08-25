@@ -12,7 +12,7 @@ bool CircleCollider::Collides(Collider* other, Hit& hit)
         hit.otherEntity = other->parent;
         hit.selfEntity = parent;
         hit.type = WorldHit;
-        vec3 directionToSelf = GetWorldPosition() - hit.point;
+        glm::vec3 directionToSelf = GetWorldPosition() - hit.point;
         if (dot(directionToSelf, hit.normal) < 0.0f)
         {
             hit.normal = -hit.normal;
@@ -22,12 +22,12 @@ bool CircleCollider::Collides(Collider* other, Hit& hit)
     return false;
 }
 
-bool CircleCollider::Collides(float _rad1, vec3 _pos1, Hit& hit)
+bool CircleCollider::Collides(float _rad1, glm::vec3 _pos1, Hit& hit)
 {
     return CheckCircleCircle(radius, GetWorldPosition(), _rad1, _pos1, hit);
 }
 
-bool CircleCollider::Collides(vec3 _dimensions, vec3 _pos1, Hit& hit, bool isSlope)
+bool CircleCollider::Collides(glm::vec3 _dimensions, glm::vec3 _pos1, Hit& hit, bool isSlope)
 {
     if (!isSlope)
         return CheckCircleSquare(radius, GetWorldPosition(), _dimensions, _pos1, hit);
@@ -35,22 +35,22 @@ bool CircleCollider::Collides(vec3 _dimensions, vec3 _pos1, Hit& hit, bool isSlo
     return CheckSlopeCircle(_dimensions, _pos1, radius, GetWorldPosition(), hit);
 }
 
-bool CircleCollider::Collides(float _height, float _radius, vec3 _pos1, Hit& hit)
+bool CircleCollider::Collides(float _height, float _radius, glm::vec3 _pos1, Hit& hit)
 {
     return CheckCapsuleCircle(_radius, _height, _pos1, radius, GetWorldPosition(), hit);
 }
 
-bool CircleCollider::Collides(vec2 _dimensions, vec3 _pos1, Hit& hit)
+bool CircleCollider::Collides(glm::vec2 _dimensions, glm::vec3 _pos1, Hit& hit)
 {
     return CheckPlaneCircle(_dimensions, _pos1, {0, 1, 0}, radius, GetWorldPosition(), hit);
 }
 
 // Collision from ray staring at origin extending towards infinity
-bool CircleCollider::RayCollides(vec3 _rayOrigin, vec3 _rayDir, Hit& hit)
+bool CircleCollider::RayCollides(glm::vec3 _rayOrigin, glm::vec3 _rayDir, Hit& hit)
 {
-    vec3 center = GetWorldPosition();
-    vec3 D = normalize(_rayDir);
-    vec3 OC = center - _rayOrigin;
+    glm::vec3 center = GetWorldPosition();
+    glm::vec3 D = normalize(_rayDir);
+    glm::vec3 OC = center - _rayOrigin;
 
     if (dot(OC, D) < 0) { 
         return false;
@@ -83,7 +83,7 @@ bool CircleCollider::RayCollides(vec3 _rayOrigin, vec3 _rayDir, Hit& hit)
     }
 
     // Calculate the hit point and the squared distance
-    vec3 hitPoint = _rayOrigin + t * D;
+    glm::vec3 hitPoint = _rayOrigin + t * D;
     float distSq = dot(hitPoint - _rayOrigin, hitPoint - _rayOrigin); // Squared distance
 
     hit.hasHit = true;
@@ -96,49 +96,49 @@ bool CircleCollider::RayCollides(vec3 _rayOrigin, vec3 _rayDir, Hit& hit)
     return true;
 }
 
-bool CircleCollider::CheckInBounds(const vec2& xBounds, const vec2& yBounds, const vec2& zBounds)
+bool CircleCollider::CheckInBounds(const glm::vec2& xBounds, const glm::vec2& yBounds, const glm::vec2& zBounds)
 {
     bool isInside = true;
-    vec3 outNormal = vec3(0.0f, 0.0f, 0.0f);
-    vec3 worldPos = GetWorldPosition();
+    glm::vec3 outNormal = glm::vec3(0.0f, 0.0f, 0.0f);
+    glm::vec3 worldPos = GetWorldPosition();
 
     // Check X bounds
     if (worldPos.x - radius < xBounds.x) {
-        outNormal = vec3(1.0f, 0.0f, 0.0f);
+        outNormal = glm::vec3(1.0f, 0.0f, 0.0f);
         isInside = false;
     } 
     else if (worldPos.x + radius > xBounds.y) {
-        outNormal = vec3(-1.0f, 0.0f, 0.0f);
+        outNormal = glm::vec3(-1.0f, 0.0f, 0.0f);
         isInside = false;
     }
 
     // Check Y bounds
     if (worldPos.y - radius < yBounds.x) {
-        outNormal = vec3(0.0f, 1.0f, 0.0f);
+        outNormal = glm::vec3(0.0f, 1.0f, 0.0f);
         isInside = false;
     } 
     else if (worldPos.y + radius > yBounds.y) {
-        outNormal = vec3(0.0f, -1.0f, 0.0f);
+        outNormal = glm::vec3(0.0f, -1.0f, 0.0f);
         isInside = false;
     }
 
     // Check Z bounds
     if (worldPos.z - radius < zBounds.x) {
-        outNormal = vec3(0.0f, 0.0f, 1.0f);
+        outNormal = glm::vec3(0.0f, 0.0f, 1.0f);
         isInside = false;
     } 
     else if (worldPos.z + radius > zBounds.y) {
-        outNormal = vec3(0.0f, 0.0f, -1.0f);
+        outNormal = glm::vec3(0.0f, 0.0f, -1.0f);
         isInside = false;
     }
 
     return isInside;
 }
 
-bool CircleCollider::OverlapsBounds(const vec2& xBounds, const vec2& yBounds, const vec2& zBounds)
+bool CircleCollider::OverlapsBounds(const glm::vec2& xBounds, const glm::vec2& yBounds, const glm::vec2& zBounds)
 {
     // Get the collider's center and radius
-    vec3 center = GetWorldPosition();
+    glm::vec3 center = GetWorldPosition();
 
     // Check if the sphere overlaps with the AABB
     float closestX = std::clamp(center.x, xBounds.x, xBounds.y);

@@ -7,7 +7,7 @@ class Transform;
 class Camera : public Component
 {
 
-    vec3 cameraForward;
+    glm::vec3 cameraForward;
 
     Transform* transform = nullptr;
     
@@ -21,10 +21,10 @@ public:
     float far = 100.f;
     float fov = 45.0f;
     
-    mat4 GetProjectionMatrix() const;
-    mat4 GetProjectionMatrix2D() const;
-    mat4 GetViewMatrix();
-    vec3 GetViewPos();
+    glm::mat4 GetProjectionMatrix() const;
+    glm::mat4 GetProjectionMatrix2D() const;
+    glm::mat4 GetViewMatrix();
+    glm::vec3 GetViewPos();
 
     void Update(float deltaTime) override;
     

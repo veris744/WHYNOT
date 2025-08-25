@@ -11,7 +11,7 @@
 
 class Transform;
 
-void Model::LoadModel(string _path, std::shared_ptr<Material> material)
+void Model::LoadModel(std::string _path, std::shared_ptr<Material> material)
 {
     Assimp::Importer import;
     const aiScene *scene = import.ReadFile(_path.c_str(), aiProcess_Triangulate | aiProcess_JoinIdenticalVertices | aiProcess_SortByPType );	
@@ -44,9 +44,9 @@ void Model::processNode(aiNode* node, const aiScene* scene, std::shared_ptr<Mate
 
 std::unique_ptr<Mesh> Model::processMesh(aiMesh* mesh, const aiScene* scene, std::shared_ptr<Material> _material)
 {
-    vector<float> vertices;
-    vector<unsigned int> indices;
-    vector<std::shared_ptr<Texture>> textures;
+    std::vector<float> vertices;
+    std::vector<unsigned int> indices;
+    std::vector<std::shared_ptr<Texture>> textures;
 
     int numVertices = mesh->mNumVertices;
 
@@ -85,11 +85,11 @@ std::unique_ptr<Mesh> Model::processMesh(aiMesh* mesh, const aiScene* scene, std
     {
         aiMaterial *material = scene->mMaterials[mesh->mMaterialIndex];
         
-        vector<std::shared_ptr<Texture>> diffuseMaps = loadMaterialTextures(material, 
+        std::vector<std::shared_ptr<Texture>> diffuseMaps = loadMaterialTextures(material, 
                                             aiTextureType_DIFFUSE, "texture_diffuse");
         textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
         
-        vector<std::shared_ptr<Texture>> specularMaps = loadMaterialTextures(material, 
+        std::vector<std::shared_ptr<Texture>> specularMaps = loadMaterialTextures(material, 
                                             aiTextureType_SPECULAR, "texture_specular");
         textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
     }
@@ -104,17 +104,17 @@ std::unique_ptr<Mesh> Model::processMesh(aiMesh* mesh, const aiScene* scene, std
     return temp;
 }
 
-vector<std::shared_ptr<Texture>> Model::loadMaterialTextures(aiMaterial* _mat, aiTextureType _type, string _typeName)
+std::vector<std::shared_ptr<Texture>> Model::loadMaterialTextures(aiMaterial* _mat, aiTextureType _type, std::string _typeName)
 {
-    vector<std::shared_ptr<Texture>> textures;
+    std::vector<std::shared_ptr<Texture>> textures;
     for(unsigned int i = 0; i < _mat->GetTextureCount(_type); i++)
     {
         aiString str;
         _mat->GetTexture(_type, i, &str);
-        string path = directory + "/" + std::string(str.C_Str());
+        std::string path = directory + "/" + std::string(str.C_Str());
         
         bool skip = false;
-        const vector<std::shared_ptr<Texture>>& texturesLoaded = Renderer::instance().textures_loaded;
+        const std::vector<std::shared_ptr<Texture>>& texturesLoaded = Renderer::instance().textures_loaded;
         for (const auto& j : texturesLoaded)
         {
             if(j->GetPath() == path)
@@ -153,7 +153,7 @@ void Model::Render()
     }
     for (const auto& mesh : meshes)
     {
-        mat4 modelMatrix = transform->GetModelMatrix(position, rotation, scale);
+        glm::mat4 modelMatrix = transform->GetModelMatrix(position, rotation, scale);
         
         mesh->Render(modelMatrix);
     }

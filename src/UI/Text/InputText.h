@@ -19,7 +19,7 @@ public:
     void UpdateText(char ch);
     void RemoveLastCharacter();
 
-    string ReturnText();
+    std::string ReturnText();
 
     void ClearText();
     void SetAutoName() override;

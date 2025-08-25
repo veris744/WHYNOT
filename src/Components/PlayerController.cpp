@@ -14,7 +14,7 @@ float moveToward(float current, float target, float maxDelta)
 {
     if (abs(current - target) <= maxDelta)
         return target;
-    return current + sign(target - current) * maxDelta;
+    return current + glm::sign(target - current) * maxDelta;
 }
 
 void PlayerController::Update(float deltaTime)
@@ -35,7 +35,7 @@ void PlayerController::Update(float deltaTime)
     {
         if (!freeMode)
         {
-            currentInput = vec3(currentInput.x, 0, currentInput.z);
+            currentInput = glm::vec3(currentInput.x, 0, currentInput.z);
         }
         UpdateMovement(deltaTime);
     }
@@ -44,11 +44,11 @@ void PlayerController::Update(float deltaTime)
 void PlayerController::UpdateMovement(float deltaTime) const
 {
     // Handle player input movement
-    vec3 inputDirection = vec3(0);
+    glm::vec3 inputDirection = glm::vec3(0);
 
     if (length(currentInput) > 0.0f)
     {
-        vec3 inputDir = normalize(currentInput);
+        glm::vec3 inputDir = normalize(currentInput);
         if (freeMode)
         {
             inputDirection = inputDir.x * transform->right + inputDir.y * transform->up + inputDir.z * transform->forward;
@@ -56,12 +56,12 @@ void PlayerController::UpdateMovement(float deltaTime) const
         else
         {
             inputDirection = inputDir.x * transform->right + inputDir.z * transform->forward;
-            inputDirection = vec3(inputDirection.x, 0, inputDirection.z);
+            inputDirection = glm::vec3(inputDirection.x, 0, inputDirection.z);
         }
     }
 
     // Calculate desired velocity based on input
-    vec3 desiredVelocity = vec3(0);
+    glm::vec3 desiredVelocity = glm::vec3(0);
     if (length(inputDirection) > 0.0f)
     {
         desiredVelocity = normalize(inputDirection) * movement->maxSpeed;
@@ -120,5 +120,5 @@ void PlayerController::Shoot()
 void PlayerController::Jump()
 {
     if (ConfigurationValues::CanPlayerMove && movement->IsGrounded())
-        movement->AddImpulse(vec3(0, 7, 0));
+        movement->AddImpulse(glm::vec3(0, 7, 0));
 }

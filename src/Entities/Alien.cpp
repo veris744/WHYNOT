@@ -40,9 +40,9 @@ void Alien::Initialize()
         std::shared_ptr<Material> mat = std::make_shared<Material>("", DEFAULT_VERTEX_SHADER_PATH, "shaders/fragmentColor.glsl");
         mat->materialData.type = MaterialType::COLOR;
         std::unique_ptr<Model> model = std::make_unique<Model>("assets/ufo/PinkAlien.obj", mat);
-        model->position = vec3(-0.5, -0.45, -0.5);
-        model->rotation = vec3(0, -45, 0);
-        model->scale = vec3(0.4, 0.4, 0.4);
+        model->position = glm::vec3(-0.5, -0.45, -0.5);
+        model->rotation = glm::vec3(0, -45, 0);
+        model->scale = glm::vec3(0.4, 0.4, 0.4);
         AddComponent(std::move(model));
     }
 
@@ -100,7 +100,7 @@ void Alien::ClearComponents()
 }
 
 
-// void Alien::OnOutOfBounds(vec3 _normal)
+// void Alien::OnOutOfBounds(glm::vec3 _normal)
 // {
 //     if (!isActive)  return;
 //
@@ -124,7 +124,7 @@ void Alien::ClearComponents()
 //     }
 // }
 
-void Alien::OnCollision(Entity* _otherEntity, vec3 _normal)
+void Alien::OnCollision(Entity* _otherEntity, glm::vec3 _normal)
 {
     if (dynamic_cast<Projectile*>(_otherEntity))
     {

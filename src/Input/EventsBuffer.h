@@ -2,8 +2,6 @@
 #include <deque>
 #include <stdexcept>
 
-using namespace std;
-
 enum class EventType {
     KeyPress,
     KeyRelease,
@@ -24,7 +22,7 @@ struct InputEvent
 
 class EventsBuffer
 {
-    deque<InputEvent> events;
+    std::deque<InputEvent> events;
     
 public:
 

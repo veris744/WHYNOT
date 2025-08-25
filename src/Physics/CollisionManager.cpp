@@ -19,8 +19,8 @@ void CollisionManager::PrepareOctree()
     Logger::Log(LogLevel::Info, "PREPARING OCTREE");
     if (!root)
     {
-        AABB worldBounds = {vec3(Helper::GetXBounds().x, Helper::GetYBounds().x, Helper::GetZBounds().x), 
-            vec3(Helper::GetXBounds().y, Helper::GetYBounds().y, Helper::GetZBounds().y)};
+        AABB worldBounds = {glm::vec3(Helper::GetXBounds().x, Helper::GetYBounds().x, Helper::GetZBounds().x), 
+            glm::vec3(Helper::GetXBounds().y, Helper::GetYBounds().y, Helper::GetZBounds().y)};
     
         root = std::make_unique<OctreeNode>(worldBounds);
     }
@@ -84,7 +84,7 @@ void CollisionManager::CheckCollisions()
     root->ClearDynamic();
 }
 
-bool CollisionManager::CheckUIClicked(vec2 mousePos)
+bool CollisionManager::CheckUIClicked(glm::vec2 mousePos)
 {
     bool isHitting = false;
     for (const auto& widget : World::GetInstance()->GetWidgetsChildOf())
@@ -101,44 +101,44 @@ bool CollisionManager::CheckUIClicked(vec2 mousePos)
     return isHitting;
 }
 
-Hit CollisionManager::ThrowRayFromScreen(vec2 mousePos, vec3 playerPosition, bool showDebug, float timer)
+Hit CollisionManager::ThrowRayFromScreen(glm::vec2 mousePos, glm::vec3 playerPosition, bool showDebug, float timer)
 {
     if (CheckUIClicked(mousePos))
     {
-        return Hit{true, HitType::UI, vec3(mousePos, 0)};
+        return Hit{true, HitType::UI, glm::vec3(mousePos, 0)};
     }
 
     // Convert mouse position to NDC
     float x = (2.0f * mousePos.x) / Helper::windowWidth - 1.0f;
     float y = 1.0f - (2.0f * mousePos.y) / Helper::windowHeight;
-    vec4 rayClip = vec4(x, y, -1.0f, 1.0f);
+    glm::vec4 rayClip = glm::vec4(x, y, -1.0f, 1.0f);
 
     // Convert from clip space to view space
-    mat4 invProj = inverse(World::GetInstance()->GetCurrentCamera()->GetProjectionMatrix());
-    vec4 rayEye = invProj * rayClip;
-    rayEye = vec4(rayEye.x, rayEye.y, -1.0f, 0.0f);
+    glm::mat4 invProj = inverse(World::GetInstance()->GetCurrentCamera()->GetProjectionMatrix());
+    glm::vec4 rayEye = invProj * rayClip;
+    rayEye = glm::vec4(rayEye.x, rayEye.y, -1.0f, 0.0f);
 
     // Convert from view space to world space
-    mat4 invView = inverse(World::GetInstance()->GetCurrentCamera()->GetViewMatrix());
-    vec4 rayWorld = invView * rayEye;
-    vec3 rayDir = normalize(vec3(rayWorld));
+    glm::mat4 invView = inverse(World::GetInstance()->GetCurrentCamera()->GetViewMatrix());
+    glm::vec4 rayWorld = invView * rayEye;
+    glm::vec3 rayDir = normalize(glm::vec3(rayWorld));
 
-    vec3 mousePos3D = playerPosition + rayDir;
+    glm::vec3 mousePos3D = playerPosition + rayDir;
 
     return ThrowRay(playerPosition, (mousePos3D - playerPosition) * 10.f, showDebug, timer);
 }
 
-Hit CollisionManager::ThrowRay(vec3 rayOrigin, vec3 rayDirection, bool showDebug, float timer)
+Hit CollisionManager::ThrowRay(glm::vec3 rayOrigin, glm::vec3 rayDirection, bool showDebug, float timer)
 {
     if (showDebug)
     {
-        Debugger::DrawLineDebug(rayOrigin, rayOrigin + 20.f * rayDirection, vec3(1,0,0), timer);
+        Debugger::DrawLineDebug(rayOrigin, rayOrigin + 20.f * rayDirection, glm::vec3(1,0,0), timer);
     }
 
     if (!root)
     {
-        AABB worldBounds = {vec3(Helper::GetXBounds().x, Helper::GetYBounds().x, Helper::GetZBounds().x), 
-            vec3(Helper::GetXBounds().y, Helper::GetYBounds().y, Helper::GetZBounds().y)};
+        AABB worldBounds = {glm::vec3(Helper::GetXBounds().x, Helper::GetYBounds().x, Helper::GetZBounds().x), 
+            glm::vec3(Helper::GetXBounds().y, Helper::GetYBounds().y, Helper::GetZBounds().y)};
         root = std::make_unique<OctreeNode>(worldBounds);
     }
 
@@ -159,7 +159,7 @@ Hit CollisionManager::ThrowRay(vec3 rayOrigin, vec3 rayDirection, bool showDebug
         }
     }
 
-    set<Hit> hits;
+    std::set<Hit> hits;
     root->QueryRayCollisions(hits, rayOrigin, rayDirection);
 
     float minDistanceSQ = -1;

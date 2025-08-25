@@ -35,7 +35,7 @@ public:
     static void CloseInputBox(bool _saveValue);
     static void ProcessUserInput(int key);
 
-    static SingleDelegate<const string&> OnEnterInput;
+    static SingleDelegate<const std::string&> OnEnterInput;
 
     static void ClearEditor();
 

@@ -10,11 +10,11 @@ float Helper::windowHeight = 600;
 float Helper::windowWidth = 800;
 MultiDelegate<> Helper::OnWindowResizeDelegate;
 
-vec3 Helper::sceneDimensions = vec3(50, 30, 50);
-vec3 Helper::sceneCenter = vec3(0, 0, 0);
-vec2 Helper::XBounds = vec2(sceneCenter.x - sceneDimensions.x * 0.5f, sceneCenter.x + sceneDimensions.x * 0.5f);
-vec2 Helper::YBounds = vec2(sceneCenter.y - sceneDimensions.y * 0.5f, sceneCenter.y + sceneDimensions.y * 0.5f);
-vec2 Helper::ZBounds = vec2(sceneCenter.z - sceneDimensions.z * 0.5f, sceneCenter.z + sceneDimensions.z * 0.5f);
+glm::vec3 Helper::sceneDimensions = glm::vec3(50, 30, 50);
+glm::vec3 Helper::sceneCenter = glm::vec3(0, 0, 0);
+glm::vec2 Helper::XBounds = glm::vec2(sceneCenter.x - sceneDimensions.x * 0.5f, sceneCenter.x + sceneDimensions.x * 0.5f);
+glm::vec2 Helper::YBounds = glm::vec2(sceneCenter.y - sceneDimensions.y * 0.5f, sceneCenter.y + sceneDimensions.y * 0.5f);
+glm::vec2 Helper::ZBounds = glm::vec2(sceneCenter.z - sceneDimensions.z * 0.5f, sceneCenter.z + sceneDimensions.z * 0.5f);
 
 void Helper::InitializeGlfw()
 {

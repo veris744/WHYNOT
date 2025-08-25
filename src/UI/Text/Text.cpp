@@ -14,7 +14,7 @@ void Text::Initialize()
     size = CalculateSize();
 }
 
-vec2 Text::CalculateSize()
+glm::vec2 Text::CalculateSize()
 {
     auto map = TextRenderer::instance().GetCharacters();
 
@@ -31,14 +31,14 @@ vec2 Text::CalculateSize()
                 maxHeight = ch.Size.y;
         }
     }
-    return vec2(width * scale, maxHeight * scale);
+    return glm::vec2(width * scale, maxHeight * scale);
 }
 
 void Text::Render()
 {
     //Widget::Render();
-    vec2 pixelPos = GetPixelPosition();
-    vec2 parentSize = parent ? parent->size : vec2(Helper::windowWidth, Helper::windowHeight);
+    glm::vec2 pixelPos = GetPixelPosition();
+    glm::vec2 parentSize = parent ? parent->size : glm::vec2(Helper::windowWidth, Helper::windowHeight);
     switch (align)
     {
         case TextAlign::LEFT:
@@ -82,7 +82,7 @@ void Text::SetAutoName()
         name = "Text" + std::to_string(++counter);
 }
 
-void Text::SetText(const string& _text)
+void Text::SetText(const std::string& _text)
 {
     text = _text;
     size = CalculateSize();

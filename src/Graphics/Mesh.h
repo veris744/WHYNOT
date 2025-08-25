@@ -13,8 +13,8 @@ class Mesh
     std::shared_ptr<Material> material;
 
 public:
-    Mesh(const vector<float>& _vertex, unsigned int _vertexCount, const std::shared_ptr<Material>& _material, unsigned int _elementCount = 3);
-    Mesh(const vector<float>& _vertex, unsigned int _vertexCount, const vector<unsigned int>& _index,
+    Mesh(const std::vector<float>& _vertex, unsigned int _vertexCount, const std::shared_ptr<Material>& _material, unsigned int _elementCount = 3);
+    Mesh(const std::vector<float>& _vertex, unsigned int _vertexCount, const std::vector<unsigned int>& _index,
          const std::shared_ptr<Material>& _material, unsigned int _elementCount = 3);
 
     ~Mesh()
@@ -23,7 +23,7 @@ public:
         material = nullptr;
     }
     void SetLinesVertexArray() const;
-    void Render(const mat4& _modelMatrix);
+    void Render(const glm::mat4& _modelMatrix);
     void Clear() const;
     Material* GetMaterial() const { return material.get(); }
 };

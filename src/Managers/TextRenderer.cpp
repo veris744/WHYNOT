@@ -19,7 +19,7 @@ void TextRenderer::InitFreeType()
     ftLibrary = std::make_unique<FT_Library>(ft);
 }
 
-void TextRenderer::LoadFont(const string& _fontPath)
+void TextRenderer::LoadFont(const std::string& _fontPath)
 {
     defaultShader = std::make_unique<Shader>(defaultVertexShaderPath, defaultFragmentShaderPath);
     defaultShader->Compile();
@@ -83,11 +83,11 @@ void TextRenderer::LoadFont(const string& _fontPath)
 
 }
 
-void TextRenderer::RenderText(string text, float x, float y, float scale, vec3 color, unsigned int layer)
+void TextRenderer::RenderText(std::string text, float x, float y, float scale, glm::vec3 color, unsigned int layer)
 {
     defaultShader->Bind();
     defaultShader->SetUniformVec3("textColor", color);
-    mat4 projection = ortho(0.0f, Helper::windowWidth, Helper::windowHeight, 0.0f);
+    glm::mat4 projection = glm::ortho(0.0f, Helper::windowWidth, Helper::windowHeight, 0.0f);
     defaultShader->SetUniformMat4("projection", projection);
     defaultShader->SetUniformFloat("layer", 0.1f * layer);
     glActiveTexture(GL_TEXTURE0);

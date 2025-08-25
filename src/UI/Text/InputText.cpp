@@ -34,8 +34,8 @@ void InputText::Initialize()
 void InputText::UpdateText(char ch)
 {
     if (textWidget->text.length() >= maxChars) return;
-    
-    string text = textWidget->text;
+
+    std::string text = textWidget->text;
     text += ch;
     textWidget->SetText(text);
 }
@@ -45,7 +45,7 @@ void InputText::RemoveLastCharacter()
     textWidget->SetText(textWidget->text.substr(0, textWidget->text.length() - 1));
 }
 
-string InputText::ReturnText()
+std::string InputText::ReturnText()
 {
     return textWidget->text;
 }

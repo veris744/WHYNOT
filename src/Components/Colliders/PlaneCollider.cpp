@@ -10,7 +10,7 @@ bool PlaneCollider::Collides(Collider* other, Hit& hit)
         hit.otherEntity = other->parent;
         hit.selfEntity = parent;
         hit.type = WorldHit;
-        vec3 directionToSelf = GetWorldPosition() - hit.point;
+        glm::vec3 directionToSelf = GetWorldPosition() - hit.point;
         if (dot(directionToSelf, hit.normal) < 0.0f)
         {
             hit.normal = -hit.normal;
@@ -20,12 +20,12 @@ bool PlaneCollider::Collides(Collider* other, Hit& hit)
     return false;
 }
 
-bool PlaneCollider::Collides(float _rad1, vec3 _pos1, Hit& hit)
+bool PlaneCollider::Collides(float _rad1, glm::vec3 _pos1, Hit& hit)
 {
     return CheckPlaneCircle(dimensions, GetWorldPosition(), {0, 1, 0}, _rad1,_pos1, hit);
 }
 
-bool PlaneCollider::Collides(vec3 _dimensions, vec3 _pos1, Hit& hit, bool isSlope)
+bool PlaneCollider::Collides(glm::vec3 _dimensions, glm::vec3 _pos1, Hit& hit, bool isSlope)
 {
     if (!isSlope)
         return CheckPlaneSquare(dimensions, GetWorldPosition(), {0, 1, 0}, _dimensions, _pos1, hit);
@@ -33,22 +33,22 @@ bool PlaneCollider::Collides(vec3 _dimensions, vec3 _pos1, Hit& hit, bool isSlop
     return CheckSlopePlane(_dimensions, _pos1, dimensions, GetWorldPosition(), hit);
 }
 
-bool PlaneCollider::Collides(float _height, float _radius, vec3 _pos1, Hit& hit)
+bool PlaneCollider::Collides(float _height, float _radius, glm::vec3 _pos1, Hit& hit)
 {
     return CheckPlaneCapsule(dimensions, GetWorldPosition(),{0, 1, 0}, _radius, _height, _pos1, hit);
 }
 
-bool PlaneCollider::Collides(vec2 _dimensions, vec3 _pos1, Hit& hit)
+bool PlaneCollider::Collides(glm::vec2 _dimensions, glm::vec3 _pos1, Hit& hit)
 {
     return false;
 }
 
-bool PlaneCollider::RayCollides(vec3 _rayOrigin, vec3 _rayDir, Hit& hit)
+bool PlaneCollider::RayCollides(glm::vec3 _rayOrigin, glm::vec3 _rayDir, Hit& hit)
 {
-    vec3 planeNormal = vec3(0,1,0);
-    vec3 planeOrigin = GetWorldPosition();
-    vec3 planeRight = vec3(1,0,0);
-    vec3 planeUp = vec3(0,0,1);
+    glm::vec3 planeNormal = glm::vec3(0,1,0);
+    glm::vec3 planeOrigin = GetWorldPosition();
+    glm::vec3 planeRight = glm::vec3(1,0,0);
+    glm::vec3 planeUp = glm::vec3(0,0,1);
 
     float halfWidth = dimensions.x * 0.5f;
     float halfHeight = dimensions.y * 0.5f;
@@ -59,10 +59,10 @@ bool PlaneCollider::RayCollides(vec3 _rayOrigin, vec3 _rayDir, Hit& hit)
     float t = dot(planeOrigin - _rayOrigin, planeNormal) / denom;
     if (t < 0) return false;
 
-    vec3 hitPoint = _rayOrigin + _rayDir * t;
+    glm::vec3 hitPoint = _rayOrigin + _rayDir * t;
 
     // Convert hit point to plane-local space
-    vec3 localHit = hitPoint - planeOrigin;
+    glm::vec3 localHit = hitPoint - planeOrigin;
     float rightDist = dot(localHit, planeRight);
     float upDist = dot(localHit, planeUp);
 
@@ -82,18 +82,18 @@ bool PlaneCollider::RayCollides(vec3 _rayOrigin, vec3 _rayDir, Hit& hit)
     return true;
 }
 
-bool PlaneCollider::CheckInBounds(const vec2& xBounds, const vec2& yBounds, const vec2& zBounds)
+bool PlaneCollider::CheckInBounds(const glm::vec2& xBounds, const glm::vec2& yBounds, const glm::vec2& zBounds)
 {
 
     // For finite planes (e.g., quad colliders)
-    vec3 corners[4] = {
-        GetWorldPosition() + vec3(1,0,0) * dimensions.x * 0.5f + vec3(0,1,0) * dimensions.y * 0.5f,
-        GetWorldPosition() - vec3(1,0,0) * dimensions.x * 0.5f + vec3(0,1,0) * dimensions.y * 0.5f,
-        GetWorldPosition() - vec3(1,0,0) * dimensions.x * 0.5f - vec3(0,1,0) * dimensions.y * 0.5f,
-        GetWorldPosition() + vec3(1,0,0) * dimensions.x * 0.5f - vec3(0,1,0) * dimensions.y * 0.5f
+    glm::vec3 corners[4] = {
+        GetWorldPosition() + glm::vec3(1,0,0) * dimensions.x * 0.5f + glm::vec3(0,1,0) * dimensions.y * 0.5f,
+        GetWorldPosition() - glm::vec3(1,0,0) * dimensions.x * 0.5f + glm::vec3(0,1,0) * dimensions.y * 0.5f,
+        GetWorldPosition() - glm::vec3(1,0,0) * dimensions.x * 0.5f - glm::vec3(0,1,0) * dimensions.y * 0.5f,
+        GetWorldPosition() + glm::vec3(1,0,0) * dimensions.x * 0.5f - glm::vec3(0,1,0) * dimensions.y * 0.5f
     };
 
-    for (const vec3& corner : corners) {
+    for (const glm::vec3& corner : corners) {
         if (corner.x < xBounds.x || corner.x > xBounds.y ||
             corner.y < yBounds.x || corner.y > yBounds.y ||
             corner.z < zBounds.x || corner.z > zBounds.y) {
@@ -104,23 +104,23 @@ bool PlaneCollider::CheckInBounds(const vec2& xBounds, const vec2& yBounds, cons
     return true;
 }
 
-bool PlaneCollider::OverlapsBounds(const vec2& xBounds, const vec2& yBounds, const vec2& zBounds)
+bool PlaneCollider::OverlapsBounds(const glm::vec2& xBounds, const glm::vec2& yBounds, const glm::vec2& zBounds)
 {
     // For finite planes - SAT (Separating Axis Theorem) test
-    vec3 boundsCenter = {
+    glm::vec3 boundsCenter = {
         (xBounds.x + xBounds.y) * 0.5f,
         (yBounds.x + yBounds.y) * 0.5f,
         (zBounds.x + zBounds.y) * 0.5f
     };
 
-    vec3 boundsExtents = {
+    glm::vec3 boundsExtents = {
         (xBounds.y - xBounds.x) * 0.5f,
         (yBounds.y - yBounds.x) * 0.5f,
         (zBounds.y - zBounds.x) * 0.5f
     };
 
     // Projection test
-    vec3 planeNormal = vec3(0,1,0);
+    glm::vec3 planeNormal = glm::vec3(0,1,0);
     float planeDistance = glm::dot(GetWorldPosition(), planeNormal);
 
     // Bounds extent along plane normal
