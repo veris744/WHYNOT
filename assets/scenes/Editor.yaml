@@ -89,3 +89,27 @@ entities:
             materialData:
               type: TEXTURE
               shininess: 10
+
+  - name: "Platform"
+    components:
+      - name: "TRANSFORM"
+        position: [10, 5, 0]
+        scale: [4, 2, 4]
+      - name: "COLLIDER"
+        dimensions: [4, 2, 4]
+        type: "BOX"
+        profile:
+          type: "STATIC"
+          mode: "ALL"
+      - name: "MODEL"
+        mesh:
+          primitive: "BOX"
+          material:
+            fragmentShaderPath: "shaders/fragmentColor.glsl"
+            materialData:
+              type: COLOR
+              color: [1, 0, 1]
+              shininess: 10
+      - name: "SEQUENCE"
+        isLooping: true
+        playOnStart: true

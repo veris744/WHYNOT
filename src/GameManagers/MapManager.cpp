@@ -5,6 +5,7 @@
 #include "MapManager.h"
 
 #include <Components/Movement.h>
+#include <Components/Sequence.h>
 #include <Components/Transform.h>
 #include <Managers/ConfigurationValues.h>
 #include <Managers/Helper.h>
@@ -24,6 +25,18 @@ void MapManager::PrepareGame()
 
 void MapManager::StartGame()
 {
+    Sequence* seq = World::GetInstance()->GetEntity("Platform")->GetComponent<Sequence>();
+
+    std::vector<Sequence::State> states = {
+        {glm::vec3(10, 5, 0), glm::vec3(0, 0, 0), glm::vec3(4, 2, 4), 0.5f},
+        {glm::vec3(15, 10, 0), glm::vec3(120, 0, 0), glm::vec3(4, 6, 4), 0.5f},
+        {glm::vec3(20, 5, 0), glm::vec3(240, 0, 0), glm::vec3(4, 6, 4), 0.5f},
+        {glm::vec3(10, 5, 0), glm::vec3(360, 0, 0), glm::vec3(4, 2, 4), 0.5f},
+    };
+
+    seq->SetSequence(states);
+    seq->Play();
+
     World::Resume();
 }
 

@@ -1,5 +1,6 @@
 #include "ComponentFactory.h"
 
+#include <Components/Sequence.h>
 #include <Components/Colliders/BoxCollider.h>
 #include <Components/Colliders/CapsuleCollider.h>
 #include <Components/Colliders/PlaneCollider.h>
@@ -114,6 +115,12 @@ void ComponentFactory::ComponentFactorySetup()
             }
         });
 
+    RegisterComponent("SEQUENCE", [](const std::shared_ptr<Entity>& entity, const YAML::Node& data) ->
+        void {
+            std::unique_ptr<Sequence> sequence = std::make_unique<Sequence>();
+            deserialize(data, sequence);
+            entity->AddComponent(std::move(sequence));
+        });
 }
 
 void ComponentFactory::RegisterComponent(const std::string& type, ComponentCreator creator)
