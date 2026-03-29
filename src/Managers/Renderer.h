@@ -29,6 +29,13 @@ class Renderer
     static const std::vector<float> slopeVertex;
     static std::vector<float> sphereVertex;
     static std::vector<unsigned int> sphereIndex;
+
+    static void AddTriangle(int a, int b, int c, std::vector<unsigned int>& indices)
+    {
+        indices.push_back(static_cast<unsigned int>(a));
+        indices.push_back(static_cast<unsigned int>(b));
+        indices.push_back(static_cast<unsigned int>(c));
+    }
     
 public:
     static Renderer& instance() {

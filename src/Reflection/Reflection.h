@@ -154,6 +154,16 @@ namespace Reflection
     // }
 }
 
+template<typename T>
+std::any member_to_any(T& member) {
+    if constexpr (std::is_pointer_v<T> && std::is_base_of_v<ReflectedObject, std::remove_pointer_t<T>>) {
+        return std::any(static_cast<ReflectedObject*>(member));
+    } else if constexpr (std::is_base_of_v<ReflectedObject, T>) {
+        return std::any(static_cast<ReflectedObject*>(&member));
+    } else {
+        return std::any(std::ref(member));
+    }
+}
 
 #define REGISTER_CLASS(type, ...) \
     namespace { \
@@ -167,7 +177,8 @@ namespace Reflection
     }
 
 #define REGISTER_MEMBER(type, member, properties) \
-    MemberInfo{#member, typeid(std::decay_t<decltype(std::declval<type>().member)>).name(), properties, [](void* obj, const YAML::Node& node) { \
+    MemberInfo{#member, typeid(std::decay_t<decltype(std::declval<type>().member)>).name(), properties, \
+    [](void* obj, const YAML::Node& node) { \
         auto& instance = *static_cast<type*>(obj); \
         using MemberT = std::decay_t<decltype(instance.member)>; \
         if constexpr (std::is_class_v<MemberT> && !Reader::IsGLMType<MemberT>() \
@@ -182,16 +193,10 @@ namespace Reflection
         } \
     }, \
     ((static_cast<uint32_t>(properties) & (static_cast<uint32_t>(MemberProperty::Viewable) | static_cast<uint32_t>(MemberProperty::Serializable))) != 0) ? \
-            static_cast<std::function<std::any(ReflectedObject*)>>([](ReflectedObject* obj) -> std::any { \
-                auto* instance = dynamic_cast<type*>(obj); \
-                if (!instance) return std::any{}; \
-                using MemberT = std::decay_t<decltype(instance->member)>; \
-                if constexpr (std::is_pointer_v<MemberT> && std::is_base_of_v<ReflectedObject, std::remove_pointer_t<MemberT>>) { \
-                    return std::any(static_cast<ReflectedObject*>(instance->member)); \
-                } else if constexpr (std::is_base_of_v<ReflectedObject, MemberT>) { \
-                    return std::any(static_cast<ReflectedObject*>(&instance->member)); \
-                } else { \
-                    return std::any(std::ref(instance->member)); /* Store reference wrapper in std::any */ \
-                } \
-            }) : nullptr \
+        static_cast<std::function<std::any(ReflectedObject*)>>([=](ReflectedObject* obj) -> std::any { \
+            auto* instance = dynamic_cast<type*>(obj); \
+            if (!instance) return std::any{}; \
+            using MemberT = std::decay_t<decltype(instance->member)>; \
+            return member_to_any(instance->member); \
+        }) : nullptr \
     }

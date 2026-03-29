@@ -7,6 +7,8 @@
 #include "Managers/World.h"
 #include "Utils/Parser.h"
 
+#include <cstring>
+
 
 struct gpuLightData
 {

@@ -4,6 +4,7 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 #include "Managers/Renderer.h"
+#include <cstring>
 
 
 Texture::Texture(const std::string& filePath)

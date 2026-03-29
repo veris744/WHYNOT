@@ -16,8 +16,7 @@ class WidgetFactory
 {
     std::shared_ptr<Widget> temp;
 public:
-    using WidgetCreator = std::function<const std::shared_ptr<Widget>&
-        (const YAML::Node&, Widget* parent)>;
+    using WidgetCreator = std::function<std::shared_ptr<Widget> (const YAML::Node&, Widget* parent)>;
 
 private:
     static std::shared_ptr<WidgetFactory> instance;

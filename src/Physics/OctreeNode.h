@@ -5,6 +5,8 @@
 #include <glm/glm.hpp>
 #include <Utils/Logger.h>
 
+#include <vector>
+
 struct Hit;
 class Entity;
 

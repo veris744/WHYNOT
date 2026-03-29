@@ -1,6 +1,7 @@
 #include "AudioManager.h"
 
 #include <fstream>
+#include <vector>
 
 #include "Utils/Logger.h"
 

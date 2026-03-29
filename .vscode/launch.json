@@ -1,0 +1,14 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug WHYNOT (MSVC)",
+      "type": "cppvsdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/build/Debug/WHYNOT.exe",
+      "args": [],
+      "cwd": "${workspaceFolder}/build",
+      "console": "integratedTerminal"
+    }
+  ]
+}

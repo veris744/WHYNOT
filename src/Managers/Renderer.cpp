@@ -11,12 +11,6 @@
 #include "Utils/Debugger.h"
 
 
-auto AddTriangle = [&](int a, int b, int c, std::vector<unsigned int>& indices) {
-    indices.push_back(static_cast<unsigned int>(a));
-    indices.push_back(static_cast<unsigned int>(b));
-    indices.push_back(static_cast<unsigned int>(c));
-};
-
 std::vector<float> Renderer::sphereVertex = {};
 std::vector<unsigned int> Renderer::sphereIndex = {};
 

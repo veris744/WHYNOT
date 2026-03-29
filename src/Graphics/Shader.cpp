@@ -14,12 +14,23 @@ Shader::Shader(const std::string& _vertexShaderPath, const std::string& _fragmen
     fragmentShaderSource = ReadShader(fragmentShaderPath);
 }
 
-std::string Shader::ReadShader(const std::string& vertexShaderPath)
+std::string Shader::ReadShader(const std::string& shaderPath)
 {
-    std::ifstream istream(vertexShaderPath.c_str(), std::ios_base::binary);
+    std::ifstream istream(shaderPath, std::ios::binary);
+    if (!istream.is_open()) {
+        std::cout << "Failed to open shader file: " << shaderPath << '\n';
+        std::exit(EXIT_FAILURE);
+    }
+
     std::stringstream sstream;
     sstream << istream.rdbuf();
     std::string temp = sstream.str();
+
+    if (temp.empty()) {
+        std::cerr << "Shader file is empty: " << shaderPath << '\n';
+        std::exit(EXIT_FAILURE);
+    }
+
     return temp;
 }
 
