@@ -5,6 +5,7 @@
 #include <Physics/CollisionManager.h>
 
 #include "Components/Transform.h"
+#include "Entities/Player.h"
 #include "Managers/World.h"
 #include "UI/Containers/EntityPanel.h"
 #include "UI/Text/InputText.h"

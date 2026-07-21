@@ -4,12 +4,13 @@
 
 #include "Components/Component.h"
 #include "Reflection/Reflection.h"
+#include "Utils/Logger.h"
+#include "Components/Camera.h"
 
 class PhysicsMaterial;
 class Model;
 class Collider;
 class LightSource;
-class Camera;
 class Component;
 class Transform;
 

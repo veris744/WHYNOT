@@ -4,10 +4,10 @@
 #include <Managers/World.h>
 #include <Utils/Parser.h>
 
-#include "GameManagers/AliensLogic.h"
 #include "Utils/Timer.h"
 #include "Components/Transform.h"
 #include "Components/Movement.h"
+#include <glfw3.h>
 
 
 float moveToward(float current, float target, float maxDelta)
@@ -117,15 +117,6 @@ void PlayerController::EnterFreeMode(bool _freeMode)
         movement->usesPhysics = !_freeMode;
         physicsMat->hasGravity = !_freeMode;
     }
-}
-
-void PlayerController::Shoot()
-{
-    if (World::GetInstance()->IsPaused()) return;
-    if (!bCanShoot) return;
-    World::GetGameManager()->OnPlayerShootDelegate.Execute();
-    bCanShoot = false;
-    Timer::StartTimer(0.3f, this, &PlayerController::SetCanShoot, true);
 }
 
 void PlayerController::Jump()

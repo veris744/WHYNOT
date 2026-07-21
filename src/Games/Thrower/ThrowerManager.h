@@ -1,7 +1,7 @@
 #pragma once
 #include <UI/Text/Text.h>
 
-#include "GameManager.h"
+#include "GameManagers/GameManager.h"
 
 class ProgressBar;
 constexpr unsigned int TOTAL_BALLS_HAND = 10;
@@ -20,6 +20,7 @@ class ThrowerManager : public GameManager
     float maxPotency = 50;
     float minPotency = 1;
     bool isCharging = false;
+    float forwardOffset = 7.f;
     Entity* ballsReserve [TOTAL_BALLS_HAND];
 
     unsigned int score = 0;
@@ -31,20 +32,19 @@ public:
     void StartGame() override;
     void EndGame() override;
     void SetPlayer() override;
-    void ProcessInput(int key, bool press) override;
     void Update(float deltaTime) override;
 
     void AddPoints(unsigned int amount);
-
-
-private:
-    void PrepareUI();
-    void PrepareScene();
 
     void GrabBall();
     void ReleaseBall();
     void ChargeBall();
     void ThrowBall();
+
+
+private:
+    void PrepareUI();
+    void PrepareScene();
 
     Entity* GenerateBall(BallType type, const std::string& name);
 

@@ -5,6 +5,7 @@
 #include <Managers/ConfigurationValues.h>
 #include <Managers/Helper.h>
 #include <Managers/World.h>
+#include <Entities/Player.h>
 
 void PhysicsSimulationManager::PrepareGame()
 {
@@ -48,9 +49,6 @@ void PhysicsSimulationManager::SetPlayer()
     player->isActive = true;
 }
 
-void PhysicsSimulationManager::ProcessInput(int key, bool press)
-{
-}
 
 void PhysicsSimulationManager::Update(float deltaTime)
 {

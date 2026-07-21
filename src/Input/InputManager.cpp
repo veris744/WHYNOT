@@ -10,6 +10,7 @@
 #include "Physics/Hit.h"
 #include "Utils/Debugger.h"
 #include "Managers/ConfigurationValues.h"
+#include <Entities/Player.h>
 
 
 ////////////////////////////////////////////////////////
@@ -186,7 +187,7 @@ void InputManager::HandleKeyPress(int key, int mods)
         if (inputOpen) return;
     }
 
-    World::GetGameManager()->ProcessInput(key, true);
+    World::GetGameManager()->GetPlayer()->GetPlayerController()->ProcessInput(key, true);
     if (!playerController)
     {
         playerController = World::GetInstance()->GetGameManager()->GetPlayer()->GetComponent<PlayerController>();
@@ -226,7 +227,9 @@ void InputManager::HandleKeyRelease(int key, int mods)
     // default:
     //     break;
     // }
-    World::GetGameManager()->ProcessInput(key, false);
+
+    // Player Controller processes input
+    World::GetGameManager()->GetPlayer()->GetPlayerController()->ProcessInput(key, false);
 }
 
 void InputManager::HandleMouseButtonPress(int key)
@@ -234,8 +237,8 @@ void InputManager::HandleMouseButtonPress(int key)
     // If user is inputting text no need to handle mouse button press
     if (EditorMode::isInputBoxOpen) return;
 
-    // Game Manager processes input
-    World::GetGameManager()->ProcessInput(key, true);
+    // Player Controller processes input
+    World::GetGameManager()->GetPlayer()->GetPlayerController()->ProcessInput(key, true);
 
     // If UI is active
     if (ConfigurationValues::IsUIActive && key == GLFW_MOUSE_BUTTON_1)
@@ -277,7 +280,7 @@ void InputManager::HandleMouseButtonPress(int key)
 void InputManager::HandleMouseButtonRelease(int key)
 {
     // Game Manager processes input
-    World::GetGameManager()->ProcessInput(key, false);
+    World::GetGameManager()->GetPlayer()->GetPlayerController()->ProcessInput(key, false);
 
     // Disable camera movement when in editor and not clicking Right Button
     if (ConfigurationValues::IsEditorOpen && key == GLFW_MOUSE_BUTTON_2)

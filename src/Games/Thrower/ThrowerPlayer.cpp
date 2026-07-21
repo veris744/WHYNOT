@@ -1,18 +1,9 @@
-#include "Player.h"
-
-#include <Components/Colliders/CapsuleCollider.h>
-#include <Utils/Parser.h>
-
+#include "ThrowerPlayer.h"
+#include "ThrowerPlayerController.h"
 #include "Components/Audio.h"
-#include "Components/Camera.h"
-#include "Components/PlayerController.h"
-#include "Components/Transform.h"
-#include "Components/Movement.h"
-#include "Managers/World.h"
+#include "Components/Colliders/CapsuleCollider.h"
 
-unsigned int Player::counter = 0;
-
-void Player::Initialize()
+void ThrowerPlayer::Initialize()
 {
     if (!GetComponent<Camera>())
     {
@@ -26,9 +17,9 @@ void Player::Initialize()
         AddComponent(std::move(transform));
     }
 
-    if (!GetComponent<PlayerController>())
+    if (!GetComponent<ThrowerPlayerController>())
     {
-        std::unique_ptr<PlayerController> controller = std::make_unique<PlayerController>();
+        std::unique_ptr<ThrowerPlayerController> controller = std::make_unique<ThrowerPlayerController>();
         AddComponent(std::move(controller));
         playerController = GetComponent<PlayerController>();
     }
@@ -69,10 +60,4 @@ void Player::Initialize()
 
     isActive = true;
     Entity::Initialize();
-}
-
-void Player::Update(float _deltaTime)
-{
-    Entity::Update(_deltaTime);
-    //Logger::Log(LogLevel::Info, "Player::Update: " + Parser::Parse(GetComponent<Transform>()->position));
 }

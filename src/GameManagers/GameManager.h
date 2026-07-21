@@ -1,9 +1,9 @@
 #pragma once
 #include <glm.hpp>
-#include <Entities/Player.h>
 #include <Utils/SingleDelegate.h>
 
 class Entity;
+class Player;
 
 class GameManager
 {
@@ -13,7 +13,7 @@ protected:
     glm::vec3 playerStart = glm::vec3(0,0,0);
     glm::vec3 playerStartRotation = glm::vec3(0,0,0);
 
-    Entity* player = nullptr;
+    Player* player = nullptr;
 
 public:
     GameManager() = default;
@@ -26,7 +26,6 @@ public:
     virtual void EndGame() = 0;
     virtual void SetPlayer() = 0;
     virtual void Update(float deltaTime) = 0;
-    virtual void ProcessInput(int key, bool press) = 0;
 
     glm::vec2 GetXBounds() const{
         return glm::vec2(playgroundCenter.z - playgroundDimensions.z * 0.5f, playgroundCenter.z + playgroundDimensions.z * 0.5f);
@@ -40,7 +39,7 @@ public:
 
     glm::vec3 GetPlayerStart() const {  return playerStart; }
     glm::vec3 GetPlayerStartRotation() const {  return playerStartRotation; }
-    Entity* GetPlayer() const { return player; }
+    Player* GetPlayer() const { return player; }
 
     SingleDelegate<> OnPlayerShootDelegate;
 };

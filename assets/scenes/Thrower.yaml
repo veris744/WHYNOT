@@ -32,7 +32,6 @@ entities:
         position: [0, 0, 0]
         scale: [50, 1, 50]
       - name: "COLLIDER"
-        dimensions: [50, 50]
         type: "PLANE"
         profile:
           type: "STATIC"
@@ -50,9 +49,8 @@ entities:
     components:
       - name: "TRANSFORM"
         position: [-25, 10, 0]
-        scale: [0.1, 20, 50]
+        scale: [0.3, 20, 50]
       - name: "COLLIDER"
-        dimensions: [0.5, 20, 50]
         type: "BOX"
         profile:
           type: "STATIC"
@@ -70,9 +68,8 @@ entities:
     components:
       - name: "TRANSFORM"
         position: [25, 10, 0]
-        scale: [0.1, 20, 50]
+        scale: [0.3, 20, 50]
       - name: "COLLIDER"
-        dimensions: [0.5, 20, 50]
         type: "BOX"
         profile:
           type: "STATIC"
@@ -90,9 +87,8 @@ entities:
     components:
       - name: "TRANSFORM"
         position: [0, 10, -25]
-        scale: [50, 20, 0.1]
+        scale: [50, 20, 0.3]
       - name: "COLLIDER"
-        dimensions: [50, 20, 0.5]
         type: "BOX"
         profile:
           type: "STATIC"
@@ -110,9 +106,8 @@ entities:
     components:
       - name: "TRANSFORM"
         position: [0, 10, 25]
-        scale: [50, 20, 0.1]
+        scale: [50, 20, 0.3]
       - name: "COLLIDER"
-        dimensions: [50, 20, 0.5]
         type: "BOX"
         profile:
           type: "STATIC"
@@ -130,9 +125,8 @@ entities:
     components:
       - name: "TRANSFORM"
         position: [-15, 2.5, 0]
-        scale: [0.1, 3, 30]
+        scale: [0.3, 3, 30]
       - name: "COLLIDER"
-        dimensions: [0.5, 3, 30]
         type: "BOX"
         profile:
           type: "STATIC"
@@ -150,9 +144,8 @@ entities:
     components:
       - name: "TRANSFORM"
         position: [15, 2.5, 0]
-        scale: [0.1, 3, 30]
+        scale: [0.3, 3, 30]
       - name: "COLLIDER"
-        dimensions: [0.5, 3, 30]
         type: "BOX"
         profile:
           type: "STATIC"
@@ -170,9 +163,8 @@ entities:
     components:
       - name: "TRANSFORM"
         position: [0, 2.5, -15]
-        scale: [30, 3, 0.1]
+        scale: [30, 3, 0.3]
       - name: "COLLIDER"
-        dimensions: [30, 3, 0.5]
         type: "BOX"
         profile:
           type: "STATIC"
@@ -190,9 +182,8 @@ entities:
     components:
       - name: "TRANSFORM"
         position: [0, 2.5, 15]
-        scale: [30, 3, 0.1]
+        scale: [30, 3, 0.3]
       - name: "COLLIDER"
-        dimensions: [30, 3, 0.5]
         type: "BOX"
         profile:
           type: "STATIC"
@@ -214,7 +205,7 @@ entities:
         position: [-7, 0, -7]
         scale: [7, 7, 7]
       - name: "COLLIDER"
-        radius: 3.5
+        radius: 0.5
         type: "CIRCLE"
         profile:
           type: "STATIC"
@@ -226,7 +217,7 @@ entities:
         position: [7, 0, 7]
         scale: [7, 7, 7]
       - name: "COLLIDER"
-        radius: 3.5
+        radius: 0.5
         type: "CIRCLE"
         profile:
           type: "STATIC"

@@ -4,8 +4,6 @@
 #include <Entities/Thrower/Goal.h>
 
 #include "Reader.h"
-#include "Entities/Alien.h"
-#include "Entities/Projectile.h"
 #include "Entities/Player.h"
 #include "Managers/World.h"
 
@@ -18,20 +16,6 @@ std::shared_ptr<EntityFactory> EntityFactory::instance = nullptr;
 
 void EntityFactory::EntityFactorySetup()
 {
-    RegisterEntity("ALIEN", [](const YAML::Node& data) ->
-        std::shared_ptr<Entity> {
-            std::shared_ptr<Alien> alien = std::make_shared<Alien>();
-            deserialize(data, alien);
-            return alien;
-        });
-    
-    RegisterEntity("PROJECTILE", [](const YAML::Node& data) ->
-        std::shared_ptr<Entity> {
-            std::shared_ptr<Projectile> proj = std::make_shared<Projectile>();
-            deserialize(data, proj);
-            return proj;
-        });
-
     RegisterEntity("GOAL", [](const YAML::Node& data) ->
         std::shared_ptr<Entity> {
             std::shared_ptr<Goal> goal = std::make_shared<Goal>();

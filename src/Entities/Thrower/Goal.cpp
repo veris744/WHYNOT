@@ -2,7 +2,7 @@
 
 #include <Components/Model.h>
 #include <Components/Colliders/CircleCollider.h>
-#include <GameManagers/ThrowerManager.h>
+#include <Games/Thrower/ThrowerManager.h>
 #include <Graphics/Material.h>
 #include <Graphics/Mesh.h>
 #include <Managers/Renderer.h>

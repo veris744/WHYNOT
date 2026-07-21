@@ -8,11 +8,13 @@ class Transform;
 
 class PlayerController : public Component
 {
+protected:
+
     Transform* transform = nullptr;
     Movement* movement = nullptr;
     PhysicsMaterial* physicsMat = nullptr;
-    bool bCanShoot = false;
     bool freeMode = false;
+    bool canJump = false;
     
 public:
     PlayerController()
@@ -25,14 +27,13 @@ public:
 
     glm::vec3 currentInput = glm::vec3(0);
 
-    void Update(float deltaTime) override;
-    void ProcessInput(int key, bool press);
-    void UpdateMovement(float deltaTime) const;
-    void EnterFreeMode(bool _freeMode);
-    void Shoot();
-    void Jump();
-    void SetCanShoot(bool _canShoot) { bCanShoot = _canShoot; }
+    virtual void Update(float deltaTime) override;
+    virtual void ProcessInput(int key, bool press);
+    virtual void UpdateMovement(float deltaTime) const;
+    virtual void EnterFreeMode(bool _freeMode);
+    virtual void Jump();
 };
 REGISTER_CLASS(PlayerController,
     REGISTER_MEMBER(PlayerController, accelerationRate, MemberProperty::Viewable | MemberProperty::Editable ),
+    REGISTER_MEMBER(PlayerController, decelerationRate, MemberProperty::Viewable | MemberProperty::Editable )
 )

@@ -10,6 +10,7 @@
 #include <Managers/ConfigurationValues.h>
 #include <Managers/Helper.h>
 #include <Managers/World.h>
+#include <Entities/Player.h>
 #include <Components/PlayerController.h>
 
 void MapManager::PrepareGame()
@@ -64,10 +65,6 @@ void MapManager::SetPlayer()
     World::GetInstance()->SetCurrentCamera("Player");
 
     player->isActive = true;
-}
-
-void MapManager::ProcessInput(int key, bool press)
-{
 }
 
 void MapManager::Update(float deltaTime)

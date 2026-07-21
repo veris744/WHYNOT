@@ -14,6 +14,7 @@
 #include <Managers/World.h>
 #include <UI/Containers/ProgressBar.h>
 #include <UI/Text/Text.h>
+#include "ThrowerPlayer.h"
 
 float getRandomFloat(float min, float max) {
     static std::random_device rd;
@@ -60,8 +61,8 @@ void ThrowerManager::SetPlayer()
 {
     if (!player)
     {
-        std::shared_ptr<Player> temp = std::make_shared<Player>("Player");
-        player = temp.get();
+        std::shared_ptr<ThrowerPlayer> temp = std::make_shared<ThrowerPlayer>("Player");
+        player = static_cast<Player*>(temp.get());
         player->Initialize();
 
         playerTransform = player->GetComponent<Transform>();
@@ -80,30 +81,11 @@ void ThrowerManager::SetPlayer()
     player->isActive = true;
 }
 
-void ThrowerManager::ProcessInput(int key, bool press)
-{
-    switch (key)
-    {
-    case GLFW_MOUSE_BUTTON_1:
-        if (press)
-            ChargeBall();
-        else
-            ThrowBall();
-        break;
-    case GLFW_MOUSE_BUTTON_2:
-        if (press)
-            GrabBall();
-        else
-            ReleaseBall();
-        break;
-    }
-}
-
 void ThrowerManager::Update(float deltaTime)
 {
     if (GrabbedBall)
     {
-        GrabbedBall->GetComponent<Transform>()->position = playerTransform->position + playerTransform->forward * 5.f;
+        GrabbedBall->GetComponent<Transform>()->position = playerTransform->position + playerTransform->forward * forwardOffset;
 
         if (isCharging)
         {
@@ -231,7 +213,7 @@ void ThrowerManager::GrabBall()
     if (currentBall >= TOTAL_BALLS_HAND) return;
 
     GrabbedBall = ballsReserve[currentBall];
-    GrabbedBall->GetComponent<Transform>()->position = playerTransform->position + playerTransform->forward * 7.f;
+    GrabbedBall->GetComponent<Transform>()->position = playerTransform->position + playerTransform->forward * forwardOffset;
     GrabbedBall->isActive = true;
 
 }

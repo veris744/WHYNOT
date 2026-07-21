@@ -10,10 +10,8 @@
 #endif
 
 class Player;
-class Projectile;
 class Entity;
 class Transform;
-class Alien;
 
 class EntityFactory
 {

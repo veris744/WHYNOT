@@ -2,7 +2,6 @@
 
 #include <thread>
 
-#include "GameManagers/AliensLogic.h"
 #include <GameManagers/MapManager.h>
 #include <GameManagers/PhysicsSimulationManager.h>
 
@@ -23,7 +22,7 @@
 #include <Components/PlayerController.h>
 #include <Components/Transform.h>
 #include <GameManagers/InMenuManager.h>
-#include <GameManagers/ThrowerManager.h>
+#include <Games/Thrower/ThrowerManager.h>
 
 
 World* World::instance = nullptr;

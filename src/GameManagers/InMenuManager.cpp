@@ -2,6 +2,7 @@
 
 #include <Components/Movement.h>
 #include <Components/Transform.h>
+#include <Entities/Player.h>
 #include <Managers/ConfigurationValues.h>
 #include <Managers/Helper.h>
 #include <Managers/World.h>
@@ -46,10 +47,6 @@ void InMenuManager::SetPlayer()
     World::GetInstance()->SetCurrentCamera("Player");
 
     player->isActive = true;
-}
-
-void InMenuManager::ProcessInput(int key, bool press)
-{
 }
 
 void InMenuManager::Update(float deltaTime)
