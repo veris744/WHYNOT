@@ -1,13 +1,20 @@
 #include "CircleCollider.h"
 
-#include "BoxCollider.h"
 #include "Entities/Entity.h"
 #include "Utils/Debugger.h"
 
-
-bool CircleCollider::Collides(Collider* other, Hit& hit)
+float CircleCollider::GetTransformScale()
 {
-    if (other->Collides(radius, GetWorldPosition(), hit))
+    if (!transform)
+    {
+        transform = parent->GetComponent<Transform>();
+    }
+    return radius * std::max(transform->scale.x, std::max(transform->scale.y, transform->scale.z));
+}
+
+bool CircleCollider::Collides(Collider *other, Hit &hit)
+{
+    if (other->Collides(GetTransformScale(), GetWorldPosition(), hit))
     {
         hit.otherEntity = other->parent;
         hit.selfEntity = parent;
@@ -24,25 +31,25 @@ bool CircleCollider::Collides(Collider* other, Hit& hit)
 
 bool CircleCollider::Collides(float _rad1, glm::vec3 _pos1, Hit& hit)
 {
-    return CheckCircleCircle(radius, GetWorldPosition(), _rad1, _pos1, hit);
+    return CheckCircleCircle(GetTransformScale(), GetWorldPosition(), _rad1, _pos1, hit);
 }
 
 bool CircleCollider::Collides(glm::vec3 _dimensions, glm::vec3 _pos1, Hit& hit, bool isSlope)
 {
     if (!isSlope)
-        return CheckCircleSquare(radius, GetWorldPosition(), _dimensions, _pos1, hit);
+        return CheckCircleSquare(GetTransformScale(), GetWorldPosition(), _dimensions, _pos1, hit);
 
-    return CheckSlopeCircle(_dimensions, _pos1, radius, GetWorldPosition(), hit);
+    return CheckSlopeCircle(_dimensions, _pos1, GetTransformScale(), GetWorldPosition(), hit);
 }
 
 bool CircleCollider::Collides(float _height, float _radius, glm::vec3 _pos1, Hit& hit)
 {
-    return CheckCapsuleCircle(_radius, _height, _pos1, radius, GetWorldPosition(), hit);
+    return CheckCapsuleCircle(_radius, _height, _pos1, GetTransformScale(), GetWorldPosition(), hit);
 }
 
 bool CircleCollider::Collides(glm::vec2 _dimensions, glm::vec3 _pos1, Hit& hit)
 {
-    return CheckPlaneCircle(_dimensions, _pos1, {0, 1, 0}, radius, GetWorldPosition(), hit);
+    return CheckPlaneCircle(_dimensions, _pos1, {0, 1, 0}, GetTransformScale(), GetWorldPosition(), hit);
 }
 
 // Collision from ray staring at origin extending towards infinity
@@ -57,7 +64,7 @@ bool CircleCollider::RayCollides(glm::vec3 _rayOrigin, glm::vec3 _rayDir, Hit& h
     }
 
     float b = dot(D, OC);
-    float c = dot(OC, OC) - radius * radius;
+    float c = dot(OC, OC) - GetTransformScale() * GetTransformScale();
     float discriminant = b * b - c;
     if (discriminant < 0.0f) {
         return false; // No intersection
@@ -103,31 +110,31 @@ bool CircleCollider::CheckInBounds(const glm::vec2& xBounds, const glm::vec2& yB
     glm::vec3 worldPos = GetWorldPosition();
 
     // Check X bounds
-    if (worldPos.x - radius < xBounds.x) {
+    if (worldPos.x - GetTransformScale() < xBounds.x) {
         outNormal = glm::vec3(1.0f, 0.0f, 0.0f);
         isInside = false;
     } 
-    else if (worldPos.x + radius > xBounds.y) {
+    else if (worldPos.x + GetTransformScale() > xBounds.y) {
         outNormal = glm::vec3(-1.0f, 0.0f, 0.0f);
         isInside = false;
     }
 
     // Check Y bounds
-    if (worldPos.y - radius < yBounds.x) {
+    if (worldPos.y - GetTransformScale() < yBounds.x) {
         outNormal = glm::vec3(0.0f, 1.0f, 0.0f);
         isInside = false;
     } 
-    else if (worldPos.y + radius > yBounds.y) {
+    else if (worldPos.y + GetTransformScale() > yBounds.y) {
         outNormal = glm::vec3(0.0f, -1.0f, 0.0f);
         isInside = false;
     }
 
     // Check Z bounds
-    if (worldPos.z - radius < zBounds.x) {
+    if (worldPos.z - GetTransformScale() < zBounds.x) {
         outNormal = glm::vec3(0.0f, 0.0f, 1.0f);
         isInside = false;
     } 
-    else if (worldPos.z + radius > zBounds.y) {
+    else if (worldPos.z + GetTransformScale() > zBounds.y) {
         outNormal = glm::vec3(0.0f, 0.0f, -1.0f);
         isInside = false;
     }
@@ -137,7 +144,7 @@ bool CircleCollider::CheckInBounds(const glm::vec2& xBounds, const glm::vec2& yB
 
 bool CircleCollider::OverlapsBounds(const glm::vec2& xBounds, const glm::vec2& yBounds, const glm::vec2& zBounds)
 {
-    // Get the collider's center and radius
+    // Get the collider's center and GetTransformScale()
     glm::vec3 center = GetWorldPosition();
 
     // Check if the sphere overlaps with the AABB
@@ -150,14 +157,10 @@ bool CircleCollider::OverlapsBounds(const glm::vec2& xBounds, const glm::vec2& y
         (center.y - closestY) * (center.y - closestY) +
         (center.z - closestZ) * (center.z - closestZ);
 
-    return distanceSquared <= (radius * radius);
+    return distanceSquared <= (GetTransformScale() * GetTransformScale());
 }
 
 void CircleCollider::RenderDebug()
 {
-    Debugger::DrawSphereDebug(radius, GetWorldPosition());
+    Debugger::DrawSphereDebug(GetTransformScale(), GetWorldPosition());
 }
-
-
-
-

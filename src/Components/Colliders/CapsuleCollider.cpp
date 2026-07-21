@@ -1,6 +1,5 @@
 #include "CapsuleCollider.h"
 
-#include "BoxCollider.h"
 #include "Entities/Entity.h"
 #include "Utils/Debugger.h"
 
@@ -12,7 +11,19 @@ glm::vec3 closestPointOnSegment(const glm::vec3& A, const glm::vec3& B, const gl
     return A + t * AB;
 }
 
-bool CapsuleCollider::Collides(Collider* other, Hit& hit)
+CapsuleCollider::Dimensions CapsuleCollider::GetTransformScale()
+{
+    if (!transform)
+    {
+        transform = parent->GetComponent<Transform>();
+    }
+    return Dimensions{
+        height * transform->scale.y,
+        radius * std::max(transform->scale.x, transform->scale.z)
+    };
+}
+
+bool CapsuleCollider::Collides(Collider *other, Hit &hit)
 {
     if (other->Collides(height, radius, GetWorldPosition(), hit))
     {

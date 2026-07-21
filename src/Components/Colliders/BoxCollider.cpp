@@ -1,10 +1,20 @@
 #include "BoxCollider.h"
 
+#include "Entities/Entity.h"
 #include <Utils/Debugger.h>
 
-bool BoxCollider::Collides(Collider* other, Hit& hit)
+glm::vec3 BoxCollider::GetTransformScale()
 {
-    other->Collides(dimensions, GetWorldPosition(), hit);
+    if (!transform)
+    {
+        transform = parent->GetComponent<Transform>();
+    }
+    return dimensions * transform->scale;
+}
+
+bool BoxCollider::Collides(Collider *other, Hit &hit)
+{
+    other->Collides(GetTransformScale(), GetWorldPosition(), hit);
     if (hit.hasHit)
     {
         hit.otherEntity = other->parent;
@@ -22,31 +32,31 @@ bool BoxCollider::Collides(Collider* other, Hit& hit)
 
 bool BoxCollider::Collides(float _rad1, glm::vec3 _pos1, Hit& hit)
 {
-    return CheckCircleSquare(_rad1, _pos1, dimensions, GetWorldPosition(), hit);
+    return CheckCircleSquare(_rad1, _pos1, GetTransformScale(), GetWorldPosition(), hit);
 }
 
 bool BoxCollider::Collides(glm::vec3 _dimensions, glm::vec3 _pos1, Hit& hit, bool isSlope)
 {
     if (!isSlope)
-        return CheckSquareSquare(_dimensions, _pos1, dimensions, GetWorldPosition(), hit);
+        return CheckSquareSquare(_dimensions, _pos1, GetTransformScale(), GetWorldPosition(), hit);
 
-    return CheckSlopeSquare(_dimensions, _pos1, dimensions, GetWorldPosition(), hit);
+    return CheckSlopeSquare(_dimensions, _pos1, GetTransformScale(), GetWorldPosition(), hit);
 }
 
 bool BoxCollider::Collides(float _height, float _radius, glm::vec3 _pos1, Hit& hit)
 {
-    return CheckCapsuleSquare(_radius, _height, _pos1, dimensions, GetWorldPosition(), hit);
+    return CheckCapsuleSquare(_radius, _height, _pos1, GetTransformScale(), GetWorldPosition(), hit);
 }
 
 bool BoxCollider::Collides(glm::vec2 _dimensions, glm::vec3 _pos1, Hit& hit)
 {
-    return CheckPlaneSquare(_dimensions, _pos1, dimensions,{0, 1, 0}, GetWorldPosition(), hit);
+    return CheckPlaneSquare(_dimensions, _pos1, GetTransformScale(),{0, 1, 0}, GetWorldPosition(), hit);
 }
 
 bool BoxCollider::RayCollides(glm::vec3 _rayOrigin, glm::vec3 _rayDir, Hit& hit)
 {
     glm::vec3 boxCenter = GetWorldPosition();
-    glm::vec3 halfExtents = dimensions * 0.5f;
+    glm::vec3 halfExtents = GetTransformScale() * 0.5f;
     glm::vec3 boxMin = boxCenter - halfExtents;
     glm::vec3 boxMax = boxCenter + halfExtents;
 
@@ -106,7 +116,7 @@ bool BoxCollider::RayCollides(glm::vec3 _rayOrigin, glm::vec3 _rayDir, Hit& hit)
 bool BoxCollider::CheckInBounds(const glm::vec2& xBounds, const glm::vec2& yBounds, const glm::vec2& zBounds)
 {
     glm::vec3 boxCenter = GetWorldPosition();
-    glm::vec3 halfExtents = dimensions * 0.5f;
+    glm::vec3 halfExtents = GetTransformScale() * 0.5f;
 
     glm::vec3 boxMin = boxCenter - halfExtents;
     glm::vec3 boxMax = boxCenter + halfExtents;
@@ -123,7 +133,7 @@ bool BoxCollider::CheckInBounds(const glm::vec2& xBounds, const glm::vec2& yBoun
 bool BoxCollider::OverlapsBounds(const glm::vec2& xBounds, const glm::vec2& yBounds, const glm::vec2& zBounds)
 {
     glm::vec3 boxCenter = GetWorldPosition();
-    glm::vec3 halfExtents = dimensions * 0.5f;
+    glm::vec3 halfExtents = GetTransformScale() * 0.5f;
 
     // Calculate min and max extents of the box
     glm::vec3 boxMin = boxCenter - halfExtents;
@@ -140,5 +150,5 @@ bool BoxCollider::OverlapsBounds(const glm::vec2& xBounds, const glm::vec2& yBou
 
 void BoxCollider::RenderDebug()
 {
-    Debugger::DrawCubeDebug(dimensions, GetWorldPosition());
+    Debugger::DrawCubeDebug(GetTransformScale(), GetWorldPosition());
 }

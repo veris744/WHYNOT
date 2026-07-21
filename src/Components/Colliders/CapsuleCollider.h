@@ -3,6 +3,12 @@
 
 class CapsuleCollider : public Collider
 {
+    struct Dimensions
+    {
+        float height;
+        float radius;
+    };
+
 public:
     float height;
     float radius;
@@ -12,6 +18,8 @@ public:
     {
         type = ColliderShape::CIRCLE;
     }
+
+    Dimensions GetTransformScale();
 
     bool Collides(Collider* other, Hit& hit) override;
     bool Collides(float _rad1, glm::vec3 _pos1, Hit& hit) override;

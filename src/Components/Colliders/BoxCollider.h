@@ -6,11 +6,13 @@ class BoxCollider : public Collider
 public:
     glm::vec3 dimensions ;
 
-    BoxCollider(glm::vec3 _dimensions = {0,0,0})
+    BoxCollider(glm::vec3 _dimensions = {1,1,1})
         : dimensions(_dimensions)
     {
         type = ColliderShape::BOX;
     }
+    
+    glm::vec3 GetTransformScale();
 
     bool Collides(Collider* other, Hit& hit) override;
     bool Collides(float _rad1, glm::vec3 _pos1, Hit& hit) override;

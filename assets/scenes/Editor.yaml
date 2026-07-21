@@ -32,12 +32,12 @@ entities:
           mode: "ALL"
       - name: "PHYSICS_MATERIAL"
         bounciness: 0.1
-  - components:
+  - name: "Floor"
+    components:
       - name: "TRANSFORM"
         position: [0, 0, 0]
         scale: [50, 1, 50]
       - name: "COLLIDER"
-        dimensions: [50, 50]
         type: "PLANE"
         profile:
           type: "STATIC"
@@ -56,7 +56,6 @@ entities:
         position: [-5, 10, 0]
         scale: [0.1, 25, 10]
       - name: "COLLIDER"
-        dimensions: [0.1, 25, 10]
         type: "BOX"
         profile:
           type: "STATIC"
@@ -75,7 +74,6 @@ entities:
         position: [10, 3, -5]
         scale: [7, 6, 15]
       - name: "COLLIDER"
-        dimensions: [7, 6, 15]
         type: "SLOPE"
         profile:
           type: "STATIC"
@@ -96,7 +94,6 @@ entities:
         position: [10, 5, 0]
         scale: [4, 2, 4]
       - name: "COLLIDER"
-        dimensions: [4, 2, 4]
         type: "BOX"
         profile:
           type: "STATIC"

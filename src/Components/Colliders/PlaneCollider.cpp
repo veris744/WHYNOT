@@ -1,10 +1,20 @@
 #include "PlaneCollider.h"
 
 #include <Utils/Debugger.h>
+#include "Entities/Entity.h"
 
-bool PlaneCollider::Collides(Collider* other, Hit& hit)
+glm::vec2 PlaneCollider::GetTransformScale()
 {
-    other->Collides(dimensions, GetWorldPosition(), hit);
+    if (!transform)
+    {
+        transform = parent->GetComponent<Transform>();
+    }
+    return glm::vec2(dimensions.x * transform->scale.x, dimensions.y * transform->scale.z);
+}
+
+bool PlaneCollider::Collides(Collider *other, Hit &hit)
+{
+    other->Collides(GetTransformScale(), GetWorldPosition(), hit);
     if (hit.hasHit)
     {
         hit.otherEntity = other->parent;
@@ -22,20 +32,20 @@ bool PlaneCollider::Collides(Collider* other, Hit& hit)
 
 bool PlaneCollider::Collides(float _rad1, glm::vec3 _pos1, Hit& hit)
 {
-    return CheckPlaneCircle(dimensions, GetWorldPosition(), {0, 1, 0}, _rad1,_pos1, hit);
+    return CheckPlaneCircle(GetTransformScale(), GetWorldPosition(), {0, 1, 0}, _rad1,_pos1, hit);
 }
 
 bool PlaneCollider::Collides(glm::vec3 _dimensions, glm::vec3 _pos1, Hit& hit, bool isSlope)
 {
     if (!isSlope)
-        return CheckPlaneSquare(dimensions, GetWorldPosition(), {0, 1, 0}, _dimensions, _pos1, hit);
+        return CheckPlaneSquare(GetTransformScale(), GetWorldPosition(), {0, 1, 0}, _dimensions, _pos1, hit);
 
-    return CheckSlopePlane(_dimensions, _pos1, dimensions, GetWorldPosition(), hit);
+    return CheckSlopePlane(_dimensions, _pos1, GetTransformScale(), GetWorldPosition(), hit);
 }
 
 bool PlaneCollider::Collides(float _height, float _radius, glm::vec3 _pos1, Hit& hit)
 {
-    return CheckPlaneCapsule(dimensions, GetWorldPosition(),{0, 1, 0}, _radius, _height, _pos1, hit);
+    return CheckPlaneCapsule(GetTransformScale(), GetWorldPosition(),{0, 1, 0}, _radius, _height, _pos1, hit);
 }
 
 bool PlaneCollider::Collides(glm::vec2 _dimensions, glm::vec3 _pos1, Hit& hit)
@@ -50,8 +60,8 @@ bool PlaneCollider::RayCollides(glm::vec3 _rayOrigin, glm::vec3 _rayDir, Hit& hi
     glm::vec3 planeRight = glm::vec3(1,0,0);
     glm::vec3 planeUp = glm::vec3(0,0,1);
 
-    float halfWidth = dimensions.x * 0.5f;
-    float halfHeight = dimensions.y * 0.5f;
+    float halfWidth = GetTransformScale().x * 0.5f;
+    float halfHeight = GetTransformScale().y * 0.5f;
 
     float denom = dot(planeNormal, _rayDir);
     if (fabs(denom) < FLT_EPSILON) return false;
@@ -87,10 +97,10 @@ bool PlaneCollider::CheckInBounds(const glm::vec2& xBounds, const glm::vec2& yBo
 
     // For finite planes (e.g., quad colliders)
     glm::vec3 corners[4] = {
-        GetWorldPosition() + glm::vec3(1,0,0) * dimensions.x * 0.5f + glm::vec3(0,1,0) * dimensions.y * 0.5f,
-        GetWorldPosition() - glm::vec3(1,0,0) * dimensions.x * 0.5f + glm::vec3(0,1,0) * dimensions.y * 0.5f,
-        GetWorldPosition() - glm::vec3(1,0,0) * dimensions.x * 0.5f - glm::vec3(0,1,0) * dimensions.y * 0.5f,
-        GetWorldPosition() + glm::vec3(1,0,0) * dimensions.x * 0.5f - glm::vec3(0,1,0) * dimensions.y * 0.5f
+        GetWorldPosition() + glm::vec3(1,0,0) * GetTransformScale().x * 0.5f + glm::vec3(0,1,0) * GetTransformScale().y * 0.5f,
+        GetWorldPosition() - glm::vec3(1,0,0) * GetTransformScale().x * 0.5f + glm::vec3(0,1,0) * GetTransformScale().y * 0.5f,
+        GetWorldPosition() - glm::vec3(1,0,0) * GetTransformScale().x * 0.5f - glm::vec3(0,1,0) * GetTransformScale().y * 0.5f,
+        GetWorldPosition() + glm::vec3(1,0,0) * GetTransformScale().x * 0.5f - glm::vec3(0,1,0) * GetTransformScale().y * 0.5f
     };
 
     for (const glm::vec3& corner : corners) {
@@ -137,5 +147,5 @@ bool PlaneCollider::OverlapsBounds(const glm::vec2& xBounds, const glm::vec2& yB
 
 void PlaneCollider::RenderDebug()
 {
-    Debugger::DrawPlaneDebug(dimensions, GetWorldPosition());
+    Debugger::DrawPlaneDebug(GetTransformScale(), GetWorldPosition());
 }

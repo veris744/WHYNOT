@@ -1,8 +1,5 @@
 // WHYNOT.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
-
-#include <Physics/CollisionManager.h>
-
 #include "Managers/TextRenderer.h"
 #include "Managers/Helper.h"
 #include "Input/InputManager.h"
@@ -10,6 +7,7 @@
 #include "Managers/World.h"
 #include "Managers/Renderer.h"
 #include "Managers/Renderer2D.h"
+#include "Physics/CollisionManager.h"
 
 int main()
 {

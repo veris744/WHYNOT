@@ -12,6 +12,8 @@ public:
         type = ColliderShape::CIRCLE;
     }
 
+    float GetTransformScale();
+
     bool Collides(Collider* other, Hit& hit) override;
     bool Collides(float _rad1, glm::vec3 _pos1, Hit& hit) override;
     bool Collides(glm::vec3 _dimensions, glm::vec3 _pos1, Hit& hit, bool isSlope) override;
