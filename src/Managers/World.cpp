@@ -280,7 +280,7 @@ void World::DoLoad()
     {
         gameManager = std::make_unique<InMenuManager>();
     }
-    else if (currentScene == "Editor")
+    else if (currentScene == "Editor" || currentScene == "Platformer")
     {
         gameManager = std::make_unique<MapManager>();
     }
@@ -297,6 +297,10 @@ void World::DoLoad()
         gameManager->PrepareGame();
         gameManager->SetPlayer();
         gameManager->StartGame();
+    }
+    else
+    {
+        Logger::Log<World>(LogLevel::Error, "No game manager found for scene " + currentScene);
     }
     if (ConfigurationValues::ArePhysicsActive)
     {

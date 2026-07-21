@@ -1,0 +1,80 @@
+entities:
+  - name: "Ambient"
+    components:
+      - name: "LIGHT"
+        lightData:
+          color: [0.5, 0.5, 0.5, 1]
+          ambient: 0.2
+          type: "AMBIENT"
+  - components:
+      - name: "LIGHT"
+        lightData:
+          color: [ 1, 1, 1 ]
+          direction: [ 1, -1, 0 ]
+          specular: 0.2
+          diffuse: 0.8
+          type: "DIRECTIONAL"
+  - name: "Floor"
+    components:
+      - name: "TRANSFORM"
+        position: [0, 0, 0]
+        scale: [50, 1, 50]
+      - name: "COLLIDER"
+        type: "PLANE"
+        profile:
+          type: "STATIC"
+          mode: "ALL"
+      - name: "MODEL"
+        mesh:
+          primitive: "PLANE"
+          material:
+            texturePaths: ["assets/2dImages/ground.jpg"]
+            wrapMode: "REPEAT"
+            materialData:
+              type: TEXTURE
+              shininess: 10
+  # - components:
+  #     - name: "TRANSFORM"
+  #       position: [10, 3, -5]
+  #       scale: [7, 6, 15]
+  #     - name: "COLLIDER"
+  #       type: "SLOPE"
+  #       profile:
+  #         type: "STATIC"
+  #         mode: "ALL"
+  #     - name: "MODEL"
+  #       mesh:
+  #         primitive: "SLOPE"
+  #         material:
+  #           texturePaths: ["assets/2dImages/ground.jpg"]
+  #           wrapMode: "REPEAT"
+  #           materialData:
+  #             type: TEXTURE
+  #             shininess: 10
+
+  - name: "Platform"
+    components:
+      - name: "TRANSFORM"
+        position: [10, 2, 0]
+        scale: [5, 1, 5]
+      - name: "COLLIDER"
+        type: "BOX"
+        profile:
+          type: "STATIC"
+          mode: "ALL"
+      - name: "MODEL"
+        mesh:
+          primitive: "BOX"
+          material:
+            fragmentShaderPath: "shaders/fragmentColor.glsl"
+            materialData:
+              type: COLOR
+              color: [1, 0, 1]
+              shininess: 10
+      - name: "SEQUENCE"
+        isLooping: true
+        playOnStart: true
+        states:
+          [[[10,2,0], [0,0,0], [5,1,5], 0.5],
+          [[15,2,0], [0,0,0], [5,1,5], 0.5],
+          [[10,2,0], [0,0,0], [5,1,5], 0.5]]

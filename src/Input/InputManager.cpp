@@ -124,7 +124,7 @@ void InputManager::Update(float _deltaTime)
         playerTransform = World::GetInstance()->GetGameManager()->GetPlayer()->GetComponent<Transform>();
     }
     ProcessInput();
-    ProcessPlayerInput();
+    ProcessMovePlayerInput();
 }
 
 
@@ -162,7 +162,7 @@ void InputManager::ProcessInput()
     }
 }
 
-void InputManager::ProcessPlayerInput() const
+void InputManager::ProcessMovePlayerInput() const
 {
     if (!playerController) return;
     if (ConfigurationValues::IsEditorOpen && EditorMode::isInputBoxOpen)    return;
@@ -187,6 +187,11 @@ void InputManager::HandleKeyPress(int key, int mods)
     }
 
     World::GetGameManager()->ProcessInput(key, true);
+    if (!playerController)
+    {
+        playerController = World::GetInstance()->GetGameManager()->GetPlayer()->GetComponent<PlayerController>();
+    }
+    playerController->ProcessInput(key, true);
 
     switch(key)
     {

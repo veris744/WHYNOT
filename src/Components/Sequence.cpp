@@ -4,7 +4,26 @@
 
 #include "Transform.h"
 
-void Sequence::SetSequence(std::vector<State> _states)
+void Sequence::SetSequence(const YAML::Node &node)
+{
+    std::vector<Sequence::State> states;
+    try {
+        for (const auto& item : node) {
+            Sequence::State state;
+            state.position = glm::vec3(item[0][0].as<float>(), item[0][1].as<float>(), item[0][2].as<float>());
+            state.rotation = glm::vec3(item[1][0].as<float>(), item[1][1].as<float>(), item[1][2].as<float>());
+            state.scale = glm::vec3(item[2][0].as<float>(), item[2][1].as<float>(), item[2][2].as<float>());
+            state.time = item[3].as<float>();
+            states.push_back(state);
+        }
+        SetSequence(states);
+    }
+    catch (const std::exception& e) {
+        Logger::Log(LogLevel::Error, "Error reading sequence states: " + std::string(e.what()));
+    }
+}
+
+void Sequence::SetSequence(const std::vector<State> &_states)
 {
     states = _states;
     for (const auto& state : states) {
@@ -103,5 +122,13 @@ void Sequence::Update(float deltaTime)
 
         // Update current state index (optional, for tracking purposes)
         currentState = nextState;
+    }
+}
+
+void Sequence::Initialize()
+{
+    if (playOnStart)
+    {
+        Play();
     }
 }

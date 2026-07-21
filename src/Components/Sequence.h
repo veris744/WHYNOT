@@ -29,12 +29,14 @@ public:
         float time;
     };
 
-    void SetSequence(std::vector<State> _states);
+    void SetSequence(const YAML::Node& node);
+    void SetSequence(const std::vector<State>& _states);
     void Play();
     void Pause();
     void Reset();
 
     void Update(float deltaTime) override;
+    void Initialize() override;
 
     std::vector<State> states;
 

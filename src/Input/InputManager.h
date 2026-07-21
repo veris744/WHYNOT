@@ -66,7 +66,7 @@ public:
     // void Initialize();
     void Update(float _deltaTime);
     void ProcessInput();
-    void ProcessPlayerInput() const;
+    void ProcessMovePlayerInput() const;
 
     static void MouseCallback(GLFWwindow* window, double xpos, double ypos);
     bool firstMouse = true;

@@ -119,6 +119,7 @@ void ComponentFactory::ComponentFactorySetup()
         void {
             std::unique_ptr<Sequence> sequence = std::make_unique<Sequence>();
             deserialize(data, sequence);
+            sequence->SetSequence(data["states"]);
             entity->AddComponent(std::move(sequence));
         });
 }

@@ -41,6 +41,17 @@ void PlayerController::Update(float deltaTime)
     }
 }
 
+void PlayerController::ProcessInput(int key, bool press)
+{
+    switch (key)
+    {
+    case GLFW_KEY_SPACE:
+        if (press)
+            Jump();
+        break;
+    }
+}
+
 void PlayerController::UpdateMovement(float deltaTime) const
 {
     // Handle player input movement

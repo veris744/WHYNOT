@@ -26,6 +26,7 @@ public:
     glm::vec3 currentInput = glm::vec3(0);
 
     void Update(float deltaTime) override;
+    void ProcessInput(int key, bool press);
     void UpdateMovement(float deltaTime) const;
     void EnterFreeMode(bool _freeMode);
     void Shoot();
